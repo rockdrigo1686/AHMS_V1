@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tasks.findAll", query = "SELECT t FROM Tasks t"),
-    @NamedQuery(name = "Tasks.findByTskId", query = "SELECT t FROM Tasks t WHERE t.tskId = :tskId"),
+    @NamedQuery(name = "Tasks.find", query = "SELECT t FROM Tasks t WHERE t.tskId = :id"),
     @NamedQuery(name = "Tasks.findByModId", query = "SELECT t FROM Tasks t WHERE t.modId = :modId"),
     @NamedQuery(name = "Tasks.findByTskCode", query = "SELECT t FROM Tasks t WHERE t.tskCode = :tskCode"),
     @NamedQuery(name = "Tasks.findByTskName", query = "SELECT t FROM Tasks t WHERE t.tskName = :tskName"),

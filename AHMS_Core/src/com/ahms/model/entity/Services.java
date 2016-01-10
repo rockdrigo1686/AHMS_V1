@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Services.findAll", query = "SELECT s FROM Services s"),
-    @NamedQuery(name = "Services.findBySrvId", query = "SELECT s FROM Services s WHERE s.srvId = :srvId"),
+    @NamedQuery(name = "Services.find", query = "SELECT s FROM Services s WHERE s.srvId = :id"),
     @NamedQuery(name = "Services.findBySrvCode", query = "SELECT s FROM Services s WHERE s.srvCode = :srvCode"),
     @NamedQuery(name = "Services.findBySrvName", query = "SELECT s FROM Services s WHERE s.srvName = :srvName"),
     @NamedQuery(name = "Services.findBySrvDesc", query = "SELECT s FROM Services s WHERE s.srvDesc = :srvDesc"),

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Privileges.findAll", query = "SELECT p FROM Privileges p"),
-    @NamedQuery(name = "Privileges.findByPrvId", query = "SELECT p FROM Privileges p WHERE p.prvId = :prvId"),
+    @NamedQuery(name = "Privileges.find", query = "SELECT p FROM Privileges p WHERE p.prvId = :id"),
     @NamedQuery(name = "Privileges.findByPrvCode", query = "SELECT p FROM Privileges p WHERE p.prvCode = :prvCode"),
     @NamedQuery(name = "Privileges.findByPrvDesc", query = "SELECT p FROM Privileges p WHERE p.prvDesc = :prvDesc"),
     @NamedQuery(name = "Privileges.findByPrvStatus", query = "SELECT p FROM Privileges p WHERE p.prvStatus = :prvStatus"),

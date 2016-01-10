@@ -37,14 +37,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Profiles.findAll", query = "SELECT p FROM Profiles p"),
-    @NamedQuery(name = "Profiles.findByProId", query = "SELECT p FROM Profiles p WHERE p.proId = :proId"),
+    @NamedQuery(name = "Profiles.find", query = "SELECT p FROM Profiles p WHERE p.proId = :id"),
     @NamedQuery(name = "Profiles.findByProCode", query = "SELECT p FROM Profiles p WHERE p.proCode = :proCode"),
     @NamedQuery(name = "Profiles.findByProName", query = "SELECT p FROM Profiles p WHERE p.proName = :proName"),
     @NamedQuery(name = "Profiles.findByProStatus", query = "SELECT p FROM Profiles p WHERE p.proStatus = :proStatus"),
     @NamedQuery(name = "Profiles.findByProUsrMod", query = "SELECT p FROM Profiles p WHERE p.proUsrMod = :proUsrMod"),
     @NamedQuery(name = "Profiles.findByProDteMod", query = "SELECT p FROM Profiles p WHERE p.proDteMod = :proDteMod")})
-public class Profiles implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Profiles extends AHMSEntity implements Serializable {
+//    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -58,7 +58,7 @@ public class Profiles implements Serializable {
     private String proName;
     @Basic(optional = false)
     @Column(name = "PRO_STATUS", nullable = false)
-    private int proStatus;
+    private String proStatus;
     @Column(name = "PRO_USR_MOD", length = 6)
     private String proUsrMod;
     @Column(name = "PRO_DTE_MOD")
@@ -69,6 +69,8 @@ public class Profiles implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.EAGER)
     private Collection<Users> usersCollection;
 
+  
+
     public Profiles() {
     }
 
@@ -76,7 +78,7 @@ public class Profiles implements Serializable {
         this.proId = proId;
     }
 
-    public Profiles(Integer proId, String proCode, String proName, int proStatus) {
+    public Profiles(Integer proId, String proCode, String proName, String proStatus) {
         this.proId = proId;
         this.proCode = proCode;
         this.proName = proName;
@@ -107,11 +109,11 @@ public class Profiles implements Serializable {
         this.proName = proName;
     }
 
-    public int getProStatus() {
+    public String getProStatus() {
         return proStatus;
     }
-
-    public void setProStatus(int proStatus) {
+    
+    public void setProStatus(String proStatus) {
         this.proStatus = proStatus;
     }
 

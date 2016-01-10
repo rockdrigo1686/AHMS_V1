@@ -34,15 +34,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.findByUsrId", query = "SELECT u FROM Users u WHERE u.usrId = :usrId"),
+    @NamedQuery(name = "Users.find", query = "SELECT u FROM Users u WHERE u.usrId = :id"),
     @NamedQuery(name = "Users.findByUsrCode", query = "SELECT u FROM Users u WHERE u.usrCode = :usrCode"),
     @NamedQuery(name = "Users.findByUsrName", query = "SELECT u FROM Users u WHERE u.usrName = :usrName"),
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
-    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrCode = :usrCode and u.usrPwd = :usrPwd"),
-    @NamedQuery(name = "Users.findByUsrDteMod", query = "SELECT u FROM Users u WHERE u.usrDteMod = :usrDteMod"),
-    @NamedQuery(name = "Users.findByUsrUsrMod", query = "SELECT u FROM Users u WHERE u.usrUsrMod = :usrUsrMod")})
+    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrCode = :usrCode and u.usrPwd = :usrPwd")
+    })
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

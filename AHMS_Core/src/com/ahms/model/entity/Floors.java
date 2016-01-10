@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f"),
-    @NamedQuery(name = "Floors.findByFlrId", query = "SELECT f FROM Floors f WHERE f.flrId = :flrId"),
+    @NamedQuery(name = "Floors.find", query = "SELECT f FROM Floors f WHERE f.flrId = :id"),
     @NamedQuery(name = "Floors.findByFlrCode", query = "SELECT f FROM Floors f WHERE f.flrCode = :flrCode"),
     @NamedQuery(name = "Floors.findByFlrStatus", query = "SELECT f FROM Floors f WHERE f.flrStatus = :flrStatus"),
     @NamedQuery(name = "Floors.findByFlrUsrMod", query = "SELECT f FROM Floors f WHERE f.flrUsrMod = :flrUsrMod"),
@@ -53,7 +53,7 @@ public class Floors implements Serializable {
     private String flrCode;
     @Basic(optional = false)
     @Column(name = "FLR_STATUS", nullable = false)
-    private int flrStatus;
+    private String flrStatus;
     @Column(name = "FLR_USR_MOD", length = 6)
     private String flrUsrMod;
     @Column(name = "FLR_DTE_MOD")
@@ -69,7 +69,7 @@ public class Floors implements Serializable {
         this.flrId = flrId;
     }
 
-    public Floors(Integer flrId, String flrCode, int flrStatus) {
+    public Floors(Integer flrId, String flrCode, String flrStatus) {
         this.flrId = flrId;
         this.flrCode = flrCode;
         this.flrStatus = flrStatus;
@@ -91,11 +91,11 @@ public class Floors implements Serializable {
         this.flrCode = flrCode;
     }
 
-    public int getFlrStatus() {
+    public String getFlrStatus() {
         return flrStatus;
     }
 
-    public void setFlrStatus(int flrStatus) {
+    public void setFlrStatus(String flrStatus) {
         this.flrStatus = flrStatus;
     }
 

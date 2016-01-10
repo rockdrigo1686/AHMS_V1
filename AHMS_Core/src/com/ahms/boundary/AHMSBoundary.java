@@ -5,10 +5,21 @@
  */
 package com.ahms.boundary;
 
+import java.util.List;
+
 /**
  *
  * @author rsoto
+ * @param <T>
  */
-public class AHMSBoundary {
+public interface AHMSBoundary<T> {
+    
+    public List<T> search(T obj);
+    public List<T> searchAll(T obj);
+    public T find(T obj);
+    public int insert(T obj);
+    public int update(T obj);
+    public int delete(T obj);    
+    
     
 }
