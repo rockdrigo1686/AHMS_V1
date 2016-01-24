@@ -5,6 +5,9 @@
  */
 package com.ahms.ui;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 /**
  *
  * @author rsoto
@@ -18,7 +21,19 @@ public class AHMSSwingUI {
         // TODO code application logic here
         LoginFrm login = new LoginFrm();
         login.setVisible(true);
+
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            // handle exception
+        }
+        // handle exception
+        // handle exception
+        // handle exception
         
+
     }
-    
+
 }

@@ -16,11 +16,13 @@ import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -326,12 +328,12 @@ public class ProfilesFrm extends javax.swing.JFrame {
                 .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(361, 361, 361))
+                .addGap(373, 373, 373))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(192, Short.MAX_VALUE)
+                    .addContainerGap(196, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(35, Short.MAX_VALUE)))
+                    .addContainerGap(43, Short.MAX_VALUE)))
         );
 
         bindingGroup.bind();
@@ -408,43 +410,53 @@ public class ProfilesFrm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String args[]) throws ClassNotFoundException {
         try {
-//            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-//            javax.swing.UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
-//            javax.swing.UIManager.setLookAndFeel("com.pagosoft.plaf.PgsLookAndFeel");
-//            javax.swing.UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
-//
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                System.out.println(info.getName());
-                if ("Metal".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    MetalLookAndFeel.setCurrentTheme(new OceanTheme());
-                    break;
-                }
-            }
-            
+            /* Set the Nimbus look and feel */
+            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+            * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+            */
+//        try {
+////            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+////            javax.swing.UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
+////            javax.swing.UIManager.setLookAndFeel("com.pagosoft.plaf.PgsLookAndFeel");
+////            javax.swing.UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
+////
 //            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
+//                System.out.println(info.getName());
+//                if ("Metal".equals(info.getName())) {
 //                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    MetalLookAndFeel.setCurrentTheme(new OceanTheme());
 //                    break;
 //                }
 //            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//            
+////            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+////                if ("Nimbus".equals(info.getName())) {
+////                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+////                    break;
+////                }
+////            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+            
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        //</editor-fold>
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
