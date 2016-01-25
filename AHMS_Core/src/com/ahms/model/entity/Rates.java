@@ -22,19 +22,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "rates", catalog = "DB_AHMS", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rates.findAll", query = "SELECT r FROM Rates r"),
-    @NamedQuery(name = "Rates.find", query = "SELECT r FROM Rates r WHERE r.rteId = :id"),
+    @NamedQuery(name = "Rates.findByRteId", query = "SELECT r FROM Rates r WHERE r.rteId = :rteId"),
     @NamedQuery(name = "Rates.findByRteDesc", query = "SELECT r FROM Rates r WHERE r.rteDesc = :rteDesc"),
     @NamedQuery(name = "Rates.findByRtePrice", query = "SELECT r FROM Rates r WHERE r.rtePrice = :rtePrice"),
     @NamedQuery(name = "Rates.findByRteStatus", query = "SELECT r FROM Rates r WHERE r.rteStatus = :rteStatus"),
-    @NamedQuery(name = "Rates.findByRteAvlStr", query = "SELECT r FROM Rates r WHERE r.rteAvlStr = :rteAvlStr"),
-    @NamedQuery(name = "Rates.findByRteAvlEnd", query = "SELECT r FROM Rates r WHERE r.rteAvlEnd = :rteAvlEnd"),
     @NamedQuery(name = "Rates.findByRteUsrMod", query = "SELECT r FROM Rates r WHERE r.rteUsrMod = :rteUsrMod"),
     @NamedQuery(name = "Rates.findByRteDteMod", query = "SELECT r FROM Rates r WHERE r.rteDteMod = :rteDteMod")})
 public class Rates implements Serializable {
@@ -53,12 +51,6 @@ public class Rates implements Serializable {
     @Basic(optional = false)
     @Column(name = "RTE_STATUS", nullable = false)
     private int rteStatus;
-    @Column(name = "RTE_AVL_STR")
-    @Temporal(TemporalType.DATE)
-    private Date rteAvlStr;
-    @Column(name = "RTE_AVL_END")
-    @Temporal(TemporalType.DATE)
-    private Date rteAvlEnd;
     @Column(name = "RTE_USR_MOD", length = 6)
     private String rteUsrMod;
     @Column(name = "RTE_DTE_MOD")
@@ -111,22 +103,6 @@ public class Rates implements Serializable {
         this.rteStatus = rteStatus;
     }
 
-    public Date getRteAvlStr() {
-        return rteAvlStr;
-    }
-
-    public void setRteAvlStr(Date rteAvlStr) {
-        this.rteAvlStr = rteAvlStr;
-    }
-
-    public Date getRteAvlEnd() {
-        return rteAvlEnd;
-    }
-
-    public void setRteAvlEnd(Date rteAvlEnd) {
-        this.rteAvlEnd = rteAvlEnd;
-    }
-
     public String getRteUsrMod() {
         return rteUsrMod;
     }
@@ -165,7 +141,7 @@ public class Rates implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.Rates[ rteId=" + rteId + " ]";
+        return "com.ahms.model.entity.Rates[ rteId=" + rteId + " ]";
     }
     
 }

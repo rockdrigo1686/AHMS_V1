@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,20 +25,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
-@Table(name = "rooms", catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "rooms",catalog = "DB_AHMS", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"RMS_NUMBER"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rooms.findAll", query = "SELECT r FROM Rooms r"),
-    @NamedQuery(name = "Rooms.find", query = "SELECT r FROM Rooms r WHERE r.rmsId = :id"),
+    @NamedQuery(name = "Rooms.findByRmsId", query = "SELECT r FROM Rooms r WHERE r.rmsId = :rmsId"),
     @NamedQuery(name = "Rooms.findByRmsNumber", query = "SELECT r FROM Rooms r WHERE r.rmsNumber = :rmsNumber"),
-    @NamedQuery(name = "Rooms.findByRmsBsnStatus", query = "SELECT r FROM Rooms r WHERE r.rmsBsnStatus = :rmsBsnStatus"),
+    @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds"),
     @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),
     @NamedQuery(name = "Rooms.findByRmsUsrMod", query = "SELECT r FROM Rooms r WHERE r.rmsUsrMod = :rmsUsrMod"),
-    @NamedQuery(name = "Rooms.findByRmsDteMod", query = "SELECT r FROM Rooms r WHERE r.rmsDteMod = :rmsDteMod")})
+    @NamedQuery(name = "Rooms.findByRmsDteMod", query = "SELECT r FROM Rooms r WHERE r.rmsDteMod = :rmsDteMod"),
+    @NamedQuery(name = "Rooms.findByRmsMaxOcu", query = "SELECT r FROM Rooms r WHERE r.rmsMaxOcu = :rmsMaxOcu"),
+    @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc")})
 public class Rooms implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,8 +52,8 @@ public class Rooms implements Serializable {
     @Column(name = "RMS_NUMBER", nullable = false, length = 4)
     private String rmsNumber;
     @Basic(optional = false)
-    @Column(name = "RMS_BSN_STATUS", nullable = false)
-    private int rmsBsnStatus;
+    @Column(name = "RMS_BEDS", nullable = false)
+    private int rmsBeds;
     @Basic(optional = false)
     @Column(name = "RMS_STATUS", nullable = false)
     private int rmsStatus;
@@ -61,8 +62,17 @@ public class Rooms implements Serializable {
     @Column(name = "RMS_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date rmsDteMod;
+    @Basic(optional = false)
+    @Column(name = "RMS_MAX_OCU", nullable = false)
+    private int rmsMaxOcu;
+    @Basic(optional = false)
+    @Column(name = "RMS_DESC", nullable = false, length = 200)
+    private String rmsDesc;
+    @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
+    @ManyToOne(optional = false)
+    private Rates rteId;
     @JoinColumn(name = "FLR_ID", referencedColumnName = "FLR_ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Floors flrId;
 
     public Rooms() {
@@ -72,11 +82,13 @@ public class Rooms implements Serializable {
         this.rmsId = rmsId;
     }
 
-    public Rooms(Integer rmsId, String rmsNumber, int rmsBsnStatus, int rmsStatus) {
+    public Rooms(Integer rmsId, String rmsNumber, int rmsBeds, int rmsStatus, int rmsMaxOcu, String rmsDesc) {
         this.rmsId = rmsId;
         this.rmsNumber = rmsNumber;
-        this.rmsBsnStatus = rmsBsnStatus;
+        this.rmsBeds = rmsBeds;
         this.rmsStatus = rmsStatus;
+        this.rmsMaxOcu = rmsMaxOcu;
+        this.rmsDesc = rmsDesc;
     }
 
     public Integer getRmsId() {
@@ -95,12 +107,12 @@ public class Rooms implements Serializable {
         this.rmsNumber = rmsNumber;
     }
 
-    public int getRmsBsnStatus() {
-        return rmsBsnStatus;
+    public int getRmsBeds() {
+        return rmsBeds;
     }
 
-    public void setRmsBsnStatus(int rmsBsnStatus) {
-        this.rmsBsnStatus = rmsBsnStatus;
+    public void setRmsBeds(int rmsBeds) {
+        this.rmsBeds = rmsBeds;
     }
 
     public int getRmsStatus() {
@@ -125,6 +137,30 @@ public class Rooms implements Serializable {
 
     public void setRmsDteMod(Date rmsDteMod) {
         this.rmsDteMod = rmsDteMod;
+    }
+
+    public int getRmsMaxOcu() {
+        return rmsMaxOcu;
+    }
+
+    public void setRmsMaxOcu(int rmsMaxOcu) {
+        this.rmsMaxOcu = rmsMaxOcu;
+    }
+
+    public String getRmsDesc() {
+        return rmsDesc;
+    }
+
+    public void setRmsDesc(String rmsDesc) {
+        this.rmsDesc = rmsDesc;
+    }
+
+    public Rates getRteId() {
+        return rteId;
+    }
+
+    public void setRteId(Rates rteId) {
+        this.rteId = rteId;
     }
 
     public Floors getFlrId() {
@@ -157,7 +193,7 @@ public class Rooms implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.Rooms[ rmsId=" + rmsId + " ]";
+        return "com.ahms.model.entity.Rooms[ rmsId=" + rmsId + " ]";
     }
     
 }
