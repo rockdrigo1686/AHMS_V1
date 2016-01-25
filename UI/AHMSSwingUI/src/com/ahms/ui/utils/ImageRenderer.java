@@ -4,6 +4,7 @@ import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class ImageRenderer extends DefaultTableCellRenderer {
@@ -26,19 +27,20 @@ public class ImageRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         //lb.setSize(50,50);
         lb.setIcon(icon);
-        /*int width = 0;
+        int width = 0;
         switch(column){
             case 0: width = 50; break;
             case 1: width = 20; break;
             case 2: width = 200; break;
-            case 3: width = 20; break;
-            case 4: width = 20; break;
-            case 5: width = 20; break;
-            case 6: width = 20; break;
-            case 7: width = 20; break;
+            case 3: width = 50; break;
+            case 4: width = 50; break;
+            case 5: width = 50; break;
+            case 6: width = 50; break;
+            case 7: width = 50; break;
         }
         table.getColumnModel().getColumn(column).setWidth(width);
-        */return lb;
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        return lb;
      }  
     
 }

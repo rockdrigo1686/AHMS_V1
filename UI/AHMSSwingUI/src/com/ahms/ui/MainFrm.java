@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui;
 
 import com.ahms.boundary.security.RoomsBoundary;
@@ -10,6 +5,7 @@ import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.ImageRenderer;
+import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Image;
@@ -61,7 +57,7 @@ public class MainFrm extends javax.swing.JFrame {
         roomsBounday = new RoomsBoundary();
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("AHMS: Advanced Hotel Management System - turno " + (shiftOn ? "iniciado" : "no iniciado"));
+        setTitle("AHMS: Advanced Hotel Management System ");
         setExtendedState(Frame.MAXIMIZED_BOTH);         
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
@@ -69,19 +65,24 @@ public class MainFrm extends javax.swing.JFrame {
     }
     
     private void configGrid(List<Rooms> rooms){
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("");
-        model.addColumn("#");
-        model.addColumn("Descripción");
-        model.addColumn("# Camas");
-        model.addColumn("Max Ocupantes");
-        model.addColumn("Fecha Reservación");
-        model.addColumn("Precio P/N");
-        model.addColumn("Estado");
-                        
+        Vector<String> columnNames = new Vector();
+        columnNames.add("");
+        columnNames.add("#");
+        columnNames.add("Descripción");
+        columnNames.add("# Camas");
+        columnNames.add("Max Ocupantes");
+        columnNames.add("Fecha Reservación");
+        columnNames.add("Precio P/N");
+        columnNames.add("Estado");
+        
+        Vector<Vector> rows = new Vector<>();
         for (Rooms room : rooms) {
             Vector vctRow = new Vector();
-            vctRow.add("");
+            switch(room.getRmsStatus()){
+                case 0: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedG.png"))); break;
+                case 1: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedR.png"))); break;
+                case 2: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedB.png"))); break;
+            }
             vctRow.add(room.getRmsNumber());
             vctRow.add(room.getRmsDesc());
             vctRow.add(room.getRmsBeds());
@@ -89,34 +90,51 @@ public class MainFrm extends javax.swing.JFrame {
             vctRow.add(room.getRmsDteMod());
             vctRow.add(100);
             vctRow.add(room.getRmsStatus());
-            model.addRow(vctRow);
+            rows.add(vctRow);
         }
+        
+        DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
+
+            private static final long serialVersionUID = 1L;
+            
+            @Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
+            @Override
+            public boolean isCellEditable(int row, int column) {
+               return false;
+            }
+            
+        };
         
         jtDashboard.setModel(model);
         jtDashboard.setRowHeight(50);
-        //jtDashboard.getColumnModel().getColumn(0).setPreferredWidth(50);
-        jtDashboard.getColumnModel().getColumn(0).setCellRenderer(new ImageRenderer("ocupado"));
-        jtDashboard.getColumnModel().getColumn(0).setHeaderRenderer(new ImageRenderer());        
-        /*jtDashboard.getColumnModel().getColumn(1).setWidth(20);
-        jtDashboard.getColumnModel().getColumn(2).setWidth(200);
-        jtDashboard.getColumnModel().getColumn(3).setWidth(20);
-        jtDashboard.getColumnModel().getColumn(4).setWidth(20);
-        jtDashboard.getColumnModel().getColumn(5).setWidth(20);
-        jtDashboard.getColumnModel().getColumn(6).setWidth(20);
-        jtDashboard.getColumnModel().getColumn(7).setWidth(20);
-        */
-        jtDashboard.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        
+        jtDashboard.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        jtDashboard.getColumnModel().getColumn(0).setMaxWidth(40);
+        jtDashboard.getColumnModel().getColumn(1).setMaxWidth(20);
+        jtDashboard.getColumnModel().getColumn(2).setMaxWidth(300);
+        jtDashboard.getColumnModel().getColumn(3).setMaxWidth(100);
+        jtDashboard.getColumnModel().getColumn(4).setMaxWidth(150);
+        jtDashboard.getColumnModel().getColumn(5).setMaxWidth(150);
+        jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
+        jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
+                
         jtDashboard.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            int row = jtDashboard.getSelectedRow();
-            int column = jtDashboard.getSelectedColumn();
-            //JLabel lbl = (JLabel) jTable1.getValueAt(row, column);
-            JOptionPane.showMessageDialog(null, "" + row + " - " + column);             
-            //detalle.setId("" + row + "-" + column);
-            //detalle.setVisible(true);  
+            int clicks = e.getClickCount();
+            if(clicks > 1){
+                CustomerReg customerReg = new CustomerReg();
+                customerReg.setAlwaysOnTop(true);
+                customerReg.setVisible(true);
+            } else {
+                int row = jtDashboard.getSelectedRow();
+                jtIdCuarto.setText((String) jtDashboard.getValueAt(row,1));
+            }
         }
+        
+        
         });
     }
    
@@ -173,6 +191,7 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
+        jlTurno = new javax.swing.JLabel();
         jTabbedPane5 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -185,10 +204,10 @@ public class MainFrm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jpRegistroRapido = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        jlRegistroNombre = new javax.swing.JLabel();
+        jlRegistroPaterno = new javax.swing.JLabel();
+        jlRegistroMaterno = new javax.swing.JLabel();
+        jlRegistroRfc = new javax.swing.JLabel();
         jbBuscarCliente = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
         jSeparator6 = new javax.swing.JSeparator();
@@ -242,15 +261,24 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel1.setBackground(java.awt.SystemColor.controlLtHighlight);
         jPanel1.setToolTipText("");
 
+        jlTurno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlTurno.setText("Turno no iniciado");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jlTurno)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 35, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jlTurno)
+                .addContainerGap())
         );
 
         jPanel7.setBackground(new java.awt.Color(254, 254, 254));
@@ -313,7 +341,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -327,22 +355,32 @@ public class MainFrm extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 443, Short.MAX_VALUE)
+            .addGap(0, 437, Short.MAX_VALUE)
         );
 
         jTabbedPane5.addTab("tools", jPanel6);
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jLabel2.setText("Nombre(s):");
+        jlRegistroNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlRegistroNombre.setText("Nombre(s):");
 
-        jLabel3.setText("Paterno:");
+        jlRegistroPaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlRegistroPaterno.setText("Paterno:");
 
-        jLabel4.setText("Materno:");
+        jlRegistroMaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlRegistroMaterno.setText("Materno:");
 
-        jLabel5.setText("RFC:");
+        jlRegistroRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlRegistroRfc.setText("RFC:");
 
+        jbBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772770_search-80px.png"))); // NOI18N
         jbBuscarCliente.setText("Buscar Cliente");
+        jbBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbBuscarClienteActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Subtotal:");
 
@@ -350,6 +388,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel7.setText("Id Cuarto:");
 
+        jtIdCuarto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         jtIdCuarto.setEnabled(false);
 
         jLabel8.setText("Entrada:");
@@ -419,10 +458,10 @@ public class MainFrm extends javax.swing.JFrame {
                         .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                         .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jlRegistroNombre)
+                            .addComponent(jlRegistroPaterno)
+                            .addComponent(jlRegistroMaterno)
+                            .addComponent(jlRegistroRfc))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                         .addComponent(jLabel11)
@@ -436,13 +475,13 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addComponent(jbBuscarCliente)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addComponent(jlRegistroNombre)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(jlRegistroPaterno)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(jlRegistroMaterno)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(jlRegistroRfc)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -468,7 +507,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(jcbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -507,7 +546,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane5)
-                    .addComponent(jTabbedPane1)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jSeparator1))
                 .addContainerGap())
         );
@@ -546,6 +585,11 @@ public class MainFrm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jbBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteActionPerformed
+        CustomerReg customerReg = new CustomerReg();
+        customerReg.setVisible(true);
+    }//GEN-LAST:event_jbBuscarClienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -553,10 +597,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -586,6 +626,11 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
     private javax.swing.JComboBox jcbTipoPago;
+    private javax.swing.JLabel jlRegistroMaterno;
+    private javax.swing.JLabel jlRegistroNombre;
+    private javax.swing.JLabel jlRegistroPaterno;
+    private javax.swing.JLabel jlRegistroRfc;
+    private javax.swing.JLabel jlTurno;
     private javax.swing.JPanel jpFecEntContainer;
     private javax.swing.JPanel jpFecSalContainer;
     private javax.swing.JPanel jpRegistroRapido;
