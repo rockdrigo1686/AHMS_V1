@@ -9,6 +9,5 @@ package com.ahms.util;
  *
  * @author rsoto
  */
-public class dummy {cdc
-    dc
+public class dummy {
 }
