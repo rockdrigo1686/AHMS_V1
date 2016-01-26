@@ -257,7 +257,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" min="-2" pref="164" max="-2" attributes="0"/>
+                              <Component id="jcbPisos" min="-2" pref="164" max="-2" attributes="0"/>
                               <EmptySpace pref="627" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -268,7 +268,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jcbPisos" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -281,7 +281,7 @@
                         <Property name="text" type="java.lang.String" value="Piso: "/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JComboBox" name="jComboBox1">
+                    <Component class="javax.swing.JComboBox" name="jcbPisos">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="4">
@@ -292,6 +292,9 @@
                           </StringArray>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbPisosActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -478,7 +481,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Nombre(s):"/>
+                    <Property name="text" type="java.lang.String" value="Jorge Alfonso"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jlRegistroPaterno">
@@ -486,7 +489,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Paterno:"/>
+                    <Property name="text" type="java.lang.String" value="Casta&#xf1;eda"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jlRegistroMaterno">
@@ -494,7 +497,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Materno:"/>
+                    <Property name="text" type="java.lang.String" value="Gutierrez"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jlRegistroRfc">
@@ -502,7 +505,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="RFC:"/>
+                    <Property name="text" type="java.lang.String" value="CAGJ860711BZ6"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="jbBuscarCliente">

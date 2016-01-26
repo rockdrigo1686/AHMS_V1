@@ -1,14 +1,13 @@
 package com.ahms.ui;
 
+import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
-import com.ahms.ui.utils.ImageRenderer;
-import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -16,9 +15,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -33,6 +33,7 @@ public class MainFrm extends javax.swing.JFrame {
     private Users mainUser = null;
     private Boolean shiftOn = false;
     private RoomsBoundary roomsBounday= null;
+    private FloorsBoundary floorsBoundary = null;
     
     private ArrayList<String> cuartos = new ArrayList<String>();
             
@@ -55,13 +56,41 @@ public class MainFrm extends javax.swing.JFrame {
     public MainFrm() {
         initComponents();
         roomsBounday = new RoomsBoundary();
+        floorsBoundary = new FloorsBoundary();
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS: Advanced Hotel Management System ");
         setExtendedState(Frame.MAXIMIZED_BOTH);         
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
-
+        configFloors(floorsBoundary.searchAll(new Floors()));
+    }
+    
+    private void configFloors(List<Floors> lstFloors){
+        /*ArrayList<ComboBoxItem> items = new ArrayList<>();
+        if(lstFloors != null && lstFloors.size() > 0){
+            for (Floors lstFloor : lstFloors) {
+                if(lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")){
+                    ComboBoxItem item = new ComboBoxItem();
+                    item.setId(lstFloor.getFlrId());
+                    item.setValue(lstFloor.getFlrCode());
+                    items.add(item);
+                }
+            }
+        }        
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new ComboBoxItem[items.size()]));
+        */
+        ArrayList<String> items = new ArrayList<>();
+        if(lstFloors != null && lstFloors.size() > 0){
+            for (Floors lstFloor : lstFloors) {
+                if(lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")){
+                    items.add(lstFloor.getFlrId().toString());
+                }
+            }
+        }        
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new String[items.size()]));
+        this.jcbPisos.setModel(model);        
+        
     }
     
     private void configGrid(List<Rooms> rooms){
@@ -74,6 +103,7 @@ public class MainFrm extends javax.swing.JFrame {
         columnNames.add("Fecha Reservación");
         columnNames.add("Precio P/N");
         columnNames.add("Estado");
+        columnNames.add("");
         
         Vector<Vector> rows = new Vector<>();
         for (Rooms room : rooms) {
@@ -90,6 +120,7 @@ public class MainFrm extends javax.swing.JFrame {
             vctRow.add(room.getRmsDteMod());
             vctRow.add(100);
             vctRow.add(room.getRmsStatus());
+            vctRow.add(room.getRmsId());
             rows.add(vctRow);
         }
         
@@ -119,7 +150,7 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(5).setMaxWidth(150);
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
-                
+        jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
         jtDashboard.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -129,8 +160,10 @@ public class MainFrm extends javax.swing.JFrame {
                 customerReg.setAlwaysOnTop(true);
                 customerReg.setVisible(true);
             } else {
+                //if(){}   agregar validacion con el estatus
                 int row = jtDashboard.getSelectedRow();
-                jtIdCuarto.setText((String) jtDashboard.getValueAt(row,1));
+                jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row,8)));
+                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row,4).toString()), 1));
             }
         }
         
@@ -197,7 +230,7 @@ public class MainFrm extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        jcbPisos = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtDashboard = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
@@ -285,7 +318,12 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel1.setText("Piso: ");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbPisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbPisos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbPisosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -295,7 +333,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(627, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -304,7 +342,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -363,16 +401,16 @@ public class MainFrm extends javax.swing.JFrame {
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         jlRegistroNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroNombre.setText("Nombre(s):");
+        jlRegistroNombre.setText("Jorge Alfonso");
 
         jlRegistroPaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroPaterno.setText("Paterno:");
+        jlRegistroPaterno.setText("Castañeda");
 
         jlRegistroMaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroMaterno.setText("Materno:");
+        jlRegistroMaterno.setText("Gutierrez");
 
         jlRegistroRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroRfc.setText("RFC:");
+        jlRegistroRfc.setText("CAGJ860711BZ6");
 
         jbBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772770_search-80px.png"))); // NOI18N
         jbBuscarCliente.setText("Buscar Cliente");
@@ -590,10 +628,17 @@ public class MainFrm extends javax.swing.JFrame {
         customerReg.setVisible(true);
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
+    private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
+        Rooms room = new Rooms();
+        Floors floor = new Floors();
+        floor.setFlrId(Integer.parseInt(this.jcbPisos.getSelectedItem().toString()));
+        room.setFlrId(floor);
+        configGrid(roomsBounday.findByFloor(room));
+    }//GEN-LAST:event_jcbPisosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -625,6 +670,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
+    private javax.swing.JComboBox jcbPisos;
     private javax.swing.JComboBox jcbTipoPago;
     private javax.swing.JLabel jlRegistroMaterno;
     private javax.swing.JLabel jlRegistroNombre;
