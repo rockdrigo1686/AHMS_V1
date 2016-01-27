@@ -348,7 +348,13 @@ public class ProfilesFrm extends javax.swing.JFrame {
         System.out.println(profile.getProCode());
 
         formManager.setDefaultFormStatus();
-        profile.resetProperties();
+        try {
+            profile.resetProperties();
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
