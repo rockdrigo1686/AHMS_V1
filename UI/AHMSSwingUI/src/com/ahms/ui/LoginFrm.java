@@ -5,9 +5,6 @@
  */                                  
 package com.ahms.ui;
 
-import com.ahms.boundary.SecurityBoundary;
-import com.ahms.model.entity.Users;
-
 /**
  *
  * @author rsoto

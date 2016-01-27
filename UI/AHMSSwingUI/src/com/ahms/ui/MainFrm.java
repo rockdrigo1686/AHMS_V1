@@ -17,6 +17,7 @@ import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
@@ -32,14 +33,13 @@ public class MainFrm extends javax.swing.JFrame {
 
     private Users mainUser = null;
     private Boolean shiftOn = false;
-    private RoomsBoundary roomsBounday= null;
+    private RoomsBoundary roomsBounday = null;
     private FloorsBoundary floorsBoundary = null;
-    
+
     private ArrayList<String> cuartos = new ArrayList<String>();
-            
-    private void fillData()
-    {
-        
+
+    private void fillData() {
+
     }
 
     public Users getMainUser() {
@@ -60,40 +60,40 @@ public class MainFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS: Advanced Hotel Management System ");
-        setExtendedState(Frame.MAXIMIZED_BOTH);         
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
         configFloors(floorsBoundary.searchAll(new Floors()));
     }
-    
-    private void configFloors(List<Floors> lstFloors){
+
+    private void configFloors(List<Floors> lstFloors) {
         /*ArrayList<ComboBoxItem> items = new ArrayList<>();
-        if(lstFloors != null && lstFloors.size() > 0){
-            for (Floors lstFloor : lstFloors) {
-                if(lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")){
-                    ComboBoxItem item = new ComboBoxItem();
-                    item.setId(lstFloor.getFlrId());
-                    item.setValue(lstFloor.getFlrCode());
-                    items.add(item);
-                }
-            }
-        }        
-        DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new ComboBoxItem[items.size()]));
-        */
+         if(lstFloors != null && lstFloors.size() > 0){
+         for (Floors lstFloor : lstFloors) {
+         if(lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")){
+         ComboBoxItem item = new ComboBoxItem();
+         item.setId(lstFloor.getFlrId());
+         item.setValue(lstFloor.getFlrCode());
+         items.add(item);
+         }
+         }
+         }        
+         DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new ComboBoxItem[items.size()]));
+         */
         ArrayList<String> items = new ArrayList<>();
-        if(lstFloors != null && lstFloors.size() > 0){
+        if (lstFloors != null && lstFloors.size() > 0) {
             for (Floors lstFloor : lstFloors) {
-                if(lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")){
+                if (lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")) {
                     items.add(lstFloor.getFlrId().toString());
                 }
             }
-        }        
+        }
         DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new String[items.size()]));
-        this.jcbPisos.setModel(model);        
-        
+        this.jcbPisos.setModel(model);
+
     }
-    
-    private void configGrid(List<Rooms> rooms){
+
+    private void configGrid(List<Rooms> rooms) {
         Vector<String> columnNames = new Vector();
         columnNames.add("");
         columnNames.add("#");
@@ -104,14 +104,20 @@ public class MainFrm extends javax.swing.JFrame {
         columnNames.add("Precio P/N");
         columnNames.add("Estado");
         columnNames.add("");
-        
+
         Vector<Vector> rows = new Vector<>();
         for (Rooms room : rooms) {
             Vector vctRow = new Vector();
-            switch(room.getRmsStatus()){
-                case 0: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedG.png"))); break;
-                case 1: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedR.png"))); break;
-                case 2: vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedB.png"))); break;
+            switch (room.getRmsStatus()) {
+                case "Disponible":
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedG.png")));
+                    break;
+                case "Ocupado":
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedR.png")));
+                    break;
+                case "Reservado":
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedB.png")));
+                    break;
             }
             vctRow.add(room.getRmsNumber());
             vctRow.add(room.getRmsDesc());
@@ -123,22 +129,23 @@ public class MainFrm extends javax.swing.JFrame {
             vctRow.add(room.getRmsId());
             rows.add(vctRow);
         }
-        
+
         DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
 
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
             }
+
             @Override
             public boolean isCellEditable(int row, int column) {
-               return false;
+                return false;
             }
-            
+
         };
-        
+        JFrame parent = this;
         jtDashboard.setModel(model);
         jtDashboard.setRowHeight(50);
         jtDashboard.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -152,33 +159,33 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
         jtDashboard.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int clicks = e.getClickCount();
-            if(clicks > 1){
-                CustomerReg customerReg = new CustomerReg();
-                customerReg.setAlwaysOnTop(true);
-                customerReg.setVisible(true);
-            } else {
-                //if(){}   agregar validacion con el estatus
-                int row = jtDashboard.getSelectedRow();
-                jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row,8)));
-                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row,4).toString()), 1));
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int clicks = e.getClickCount();
+                 int row = jtDashboard.getSelectedRow();
+                if (clicks > 1) {
+                    RoomService roomServiceDlg = new RoomService(parent,true, (Integer) jtDashboard.getValueAt(row, 8));
+                    roomServiceDlg.setVisible(true);
+                    roomServiceDlg.setAlwaysOnTop(true);
+                    
+                } else {
+                    //if(){}   agregar validacion con el estatus
+                    jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
+                    jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                }
             }
-        }
-        
-        
+
         });
     }
-   
-    private void configDatePickers(){
-         
+
+    private void configDatePickers() {
+
         Calendar calToday = Calendar.getInstance();
-         
+
         UtilDateModel modelEntrada = new UtilDateModel();
         Properties pEntrada = new Properties();
         pEntrada.put("text.today", calToday.get(Calendar.DATE));
-        pEntrada.put("text.month", calToday.get(Calendar.MONTH +1));
+        pEntrada.put("text.month", calToday.get(Calendar.MONTH + 1));
         pEntrada.put("text.year", calToday.get(Calendar.YEAR));
         JDatePanelImpl datePanelEntrada = new JDatePanelImpl(modelEntrada, pEntrada);
         JDatePickerImpl datePickerEntrada = new JDatePickerImpl(datePanelEntrada, new DateLabelFormatter());
@@ -188,12 +195,11 @@ public class MainFrm extends javax.swing.JFrame {
         datePickerEntrada.setVisible(true);
         datePickerEntrada.setEnabled(true);
         this.jpFecEntContainer.add(datePickerEntrada);
-         
-        
+
         UtilDateModel modelSalida = new UtilDateModel();
         Properties pSalida = new Properties();
         pSalida.put("text.today", calToday.get(Calendar.DATE));
-        pSalida.put("text.month", calToday.get(Calendar.MONTH +1));
+        pSalida.put("text.month", calToday.get(Calendar.MONTH + 1));
         pSalida.put("text.year", calToday.get(Calendar.YEAR));
         JDatePanelImpl datePanelSalida = new JDatePanelImpl(modelSalida, pSalida);
         JDatePickerImpl datePickerSalida = new JDatePickerImpl(datePanelSalida, new DateLabelFormatter());
@@ -203,8 +209,7 @@ public class MainFrm extends javax.swing.JFrame {
         datePickerSalida.setVisible(true);
         datePickerSalida.setEnabled(true);
         this.jpFecSalContainer.add(datePickerSalida);
-        
-        
+
     }
 
     /**
@@ -600,7 +605,14 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771639_2.png"))); // NOI18N
         jMenu3.setText("jMenu3");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771614_7.png"))); // NOI18N
+        jMenuItem1.setText("RoomService");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem1);
 
         jMenuBar1.add(jMenu3);
@@ -624,7 +636,9 @@ public class MainFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteActionPerformed
-        CustomerReg customerReg = new CustomerReg();
+        
+        
+        CustomerReg customerReg = new CustomerReg(this,true);
         customerReg.setVisible(true);
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
@@ -635,6 +649,11 @@ public class MainFrm extends javax.swing.JFrame {
         room.setFlrId(floor);
         configGrid(roomsBounday.findByFloor(room));
     }//GEN-LAST:event_jcbPisosActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
