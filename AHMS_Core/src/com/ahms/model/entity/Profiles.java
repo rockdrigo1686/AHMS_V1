@@ -6,45 +6,40 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.lang.reflect.Field;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author rsoto
  */
 @Entity
-@Table(name = "profiles", catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name="profiles",catalog = "DB_AHMS", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"PRO_CODE"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Profiles.findAll", query = "SELECT p FROM Profiles p"),
-    @NamedQuery(name = "Profiles.find", query = "SELECT p FROM Profiles p WHERE p.proId = :id"),
+    @NamedQuery(name = "Profiles.findByProId", query = "SELECT p FROM Profiles p WHERE p.proId = :proId"),
     @NamedQuery(name = "Profiles.findByProCode", query = "SELECT p FROM Profiles p WHERE p.proCode = :proCode"),
     @NamedQuery(name = "Profiles.findByProName", query = "SELECT p FROM Profiles p WHERE p.proName = :proName"),
     @NamedQuery(name = "Profiles.findByProStatus", query = "SELECT p FROM Profiles p WHERE p.proStatus = :proStatus"),
     @NamedQuery(name = "Profiles.findByProUsrMod", query = "SELECT p FROM Profiles p WHERE p.proUsrMod = :proUsrMod"),
     @NamedQuery(name = "Profiles.findByProDteMod", query = "SELECT p FROM Profiles p WHERE p.proDteMod = :proDteMod")})
-public class Profiles extends AHMSEntity implements Serializable {
-//    private static final long serialVersionUID = 1L;
+public class Profiles implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -57,19 +52,13 @@ public class Profiles extends AHMSEntity implements Serializable {
     @Column(name = "PRO_NAME", nullable = false, length = 50)
     private String proName;
     @Basic(optional = false)
-    @Column(name = "PRO_STATUS", nullable = false)
+    @Column(name = "PRO_STATUS", nullable = false, length = 10)
     private String proStatus;
     @Column(name = "PRO_USR_MOD", length = 6)
     private String proUsrMod;
     @Column(name = "PRO_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date proDteMod;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "profiles", fetch = FetchType.EAGER)
-    private ProfileTasks profileTasks;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.EAGER)
-    private Collection<Users> usersCollection;
-
-  
 
     public Profiles() {
     }
@@ -112,7 +101,7 @@ public class Profiles extends AHMSEntity implements Serializable {
     public String getProStatus() {
         return proStatus;
     }
-    
+
     public void setProStatus(String proStatus) {
         this.proStatus = proStatus;
     }
@@ -131,23 +120,6 @@ public class Profiles extends AHMSEntity implements Serializable {
 
     public void setProDteMod(Date proDteMod) {
         this.proDteMod = proDteMod;
-    }
-
-    public ProfileTasks getProfileTasks() {
-        return profileTasks;
-    }
-
-    public void setProfileTasks(ProfileTasks profileTasks) {
-        this.profileTasks = profileTasks;
-    }
-
-    @XmlTransient
-    public Collection<Users> getUsersCollection() {
-        return usersCollection;
-    }
-
-    public void setUsersCollection(Collection<Users> usersCollection) {
-        this.usersCollection = usersCollection;
     }
 
     @Override
@@ -172,7 +144,13 @@ public class Profiles extends AHMSEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.Profiles[ proId=" + proId + " ]";
+        return "com.ahms.model.entity.Profiles[ proId=" + proId + " ]";
+    }
+
+    public void resetProperties() throws IllegalArgumentException, IllegalAccessException {
+        for (Field f : this.getClass().getDeclaredFields()){
+            f.set(this, null);
+        }
     }
     
 }

@@ -57,7 +57,7 @@ public class Rooms implements Serializable {
     private int rmsBeds;
     @Basic(optional = false)
     @Column(name = "RMS_STATUS", nullable = false)
-    private int rmsStatus;
+    private String rmsStatus;
     @Column(name = "RMS_USR_MOD", length = 6)
     private String rmsUsrMod;
     @Column(name = "RMS_DTE_MOD")
@@ -83,7 +83,7 @@ public class Rooms implements Serializable {
         this.rmsId = rmsId;
     }
 
-    public Rooms(Integer rmsId, String rmsNumber, int rmsBeds, int rmsStatus, int rmsMaxOcu, String rmsDesc) {
+    public Rooms(Integer rmsId, String rmsNumber, int rmsBeds, String rmsStatus, int rmsMaxOcu, String rmsDesc) {
         this.rmsId = rmsId;
         this.rmsNumber = rmsNumber;
         this.rmsBeds = rmsBeds;
@@ -116,11 +116,11 @@ public class Rooms implements Serializable {
         this.rmsBeds = rmsBeds;
     }
 
-    public int getRmsStatus() {
+    public String getRmsStatus() {
         return rmsStatus;
     }
 
-    public void setRmsStatus(int rmsStatus) {
+    public void setRmsStatus(String rmsStatus) {
         this.rmsStatus = rmsStatus;
     }
 
