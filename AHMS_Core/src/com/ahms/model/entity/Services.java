@@ -6,15 +6,16 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -23,18 +24,19 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author rsoto
  */
 @Entity
-@Table(name = "services", catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "services", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"SRV_CODE"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Services.findAll", query = "SELECT s FROM Services s"),
-    @NamedQuery(name = "Services.find", query = "SELECT s FROM Services s WHERE s.srvId = :id"),
+    @NamedQuery(name = "Services.findBySrvId", query = "SELECT s FROM Services s WHERE s.srvId = :srvId"),
     @NamedQuery(name = "Services.findBySrvCode", query = "SELECT s FROM Services s WHERE s.srvCode = :srvCode"),
     @NamedQuery(name = "Services.findBySrvName", query = "SELECT s FROM Services s WHERE s.srvName = :srvName"),
     @NamedQuery(name = "Services.findBySrvDesc", query = "SELECT s FROM Services s WHERE s.srvDesc = :srvDesc"),
@@ -50,17 +52,17 @@ public class Services implements Serializable {
     @Column(name = "SRV_ID", nullable = false)
     private Integer srvId;
     @Basic(optional = false)
-    @Column(name = "SRV_CODE", nullable = false, length = 4)
+    @Column(name = "SRV_CODE", nullable = false, length = 5)
     private String srvCode;
     @Basic(optional = false)
-    @Column(name = "SRV_NAME", nullable = false, length = 15)
+    @Column(name = "SRV_NAME", nullable = false, length = 40)
     private String srvName;
     @Basic(optional = false)
-    @Column(name = "SRV_DESC", nullable = false, length = 20)
+    @Column(name = "SRV_DESC", nullable = false, length = 150)
     private String srvDesc;
     @Basic(optional = false)
-    @Column(name = "SRV_STATUS", nullable = false)
-    private int srvStatus;
+    @Column(name = "SRV_STATUS", nullable = false, length = 10)
+    private String srvStatus;
     @Basic(optional = false)
     @Column(name = "SRV_PRICE", nullable = false)
     private long srvPrice;
@@ -69,8 +71,10 @@ public class Services implements Serializable {
     @Column(name = "SRV_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date srvDteMod;
+    @ManyToMany(mappedBy = "servicesCollection")
+    private Collection<Rooms> roomsCollection;
     @JoinColumn(name = "SVT_ID", referencedColumnName = "SVT_ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private ServiceTypes svtId;
 
     public Services() {
@@ -80,7 +84,7 @@ public class Services implements Serializable {
         this.srvId = srvId;
     }
 
-    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, int srvStatus, long srvPrice) {
+    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, String srvStatus, long srvPrice) {
         this.srvId = srvId;
         this.srvCode = srvCode;
         this.srvName = srvName;
@@ -121,11 +125,11 @@ public class Services implements Serializable {
         this.srvDesc = srvDesc;
     }
 
-    public int getSrvStatus() {
+    public String getSrvStatus() {
         return srvStatus;
     }
 
-    public void setSrvStatus(int srvStatus) {
+    public void setSrvStatus(String srvStatus) {
         this.srvStatus = srvStatus;
     }
 
@@ -151,6 +155,15 @@ public class Services implements Serializable {
 
     public void setSrvDteMod(Date srvDteMod) {
         this.srvDteMod = srvDteMod;
+    }
+
+    @XmlTransient
+    public Collection<Rooms> getRoomsCollection() {
+        return roomsCollection;
+    }
+
+    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
+        this.roomsCollection = roomsCollection;
     }
 
     public ServiceTypes getSvtId() {
@@ -183,7 +196,7 @@ public class Services implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.Services[ srvId=" + srvId + " ]";
+        return "com.ahms.model.entity.Services[ srvId=" + srvId + " ]";
     }
     
 }

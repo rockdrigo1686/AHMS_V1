@@ -25,10 +25,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
-@Table(name = "rooms",catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "rooms", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"RMS_NUMBER"})})
 @XmlRootElement
 @NamedQueries({
@@ -40,8 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Rooms.findByRmsUsrMod", query = "SELECT r FROM Rooms r WHERE r.rmsUsrMod = :rmsUsrMod"),
     @NamedQuery(name = "Rooms.findByRmsDteMod", query = "SELECT r FROM Rooms r WHERE r.rmsDteMod = :rmsDteMod"),
     @NamedQuery(name = "Rooms.findByRmsMaxOcu", query = "SELECT r FROM Rooms r WHERE r.rmsMaxOcu = :rmsMaxOcu"),
-    @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc"),
-    @NamedQuery(name = "Rooms.findByFlrId", query = "SELECT r FROM Rooms r WHERE r.flrId = :flrId")})
+    @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc")})
 public class Rooms implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -56,7 +55,7 @@ public class Rooms implements Serializable {
     @Column(name = "RMS_BEDS", nullable = false)
     private int rmsBeds;
     @Basic(optional = false)
-    @Column(name = "RMS_STATUS", nullable = false)
+    @Column(name = "RMS_STATUS", nullable = false, length = 20)
     private String rmsStatus;
     @Column(name = "RMS_USR_MOD", length = 6)
     private String rmsUsrMod;
@@ -69,12 +68,12 @@ public class Rooms implements Serializable {
     @Basic(optional = false)
     @Column(name = "RMS_DESC", nullable = false, length = 200)
     private String rmsDesc;
-    @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Rates rteId;
     @JoinColumn(name = "FLR_ID", referencedColumnName = "FLR_ID", nullable = false)
     @ManyToOne(optional = false)
     private Floors flrId;
+    @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
+    @ManyToOne(optional = false)
+    private Rates rteId;
 
     public Rooms() {
     }
@@ -156,20 +155,20 @@ public class Rooms implements Serializable {
         this.rmsDesc = rmsDesc;
     }
 
-    public Rates getRteId() {
-        return rteId;
-    }
-
-    public void setRteId(Rates rteId) {
-        this.rteId = rteId;
-    }
-
     public Floors getFlrId() {
         return flrId;
     }
 
     public void setFlrId(Floors flrId) {
         this.flrId = flrId;
+    }
+
+    public Rates getRteId() {
+        return rteId;
+    }
+
+    public void setRteId(Rates rteId) {
+        this.rteId = rteId;
     }
 
     @Override

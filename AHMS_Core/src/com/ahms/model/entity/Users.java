@@ -10,7 +10,6 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,19 +28,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author rsoto
  */
 @Entity
-@Table(name = "users", catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "users", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"USR_CODE"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
-    @NamedQuery(name = "Users.find", query = "SELECT u FROM Users u WHERE u.usrId = :id"),
+    @NamedQuery(name = "Users.findByUsrId", query = "SELECT u FROM Users u WHERE u.usrId = :usrId"),
     @NamedQuery(name = "Users.findByUsrCode", query = "SELECT u FROM Users u WHERE u.usrCode = :usrCode"),
     @NamedQuery(name = "Users.findByUsrName", query = "SELECT u FROM Users u WHERE u.usrName = :usrName"),
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
-    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrCode = :usrCode and u.usrPwd = :usrPwd")
-    })
+    @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd"),
+    @NamedQuery(name = "Users.findByUsrDteMod", query = "SELECT u FROM Users u WHERE u.usrDteMod = :usrDteMod"),
+    @NamedQuery(name = "Users.findByUsrUsrMod", query = "SELECT u FROM Users u WHERE u.usrUsrMod = :usrUsrMod")})
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -61,8 +61,8 @@ public class Users implements Serializable {
     @Column(name = "USR_LST_2", length = 50)
     private String usrLst2;
     @Basic(optional = false)
-    @Column(name = "USR_STATUS", nullable = false)
-    private int usrStatus;
+    @Column(name = "USR_STATUS", nullable = false, length = 10)
+    private String usrStatus;
     @Basic(optional = false)
     @Column(name = "USR_PWD", nullable = false, length = 10)
     private String usrPwd;
@@ -73,7 +73,7 @@ public class Users implements Serializable {
     @Column(name = "USR_USR_MOD", length = 6)
     private String usrUsrMod;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Profiles proId;
 
     public Users() {
@@ -83,7 +83,7 @@ public class Users implements Serializable {
         this.usrId = usrId;
     }
 
-    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, int usrStatus, String usrPwd, Date usrDteMod) {
+    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, String usrStatus, String usrPwd, Date usrDteMod) {
         this.usrId = usrId;
         this.usrCode = usrCode;
         this.usrName = usrName;
@@ -133,11 +133,11 @@ public class Users implements Serializable {
         this.usrLst2 = usrLst2;
     }
 
-    public int getUsrStatus() {
+    public String getUsrStatus() {
         return usrStatus;
     }
 
-    public void setUsrStatus(int usrStatus) {
+    public void setUsrStatus(String usrStatus) {
         this.usrStatus = usrStatus;
     }
 
@@ -195,7 +195,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.Users[ usrId=" + usrId + " ]";
+        return "com.ahms.model.entity.Users[ usrId=" + usrId + " ]";
     }
     
 }

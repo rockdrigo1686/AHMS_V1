@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
-@Table(name = "rates", catalog = "DB_AHMS", schema = "")
+@Table(name = "rates", catalog = "db_ahms", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rates.findAll", query = "SELECT r FROM Rates r"),
@@ -40,8 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rates.findByRteUsrMod", query = "SELECT r FROM Rates r WHERE r.rteUsrMod = :rteUsrMod"),
     @NamedQuery(name = "Rates.findByRteDteMod", query = "SELECT r FROM Rates r WHERE r.rteDteMod = :rteDteMod")})
 public class Rates implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteId")
-    private Collection<Rooms> roomsCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,13 +53,15 @@ public class Rates implements Serializable {
     @Column(name = "RTE_PRICE", nullable = false)
     private long rtePrice;
     @Basic(optional = false)
-    @Column(name = "RTE_STATUS", nullable = false)
-    private int rteStatus;
+    @Column(name = "RTE_STATUS", nullable = false, length = 10)
+    private String rteStatus;
     @Column(name = "RTE_USR_MOD", length = 6)
     private String rteUsrMod;
     @Column(name = "RTE_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date rteDteMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteId")
+    private Collection<Rooms> roomsCollection;
 
     public Rates() {
     }
@@ -70,7 +70,7 @@ public class Rates implements Serializable {
         this.rteId = rteId;
     }
 
-    public Rates(Integer rteId, String rteDesc, long rtePrice, int rteStatus) {
+    public Rates(Integer rteId, String rteDesc, long rtePrice, String rteStatus) {
         this.rteId = rteId;
         this.rteDesc = rteDesc;
         this.rtePrice = rtePrice;
@@ -101,11 +101,11 @@ public class Rates implements Serializable {
         this.rtePrice = rtePrice;
     }
 
-    public int getRteStatus() {
+    public String getRteStatus() {
         return rteStatus;
     }
 
-    public void setRteStatus(int rteStatus) {
+    public void setRteStatus(String rteStatus) {
         this.rteStatus = rteStatus;
     }
 
@@ -123,6 +123,15 @@ public class Rates implements Serializable {
 
     public void setRteDteMod(Date rteDteMod) {
         this.rteDteMod = rteDteMod;
+    }
+
+    @XmlTransient
+    public Collection<Rooms> getRoomsCollection() {
+        return roomsCollection;
+    }
+
+    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
+        this.roomsCollection = roomsCollection;
     }
 
     @Override
@@ -148,15 +157,6 @@ public class Rates implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.model.entity.Rates[ rteId=" + rteId + " ]";
-    }
-
-    @XmlTransient
-    public Collection<Rooms> getRoomsCollection() {
-        return roomsCollection;
-    }
-
-    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
-        this.roomsCollection = roomsCollection;
     }
     
 }

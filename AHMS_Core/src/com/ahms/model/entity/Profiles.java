@@ -6,9 +6,10 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,18 +17,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author rsoto
  */
 @Entity
-@Table(name="profiles",catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "profiles", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"PRO_CODE"})})
 @XmlRootElement
 @NamedQueries({
@@ -46,7 +49,7 @@ public class Profiles implements Serializable {
     @Column(name = "PRO_ID", nullable = false)
     private Integer proId;
     @Basic(optional = false)
-    @Column(name = "PRO_CODE", nullable = false, length = 4)
+    @Column(name = "PRO_CODE", nullable = false, length = 5)
     private String proCode;
     @Basic(optional = false)
     @Column(name = "PRO_NAME", nullable = false, length = 50)
@@ -59,6 +62,8 @@ public class Profiles implements Serializable {
     @Column(name = "PRO_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date proDteMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId")
+    private Collection<Users> usersCollection;
 
     public Profiles() {
     }
@@ -122,6 +127,15 @@ public class Profiles implements Serializable {
         this.proDteMod = proDteMod;
     }
 
+    @XmlTransient
+    public Collection<Users> getUsersCollection() {
+        return usersCollection;
+    }
+
+    public void setUsersCollection(Collection<Users> usersCollection) {
+        this.usersCollection = usersCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -145,12 +159,6 @@ public class Profiles implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.model.entity.Profiles[ proId=" + proId + " ]";
-    }
-
-    public void resetProperties() throws IllegalArgumentException, IllegalAccessException {
-        for (Field f : this.getClass().getDeclaredFields()){
-            f.set(this, null);
-        }
     }
     
 }

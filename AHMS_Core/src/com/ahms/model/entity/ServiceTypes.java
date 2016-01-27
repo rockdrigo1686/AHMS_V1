@@ -12,7 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,12 +30,12 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rsoto
  */
 @Entity
-@Table(name = "service_types", catalog = "DB_AHMS", schema = "", uniqueConstraints = {
+@Table(name = "service_types", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"SVT_CODE"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ServiceTypes.findAll", query = "SELECT s FROM ServiceTypes s"),
-    @NamedQuery(name = "ServiceTypes.find", query = "SELECT s FROM ServiceTypes s WHERE s.svtId = :id"),
+    @NamedQuery(name = "ServiceTypes.findBySvtId", query = "SELECT s FROM ServiceTypes s WHERE s.svtId = :svtId"),
     @NamedQuery(name = "ServiceTypes.findBySvtCode", query = "SELECT s FROM ServiceTypes s WHERE s.svtCode = :svtCode"),
     @NamedQuery(name = "ServiceTypes.findBySvtDesc", query = "SELECT s FROM ServiceTypes s WHERE s.svtDesc = :svtDesc"),
     @NamedQuery(name = "ServiceTypes.findBySvtStatus", query = "SELECT s FROM ServiceTypes s WHERE s.svtStatus = :svtStatus"),
@@ -50,20 +49,20 @@ public class ServiceTypes implements Serializable {
     @Column(name = "SVT_ID", nullable = false)
     private Integer svtId;
     @Basic(optional = false)
-    @Column(name = "SVT_CODE", nullable = false, length = 3)
+    @Column(name = "SVT_CODE", nullable = false, length = 5)
     private String svtCode;
     @Basic(optional = false)
     @Column(name = "SVT_DESC", nullable = false, length = 20)
     private String svtDesc;
     @Basic(optional = false)
-    @Column(name = "SVT_STATUS", nullable = false)
-    private int svtStatus;
+    @Column(name = "SVT_STATUS", nullable = false, length = 10)
+    private String svtStatus;
     @Column(name = "SVT_USR_MOD", length = 6)
     private String svtUsrMod;
     @Column(name = "SVT_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date svtDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId")
     private Collection<Services> servicesCollection;
 
     public ServiceTypes() {
@@ -73,7 +72,7 @@ public class ServiceTypes implements Serializable {
         this.svtId = svtId;
     }
 
-    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, int svtStatus) {
+    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, String svtStatus) {
         this.svtId = svtId;
         this.svtCode = svtCode;
         this.svtDesc = svtDesc;
@@ -104,11 +103,11 @@ public class ServiceTypes implements Serializable {
         this.svtDesc = svtDesc;
     }
 
-    public int getSvtStatus() {
+    public String getSvtStatus() {
         return svtStatus;
     }
 
-    public void setSvtStatus(int svtStatus) {
+    public void setSvtStatus(String svtStatus) {
         this.svtStatus = svtStatus;
     }
 
@@ -159,7 +158,7 @@ public class ServiceTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entitys.ServiceTypes[ svtId=" + svtId + " ]";
+        return "com.ahms.model.entity.ServiceTypes[ svtId=" + svtId + " ]";
     }
     
 }
