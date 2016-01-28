@@ -131,6 +131,21 @@ public class ProfilesFrm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
 
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proCode}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proCode"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proDteMod}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proDteMod"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proId}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proId"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proName}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proName"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proStatus}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proStatus"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proUsrMod}"), profile, org.jdesktop.beansbinding.BeanProperty.create("proUsrMod"));
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${usersCollection}"), profile, org.jdesktop.beansbinding.BeanProperty.create("usersCollection"));
+        bindingGroup.addBinding(binding);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(700, 500));
 
@@ -138,7 +153,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
         proCode.setName("proCode"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proCode}"), proCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proCode}"), proCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
         jLabel2.setText("Nombre:");
@@ -348,13 +363,13 @@ public class ProfilesFrm extends javax.swing.JFrame {
         System.out.println(profile.getProCode());
 
         formManager.setDefaultFormStatus();
-        try {
+        /*try {
             profile.resetProperties();
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
             Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();

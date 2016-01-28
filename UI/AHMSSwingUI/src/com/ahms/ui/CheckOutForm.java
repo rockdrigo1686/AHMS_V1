@@ -5,18 +5,46 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountServiceBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountService;
+import java.util.ArrayList;
+
 /**
  *
  * @author jorge
  */
 public class CheckOutForm extends javax.swing.JDialog {
 
-    /**
-     * Creates new form CheckOutForm
-     */
-    public CheckOutForm(java.awt.Frame parent, boolean modal) {
+    private ArrayList<AccountService> roomService;
+    private AccountServiceBoundary accountServiceBoundary;
+    //private 
+    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
+        accountServiceBoundary = new AccountServiceBoundary();
+        //loadRoomService(account);
+        generateGrid(account);
+    }
+    
+    private void generateGrid(Account account){
+        try {
+            //System.err.println(account.toString());
+            //System.err.println(account.getAccountServiceCollection());
+            for(AccountService a : account.getAccountServiceCollection()){
+                System.out.println("TOTAL:     " + a.getAseTotal());
+            }
+            //System.err.println(account.get);
+        } catch (Exception e) {
+        }
+    }
+    
+    private void loadRoomService(Account account){
+        try {
+            //AccountService actService = new AccountService();
+            //roomService = accountServiceBoundary.findByAccount(null)
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -296,7 +324,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                CheckOutForm dialog = new CheckOutForm(new javax.swing.JFrame(), true);
+                CheckOutForm dialog = new CheckOutForm(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

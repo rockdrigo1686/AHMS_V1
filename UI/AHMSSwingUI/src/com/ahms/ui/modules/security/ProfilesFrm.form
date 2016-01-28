@@ -5,6 +5,15 @@
     <Component class="javax.swing.JSeparator" name="jSeparator2">
     </Component>
     <Component class="com.ahms.model.entity.Profiles" name="profile">
+      <BindingProperties>
+        <BindingProperty name="proCode" source="profile" sourcePath="${proCode}" target="profile" targetPath="proCode" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="proDteMod" source="profile" sourcePath="${proDteMod}" target="profile" targetPath="proDteMod" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="proId" source="profile" sourcePath="${proId}" target="profile" targetPath="proId" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="proName" source="profile" sourcePath="${proName}" target="profile" targetPath="proName" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="proStatus" source="profile" sourcePath="${proStatus}" target="profile" targetPath="proStatus" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="proUsrMod" source="profile" sourcePath="${proUsrMod}" target="profile" targetPath="proUsrMod" updateStrategy="0" immediately="false"/>
+        <BindingProperty name="usersCollection" source="profile" sourcePath="${usersCollection}" target="profile" targetPath="usersCollection" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
     </Component>
   </NonVisualComponents>
   <Properties>

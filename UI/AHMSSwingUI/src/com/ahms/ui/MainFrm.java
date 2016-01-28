@@ -1,7 +1,9 @@
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.model.entity.Account;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
@@ -17,6 +19,7 @@ import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
@@ -35,6 +38,7 @@ public class MainFrm extends javax.swing.JFrame {
     private Boolean shiftOn = false;
     private RoomsBoundary roomsBounday = null;
     private FloorsBoundary floorsBoundary = null;
+    private AccountBoundary accountBoundary = null;
 
     private ArrayList<String> cuartos = new ArrayList<String>();
 
@@ -57,6 +61,7 @@ public class MainFrm extends javax.swing.JFrame {
         initComponents();
         roomsBounday = new RoomsBoundary();
         floorsBoundary = new FloorsBoundary();
+        accountBoundary = new AccountBoundary();
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS: Advanced Hotel Management System ");
@@ -236,6 +241,7 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jcbPisos = new javax.swing.JComboBox();
+        jButton3 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtDashboard = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
@@ -348,6 +354,13 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("CheckOut");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -357,7 +370,9 @@ public class MainFrm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(627, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,7 +380,8 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -389,7 +405,7 @@ public class MainFrm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 856, Short.MAX_VALUE)
                     .addComponent(jSeparator3, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -402,7 +418,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -830,10 +846,17 @@ public class MainFrm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Account acct = accountBoundary.find(new Account(1));
+        JDialog dialogCheckout = new CheckOutForm(this, true, acct);
+        dialogCheckout.setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
