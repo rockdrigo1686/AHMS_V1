@@ -6,26 +6,32 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "rooms", catalog = "db_ahms", schema = "", uniqueConstraints = {
@@ -68,12 +74,21 @@ public class Rooms implements Serializable {
     @Basic(optional = false)
     @Column(name = "RMS_DESC", nullable = false, length = 200)
     private String rmsDesc;
+    @JoinTable(name = "room_service", joinColumns = {
+        @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "srv_id", referencedColumnName = "SRV_ID", nullable = false)})
+    @ManyToMany
+    private Collection<Services> servicesCollection;
     @JoinColumn(name = "FLR_ID", referencedColumnName = "FLR_ID", nullable = false)
     @ManyToOne(optional = false)
     private Floors flrId;
     @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
     @ManyToOne(optional = false)
     private Rates rteId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId")
+    private Collection<Reservation> reservationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId")
+    private Collection<Account> accountCollection;
 
     public Rooms() {
     }
@@ -155,6 +170,15 @@ public class Rooms implements Serializable {
         this.rmsDesc = rmsDesc;
     }
 
+    @XmlTransient
+    public Collection<Services> getServicesCollection() {
+        return servicesCollection;
+    }
+
+    public void setServicesCollection(Collection<Services> servicesCollection) {
+        this.servicesCollection = servicesCollection;
+    }
+
     public Floors getFlrId() {
         return flrId;
     }
@@ -169,6 +193,24 @@ public class Rooms implements Serializable {
 
     public void setRteId(Rates rteId) {
         this.rteId = rteId;
+    }
+
+    @XmlTransient
+    public Collection<Reservation> getReservationCollection() {
+        return reservationCollection;
+    }
+
+    public void setReservationCollection(Collection<Reservation> reservationCollection) {
+        this.reservationCollection = reservationCollection;
+    }
+
+    @XmlTransient
+    public Collection<Account> getAccountCollection() {
+        return accountCollection;
+    }
+
+    public void setAccountCollection(Collection<Account> accountCollection) {
+        this.accountCollection = accountCollection;
     }
 
     @Override

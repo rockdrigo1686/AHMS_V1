@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "payment_types", catalog = "db_ahms", schema = "", uniqueConstraints = {

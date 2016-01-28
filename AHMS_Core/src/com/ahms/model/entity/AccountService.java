@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "account_service", catalog = "db_ahms", schema = "")
@@ -58,16 +59,16 @@ public class AccountService implements Serializable {
     @Column(name = "ase_folio3", length = 15)
     private String aseFolio3;
     @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account actId;
     @JoinColumn(name = "pay_id1", referencedColumnName = "PAY_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private PaymentTypes payId1;
     @JoinColumn(name = "pay_id2", referencedColumnName = "PAY_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId2;
     @JoinColumn(name = "pay_id3", referencedColumnName = "PAY_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId3;
 
     public AccountService() {

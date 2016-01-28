@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "account", catalog = "db_ahms", schema = "")
@@ -78,7 +79,7 @@ public class Account implements Serializable {
     private Long actAmount3;
     @Column(name = "act_folio3", length = 15)
     private String actFolio3;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)    
     private Collection<AccountService> accountServiceCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId")
     private Collection<Guests> guestsCollection;
