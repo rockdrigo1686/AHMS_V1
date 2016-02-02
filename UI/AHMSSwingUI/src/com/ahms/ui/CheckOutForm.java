@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui;
 
 import com.ahms.boundary.security.AccountServiceBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountService;
 import java.util.ArrayList;
+import java.util.List;
+import com.ahms.model.entity.RoomService;
+import java.util.Vector;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,29 +23,51 @@ public class CheckOutForm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         accountServiceBoundary = new AccountServiceBoundary();
-        //loadRoomService(account);
         generateGrid(account);
     }
     
     private void generateGrid(Account account){
         try {
-            //System.err.println(account.toString());
-            //System.err.println(account.getAccountServiceCollection());
+            
+            Vector<String> vctColumns = new Vector<String>();
+            vctColumns.add("Cantidad");
+            vctColumns.add("Descripción");
+            vctColumns.add("Costo");
+            
+            Vector<Vector> rows = new Vector<>();
             for(AccountService a : account.getAccountServiceCollection()){
-                System.out.println("TOTAL:     " + a.getAseTotal());
+                for(RoomService rms : a.getRoomServiceCollection()){
+                    Vector<Object> vctRow = new Vector<>();
+                    vctRow.add(rms.getRseQuantity());
+                    vctRow.add(rms.getSrvId().getSrvDesc());
+                    vctRow.add((rms.getRseQuantity() * rms.getSrvId().getSrvPrice()));
+                    rows.add(vctRow);
+                }
             }
-            //System.err.println(account.get);
+            
+            DefaultTableModel model = new DefaultTableModel(rows, vctColumns) {
+                private static final long serialVersionUID = 1L;
+                @Override
+                public Class getColumnClass(int column) {
+                    return getValueAt(0, column).getClass();
+                }
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+            jtCheckoutDetalle.setModel(model);
+            //jtCheckoutDetalle.setRowHeight(50);
+            jtCheckoutDetalle.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+            jtCheckoutDetalle.getColumnModel().getColumn(0).setMaxWidth(100);
+            jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(700);
+            jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(100);
+            
         } catch (Exception e) {
         }
     }
     
-    private void loadRoomService(Account account){
-        try {
-            //AccountService actService = new AccountService();
-            //roomService = accountServiceBoundary.findByAccount(null)
-        } catch (Exception e) {
-        }
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
