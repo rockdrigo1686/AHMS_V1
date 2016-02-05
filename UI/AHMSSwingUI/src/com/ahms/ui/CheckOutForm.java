@@ -6,6 +6,7 @@ import com.ahms.model.entity.AccountService;
 import java.util.ArrayList;
 import java.util.List;
 import com.ahms.model.entity.RoomService;
+import java.math.BigDecimal;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -23,16 +24,18 @@ public class CheckOutForm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         accountServiceBoundary = new AccountServiceBoundary();
-        generateGrid(account);
+        generateGridSimple(account);
     }
     
-    private void generateGrid(Account account){
+    private void generateGridSimple(Account account){
         try {
             
             Vector<String> vctColumns = new Vector<String>();
             vctColumns.add("Cantidad");
             vctColumns.add("Descripción");
             vctColumns.add("Costo");
+            
+            BigDecimal total = new BigDecimal(0);
             
             Vector<Vector> rows = new Vector<>();
             for(AccountService a : account.getAccountServiceCollection()){
@@ -42,8 +45,17 @@ public class CheckOutForm extends javax.swing.JDialog {
                     vctRow.add(rms.getSrvId().getSrvDesc());
                     vctRow.add((rms.getRseQuantity() * rms.getSrvId().getSrvPrice()));
                     rows.add(vctRow);
+                    
+                    total = total.add(new BigDecimal((rms.getRseQuantity() * rms.getSrvId().getSrvPrice())));
                 }
             }
+            // renglon de total
+            Vector<Object> totalRow = new Vector<>();
+            totalRow.add("*");
+            totalRow.add(" Subtotal: ");
+            totalRow.add(total);
+                        
+            //Vector<Object> vctRow = new Vector<>();
             
             DefaultTableModel model = new DefaultTableModel(rows, vctColumns) {
                 private static final long serialVersionUID = 1L;
@@ -54,7 +66,8 @@ public class CheckOutForm extends javax.swing.JDialog {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
-                }
+                }   
+                
             };
             jtCheckoutDetalle.setModel(model);
             //jtCheckoutDetalle.setRowHeight(50);
@@ -62,6 +75,14 @@ public class CheckOutForm extends javax.swing.JDialog {
             jtCheckoutDetalle.getColumnModel().getColumn(0).setMaxWidth(100);
             jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(700);
             jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(100);
+            
+            //pintando subtotales
+            for(int i=0; i < jtCheckoutDetalle.getRowCount();i++){
+                //for(int j=0; j < jt){
+                
+                //}
+            }
+            jtCheckoutDetalle.getColumnModel().getColumn(0).setCellRenderer(null);
             
         } catch (Exception e) {
         }
