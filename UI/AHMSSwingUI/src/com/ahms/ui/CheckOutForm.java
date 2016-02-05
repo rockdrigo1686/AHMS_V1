@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.ahms.model.entity.RoomService;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +18,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CheckOutForm extends javax.swing.JDialog {
 
+    public BigDecimal totalAccount = BigDecimal.ZERO;
+    public BigDecimal totalPending = BigDecimal.ZERO;
+    public BigDecimal totalPaid    = BigDecimal.ZERO;
+    public BigDecimal totalIVA     = BigDecimal.ZERO;
+    public BigDecimal totalPagado  = BigDecimal.ZERO; 
+    
     private ArrayList<AccountService> roomService;
     private AccountServiceBoundary accountServiceBoundary;
     //private 
@@ -31,6 +38,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         try {
             
             Vector<String> vctColumns = new Vector<String>();
+            vctColumns.add("Cuarto");
             vctColumns.add("Cantidad");
             vctColumns.add("Descripción");
             vctColumns.add("Costo");
@@ -41,6 +49,7 @@ public class CheckOutForm extends javax.swing.JDialog {
             for(AccountService a : account.getAccountServiceCollection()){
                 for(RoomService rms : a.getRoomServiceCollection()){
                     Vector<Object> vctRow = new Vector<>();
+                    vctRow.add("Cuarto1");
                     vctRow.add(rms.getRseQuantity());
                     vctRow.add(rms.getSrvId().getSrvDesc());
                     vctRow.add((rms.getRseQuantity() * rms.getSrvId().getSrvPrice()));
@@ -49,13 +58,23 @@ public class CheckOutForm extends javax.swing.JDialog {
                     total = total.add(new BigDecimal((rms.getRseQuantity() * rms.getSrvId().getSrvPrice())));
                 }
             }
-            // renglon de total
-            Vector<Object> totalRow = new Vector<>();
-            totalRow.add("*");
-            totalRow.add(" Subtotal: ");
-            totalRow.add(total);
-                        
-            //Vector<Object> vctRow = new Vector<>();
+            
+            totalIVA = total.multiply(new BigDecimal(0.16));
+            totalAccount = totalPending = total.add(totalIVA);
+            
+            total = total.setScale(2, RoundingMode.HALF_EVEN);
+            totalIVA = totalIVA.setScale(2, RoundingMode.HALF_EVEN);
+            totalAccount = totalAccount.setScale(2, RoundingMode.HALF_EVEN);
+            totalPending = totalPending.setScale(2, RoundingMode.HALF_EVEN);
+            totalPagado = totalPagado.setScale(2, RoundingMode.HALF_EVEN);
+            
+            //vinculando al UI
+            jlSubtotal.setText(total.toString());
+            jlIVA.setText(totalIVA.toString());
+            jlTotal.setText(totalAccount.toString());
+            
+            jlPagado.setText(totalPagado.toString());
+            jlPendiente.setText(totalPending.toString());
             
             DefaultTableModel model = new DefaultTableModel(rows, vctColumns) {
                 private static final long serialVersionUID = 1L;
@@ -73,17 +92,10 @@ public class CheckOutForm extends javax.swing.JDialog {
             //jtCheckoutDetalle.setRowHeight(50);
             jtCheckoutDetalle.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
             jtCheckoutDetalle.getColumnModel().getColumn(0).setMaxWidth(100);
-            jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(700);
-            jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(100);
-            
-            //pintando subtotales
-            for(int i=0; i < jtCheckoutDetalle.getRowCount();i++){
-                //for(int j=0; j < jt){
-                
-                //}
-            }
-            jtCheckoutDetalle.getColumnModel().getColumn(0).setCellRenderer(null);
-            
+            jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(100);
+            jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(600);
+            jtCheckoutDetalle.getColumnModel().getColumn(3).setMaxWidth(100);
+                                    
         } catch (Exception e) {
         }
     }
@@ -104,27 +116,21 @@ public class CheckOutForm extends javax.swing.JDialog {
         jlCuarto = new javax.swing.JLabel();
         jscpDetalle = new javax.swing.JScrollPane();
         jtCheckoutDetalle = new javax.swing.JTable();
-        jpSubtotal = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jcbTipoPago1 = new javax.swing.JComboBox();
-        jtSubtotal = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jcbTipoPago2 = new javax.swing.JComboBox();
-        jLabel7 = new javax.swing.JLabel();
-        jtSubtotal1 = new javax.swing.JTextField();
-        jtSubtotal3 = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jcbTipoPago3 = new javax.swing.JComboBox();
-        jLabel14 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         jbSalir = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jcbTipoPago = new javax.swing.JComboBox();
-        jtSubtotal4 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jlSubtotal = new javax.swing.JLabel();
+        jlIVA = new javax.swing.JLabel();
+        jlTotal = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jlPagado = new javax.swing.JLabel();
+        jlPendiente = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -170,92 +176,6 @@ public class CheckOutForm extends javax.swing.JDialog {
         ));
         jscpDetalle.setViewportView(jtCheckoutDetalle);
 
-        jpSubtotal.setBackground(java.awt.Color.white);
-
-        jLabel12.setText("Tipo de Pago:");
-
-        jcbTipoPago1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo", "T. Crédito", "T. Débito" }));
-
-        jLabel6.setText("Subtotal:");
-
-        jLabel13.setText("Tipo de Pago:");
-
-        jcbTipoPago2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo", "T. Crédito", "T. Débito" }));
-
-        jLabel7.setText("Subtotal:");
-
-        jLabel9.setText("Subtotal:");
-
-        jcbTipoPago3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo", "T. Crédito", "T. Débito" }));
-
-        jLabel14.setText("Tipo de Pago:");
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
-        jButton2.setText("Pagar");
-
-        javax.swing.GroupLayout jpSubtotalLayout = new javax.swing.GroupLayout(jpSubtotal);
-        jpSubtotal.setLayout(jpSubtotalLayout);
-        jpSubtotalLayout.setHorizontalGroup(
-            jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpSubtotalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSubtotalLayout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbTipoPago1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSubtotalLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbTipoPago2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtSubtotal1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpSubtotalLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbTipoPago3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtSubtotal3, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jpSubtotalLayout.setVerticalGroup(
-            jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpSubtotalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpSubtotalLayout.createSequentialGroup()
-                        .addGroup(jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(jcbTipoPago1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtSubtotal1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
-                            .addComponent(jcbTipoPago2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jpSubtotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtSubtotal3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(jcbTipoPago3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
         jToolBar1.setFloatable(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -267,11 +187,42 @@ public class CheckOutForm extends javax.swing.JDialog {
 
         jPanel1.setBackground(java.awt.Color.white);
 
-        jLabel11.setText("Tipo de Pago:");
+        jLabel11.setText("Subtotal:");
 
-        jcbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo", "T. Crédito", "T. Débito" }));
+        jLabel10.setText("IVA(16%):");
 
-        jLabel10.setText("Subtotal:");
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
+        jButton2.setText("Pagar");
+
+        jLabel1.setText("Total:");
+
+        jlSubtotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlSubtotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlSubtotal.setText("subtotal");
+
+        jlIVA.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlIVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlIVA.setText("iva");
+
+        jlTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlTotal.setText("total");
+
+        jLabel2.setText("Total Pagado:");
+
+        jLabel3.setText("Por pagar:");
+
+        jlPagado.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlPagado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlPagado.setText("pagado");
+
+        jlPendiente.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlPendiente.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlPendiente.setText("pagado");
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/accept.png"))); // NOI18N
+        jButton4.setText("Cerrar Cuenta");
+        jButton4.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -281,24 +232,54 @@ public class CheckOutForm extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
-                    .addComponent(jLabel10))
-                .addGap(27, 27, 27)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel1))
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtSubtotal4)
-                    .addComponent(jcbTipoPago, 0, 116, Short.MAX_VALUE))
+                    .addComponent(jlIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(64, 64, 64)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlPendiente, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jlPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jcbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jtSubtotal4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(jlSubtotal)
+                            .addComponent(jLabel2)
+                            .addComponent(jlPagado))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jlIVA))
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jlTotal)
+                            .addComponent(jLabel3)
+                            .addComponent(jlPendiente))))
                 .addContainerGap())
         );
 
@@ -312,10 +293,7 @@ public class CheckOutForm extends javax.swing.JDialog {
                     .addComponent(jscpDetalle)
                     .addComponent(jpCabecera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpSubtotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -328,9 +306,7 @@ public class CheckOutForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jscpDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -381,30 +357,24 @@ public class CheckOutForm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JComboBox jcbTipoPago;
-    private javax.swing.JComboBox jcbTipoPago1;
-    private javax.swing.JComboBox jcbTipoPago2;
-    private javax.swing.JComboBox jcbTipoPago3;
     private javax.swing.JLabel jlCuarto;
+    private javax.swing.JLabel jlIVA;
     private javax.swing.JLabel jlNombre;
+    private javax.swing.JLabel jlPagado;
+    private javax.swing.JLabel jlPendiente;
+    private javax.swing.JLabel jlSubtotal;
+    private javax.swing.JLabel jlTotal;
     private javax.swing.JPanel jpCabecera;
-    private javax.swing.JPanel jpSubtotal;
     private javax.swing.JScrollPane jscpDetalle;
     private javax.swing.JTable jtCheckoutDetalle;
-    private javax.swing.JTextField jtSubtotal;
-    private javax.swing.JTextField jtSubtotal1;
-    private javax.swing.JTextField jtSubtotal3;
-    private javax.swing.JTextField jtSubtotal4;
     // End of variables declaration//GEN-END:variables
 }

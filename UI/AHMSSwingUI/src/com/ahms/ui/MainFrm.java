@@ -103,16 +103,16 @@ public class MainFrm extends javax.swing.JFrame {
             Vector vctRow = new Vector();
             switch (room.getRmsStatus()) {
                 case "Disponible":
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedG.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/green_ball.png")));
                     break;
                 case "Ocupado":
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedR.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/red_ball.png")));
                     break;
                 case "Reservado":
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/bedB.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/blue_ball.png")));
                     break;
                 case "Mantenimiento":
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Gear.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/grey_ball.png")));
                     break;
             }
             vctRow.add(room.getRmsNumber());

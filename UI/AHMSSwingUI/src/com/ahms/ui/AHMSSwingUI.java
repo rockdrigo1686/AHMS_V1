@@ -19,13 +19,13 @@ public class AHMSSwingUI {
      */  
     public static void main(String[] args) {
         // TODO code application logic here
-        LoginFrm login = new LoginFrm();
-        login.setVisible(true);
-
         try {
             // Set System L&F
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
+            
+            LoginFrm login = new LoginFrm();
+            login.setVisible(true);
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             // handle exception
         }
