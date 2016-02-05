@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -39,7 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PaymentTypes.findByPayCode", query = "SELECT p FROM PaymentTypes p WHERE p.payCode = :payCode"),
     @NamedQuery(name = "PaymentTypes.findByPayDesc", query = "SELECT p FROM PaymentTypes p WHERE p.payDesc = :payDesc"),
     @NamedQuery(name = "PaymentTypes.findByPayStatus", query = "SELECT p FROM PaymentTypes p WHERE p.payStatus = :payStatus"),
-    @NamedQuery(name = "PaymentTypes.findByPayUsrMod", query = "SELECT p FROM PaymentTypes p WHERE p.payUsrMod = :payUsrMod"),
     @NamedQuery(name = "PaymentTypes.findByPayDteMod", query = "SELECT p FROM PaymentTypes p WHERE p.payDteMod = :payDteMod")})
 public class PaymentTypes implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -57,23 +58,15 @@ public class PaymentTypes implements Serializable {
     @Basic(optional = false)
     @Column(name = "PAY_STATUS", nullable = false, length = 10)
     private String payStatus;
-    @Column(name = "PAY_USR_MOD", length = 6)
-    private String payUsrMod;
-    @Column(name = "PAY_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "PAY_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date payDteMod;
-    @OneToMany(mappedBy = "payId1", fetch = FetchType.EAGER)
-    private Collection<AccountService> accountServiceCollection;
-    @OneToMany(mappedBy = "payId2", fetch = FetchType.EAGER)
-    private Collection<AccountService> accountServiceCollection1;
-    @OneToMany(mappedBy = "payId3", fetch = FetchType.EAGER)
-    private Collection<AccountService> accountServiceCollection2;
-    @OneToMany(mappedBy = "payId1", fetch = FetchType.EAGER)
-    private Collection<Account> accountCollection;
-    @OneToMany(mappedBy = "payId2", fetch = FetchType.EAGER)
-    private Collection<Account> accountCollection1;
-    @OneToMany(mappedBy = "payId3", fetch = FetchType.EAGER)
-    private Collection<Account> accountCollection2;
+    @JoinColumn(name = "PAY_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users payUsrMod;
+    @OneToMany(mappedBy = "payId", fetch = FetchType.EAGER)
+    private Collection<FolioTransaction> folioTransactionCollection;
 
     public PaymentTypes() {
     }
@@ -82,11 +75,12 @@ public class PaymentTypes implements Serializable {
         this.payId = payId;
     }
 
-    public PaymentTypes(Integer payId, String payCode, String payDesc, String payStatus) {
+    public PaymentTypes(Integer payId, String payCode, String payDesc, String payStatus, Date payDteMod) {
         this.payId = payId;
         this.payCode = payCode;
         this.payDesc = payDesc;
         this.payStatus = payStatus;
+        this.payDteMod = payDteMod;
     }
 
     public Integer getPayId() {
@@ -121,14 +115,6 @@ public class PaymentTypes implements Serializable {
         this.payStatus = payStatus;
     }
 
-    public String getPayUsrMod() {
-        return payUsrMod;
-    }
-
-    public void setPayUsrMod(String payUsrMod) {
-        this.payUsrMod = payUsrMod;
-    }
-
     public Date getPayDteMod() {
         return payDteMod;
     }
@@ -137,58 +123,21 @@ public class PaymentTypes implements Serializable {
         this.payDteMod = payDteMod;
     }
 
-    @XmlTransient
-    public Collection<AccountService> getAccountServiceCollection() {
-        return accountServiceCollection;
+    public Users getPayUsrMod() {
+        return payUsrMod;
     }
 
-    public void setAccountServiceCollection(Collection<AccountService> accountServiceCollection) {
-        this.accountServiceCollection = accountServiceCollection;
-    }
-
-    @XmlTransient
-    public Collection<AccountService> getAccountServiceCollection1() {
-        return accountServiceCollection1;
-    }
-
-    public void setAccountServiceCollection1(Collection<AccountService> accountServiceCollection1) {
-        this.accountServiceCollection1 = accountServiceCollection1;
+    public void setPayUsrMod(Users payUsrMod) {
+        this.payUsrMod = payUsrMod;
     }
 
     @XmlTransient
-    public Collection<AccountService> getAccountServiceCollection2() {
-        return accountServiceCollection2;
+    public Collection<FolioTransaction> getFolioTransactionCollection() {
+        return folioTransactionCollection;
     }
 
-    public void setAccountServiceCollection2(Collection<AccountService> accountServiceCollection2) {
-        this.accountServiceCollection2 = accountServiceCollection2;
-    }
-
-    @XmlTransient
-    public Collection<Account> getAccountCollection() {
-        return accountCollection;
-    }
-
-    public void setAccountCollection(Collection<Account> accountCollection) {
-        this.accountCollection = accountCollection;
-    }
-
-    @XmlTransient
-    public Collection<Account> getAccountCollection1() {
-        return accountCollection1;
-    }
-
-    public void setAccountCollection1(Collection<Account> accountCollection1) {
-        this.accountCollection1 = accountCollection1;
-    }
-
-    @XmlTransient
-    public Collection<Account> getAccountCollection2() {
-        return accountCollection2;
-    }
-
-    public void setAccountCollection2(Collection<Account> accountCollection2) {
-        this.accountCollection2 = accountCollection2;
+    public void setFolioTransactionCollection(Collection<FolioTransaction> folioTransactionCollection) {
+        this.folioTransactionCollection = folioTransactionCollection;
     }
 
     @Override

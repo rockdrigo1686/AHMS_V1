@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,7 +42,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Profiles.findByProCode", query = "SELECT p FROM Profiles p WHERE p.proCode = :proCode"),
     @NamedQuery(name = "Profiles.findByProName", query = "SELECT p FROM Profiles p WHERE p.proName = :proName"),
     @NamedQuery(name = "Profiles.findByProStatus", query = "SELECT p FROM Profiles p WHERE p.proStatus = :proStatus"),
-    @NamedQuery(name = "Profiles.findByProUsrMod", query = "SELECT p FROM Profiles p WHERE p.proUsrMod = :proUsrMod"),
     @NamedQuery(name = "Profiles.findByProDteMod", query = "SELECT p FROM Profiles p WHERE p.proDteMod = :proDteMod")})
 public class Profiles implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -58,11 +59,13 @@ public class Profiles implements Serializable {
     @Basic(optional = false)
     @Column(name = "PRO_STATUS", nullable = false, length = 10)
     private String proStatus;
-    @Column(name = "PRO_USR_MOD", length = 6)
-    private String proUsrMod;
-    @Column(name = "PRO_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "PRO_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date proDteMod;
+    @JoinColumn(name = "PRO_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users proUsrMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.EAGER)
     private Collection<Users> usersCollection;
 
@@ -73,11 +76,12 @@ public class Profiles implements Serializable {
         this.proId = proId;
     }
 
-    public Profiles(Integer proId, String proCode, String proName, String proStatus) {
+    public Profiles(Integer proId, String proCode, String proName, String proStatus, Date proDteMod) {
         this.proId = proId;
         this.proCode = proCode;
         this.proName = proName;
         this.proStatus = proStatus;
+        this.proDteMod = proDteMod;
     }
 
     public Integer getProId() {
@@ -112,20 +116,20 @@ public class Profiles implements Serializable {
         this.proStatus = proStatus;
     }
 
-    public String getProUsrMod() {
-        return proUsrMod;
-    }
-
-    public void setProUsrMod(String proUsrMod) {
-        this.proUsrMod = proUsrMod;
-    }
-
     public Date getProDteMod() {
         return proDteMod;
     }
 
     public void setProDteMod(Date proDteMod) {
         this.proDteMod = proDteMod;
+    }
+
+    public Users getProUsrMod() {
+        return proUsrMod;
+    }
+
+    public void setProUsrMod(Users proUsrMod) {
+        this.proUsrMod = proUsrMod;
     }
 
     @XmlTransient

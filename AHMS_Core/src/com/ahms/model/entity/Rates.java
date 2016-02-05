@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -38,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rates.findByRteDesc", query = "SELECT r FROM Rates r WHERE r.rteDesc = :rteDesc"),
     @NamedQuery(name = "Rates.findByRtePrice", query = "SELECT r FROM Rates r WHERE r.rtePrice = :rtePrice"),
     @NamedQuery(name = "Rates.findByRteStatus", query = "SELECT r FROM Rates r WHERE r.rteStatus = :rteStatus"),
-    @NamedQuery(name = "Rates.findByRteUsrMod", query = "SELECT r FROM Rates r WHERE r.rteUsrMod = :rteUsrMod"),
     @NamedQuery(name = "Rates.findByRteDteMod", query = "SELECT r FROM Rates r WHERE r.rteDteMod = :rteDteMod")})
 public class Rates implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -56,13 +57,15 @@ public class Rates implements Serializable {
     @Basic(optional = false)
     @Column(name = "RTE_STATUS", nullable = false, length = 10)
     private String rteStatus;
-    @Column(name = "RTE_USR_MOD", length = 6)
-    private String rteUsrMod;
-    @Column(name = "RTE_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "RTE_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date rteDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteId", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
+    @JoinColumn(name = "RTE_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users rteUsrMod;
 
     public Rates() {
     }
@@ -71,11 +74,12 @@ public class Rates implements Serializable {
         this.rteId = rteId;
     }
 
-    public Rates(Integer rteId, String rteDesc, long rtePrice, String rteStatus) {
+    public Rates(Integer rteId, String rteDesc, long rtePrice, String rteStatus, Date rteDteMod) {
         this.rteId = rteId;
         this.rteDesc = rteDesc;
         this.rtePrice = rtePrice;
         this.rteStatus = rteStatus;
+        this.rteDteMod = rteDteMod;
     }
 
     public Integer getRteId() {
@@ -110,14 +114,6 @@ public class Rates implements Serializable {
         this.rteStatus = rteStatus;
     }
 
-    public String getRteUsrMod() {
-        return rteUsrMod;
-    }
-
-    public void setRteUsrMod(String rteUsrMod) {
-        this.rteUsrMod = rteUsrMod;
-    }
-
     public Date getRteDteMod() {
         return rteDteMod;
     }
@@ -133,6 +129,14 @@ public class Rates implements Serializable {
 
     public void setRoomsCollection(Collection<Rooms> roomsCollection) {
         this.roomsCollection = roomsCollection;
+    }
+
+    public Users getRteUsrMod() {
+        return rteUsrMod;
+    }
+
+    public void setRteUsrMod(Users rteUsrMod) {
+        this.rteUsrMod = rteUsrMod;
     }
 
     @Override

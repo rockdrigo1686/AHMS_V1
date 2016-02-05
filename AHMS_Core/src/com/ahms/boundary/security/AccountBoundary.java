@@ -2,7 +2,6 @@ package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Account;
-import com.ahms.model.entity.AccountService;
 import com.ahms.model.manager.entity_manager.AccountEM;
 import java.util.List;
 

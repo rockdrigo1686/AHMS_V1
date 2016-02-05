@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -39,7 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Floors.findByFlrId", query = "SELECT f FROM Floors f WHERE f.flrId = :flrId"),
     @NamedQuery(name = "Floors.findByFlrCode", query = "SELECT f FROM Floors f WHERE f.flrCode = :flrCode"),
     @NamedQuery(name = "Floors.findByFlrStatus", query = "SELECT f FROM Floors f WHERE f.flrStatus = :flrStatus"),
-    @NamedQuery(name = "Floors.findByFlrUsrMod", query = "SELECT f FROM Floors f WHERE f.flrUsrMod = :flrUsrMod"),
     @NamedQuery(name = "Floors.findByFlrDteMod", query = "SELECT f FROM Floors f WHERE f.flrDteMod = :flrDteMod")})
 public class Floors implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -54,13 +55,15 @@ public class Floors implements Serializable {
     @Basic(optional = false)
     @Column(name = "FLR_STATUS", nullable = false, length = 15)
     private String flrStatus;
-    @Column(name = "FLR_USR_MOD", length = 6)
-    private String flrUsrMod;
-    @Column(name = "FLR_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "FLR_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date flrDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrId", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
+    @JoinColumn(name = "FLR_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users flrUsrMod;
 
     public Floors() {
     }
@@ -69,10 +72,11 @@ public class Floors implements Serializable {
         this.flrId = flrId;
     }
 
-    public Floors(Integer flrId, String flrCode, String flrStatus) {
+    public Floors(Integer flrId, String flrCode, String flrStatus, Date flrDteMod) {
         this.flrId = flrId;
         this.flrCode = flrCode;
         this.flrStatus = flrStatus;
+        this.flrDteMod = flrDteMod;
     }
 
     public Integer getFlrId() {
@@ -99,14 +103,6 @@ public class Floors implements Serializable {
         this.flrStatus = flrStatus;
     }
 
-    public String getFlrUsrMod() {
-        return flrUsrMod;
-    }
-
-    public void setFlrUsrMod(String flrUsrMod) {
-        this.flrUsrMod = flrUsrMod;
-    }
-
     public Date getFlrDteMod() {
         return flrDteMod;
     }
@@ -122,6 +118,14 @@ public class Floors implements Serializable {
 
     public void setRoomsCollection(Collection<Rooms> roomsCollection) {
         this.roomsCollection = roomsCollection;
+    }
+
+    public Users getFlrUsrMod() {
+        return flrUsrMod;
+    }
+
+    public void setFlrUsrMod(Users flrUsrMod) {
+        this.flrUsrMod = flrUsrMod;
     }
 
     @Override

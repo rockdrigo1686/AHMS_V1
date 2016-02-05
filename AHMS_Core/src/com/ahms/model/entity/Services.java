@@ -44,7 +44,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Services.findBySrvDesc", query = "SELECT s FROM Services s WHERE s.srvDesc = :srvDesc"),
     @NamedQuery(name = "Services.findBySrvStatus", query = "SELECT s FROM Services s WHERE s.srvStatus = :srvStatus"),
     @NamedQuery(name = "Services.findBySrvPrice", query = "SELECT s FROM Services s WHERE s.srvPrice = :srvPrice"),
-    @NamedQuery(name = "Services.findBySrvUsrMod", query = "SELECT s FROM Services s WHERE s.srvUsrMod = :srvUsrMod"),
     @NamedQuery(name = "Services.findBySrvDteMod", query = "SELECT s FROM Services s WHERE s.srvDteMod = :srvDteMod")})
 public class Services implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -68,16 +67,18 @@ public class Services implements Serializable {
     @Basic(optional = false)
     @Column(name = "SRV_PRICE", nullable = false)
     private long srvPrice;
-    @Column(name = "SRV_USR_MOD", length = 6)
-    private String srvUsrMod;
-    @Column(name = "SRV_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "SRV_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date srvDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvId", fetch = FetchType.EAGER)
-    private Collection<RoomService> roomServiceCollection;
     @JoinColumn(name = "SVT_ID", referencedColumnName = "SVT_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ServiceTypes svtId;
+    @JoinColumn(name = "SRV_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users srvUsrMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvId", fetch = FetchType.EAGER)
+    private Collection<AccountTransactions> accountTransactionsCollection;
 
     public Services() {
     }
@@ -86,13 +87,14 @@ public class Services implements Serializable {
         this.srvId = srvId;
     }
 
-    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, String srvStatus, long srvPrice) {
+    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, String srvStatus, long srvPrice, Date srvDteMod) {
         this.srvId = srvId;
         this.srvCode = srvCode;
         this.srvName = srvName;
         this.srvDesc = srvDesc;
         this.srvStatus = srvStatus;
         this.srvPrice = srvPrice;
+        this.srvDteMod = srvDteMod;
     }
 
     public Integer getSrvId() {
@@ -143,14 +145,6 @@ public class Services implements Serializable {
         this.srvPrice = srvPrice;
     }
 
-    public String getSrvUsrMod() {
-        return srvUsrMod;
-    }
-
-    public void setSrvUsrMod(String srvUsrMod) {
-        this.srvUsrMod = srvUsrMod;
-    }
-
     public Date getSrvDteMod() {
         return srvDteMod;
     }
@@ -159,21 +153,29 @@ public class Services implements Serializable {
         this.srvDteMod = srvDteMod;
     }
 
-    @XmlTransient
-    public Collection<RoomService> getRoomServiceCollection() {
-        return roomServiceCollection;
-    }
-
-    public void setRoomServiceCollection(Collection<RoomService> roomServiceCollection) {
-        this.roomServiceCollection = roomServiceCollection;
-    }
-
     public ServiceTypes getSvtId() {
         return svtId;
     }
 
     public void setSvtId(ServiceTypes svtId) {
         this.svtId = svtId;
+    }
+
+    public Users getSrvUsrMod() {
+        return srvUsrMod;
+    }
+
+    public void setSrvUsrMod(Users srvUsrMod) {
+        this.srvUsrMod = srvUsrMod;
+    }
+
+    @XmlTransient
+    public Collection<AccountTransactions> getAccountTransactionsCollection() {
+        return accountTransactionsCollection;
+    }
+
+    public void setAccountTransactionsCollection(Collection<AccountTransactions> accountTransactionsCollection) {
+        this.accountTransactionsCollection = accountTransactionsCollection;
     }
 
     @Override

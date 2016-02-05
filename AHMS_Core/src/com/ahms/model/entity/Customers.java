@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,7 +48,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customers.findByCusRfc", query = "SELECT c FROM Customers c WHERE c.cusRfc = :cusRfc"),
     @NamedQuery(name = "Customers.findByCusCel", query = "SELECT c FROM Customers c WHERE c.cusCel = :cusCel"),
     @NamedQuery(name = "Customers.findByCusEmail", query = "SELECT c FROM Customers c WHERE c.cusEmail = :cusEmail"),
-    @NamedQuery(name = "Customers.findByCusUsrMod", query = "SELECT c FROM Customers c WHERE c.cusUsrMod = :cusUsrMod"),
     @NamedQuery(name = "Customers.findByCusDteMod", query = "SELECT c FROM Customers c WHERE c.cusDteMod = :cusDteMod")})
 public class Customers implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -74,22 +75,21 @@ public class Customers implements Serializable {
     private String cusCity;
     @Column(name = "cus_tel", length = 15)
     private String cusTel;
-    @Basic(optional = false)
-    @Column(name = "cus_rfc", nullable = false, length = 15)
+    @Column(name = "cus_rfc", length = 15)
     private String cusRfc;
-    @Basic(optional = false)
-    @Column(name = "cus_cel", nullable = false, length = 15)
+    @Column(name = "cus_cel", length = 15)
     private String cusCel;
-    @Basic(optional = false)
-    @Column(name = "cus_email", nullable = false, length = 100)
+    @Column(name = "cus_email", length = 100)
     private String cusEmail;
-    @Column(name = "cus_usr_mod", length = 6)
-    private String cusUsrMod;
-    @Column(name = "cus_dte_mod")
+    @Basic(optional = false)
+    @Column(name = "cus_dte_mod", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date cusDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
+    @JoinColumn(name = "cus_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users cusUsrMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
 
@@ -100,14 +100,12 @@ public class Customers implements Serializable {
         this.cusId = cusId;
     }
 
-    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, String cusRfc, String cusCel, String cusEmail) {
+    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, Date cusDteMod) {
         this.cusId = cusId;
         this.cusName = cusName;
         this.cusLst1 = cusLst1;
         this.cusLst2 = cusLst2;
-        this.cusRfc = cusRfc;
-        this.cusCel = cusCel;
-        this.cusEmail = cusEmail;
+        this.cusDteMod = cusDteMod;
     }
 
     public Integer getCusId() {
@@ -206,14 +204,6 @@ public class Customers implements Serializable {
         this.cusEmail = cusEmail;
     }
 
-    public String getCusUsrMod() {
-        return cusUsrMod;
-    }
-
-    public void setCusUsrMod(String cusUsrMod) {
-        this.cusUsrMod = cusUsrMod;
-    }
-
     public Date getCusDteMod() {
         return cusDteMod;
     }
@@ -229,6 +219,14 @@ public class Customers implements Serializable {
 
     public void setReservationCollection(Collection<Reservation> reservationCollection) {
         this.reservationCollection = reservationCollection;
+    }
+
+    public Users getCusUsrMod() {
+        return cusUsrMod;
+    }
+
+    public void setCusUsrMod(Users cusUsrMod) {
+        this.cusUsrMod = cusUsrMod;
     }
 
     @XmlTransient

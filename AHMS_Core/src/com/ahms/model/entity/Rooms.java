@@ -42,13 +42,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rooms.findByRmsNumber", query = "SELECT r FROM Rooms r WHERE r.rmsNumber = :rmsNumber"),
     @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds"),
     @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),
-    @NamedQuery(name = "Rooms.findByRmsUsrMod", query = "SELECT r FROM Rooms r WHERE r.rmsUsrMod = :rmsUsrMod"),
     @NamedQuery(name = "Rooms.findByRmsDteMod", query = "SELECT r FROM Rooms r WHERE r.rmsDteMod = :rmsDteMod"),
     @NamedQuery(name = "Rooms.findByRmsMaxOcu", query = "SELECT r FROM Rooms r WHERE r.rmsMaxOcu = :rmsMaxOcu"),
     @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc"),
     @NamedQuery(name = "Rooms.findByFlrId", query = "SELECT r FROM Rooms r WHERE r.flrId = :flrId")})
 public class Rooms implements Serializable {
-    //private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -63,9 +62,8 @@ public class Rooms implements Serializable {
     @Basic(optional = false)
     @Column(name = "RMS_STATUS", nullable = false, length = 20)
     private String rmsStatus;
-    @Column(name = "RMS_USR_MOD", length = 6)
-    private String rmsUsrMod;
-    @Column(name = "RMS_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "RMS_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date rmsDteMod;
     @Basic(optional = false)
@@ -80,10 +78,13 @@ public class Rooms implements Serializable {
     @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rates rteId;
+    @JoinColumn(name = "RMS_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users rmsUsrMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rooms", fetch = FetchType.EAGER)
+    private Collection<AccountTransactions> accountTransactionsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
-    private Collection<Account> accountCollection;
 
     public Rooms() {
     }
@@ -92,11 +93,12 @@ public class Rooms implements Serializable {
         this.rmsId = rmsId;
     }
 
-    public Rooms(Integer rmsId, String rmsNumber, int rmsBeds, String rmsStatus, int rmsMaxOcu, String rmsDesc) {
+    public Rooms(Integer rmsId, String rmsNumber, int rmsBeds, String rmsStatus, Date rmsDteMod, int rmsMaxOcu, String rmsDesc) {
         this.rmsId = rmsId;
         this.rmsNumber = rmsNumber;
         this.rmsBeds = rmsBeds;
         this.rmsStatus = rmsStatus;
+        this.rmsDteMod = rmsDteMod;
         this.rmsMaxOcu = rmsMaxOcu;
         this.rmsDesc = rmsDesc;
     }
@@ -131,14 +133,6 @@ public class Rooms implements Serializable {
 
     public void setRmsStatus(String rmsStatus) {
         this.rmsStatus = rmsStatus;
-    }
-
-    public String getRmsUsrMod() {
-        return rmsUsrMod;
-    }
-
-    public void setRmsUsrMod(String rmsUsrMod) {
-        this.rmsUsrMod = rmsUsrMod;
     }
 
     public Date getRmsDteMod() {
@@ -181,6 +175,23 @@ public class Rooms implements Serializable {
         this.rteId = rteId;
     }
 
+    public Users getRmsUsrMod() {
+        return rmsUsrMod;
+    }
+
+    public void setRmsUsrMod(Users rmsUsrMod) {
+        this.rmsUsrMod = rmsUsrMod;
+    }
+
+    @XmlTransient
+    public Collection<AccountTransactions> getAccountTransactionsCollection() {
+        return accountTransactionsCollection;
+    }
+
+    public void setAccountTransactionsCollection(Collection<AccountTransactions> accountTransactionsCollection) {
+        this.accountTransactionsCollection = accountTransactionsCollection;
+    }
+
     @XmlTransient
     public Collection<Reservation> getReservationCollection() {
         return reservationCollection;
@@ -188,15 +199,6 @@ public class Rooms implements Serializable {
 
     public void setReservationCollection(Collection<Reservation> reservationCollection) {
         this.reservationCollection = reservationCollection;
-    }
-
-    @XmlTransient
-    public Collection<Account> getAccountCollection() {
-        return accountCollection;
-    }
-
-    public void setAccountCollection(Collection<Account> accountCollection) {
-        this.accountCollection = accountCollection;
     }
 
     @Override

@@ -6,8 +6,9 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,19 +19,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author jorge
  */
 @Entity
-@Table(name = "users", catalog = "db_ahms", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"USR_CODE"})})
+@Table(name = "users", catalog = "db_ahms", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u"),
@@ -40,15 +39,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
-    @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd"),
-    @NamedQuery(name = "Users.findByUsrDteMod", query = "SELECT u FROM Users u WHERE u.usrDteMod = :usrDteMod"),
-    @NamedQuery(name = "Users.findByUsrUsrMod", query = "SELECT u FROM Users u WHERE u.usrUsrMod = :usrUsrMod")})
+    @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd")})
 public class Users implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "USR_ID", nullable = false)
+    @Column(name = "usr_id", nullable = false)
     private Integer usrId;
     @Basic(optional = false)
     @Column(name = "USR_CODE", nullable = false, length = 6)
@@ -67,15 +64,39 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "USR_PWD", nullable = false, length = 10)
     private String usrPwd;
-    @Basic(optional = false)
-    @Column(name = "USR_DTE_MOD", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date usrDteMod;
-    @Column(name = "USR_USR_MOD", length = 6)
-    private String usrUsrMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.EAGER)
+    private Collection<Rooms> roomsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.EAGER)
+    private Collection<Rates> ratesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proUsrMod", fetch = FetchType.EAGER)
+    private Collection<Profiles> profilesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.EAGER)
+    private Collection<PaymentTypes> paymentTypesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvUsrMod", fetch = FetchType.EAGER)
+    private Collection<Services> servicesCollection;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrUsrMod", fetch = FetchType.EAGER)
+    private Collection<Floors> floorsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrUsrMod", fetch = FetchType.EAGER)
+    private Collection<AccountTransactions> accountTransactionsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mmoUsrMod", fetch = FetchType.EAGER)
+    private Collection<MoneyMovement> moneyMovementCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrId", fetch = FetchType.EAGER)
+    private Collection<CashOut> cashOutCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gstUsrMod", fetch = FetchType.EAGER)
+    private Collection<Guests> guestsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resUsrMod", fetch = FetchType.EAGER)
+    private Collection<Reservation> reservationCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtUsrMod", fetch = FetchType.EAGER)
+    private Collection<ServiceTypes> serviceTypesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusUsrMod", fetch = FetchType.EAGER)
+    private Collection<Customers> customersCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ftrUsrMod", fetch = FetchType.EAGER)
+    private Collection<FolioTransaction> folioTransactionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actUsrMod", fetch = FetchType.EAGER)
+    private Collection<Account> accountCollection;
 
     public Users() {
     }
@@ -84,14 +105,13 @@ public class Users implements Serializable {
         this.usrId = usrId;
     }
 
-    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, String usrStatus, String usrPwd, Date usrDteMod) {
+    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, String usrStatus, String usrPwd) {
         this.usrId = usrId;
         this.usrCode = usrCode;
         this.usrName = usrName;
         this.usrLst1 = usrLst1;
         this.usrStatus = usrStatus;
         this.usrPwd = usrPwd;
-        this.usrDteMod = usrDteMod;
     }
 
     public Integer getUsrId() {
@@ -150,20 +170,49 @@ public class Users implements Serializable {
         this.usrPwd = usrPwd;
     }
 
-    public Date getUsrDteMod() {
-        return usrDteMod;
+    @XmlTransient
+    public Collection<Rooms> getRoomsCollection() {
+        return roomsCollection;
     }
 
-    public void setUsrDteMod(Date usrDteMod) {
-        this.usrDteMod = usrDteMod;
+    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
+        this.roomsCollection = roomsCollection;
     }
 
-    public String getUsrUsrMod() {
-        return usrUsrMod;
+    @XmlTransient
+    public Collection<Rates> getRatesCollection() {
+        return ratesCollection;
     }
 
-    public void setUsrUsrMod(String usrUsrMod) {
-        this.usrUsrMod = usrUsrMod;
+    public void setRatesCollection(Collection<Rates> ratesCollection) {
+        this.ratesCollection = ratesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Profiles> getProfilesCollection() {
+        return profilesCollection;
+    }
+
+    public void setProfilesCollection(Collection<Profiles> profilesCollection) {
+        this.profilesCollection = profilesCollection;
+    }
+
+    @XmlTransient
+    public Collection<PaymentTypes> getPaymentTypesCollection() {
+        return paymentTypesCollection;
+    }
+
+    public void setPaymentTypesCollection(Collection<PaymentTypes> paymentTypesCollection) {
+        this.paymentTypesCollection = paymentTypesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Services> getServicesCollection() {
+        return servicesCollection;
+    }
+
+    public void setServicesCollection(Collection<Services> servicesCollection) {
+        this.servicesCollection = servicesCollection;
     }
 
     public Profiles getProId() {
@@ -172,6 +221,96 @@ public class Users implements Serializable {
 
     public void setProId(Profiles proId) {
         this.proId = proId;
+    }
+
+    @XmlTransient
+    public Collection<Floors> getFloorsCollection() {
+        return floorsCollection;
+    }
+
+    public void setFloorsCollection(Collection<Floors> floorsCollection) {
+        this.floorsCollection = floorsCollection;
+    }
+
+    @XmlTransient
+    public Collection<AccountTransactions> getAccountTransactionsCollection() {
+        return accountTransactionsCollection;
+    }
+
+    public void setAccountTransactionsCollection(Collection<AccountTransactions> accountTransactionsCollection) {
+        this.accountTransactionsCollection = accountTransactionsCollection;
+    }
+
+    @XmlTransient
+    public Collection<MoneyMovement> getMoneyMovementCollection() {
+        return moneyMovementCollection;
+    }
+
+    public void setMoneyMovementCollection(Collection<MoneyMovement> moneyMovementCollection) {
+        this.moneyMovementCollection = moneyMovementCollection;
+    }
+
+    @XmlTransient
+    public Collection<CashOut> getCashOutCollection() {
+        return cashOutCollection;
+    }
+
+    public void setCashOutCollection(Collection<CashOut> cashOutCollection) {
+        this.cashOutCollection = cashOutCollection;
+    }
+
+    @XmlTransient
+    public Collection<Guests> getGuestsCollection() {
+        return guestsCollection;
+    }
+
+    public void setGuestsCollection(Collection<Guests> guestsCollection) {
+        this.guestsCollection = guestsCollection;
+    }
+
+    @XmlTransient
+    public Collection<Reservation> getReservationCollection() {
+        return reservationCollection;
+    }
+
+    public void setReservationCollection(Collection<Reservation> reservationCollection) {
+        this.reservationCollection = reservationCollection;
+    }
+
+    @XmlTransient
+    public Collection<ServiceTypes> getServiceTypesCollection() {
+        return serviceTypesCollection;
+    }
+
+    public void setServiceTypesCollection(Collection<ServiceTypes> serviceTypesCollection) {
+        this.serviceTypesCollection = serviceTypesCollection;
+    }
+
+    @XmlTransient
+    public Collection<Customers> getCustomersCollection() {
+        return customersCollection;
+    }
+
+    public void setCustomersCollection(Collection<Customers> customersCollection) {
+        this.customersCollection = customersCollection;
+    }
+
+    @XmlTransient
+    public Collection<FolioTransaction> getFolioTransactionCollection() {
+        return folioTransactionCollection;
+    }
+
+    public void setFolioTransactionCollection(Collection<FolioTransaction> folioTransactionCollection) {
+        this.folioTransactionCollection = folioTransactionCollection;
+    }
+
+    @XmlTransient
+    public Collection<Account> getAccountCollection() {
+        return accountCollection;
+    }
+
+    public void setAccountCollection(Collection<Account> accountCollection) {
+        this.accountCollection = accountCollection;
     }
 
     @Override

@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,7 +42,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ServiceTypes.findBySvtCode", query = "SELECT s FROM ServiceTypes s WHERE s.svtCode = :svtCode"),
     @NamedQuery(name = "ServiceTypes.findBySvtDesc", query = "SELECT s FROM ServiceTypes s WHERE s.svtDesc = :svtDesc"),
     @NamedQuery(name = "ServiceTypes.findBySvtStatus", query = "SELECT s FROM ServiceTypes s WHERE s.svtStatus = :svtStatus"),
-    @NamedQuery(name = "ServiceTypes.findBySvtUsrMod", query = "SELECT s FROM ServiceTypes s WHERE s.svtUsrMod = :svtUsrMod"),
     @NamedQuery(name = "ServiceTypes.findBySvtDteMod", query = "SELECT s FROM ServiceTypes s WHERE s.svtDteMod = :svtDteMod")})
 public class ServiceTypes implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -58,13 +59,15 @@ public class ServiceTypes implements Serializable {
     @Basic(optional = false)
     @Column(name = "SVT_STATUS", nullable = false, length = 10)
     private String svtStatus;
-    @Column(name = "SVT_USR_MOD", length = 6)
-    private String svtUsrMod;
-    @Column(name = "SVT_DTE_MOD")
+    @Basic(optional = false)
+    @Column(name = "SVT_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date svtDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
+    @JoinColumn(name = "SVT_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users svtUsrMod;
 
     public ServiceTypes() {
     }
@@ -73,11 +76,12 @@ public class ServiceTypes implements Serializable {
         this.svtId = svtId;
     }
 
-    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, String svtStatus) {
+    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, String svtStatus, Date svtDteMod) {
         this.svtId = svtId;
         this.svtCode = svtCode;
         this.svtDesc = svtDesc;
         this.svtStatus = svtStatus;
+        this.svtDteMod = svtDteMod;
     }
 
     public Integer getSvtId() {
@@ -112,14 +116,6 @@ public class ServiceTypes implements Serializable {
         this.svtStatus = svtStatus;
     }
 
-    public String getSvtUsrMod() {
-        return svtUsrMod;
-    }
-
-    public void setSvtUsrMod(String svtUsrMod) {
-        this.svtUsrMod = svtUsrMod;
-    }
-
     public Date getSvtDteMod() {
         return svtDteMod;
     }
@@ -135,6 +131,14 @@ public class ServiceTypes implements Serializable {
 
     public void setServicesCollection(Collection<Services> servicesCollection) {
         this.servicesCollection = servicesCollection;
+    }
+
+    public Users getSvtUsrMod() {
+        return svtUsrMod;
+    }
+
+    public void setSvtUsrMod(Users svtUsrMod) {
+        this.svtUsrMod = svtUsrMod;
     }
 
     @Override

@@ -36,7 +36,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reservation.findByResFecIni", query = "SELECT r FROM Reservation r WHERE r.resFecIni = :resFecIni"),
     @NamedQuery(name = "Reservation.findByResFecFin", query = "SELECT r FROM Reservation r WHERE r.resFecFin = :resFecFin"),
     @NamedQuery(name = "Reservation.findByResStatus", query = "SELECT r FROM Reservation r WHERE r.resStatus = :resStatus"),
-    @NamedQuery(name = "Reservation.findByResUsrMod", query = "SELECT r FROM Reservation r WHERE r.resUsrMod = :resUsrMod"),
     @NamedQuery(name = "Reservation.findByResDteMod", query = "SELECT r FROM Reservation r WHERE r.resDteMod = :resDteMod")})
 public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -56,9 +55,8 @@ public class Reservation implements Serializable {
     @Basic(optional = false)
     @Column(name = "res_status", nullable = false, length = 15)
     private String resStatus;
-    @Column(name = "res_usr_mod", length = 6)
-    private String resUsrMod;
-    @Column(name = "res_dte_mod")
+    @Basic(optional = false)
+    @Column(name = "res_dte_mod", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date resDteMod;
     @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
@@ -67,6 +65,9 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rooms rmsId;
+    @JoinColumn(name = "res_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users resUsrMod;
 
     public Reservation() {
     }
@@ -75,11 +76,12 @@ public class Reservation implements Serializable {
         this.resId = resId;
     }
 
-    public Reservation(Integer resId, Date resFecIni, Date resFecFin, String resStatus) {
+    public Reservation(Integer resId, Date resFecIni, Date resFecFin, String resStatus, Date resDteMod) {
         this.resId = resId;
         this.resFecIni = resFecIni;
         this.resFecFin = resFecFin;
         this.resStatus = resStatus;
+        this.resDteMod = resDteMod;
     }
 
     public Integer getResId() {
@@ -114,14 +116,6 @@ public class Reservation implements Serializable {
         this.resStatus = resStatus;
     }
 
-    public String getResUsrMod() {
-        return resUsrMod;
-    }
-
-    public void setResUsrMod(String resUsrMod) {
-        this.resUsrMod = resUsrMod;
-    }
-
     public Date getResDteMod() {
         return resDteMod;
     }
@@ -144,6 +138,14 @@ public class Reservation implements Serializable {
 
     public void setRmsId(Rooms rmsId) {
         this.rmsId = rmsId;
+    }
+
+    public Users getResUsrMod() {
+        return resUsrMod;
+    }
+
+    public void setResUsrMod(Users resUsrMod) {
+        this.resUsrMod = resUsrMod;
     }
 
     @Override

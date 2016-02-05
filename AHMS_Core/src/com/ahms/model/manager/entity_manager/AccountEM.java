@@ -29,7 +29,7 @@ public class AccountEM extends AHMSEntityManager{
     }
     
     public Account findByRmsId(Account account) {
-        try {
+       /* try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
@@ -46,7 +46,8 @@ public class AccountEM extends AHMSEntityManager{
             if (em != null) {
                 closeEm();
             }
-        }
+        }*/
+        return null;
     }
     
 }
