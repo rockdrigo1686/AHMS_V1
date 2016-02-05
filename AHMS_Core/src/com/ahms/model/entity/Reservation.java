@@ -10,6 +10,9 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,10 +35,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reservation.findByResId", query = "SELECT r FROM Reservation r WHERE r.resId = :resId"),
     @NamedQuery(name = "Reservation.findByResFecIni", query = "SELECT r FROM Reservation r WHERE r.resFecIni = :resFecIni"),
     @NamedQuery(name = "Reservation.findByResFecFin", query = "SELECT r FROM Reservation r WHERE r.resFecFin = :resFecFin"),
-    @NamedQuery(name = "Reservation.findByResStatus", query = "SELECT r FROM Reservation r WHERE r.resStatus = :resStatus")})
+    @NamedQuery(name = "Reservation.findByResStatus", query = "SELECT r FROM Reservation r WHERE r.resStatus = :resStatus"),
+    @NamedQuery(name = "Reservation.findByResUsrMod", query = "SELECT r FROM Reservation r WHERE r.resUsrMod = :resUsrMod"),
+    @NamedQuery(name = "Reservation.findByResDteMod", query = "SELECT r FROM Reservation r WHERE r.resDteMod = :resDteMod")})
 public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "res_id", nullable = false)
     private Integer resId;
@@ -50,11 +56,16 @@ public class Reservation implements Serializable {
     @Basic(optional = false)
     @Column(name = "res_status", nullable = false, length = 15)
     private String resStatus;
+    @Column(name = "res_usr_mod", length = 6)
+    private String resUsrMod;
+    @Column(name = "res_dte_mod")
+    @Temporal(TemporalType.DATE)
+    private Date resDteMod;
     @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Customers cusId;
     @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rooms rmsId;
 
     public Reservation() {
@@ -101,6 +112,22 @@ public class Reservation implements Serializable {
 
     public void setResStatus(String resStatus) {
         this.resStatus = resStatus;
+    }
+
+    public String getResUsrMod() {
+        return resUsrMod;
+    }
+
+    public void setResUsrMod(String resUsrMod) {
+        this.resUsrMod = resUsrMod;
+    }
+
+    public Date getResDteMod() {
+        return resDteMod;
+    }
+
+    public void setResDteMod(Date resDteMod) {
+        this.resDteMod = resDteMod;
     }
 
     public Customers getCusId() {

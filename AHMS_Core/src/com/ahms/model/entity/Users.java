@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -73,7 +74,7 @@ public class Users implements Serializable {
     @Column(name = "USR_USR_MOD", length = 6)
     private String usrUsrMod;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
 
     public Users() {

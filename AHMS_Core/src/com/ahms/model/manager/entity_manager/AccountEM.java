@@ -28,4 +28,25 @@ public class AccountEM extends AHMSEntityManager{
         }
     }
     
+    public Account findByRmsId(Account account) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Account> query = em.createNamedQuery("Account.findByRmsId", Account.class);
+            query.setParameter("rmsId", account.getRmsId());
+            return query.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
+    
 }

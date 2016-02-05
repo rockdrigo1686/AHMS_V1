@@ -9,9 +9,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +52,7 @@ public class PaymentTypes implements Serializable {
     @Column(name = "PAY_CODE", nullable = false, length = 5)
     private String payCode;
     @Basic(optional = false)
-    @Column(name = "PAY_DESC", nullable = false, length = 20)
+    @Column(name = "PAY_DESC", nullable = false, length = 150)
     private String payDesc;
     @Basic(optional = false)
     @Column(name = "PAY_STATUS", nullable = false, length = 10)
@@ -62,17 +62,17 @@ public class PaymentTypes implements Serializable {
     @Column(name = "PAY_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date payDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payId1")
+    @OneToMany(mappedBy = "payId1", fetch = FetchType.EAGER)
     private Collection<AccountService> accountServiceCollection;
-    @OneToMany(mappedBy = "payId2")
+    @OneToMany(mappedBy = "payId2", fetch = FetchType.EAGER)
     private Collection<AccountService> accountServiceCollection1;
-    @OneToMany(mappedBy = "payId3")
+    @OneToMany(mappedBy = "payId3", fetch = FetchType.EAGER)
     private Collection<AccountService> accountServiceCollection2;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payId1")
+    @OneToMany(mappedBy = "payId1", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
-    @OneToMany(mappedBy = "payId2")
+    @OneToMany(mappedBy = "payId2", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection1;
-    @OneToMany(mappedBy = "payId3")
+    @OneToMany(mappedBy = "payId3", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection2;
 
     public PaymentTypes() {

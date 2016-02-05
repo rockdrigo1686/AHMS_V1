@@ -6,17 +6,26 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,21 +43,25 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccountService.findByAseAmount2", query = "SELECT a FROM AccountService a WHERE a.aseAmount2 = :aseAmount2"),
     @NamedQuery(name = "AccountService.findByAseFolio2", query = "SELECT a FROM AccountService a WHERE a.aseFolio2 = :aseFolio2"),
     @NamedQuery(name = "AccountService.findByAseAmount3", query = "SELECT a FROM AccountService a WHERE a.aseAmount3 = :aseAmount3"),
-    @NamedQuery(name = "AccountService.findByAseFolio3", query = "SELECT a FROM AccountService a WHERE a.aseFolio3 = :aseFolio3")})
+    @NamedQuery(name = "AccountService.findByAseFolio3", query = "SELECT a FROM AccountService a WHERE a.aseFolio3 = :aseFolio3"),
+    @NamedQuery(name = "AccountService.findByAseUsrMod", query = "SELECT a FROM AccountService a WHERE a.aseUsrMod = :aseUsrMod"),
+    @NamedQuery(name = "AccountService.findByAseDteMod", query = "SELECT a FROM AccountService a WHERE a.aseDteMod = :aseDteMod"),
+    @NamedQuery(name = "AccountService.findByAseIva", query = "SELECT a FROM AccountService a WHERE a.aseIva = :aseIva"),
+    @NamedQuery(name = "AccountService.findByAseIvaAmt", query = "SELECT a FROM AccountService a WHERE a.aseIvaAmt = :aseIvaAmt"),
+    @NamedQuery(name = "AccountService.findByAseSubtotal", query = "SELECT a FROM AccountService a WHERE a.aseSubtotal = :aseSubtotal")})
 public class AccountService implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ase_id", nullable = false)
     private Integer aseId;
     @Basic(optional = false)
     @Column(name = "ase_total", nullable = false)
     private long aseTotal;
-    @Basic(optional = false)
-    @Column(name = "ase_amount1", nullable = false)
-    private long aseAmount1;
-    @Basic(optional = false)
-    @Column(name = "ase_folio1", nullable = false, length = 15)
+    @Column(name = "ase_amount1")
+    private Long aseAmount1;
+    @Column(name = "ase_folio1", length = 15)
     private String aseFolio1;
     @Column(name = "ase_amount2")
     private Long aseAmount2;
@@ -58,11 +71,24 @@ public class AccountService implements Serializable {
     private Long aseAmount3;
     @Column(name = "ase_folio3", length = 15)
     private String aseFolio3;
+    @Column(name = "ase_usr_mod", length = 6)
+    private String aseUsrMod;
+    @Column(name = "ase_dte_mod")
+    @Temporal(TemporalType.DATE)
+    private Date aseDteMod;
+    @Column(name = "ase_iva")
+    private Long aseIva;
+    @Column(name = "ase_iva_amt")
+    private Long aseIvaAmt;
+    @Column(name = "ase_subtotal")
+    private Long aseSubtotal;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accountService", fetch = FetchType.EAGER)
+    private Collection<RoomService> roomServiceCollection;
     @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account actId;
-    @JoinColumn(name = "pay_id1", referencedColumnName = "PAY_ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "pay_id1", referencedColumnName = "PAY_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId1;
     @JoinColumn(name = "pay_id2", referencedColumnName = "PAY_ID")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -78,11 +104,9 @@ public class AccountService implements Serializable {
         this.aseId = aseId;
     }
 
-    public AccountService(Integer aseId, long aseTotal, long aseAmount1, String aseFolio1) {
+    public AccountService(Integer aseId, long aseTotal) {
         this.aseId = aseId;
         this.aseTotal = aseTotal;
-        this.aseAmount1 = aseAmount1;
-        this.aseFolio1 = aseFolio1;
     }
 
     public Integer getAseId() {
@@ -101,11 +125,11 @@ public class AccountService implements Serializable {
         this.aseTotal = aseTotal;
     }
 
-    public long getAseAmount1() {
+    public Long getAseAmount1() {
         return aseAmount1;
     }
 
-    public void setAseAmount1(long aseAmount1) {
+    public void setAseAmount1(Long aseAmount1) {
         this.aseAmount1 = aseAmount1;
     }
 
@@ -147,6 +171,55 @@ public class AccountService implements Serializable {
 
     public void setAseFolio3(String aseFolio3) {
         this.aseFolio3 = aseFolio3;
+    }
+
+    public String getAseUsrMod() {
+        return aseUsrMod;
+    }
+
+    public void setAseUsrMod(String aseUsrMod) {
+        this.aseUsrMod = aseUsrMod;
+    }
+
+    public Date getAseDteMod() {
+        return aseDteMod;
+    }
+
+    public void setAseDteMod(Date aseDteMod) {
+        this.aseDteMod = aseDteMod;
+    }
+
+    public Long getAseIva() {
+        return aseIva;
+    }
+
+    public void setAseIva(Long aseIva) {
+        this.aseIva = aseIva;
+    }
+
+    public Long getAseIvaAmt() {
+        return aseIvaAmt;
+    }
+
+    public void setAseIvaAmt(Long aseIvaAmt) {
+        this.aseIvaAmt = aseIvaAmt;
+    }
+
+    public Long getAseSubtotal() {
+        return aseSubtotal;
+    }
+
+    public void setAseSubtotal(Long aseSubtotal) {
+        this.aseSubtotal = aseSubtotal;
+    }
+
+    @XmlTransient
+    public Collection<RoomService> getRoomServiceCollection() {
+        return roomServiceCollection;
+    }
+
+    public void setRoomServiceCollection(Collection<RoomService> roomServiceCollection) {
+        this.roomServiceCollection = roomServiceCollection;
     }
 
     public Account getActId() {

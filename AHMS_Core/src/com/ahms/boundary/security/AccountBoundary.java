@@ -28,6 +28,10 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
     public Account find(Account obj) {
         return accountEM.find(obj);
     }
+    
+    public Account findByRms(Account obj) {
+        return accountEM.findByRmsId(obj);
+    }
 
     @Override
     public int insert(Account obj) {

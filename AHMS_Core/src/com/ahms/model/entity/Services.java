@@ -9,16 +9,18 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -71,10 +73,10 @@ public class Services implements Serializable {
     @Column(name = "SRV_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date srvDteMod;
-    @ManyToMany(mappedBy = "servicesCollection")
-    private Collection<Rooms> roomsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvId", fetch = FetchType.EAGER)
+    private Collection<RoomService> roomServiceCollection;
     @JoinColumn(name = "SVT_ID", referencedColumnName = "SVT_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ServiceTypes svtId;
 
     public Services() {
@@ -158,12 +160,12 @@ public class Services implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Rooms> getRoomsCollection() {
-        return roomsCollection;
+    public Collection<RoomService> getRoomServiceCollection() {
+        return roomServiceCollection;
     }
 
-    public void setRoomsCollection(Collection<Rooms> roomsCollection) {
-        this.roomsCollection = roomsCollection;
+    public void setRoomServiceCollection(Collection<RoomService> roomServiceCollection) {
+        this.roomServiceCollection = roomServiceCollection;
     }
 
     public ServiceTypes getSvtId() {

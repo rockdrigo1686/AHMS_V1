@@ -12,12 +12,11 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -46,9 +45,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rooms.findByRmsUsrMod", query = "SELECT r FROM Rooms r WHERE r.rmsUsrMod = :rmsUsrMod"),
     @NamedQuery(name = "Rooms.findByRmsDteMod", query = "SELECT r FROM Rooms r WHERE r.rmsDteMod = :rmsDteMod"),
     @NamedQuery(name = "Rooms.findByRmsMaxOcu", query = "SELECT r FROM Rooms r WHERE r.rmsMaxOcu = :rmsMaxOcu"),
-    @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc")})
+    @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc"),
+    @NamedQuery(name = "Rooms.findByFlrId", query = "SELECT r FROM Rooms r WHERE r.flrId = :flrId")})
 public class Rooms implements Serializable {
-    private static final long serialVersionUID = 1L;
+    //private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -72,22 +72,17 @@ public class Rooms implements Serializable {
     @Column(name = "RMS_MAX_OCU", nullable = false)
     private int rmsMaxOcu;
     @Basic(optional = false)
-    @Column(name = "RMS_DESC", nullable = false, length = 200)
+    @Column(name = "rms_desc", nullable = false, length = 200)
     private String rmsDesc;
-    @JoinTable(name = "room_service", joinColumns = {
-        @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "srv_id", referencedColumnName = "SRV_ID", nullable = false)})
-    @ManyToMany
-    private Collection<Services> servicesCollection;
     @JoinColumn(name = "FLR_ID", referencedColumnName = "FLR_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Floors flrId;
     @JoinColumn(name = "RTE_ID", referencedColumnName = "RTE_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rates rteId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
 
     public Rooms() {
@@ -168,15 +163,6 @@ public class Rooms implements Serializable {
 
     public void setRmsDesc(String rmsDesc) {
         this.rmsDesc = rmsDesc;
-    }
-
-    @XmlTransient
-    public Collection<Services> getServicesCollection() {
-        return servicesCollection;
-    }
-
-    public void setServicesCollection(Collection<Services> servicesCollection) {
-        this.servicesCollection = servicesCollection;
     }
 
     public Floors getFlrId() {

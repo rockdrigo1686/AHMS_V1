@@ -7,10 +7,12 @@ package com.ahms.model.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -41,7 +45,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customers.findByCusTel", query = "SELECT c FROM Customers c WHERE c.cusTel = :cusTel"),
     @NamedQuery(name = "Customers.findByCusRfc", query = "SELECT c FROM Customers c WHERE c.cusRfc = :cusRfc"),
     @NamedQuery(name = "Customers.findByCusCel", query = "SELECT c FROM Customers c WHERE c.cusCel = :cusCel"),
-    @NamedQuery(name = "Customers.findByCusEmail", query = "SELECT c FROM Customers c WHERE c.cusEmail = :cusEmail")})
+    @NamedQuery(name = "Customers.findByCusEmail", query = "SELECT c FROM Customers c WHERE c.cusEmail = :cusEmail"),
+    @NamedQuery(name = "Customers.findByCusUsrMod", query = "SELECT c FROM Customers c WHERE c.cusUsrMod = :cusUsrMod"),
+    @NamedQuery(name = "Customers.findByCusDteMod", query = "SELECT c FROM Customers c WHERE c.cusDteMod = :cusDteMod")})
 public class Customers implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -77,9 +83,14 @@ public class Customers implements Serializable {
     @Basic(optional = false)
     @Column(name = "cus_email", nullable = false, length = 100)
     private String cusEmail;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId")
+    @Column(name = "cus_usr_mod", length = 6)
+    private String cusUsrMod;
+    @Column(name = "cus_dte_mod")
+    @Temporal(TemporalType.DATE)
+    private Date cusDteMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
 
     public Customers() {
@@ -193,6 +204,22 @@ public class Customers implements Serializable {
 
     public void setCusEmail(String cusEmail) {
         this.cusEmail = cusEmail;
+    }
+
+    public String getCusUsrMod() {
+        return cusUsrMod;
+    }
+
+    public void setCusUsrMod(String cusUsrMod) {
+        this.cusUsrMod = cusUsrMod;
+    }
+
+    public Date getCusDteMod() {
+        return cusDteMod;
+    }
+
+    public void setCusDteMod(Date cusDteMod) {
+        this.cusDteMod = cusDteMod;
     }
 
     @XmlTransient

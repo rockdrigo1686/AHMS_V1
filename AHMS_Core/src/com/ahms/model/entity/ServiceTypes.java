@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class ServiceTypes implements Serializable {
     @Column(name = "SVT_CODE", nullable = false, length = 5)
     private String svtCode;
     @Basic(optional = false)
-    @Column(name = "SVT_DESC", nullable = false, length = 20)
+    @Column(name = "SVT_DESC", nullable = false, length = 150)
     private String svtDesc;
     @Basic(optional = false)
     @Column(name = "SVT_STATUS", nullable = false, length = 10)
@@ -62,7 +63,7 @@ public class ServiceTypes implements Serializable {
     @Column(name = "SVT_DTE_MOD")
     @Temporal(TemporalType.DATE)
     private Date svtDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
 
     public ServiceTypes() {

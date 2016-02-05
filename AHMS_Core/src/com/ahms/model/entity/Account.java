@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -44,10 +46,18 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.findByActAmount2", query = "SELECT a FROM Account a WHERE a.actAmount2 = :actAmount2"),
     @NamedQuery(name = "Account.findByActFolio2", query = "SELECT a FROM Account a WHERE a.actFolio2 = :actFolio2"),
     @NamedQuery(name = "Account.findByActAmount3", query = "SELECT a FROM Account a WHERE a.actAmount3 = :actAmount3"),
-    @NamedQuery(name = "Account.findByActFolio3", query = "SELECT a FROM Account a WHERE a.actFolio3 = :actFolio3")})
+    @NamedQuery(name = "Account.findByActFolio3", query = "SELECT a FROM Account a WHERE a.actFolio3 = :actFolio3"),
+    @NamedQuery(name = "Account.findByActUsrMod", query = "SELECT a FROM Account a WHERE a.actUsrMod = :actUsrMod"),
+    @NamedQuery(name = "Account.findByActDteMod", query = "SELECT a FROM Account a WHERE a.actDteMod = :actDteMod"),
+    @NamedQuery(name = "Account.findByActRent", query = "SELECT a FROM Account a WHERE a.actRent = :actRent"),
+    @NamedQuery(name = "Account.findByActSubtotal", query = "SELECT a FROM Account a WHERE a.actSubtotal = :actSubtotal"),
+    @NamedQuery(name = "Account.findByActIva", query = "SELECT a FROM Account a WHERE a.actIva = :actIva"),
+    @NamedQuery(name = "Account.findByActIvaAmt", query = "SELECT a FROM Account a WHERE a.actIvaAmt = :actIvaAmt"),
+    @NamedQuery(name = "Account.findByRmsId", query = "SELECT a FROM Account a WHERE a.rmsId = :rmsId and a.actStatus = 'Activo' ")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "act_id", nullable = false)
     private Integer actId;
@@ -65,38 +75,49 @@ public class Account implements Serializable {
     @Basic(optional = false)
     @Column(name = "act_total", nullable = false)
     private long actTotal;
-    @Basic(optional = false)
-    @Column(name = "act_amount1", nullable = false)
-    private long actAmount1;
-    @Basic(optional = false)
-    @Column(name = "act_folio1", nullable = false, length = 15)
+    @Column(name = "act_amount1")
+    private Long actAmount1;
+    @Column(name = "act_folio1", length = 20)
     private String actFolio1;
     @Column(name = "act_amount2")
     private Long actAmount2;
-    @Column(name = "act_folio2", length = 15)
+    @Column(name = "act_folio2", length = 20)
     private String actFolio2;
     @Column(name = "act_amount3")
     private Long actAmount3;
-    @Column(name = "act_folio3", length = 15)
+    @Column(name = "act_folio3", length = 20)
     private String actFolio3;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)    
+    @Column(name = "act_usr_mod", length = 6)
+    private String actUsrMod;
+    @Column(name = "act_dte_mod")
+    @Temporal(TemporalType.DATE)
+    private Date actDteMod;
+    @Column(name = "act_rent")
+    private Long actRent;
+    @Column(name = "act_subtotal")
+    private Long actSubtotal;
+    @Column(name = "act_iva")
+    private Long actIva;
+    @Column(name = "act_iva_amt")
+    private Long actIvaAmt;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<AccountService> accountServiceCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<Guests> guestsCollection;
     @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Customers cusId;
-    @JoinColumn(name = "pay_id1", referencedColumnName = "PAY_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "pay_id1", referencedColumnName = "PAY_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId1;
     @JoinColumn(name = "pay_id2", referencedColumnName = "PAY_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId2;
     @JoinColumn(name = "pay_id3", referencedColumnName = "PAY_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private PaymentTypes payId3;
     @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rooms rmsId;
 
     public Account() {
@@ -106,14 +127,12 @@ public class Account implements Serializable {
         this.actId = actId;
     }
 
-    public Account(Integer actId, Date actFecIni, Date actFecFin, String actStatus, long actTotal, long actAmount1, String actFolio1) {
+    public Account(Integer actId, Date actFecIni, Date actFecFin, String actStatus, long actTotal) {
         this.actId = actId;
         this.actFecIni = actFecIni;
         this.actFecFin = actFecFin;
         this.actStatus = actStatus;
         this.actTotal = actTotal;
-        this.actAmount1 = actAmount1;
-        this.actFolio1 = actFolio1;
     }
 
     public Integer getActId() {
@@ -156,11 +175,11 @@ public class Account implements Serializable {
         this.actTotal = actTotal;
     }
 
-    public long getActAmount1() {
+    public Long getActAmount1() {
         return actAmount1;
     }
 
-    public void setActAmount1(long actAmount1) {
+    public void setActAmount1(Long actAmount1) {
         this.actAmount1 = actAmount1;
     }
 
@@ -202,6 +221,54 @@ public class Account implements Serializable {
 
     public void setActFolio3(String actFolio3) {
         this.actFolio3 = actFolio3;
+    }
+
+    public String getActUsrMod() {
+        return actUsrMod;
+    }
+
+    public void setActUsrMod(String actUsrMod) {
+        this.actUsrMod = actUsrMod;
+    }
+
+    public Date getActDteMod() {
+        return actDteMod;
+    }
+
+    public void setActDteMod(Date actDteMod) {
+        this.actDteMod = actDteMod;
+    }
+
+    public Long getActRent() {
+        return actRent;
+    }
+
+    public void setActRent(Long actRent) {
+        this.actRent = actRent;
+    }
+
+    public Long getActSubtotal() {
+        return actSubtotal;
+    }
+
+    public void setActSubtotal(Long actSubtotal) {
+        this.actSubtotal = actSubtotal;
+    }
+
+    public Long getActIva() {
+        return actIva;
+    }
+
+    public void setActIva(Long actIva) {
+        this.actIva = actIva;
+    }
+
+    public Long getActIvaAmt() {
+        return actIvaAmt;
+    }
+
+    public void setActIvaAmt(Long actIvaAmt) {
+        this.actIvaAmt = actIvaAmt;
     }
 
     @XmlTransient
