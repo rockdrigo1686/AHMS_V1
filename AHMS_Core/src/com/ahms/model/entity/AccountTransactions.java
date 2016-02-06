@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "account_transactions", catalog = "db_ahms", schema = "")
@@ -52,6 +52,9 @@ public class AccountTransactions implements Serializable {
     @Column(name = "atr_dte_mod", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date atrDteMod;
+    @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Account actId;
     @JoinColumn(name = "cou_id", referencedColumnName = "cou_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CashOut couId;
@@ -121,6 +124,14 @@ public class AccountTransactions implements Serializable {
 
     public void setAtrDteMod(Date atrDteMod) {
         this.atrDteMod = atrDteMod;
+    }
+
+    public Account getActId() {
+        return actId;
+    }
+
+    public void setActId(Account actId) {
+        this.actId = actId;
     }
 
     public CashOut getCouId() {

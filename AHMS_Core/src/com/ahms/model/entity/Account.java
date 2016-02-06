@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "account", catalog = "db_ahms", schema = "")
@@ -76,6 +76,8 @@ public class Account implements Serializable {
     private Long actIva;
     @Column(name = "act_iva_amt")
     private Long actIvaAmt;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
+    private Collection<AccountTransactions> accountTransactionsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<Guests> guestsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
@@ -173,6 +175,15 @@ public class Account implements Serializable {
 
     public void setActIvaAmt(Long actIvaAmt) {
         this.actIvaAmt = actIvaAmt;
+    }
+
+    @XmlTransient
+    public Collection<AccountTransactions> getAccountTransactionsCollection() {
+        return accountTransactionsCollection;
+    }
+
+    public void setAccountTransactionsCollection(Collection<AccountTransactions> accountTransactionsCollection) {
+        this.accountTransactionsCollection = accountTransactionsCollection;
     }
 
     @XmlTransient
