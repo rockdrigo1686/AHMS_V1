@@ -1,11 +1,9 @@
 package com.ahms.ui;
 
-import com.ahms.boundary.security.AccountServiceBoundary;
+import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.model.entity.Account;
-import com.ahms.model.entity.AccountService;
-import java.util.ArrayList;
-import java.util.List;
-import com.ahms.model.entity.RoomService;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.Customers;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Vector;
@@ -20,44 +18,60 @@ public class CheckOutForm extends javax.swing.JDialog {
 
     public BigDecimal totalAccount = BigDecimal.ZERO;
     public BigDecimal totalPending = BigDecimal.ZERO;
-    public BigDecimal totalPaid    = BigDecimal.ZERO;
+    public BigDecimal total        = BigDecimal.ZERO;
     public BigDecimal totalIVA     = BigDecimal.ZERO;
     public BigDecimal totalPagado  = BigDecimal.ZERO; 
+    public BigDecimal totalOriginal= BigDecimal.ZERO; 
+    private Customers customerGlobal;
     
-    private ArrayList<AccountService> roomService;
-    private AccountServiceBoundary accountServiceBoundary;
-    //private 
-    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account) {
+    private CustomersBoundary customersBoundary; 
+    
+    
+    public CheckOutForm(java.awt.Frame parent, boolean modal, Customers customer) {
         super(parent, modal);
         initComponents();
-        accountServiceBoundary = new AccountServiceBoundary();
-        generateGridSimple(account);
+        customerGlobal = customer;
+        customersBoundary = new CustomersBoundary();
+        customerGlobal = new Customers(1);
+        customerGlobal = customersBoundary.find(customerGlobal);
+        jlNombre.setText(customerGlobal.getCusName() + " " + customerGlobal.getCusLst1() + " " + customerGlobal.getCusLst2() + " - " + customerGlobal.getCusRfc());
+        
+        generateGridSimple(customerGlobal);
     }
     
-    private void generateGridSimple(Account account){
+    public void regenerateTotals(){
+        jlSubtotal.setText("$" +total.toString());
+        jlIVA.setText("$" +totalIVA.toString());
+        jlTotal.setText("$" +totalOriginal.toString());
+        jlPagado.setText("$" +totalPagado.toString());
+        jlPendiente.setText("$" +totalPending.toString());
+    }
+    
+    private void generateGridSimple(Customers customer){
         try {
             
-            Vector<String> vctColumns = new Vector<String>();
+            Vector<String> vctColumns = new Vector<>();
             vctColumns.add("Cuarto");
             vctColumns.add("Cantidad");
             vctColumns.add("Descripción");
             vctColumns.add("Costo");
             
-            BigDecimal total = new BigDecimal(0);
+            total = BigDecimal.ZERO;
             
             Vector<Vector> rows = new Vector<>();
-            for(AccountService a : account.getAccountServiceCollection()){
-                for(RoomService rms : a.getRoomServiceCollection()){
+            for(Account account : customer.getAccountCollection()){
+                for(AccountTransactions a  : account.getAccountTransactionsCollection()){
                     Vector<Object> vctRow = new Vector<>();
-                    vctRow.add("Cuarto1");
-                    vctRow.add(rms.getRseQuantity());
-                    vctRow.add(rms.getSrvId().getSrvDesc());
-                    vctRow.add((rms.getRseQuantity() * rms.getSrvId().getSrvPrice()));
+                    vctRow.add(a.getRooms().getRmsNumber());
+                    vctRow.add(a.getAtrQuantity());
+                    vctRow.add(a.getSrvId().getSrvDesc());
+                    vctRow.add((a.getAtrQuantity() * a.getSrvId().getSrvPrice()));
                     rows.add(vctRow);
                     
-                    total = total.add(new BigDecimal((rms.getRseQuantity() * rms.getSrvId().getSrvPrice())));
+                    total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice())));
                 }
             }
+            
             
             totalIVA = total.multiply(new BigDecimal(0.16));
             totalAccount = totalPending = total.add(totalIVA);
@@ -68,13 +82,9 @@ public class CheckOutForm extends javax.swing.JDialog {
             totalPending = totalPending.setScale(2, RoundingMode.HALF_EVEN);
             totalPagado = totalPagado.setScale(2, RoundingMode.HALF_EVEN);
             
+            totalOriginal = totalAccount;
             //vinculando al UI
-            jlSubtotal.setText(total.toString());
-            jlIVA.setText(totalIVA.toString());
-            jlTotal.setText(totalAccount.toString());
-            
-            jlPagado.setText(totalPagado.toString());
-            jlPendiente.setText(totalPending.toString());
+            regenerateTotals();
             
             DefaultTableModel model = new DefaultTableModel(rows, vctColumns) {
                 private static final long serialVersionUID = 1L;
@@ -113,7 +123,6 @@ public class CheckOutForm extends javax.swing.JDialog {
 
         jpCabecera = new javax.swing.JPanel();
         jlNombre = new javax.swing.JLabel();
-        jlCuarto = new javax.swing.JLabel();
         jscpDetalle = new javax.swing.JScrollPane();
         jtCheckoutDetalle = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
@@ -137,10 +146,8 @@ public class CheckOutForm extends javax.swing.JDialog {
         jpCabecera.setBackground(java.awt.Color.white);
 
         jlNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlNombre.setText("Jorge  Alfonso Castañeda Gutierrez");
-
-        jlCuarto.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlCuarto.setText("Cuarto:");
 
         javax.swing.GroupLayout jpCabeceraLayout = new javax.swing.GroupLayout(jpCabecera);
         jpCabecera.setLayout(jpCabeceraLayout);
@@ -148,19 +155,15 @@ public class CheckOutForm extends javax.swing.JDialog {
             jpCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpCabeceraLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jlNombre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlCuarto)
-                .addGap(34, 34, 34))
+                .addComponent(jlNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jpCabeceraLayout.setVerticalGroup(
             jpCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpCabeceraLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpCabeceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlNombre)
-                    .addComponent(jlCuarto))
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCabeceraLayout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(jlNombre)
+                .addContainerGap())
         );
 
         jtCheckoutDetalle.setModel(new javax.swing.table.DefaultTableModel(
@@ -193,6 +196,11 @@ public class CheckOutForm extends javax.swing.JDialog {
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
         jButton2.setText("Pagar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Total:");
 
@@ -251,8 +259,8 @@ public class CheckOutForm extends javax.swing.JDialog {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jlPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 90, Short.MAX_VALUE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -313,6 +321,12 @@ public class CheckOutForm extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //abrir PaymentModule
+        PaymentModule paymentModule = new PaymentModule(this, true, totalAccount);
+        paymentModule.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -366,7 +380,6 @@ public class CheckOutForm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JLabel jlCuarto;
     private javax.swing.JLabel jlIVA;
     private javax.swing.JLabel jlNombre;
     private javax.swing.JLabel jlPagado;
