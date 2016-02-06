@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "folio_transaction", catalog = "db_ahms", schema = "")
@@ -34,8 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FolioTransaction.findByFtrFolio", query = "SELECT f FROM FolioTransaction f WHERE f.ftrFolio = :ftrFolio"),
     @NamedQuery(name = "FolioTransaction.findByFtrAmount", query = "SELECT f FROM FolioTransaction f WHERE f.ftrAmount = :ftrAmount"),
     @NamedQuery(name = "FolioTransaction.findByFtrCardNumber", query = "SELECT f FROM FolioTransaction f WHERE f.ftrCardNumber = :ftrCardNumber"),
-    @NamedQuery(name = "FolioTransaction.findByFtrDteMod", query = "SELECT f FROM FolioTransaction f WHERE f.ftrDteMod = :ftrDteMod")})
+    @NamedQuery(name = "FolioTransaction.findByFtrDteMod", query = "SELECT f FROM FolioTransaction f WHERE f.ftrDteMod = :ftrDteMod"),
+    @NamedQuery(name = "FolioTransaction.findByCouId", query = "SELECT f FROM FolioTransaction f WHERE f.couId = :couId")
+})
 public class FolioTransaction implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -54,6 +57,9 @@ public class FolioTransaction implements Serializable {
     @Column(name = "ftr_dte_mod", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date ftrDteMod;
+    @JoinColumn(name = "cou_id", referencedColumnName = "cou_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private CashOut couId;
     @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account actId;
@@ -119,6 +125,14 @@ public class FolioTransaction implements Serializable {
         this.ftrDteMod = ftrDteMod;
     }
 
+    public CashOut getCouId() {
+        return couId;
+    }
+
+    public void setCouId(CashOut couId) {
+        this.couId = couId;
+    }
+
     public Account getActId() {
         return actId;
     }
@@ -167,5 +181,5 @@ public class FolioTransaction implements Serializable {
     public String toString() {
         return "com.ahms.model.entity.FolioTransaction[ ftrId=" + ftrId + " ]";
     }
-    
+
 }

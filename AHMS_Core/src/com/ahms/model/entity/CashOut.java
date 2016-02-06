@@ -41,8 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CashOut.findByCouMonEnd", query = "SELECT c FROM CashOut c WHERE c.couMonEnd = :couMonEnd"),
     @NamedQuery(name = "CashOut.findByCouDteIni", query = "SELECT c FROM CashOut c WHERE c.couDteIni = :couDteIni"),
     @NamedQuery(name = "CashOut.findByCouDteEnd", query = "SELECT c FROM CashOut c WHERE c.couDteEnd = :couDteEnd"),
-    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = :couStatus")})
+    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = 1")})
 public class CashOut implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
+    private Collection<FolioTransaction> folioTransactionCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -187,6 +189,15 @@ public class CashOut implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.model.entity.CashOut[ couId=" + couId + " ]";
+    }
+
+    @XmlTransient
+    public Collection<FolioTransaction> getFolioTransactionCollection() {
+        return folioTransactionCollection;
+    }
+
+    public void setFolioTransactionCollection(Collection<FolioTransaction> folioTransactionCollection) {
+        this.folioTransactionCollection = folioTransactionCollection;
     }
     
 }
