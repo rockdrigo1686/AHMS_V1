@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @UniqueConstraint(columnNames = {"PAY_CODE"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PaymentTypes.findAll", query = "SELECT p FROM PaymentTypes p"),
+    @NamedQuery(name = "PaymentTypes.findAll", query = "SELECT p FROM PaymentTypes p WHERE p.payStatus = 'Activo'"),
     @NamedQuery(name = "PaymentTypes.findByPayId", query = "SELECT p FROM PaymentTypes p WHERE p.payId = :payId"),
     @NamedQuery(name = "PaymentTypes.findByPayCode", query = "SELECT p FROM PaymentTypes p WHERE p.payCode = :payCode"),
     @NamedQuery(name = "PaymentTypes.findByPayDesc", query = "SELECT p FROM PaymentTypes p WHERE p.payDesc = :payDesc"),
@@ -162,7 +162,7 @@ public class PaymentTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.PaymentTypes[ payId=" + payId + " ]";
+        return getPayDesc();
     }
     
 }

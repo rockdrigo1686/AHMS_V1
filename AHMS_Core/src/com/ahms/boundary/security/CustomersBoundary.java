@@ -1,52 +1,54 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
-import com.ahms.model.entity.Account;
-import com.ahms.model.manager.entity_manager.AccountEM;
+import com.ahms.model.entity.Customers;
+import com.ahms.model.manager.entity_manager.CustomersEM;
 import java.util.List;
 
-public class AccountBoundary  implements AHMSBoundary<Account>{
+/**
+ *
+ * @author jorge
+ */
+public class CustomersBoundary implements AHMSBoundary<Customers> {
+
+    private CustomersEM customersEM = null;
     
-    private AccountEM accountEM = null;
-    
-    public AccountBoundary() {
-        accountEM = new AccountEM();
+    public CustomersBoundary() {
+        customersEM = new CustomersEM();
     }
-
     @Override
-    public List<Account> search(Account obj) {
+    public List<Customers> search(Customers obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Account> searchAll(Account obj) {
+    public List<Customers> searchAll(Customers obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Account find(Account obj) {
-        return accountEM.find(obj);
-    }
-    
-    public List<Account> findByCusId(Account obj) {
-        return accountEM.findByCusId(obj);
+    public Customers find(Customers obj) {
+        return customersEM.find(obj);
     }
 
     @Override
-    public int insert(Account obj) {
+    public int insert(Customers obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int update(Account obj) {
+    public int update(Customers obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int delete(Account obj) {
+    public int delete(Customers obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    
     
 }

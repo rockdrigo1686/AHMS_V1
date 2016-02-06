@@ -5,9 +5,8 @@
  */
 package com.ahms.model.manager.entity_manager;
 
-import com.ahms.model.entity.PaymentTypes;
+import com.ahms.model.entity.Customers;
 import com.ahms.model.manager.AHMSEntityManager;
-import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -15,14 +14,15 @@ import javax.persistence.TypedQuery;
  *
  * @author jorge
  */
-public class PaymenTypesEM extends AHMSEntityManager{
-    public List<PaymentTypes> findAll(PaymentTypes payment) {
+public class CustomersEM extends AHMSEntityManager{
+    public Customers find(Customers customers) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<PaymentTypes> query = em.createNamedQuery("PaymentTypes.findAll", PaymentTypes.class);
-            return query.getResultList();
+            TypedQuery<Customers> query = em.createNamedQuery("Customers.findByCusId", Customers.class);
+            query.setParameter("cusId", customers.getCusId());
+            return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;
