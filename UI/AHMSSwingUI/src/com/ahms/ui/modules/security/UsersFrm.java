@@ -35,6 +35,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        rooms1 = new com.ahms.model.entity.Rooms();
         jPanel1 = new javax.swing.JPanel();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
@@ -175,5 +176,6 @@ public class UsersFrm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTable jTable1;
+    private com.ahms.model.entity.Rooms rooms1;
     // End of variables declaration//GEN-END:variables
 }

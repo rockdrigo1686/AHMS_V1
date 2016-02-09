@@ -3,7 +3,7 @@ package com.ahms.ui;
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
-import com.ahms.model.entity.Account;
+import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
@@ -19,7 +19,6 @@ import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -40,7 +39,7 @@ public class MainFrm extends javax.swing.JFrame {
     private RoomsBoundary roomsBounday = null;
     private FloorsBoundary floorsBoundary = null;
     private AccountBoundary accountBoundary = null;
-
+    private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
 
     private void fillData() {
@@ -51,14 +50,50 @@ public class MainFrm extends javax.swing.JFrame {
         return mainUser;
     }
 
+    /**
+     * @param mainUser the mainUser to set
+     */
     public void setMainUser(Users mainUser) {
         this.mainUser = mainUser;
     }
 
     /**
-     * Creates new form MainFrm
+     * @return the shiftOn
      */
-    public MainFrm() {
+    public Boolean getShiftOn() {
+        return shiftOn;
+    }
+
+    /**
+     * @param shiftOn the shiftOn to set
+     */
+    public void setShiftOn(Boolean shiftOn) {
+        this.shiftOn = shiftOn;
+    }
+
+    /**
+     * @return the currentShift
+     */
+    public CashOut getCurrentShift() {
+        return currentShift;
+    }
+
+    /**
+     * @param currentShift the currentShift to set
+     */
+    public void setCurrentShift(CashOut currentShift) {
+        this.currentShift = currentShift;
+    }
+
+    /**
+     * Creates new form MainFrm
+     *
+     * @param mainUser
+     * @param currentShift
+     */
+    public MainFrm(Users mainUser, CashOut currentShift) {
+        this.mainUser = mainUser;
+        this.currentShift = currentShift;
         initComponents();
         roomsBounday = new RoomsBoundary();
         floorsBoundary = new FloorsBoundary();
@@ -160,20 +195,18 @@ public class MainFrm extends javax.swing.JFrame {
                 int clicks = e.getClickCount();
                 int row = jtDashboard.getSelectedRow();
                 String estatus = String.valueOf(jtDashboard.getValueAt(row, 7));
-                if(estatus.trim().toLowerCase().equals("mantenimiento")){
+                if (estatus.trim().toLowerCase().equals("mantenimiento")) {
                     if (clicks > 1) {
-                        JOptionPane.showMessageDialog(null,"La habitación no esta disponible por el momento.");                
-                    }                    
-                } 
-                else 
-                {
+                        JOptionPane.showMessageDialog(null, "La habitación no esta disponible por el momento.");
+                    }
+                } else {
                     if (clicks > 1) {
-                        Account paramAct = new Account();
-                        paramAct.setRmsId(new Rooms((int) jtDashboard.getValueAt(row, 8)));
-                        Account acct = accountBoundary.findByRms(paramAct);                        
-                        CheckOutForm checkOut = new CheckOutForm(parent,true, acct);
-                        checkOut.setVisible(true);
-                        checkOut.setAlwaysOnTop(true);
+//                        Account paramAct = new Account();
+////                        paramAct.setRmsId(new Rooms((int) jtDashboard.getValueAt(row, 8)));
+////                        Account acct = accountBoundary.findByRms(paramAct);
+////                        CheckOutForm checkOut = new CheckOutForm(parent, true, acct);
+////                        checkOut.setVisible(true);
+////                        checkOut.setAlwaysOnTop(true);
 
                     } else {
                         jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
@@ -291,6 +324,8 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        btnIniciarTurno = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -431,7 +466,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -445,7 +480,7 @@ public class MainFrm extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 419, Short.MAX_VALUE)
+            .addGap(0, 411, Short.MAX_VALUE)
         );
 
         jTabbedPane5.addTab("tools", jPanel6);
@@ -780,7 +815,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane5)
+                    .addComponent(jTabbedPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jSeparator1))
                 .addContainerGap())
@@ -791,7 +826,29 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/History.png"))); // NOI18N
+        jMenu2.setText("Turnos");
+
+        btnIniciarTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        btnIniciarTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Add Appointment.png"))); // NOI18N
+        btnIniciarTurno.setText("Iniciar Turno");
+        btnIniciarTurno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarTurnoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnIniciarTurno);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Remove Appointment.png"))); // NOI18N
+        jMenuItem2.setText("Cerrar Turno");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771639_2.png"))); // NOI18N
@@ -828,9 +885,8 @@ public class MainFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteActionPerformed
-        
-        
-        CustomerReg customerReg = new CustomerReg(this,true);
+
+        CustomerReg customerReg = new CustomerReg(this, true);
         customerReg.setVisible(true);
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
@@ -848,13 +904,31 @@ public class MainFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Account acct = accountBoundary.find(new Account(1));
-        JDialog dialogCheckout = new CheckOutForm(this, true, acct);
-        dialogCheckout.setVisible(true);
+//        Account acct = accountBoundary.find(new Account(1));
+//        JDialog dialogCheckout = new CheckOutForm(this, true, acct);
+//        dialogCheckout.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnIniciarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarTurnoActionPerformed
+        // TODO add your handling code here:
+        if (currentShift == null) {
+            ShiftFrm shiftFrm = new ShiftFrm(this, true, mainUser);
+            shiftFrm.setVisible(true);
+        }
+
+    }//GEN-LAST:event_btnIniciarTurnoActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        if (currentShift != null) {
+            ShiftEndFrm se = new ShiftEndFrm(this, true, mainUser, currentShift);
+            se.setVisible(true);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem btnIniciarTurno;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -874,6 +948,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -921,4 +996,5 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTextField jtSubtotal;
     private javax.swing.JTextField jtSubtotal1;
     // End of variables declaration//GEN-END:variables
+
 }

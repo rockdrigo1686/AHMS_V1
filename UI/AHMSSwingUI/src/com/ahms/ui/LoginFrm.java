@@ -2,8 +2,13 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */                                  
+ */
 package com.ahms.ui;
+
+import com.ahms.boundary.SecurityBoundary;
+import com.ahms.boundary.core.CashOutBoundary;
+import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.Users;
 
 /**
  *
@@ -19,7 +24,7 @@ public class LoginFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS Login");
-       
+
     }
 
     /**
@@ -119,18 +124,21 @@ public class LoginFrm extends javax.swing.JFrame {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
-//        SecurityBoundary secBound = new SecurityBoundary();
-//        String user = usrTxt.getText();
-//        String password = new String(pwdTxt.getPassword());
-//        Users mainUser = secBound.login(user, password);
-//        if (mainUser != null) {
-          
-            MainFrm form = new MainFrm();
-//            form.setMainUser(mainUser);
+        SecurityBoundary secBound = new SecurityBoundary();
+        CashOutBoundary cashOutBoundary = new CashOutBoundary();
+        CashOut currentShift = null;
+        String user = usrTxt.getText();
+        String password = new String(pwdTxt.getPassword());
+        Users mainUser = secBound.login(user, password);
+        if (mainUser != null) {
+
+            currentShift = cashOutBoundary.getCurrentShift();
+
+            MainFrm form = new MainFrm(mainUser, currentShift);
             form.setVisible(true);
-              
+
             dispose();
-//        }
+        }
 
     }//GEN-LAST:event_loginBtnActionPerformed
 

@@ -6,6 +6,8 @@
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator4">
     </Component>
+    <Component class="com.ahms.model.entity.Rooms" name="rooms1">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenu1">
