@@ -16,7 +16,6 @@
     <class>com.ahms.model.entity.ProfileTasks</class>
     <class>com.ahms.model.entity.PaymentTypes</class>
     <class>com.ahms.model.entity.Reservation</class>
-    <class>com.ahms.model.entity.AccountService</class>
     <class>com.ahms.model.entity.Customers</class>
     <class>com.ahms.model.entity.Account</class>
     <class>com.ahms.model.entity.Guests</class>
@@ -26,7 +25,7 @@
     <class>com.ahms.model.entity.MoneyMovement</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_ahms"/>
-      <property name="javax.persistence.jdbc.password" value="root"/>
+      <property name="javax.persistence.jdbc.password" value="#5070Rock"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
     </properties>

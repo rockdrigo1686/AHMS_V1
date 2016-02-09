@@ -5,8 +5,9 @@
  */
 package com.ahms.model.manager.entity_manager;
 
-import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.MoneyMovement;
 import com.ahms.model.manager.AHMSEntityManager;
+import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -14,15 +15,16 @@ import javax.persistence.TypedQuery;
  *
  * @author rsoto
  */
-public class CashOutEM extends AHMSEntityManager {
+public class MoneyMovementEM extends AHMSEntityManager<MoneyMovement>{
 
-    public CashOut getCurrentShift() {
-        try {
+    public List<MoneyMovement> searchByCouId(MoneyMovement obj) {
+         try {
             if (em == null) {
                 createEm();
             }
-            TypedQuery<CashOut> query = em.createNamedQuery("CashOut.findByCouStatus", CashOut.class);
-            return query.getSingleResult();
+            TypedQuery<MoneyMovement> query = em.createNamedQuery("MoneyMovement.findByCouId", MoneyMovement.class);
+             query.setParameter("couId", obj.getCouId());
+            return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;
@@ -35,4 +37,5 @@ public class CashOutEM extends AHMSEntityManager {
             }
         }
     }
+    
 }

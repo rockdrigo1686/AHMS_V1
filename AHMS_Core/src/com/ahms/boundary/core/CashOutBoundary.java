@@ -35,12 +35,14 @@ public class CashOutBoundary implements AHMSBoundary<CashOut> {
 
     @Override
     public int insert(CashOut obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         cashOutEM = new CashOutEM();
+         return cashOutEM.insert(obj);
     }
 
     @Override
     public int update(CashOut obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         cashOutEM = new CashOutEM();
+         return cashOutEM.update(obj);
     }
 
     @Override

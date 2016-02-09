@@ -39,8 +39,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
+    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode"),
     @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd")})
 public class Users implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -337,5 +339,9 @@ public class Users implements Serializable {
     public String toString() {
         return "com.ahms.model.entity.Users[ usrId=" + usrId + " ]";
     }
-    
+
+    public String getFullName() {
+        return this.usrName + " " + this.usrLst1 + " " + this.usrLst2;
+    }
+
 }
