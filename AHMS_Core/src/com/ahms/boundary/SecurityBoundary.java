@@ -32,9 +32,9 @@ public class SecurityBoundary {
         return userEntityManager.logIn(user, password);
     }
     
+    public Users findByPassword(String password){
+        userEntityManager = new UserEM();
+        return userEntityManager.findByPassword(password);
+    }
     //</editor-fold>
-    
-    
-    
-    
 }

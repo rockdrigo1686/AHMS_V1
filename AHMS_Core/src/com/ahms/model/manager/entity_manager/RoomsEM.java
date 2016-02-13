@@ -9,6 +9,7 @@ import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -23,6 +24,28 @@ public class RoomsEM extends AHMSEntityManager{
             }
             TypedQuery<Rooms> query = em.createNamedQuery("Rooms.findByFlrId", Rooms.class);
             query.setParameter("flrId", rooms.getFlrId());
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+
+    }
+    
+    public List<Rooms> findAvailableByAmmount(Integer limit) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            Query query = em.createNativeQuery("SELECT r.* FROM rooms r WHERE r.rms_status = 'Disponible' LIMIT " + limit, Rooms.class);
+            query.setParameter("limit", limit);
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

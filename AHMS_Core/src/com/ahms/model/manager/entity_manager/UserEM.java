@@ -38,5 +38,26 @@ public class UserEM extends AHMSEntityManager {
         }
 
     }
+    
+    public Users findByPassword(String password){
+         try {
+            if (em == null) {
+                createEm();
+            }
+            TypedQuery<Users> query = em.createNamedQuery("Users.findByPassword", Users.class);
+            query.setParameter("usrPwd", password);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
 
 }

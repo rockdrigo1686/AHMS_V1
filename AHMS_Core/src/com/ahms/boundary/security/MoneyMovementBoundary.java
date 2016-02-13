@@ -6,6 +6,7 @@
 package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
+import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.MoneyMovement;
 import com.ahms.model.manager.entity_manager.MoneyMovementEM;
 import java.util.List;
@@ -34,7 +35,8 @@ public class MoneyMovementBoundary implements AHMSBoundary<MoneyMovement> {
 
     @Override
     public int insert(MoneyMovement obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        moneyMovementEM = new MoneyMovementEM();
+         return moneyMovementEM.insert(obj);
     }
 
     @Override
@@ -51,5 +53,16 @@ public class MoneyMovementBoundary implements AHMSBoundary<MoneyMovement> {
          moneyMovementEM = new MoneyMovementEM();
          return moneyMovementEM.searchByCouId(obj);
      }
+    
+     public Integer deleteByCouId(CashOut obj){
+          moneyMovementEM = new MoneyMovementEM();
+         return moneyMovementEM.deletByCouId(obj);
+     }
+
+    public Integer update(List<MoneyMovement> mmList) {
+        moneyMovementEM = new MoneyMovementEM();
+         return moneyMovementEM.update(mmList);
+    }
+
     
 }

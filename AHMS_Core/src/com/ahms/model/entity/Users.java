@@ -39,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
-    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode"),
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = 'Activo' and u.usrPwd = :usrPwd"),
+    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = 'Activo'"),
     @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd")})
 public class Users implements Serializable {
 
@@ -66,38 +67,38 @@ public class Users implements Serializable {
     @Basic(optional = false)
     @Column(name = "USR_PWD", nullable = false, length = 10)
     private String usrPwd;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.LAZY)
     private Collection<Rooms> roomsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.LAZY)
     private Collection<Rates> ratesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proUsrMod", fetch = FetchType.EAGER)
     private Collection<Profiles> profilesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.LAZY)
     private Collection<PaymentTypes> paymentTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvUsrMod", fetch = FetchType.LAZY)
     private Collection<Services> servicesCollection;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrUsrMod", fetch = FetchType.LAZY)
     private Collection<Floors> floorsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrUsrMod", fetch = FetchType.LAZY)
     private Collection<AccountTransactions> accountTransactionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mmoUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mmoUsrMod", fetch = FetchType.LAZY)
     private Collection<MoneyMovement> moneyMovementCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrId", fetch = FetchType.LAZY)
     private Collection<CashOut> cashOutCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gstUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gstUsrMod", fetch = FetchType.LAZY)
     private Collection<Guests> guestsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resUsrMod", fetch = FetchType.LAZY)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtUsrMod", fetch = FetchType.LAZY)
     private Collection<ServiceTypes> serviceTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusUsrMod", fetch = FetchType.LAZY)
     private Collection<Customers> customersCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ftrUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ftrUsrMod", fetch = FetchType.LAZY)
     private Collection<FolioTransaction> folioTransactionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actUsrMod", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actUsrMod", fetch = FetchType.LAZY)
     private Collection<Account> accountCollection;
 
     public Users() {

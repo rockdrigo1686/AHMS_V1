@@ -56,6 +56,8 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+     public List<Rooms> findAvailableByAmmount(Integer limit) {
+          return roomsEm.findAvailableByAmmount(limit);
+     }
     
 }

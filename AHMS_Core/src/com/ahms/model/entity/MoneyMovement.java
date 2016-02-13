@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,10 +37,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MoneyMovement.findByMmoCasOut", query = "SELECT m FROM MoneyMovement m WHERE m.mmoCasOut = :mmoCasOut"),
     @NamedQuery(name = "MoneyMovement.findByMmoCasIn", query = "SELECT m FROM MoneyMovement m WHERE m.mmoCasIn = :mmoCasIn"),
     @NamedQuery(name = "MoneyMovement.findByCouId", query = "SELECT m FROM MoneyMovement m WHERE m.couId = :couId"),
+    @NamedQuery(name = "MoneyMovement.deleteByCouId", query = "Delete FROM MoneyMovement m WHERE m.couId = :couId"),
     @NamedQuery(name = "MoneyMovement.findByMmoDteMod", query = "SELECT m FROM MoneyMovement m WHERE m.mmoDteMod = :mmoDteMod")})
 public class MoneyMovement implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "mmo_id", nullable = false)
     private Integer mmoId;
