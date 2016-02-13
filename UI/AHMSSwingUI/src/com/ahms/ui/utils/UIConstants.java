@@ -21,10 +21,14 @@ public class UIConstants {
     public static final String DOUBLE_CLICK = "DC";
 
     //Estatus cuartos
-    public static final String ROOM_STA_AVA = "Disponible.";
-    public static final String ROOM_STA_RE = "Reservado.";
-    public static final String ROOM_STA_TAK = "Ocupado.";
-    public static final String ROOM_STA_MNT = "Mantenimiento.";
+    public static final String ROOM_STA_AVA = "Disponible";
+    public static final String ROOM_STA_RE = "Reservado";
+    public static final String ROOM_STA_TAK = "Ocupado";
+    public static final String ROOM_STA_MNT = "Mantenimiento";
+    
+    //Estatus de Cuentas
+    public static final String ACCOUNT_ACTIVE = "Activo";
+    public static final String ACCOUNT_CLOSED = "Cerrado";
     
     //mensajes
     public static final String TYPE_WARNING = "Advertencia.";
