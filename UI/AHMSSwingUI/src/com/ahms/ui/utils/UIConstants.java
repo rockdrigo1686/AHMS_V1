@@ -11,6 +11,14 @@ package com.ahms.ui.utils;
  */
 public class UIConstants {
 
+    
+    // Estatus
+     public static final String STATUS_OPEN = "Abierto";
+     public static final String STATUS_PAID = "Pagado";
+     public static final String STATUS_CLOSED = "Cerrado";
+     public static final String STATUS_PEDING = "Pendiente";
+     public static final String STATUS_DELAYED = "Moroso";
+    
     //controlles de tarea
     public static final String BTN_LIMPIAR = "btnLimpiar";
     public static final String BTN_NUEVO = "btnNuevo";
@@ -21,10 +29,10 @@ public class UIConstants {
     public static final String DOUBLE_CLICK = "DC";
 
     //Estatus cuartos
-    public static final String ROOM_STA_AVA = "Disponible.";
-    public static final String ROOM_STA_RE = "Reservado.";
-    public static final String ROOM_STA_TAK = "Ocupado.";
-    public static final String ROOM_STA_MNT = "Mantenimiento.";
+    public static final String ROOM_STA_AVA = "Disponible";
+    public static final String ROOM_STA_RE = "Reservado";
+    public static final String ROOM_STA_TAK = "Ocupado";
+    public static final String ROOM_STA_MNT = "Mantenimiento";
     
     //mensajes
     public static final String TYPE_WARNING = "Advertencia.";
@@ -37,10 +45,15 @@ public class UIConstants {
     public static final String SUCCESS_UPDATE = "Registro guardado exitosamente.";
     public static final String SUCCESS_DELETE = "Registro eliminado exitosamente.";
     public static final String SHIFT_ENDED =  "Turno Cerrado.";
+    public static final String NOT_ENOUGH_ROOMS =   "No se encontraron suficientes cuartos disponibles, favor de verificar.";
+    public static final String NO_AVAIL_ROOMS =   "No se encontraron cuartos disponibles.";
     
     //Errores
     public static final String ERROR_EMPY_AMOUNT = "Error: El monto inicial no puede estar vacio, favor de capturar.";
     public static final String ERROR_SHIFT_INI = "Error: Turno no iniciado.";
+    public static final String ERROR_AUT_CODE = "Error: Clave de autorizacion incorrecta.";
+    public static final String ERROR_LOGIN = "Error: Clave de usuario o contraseña incorrecta.";
+    public static final String ERROR_SAVE = "Error: No se pudo guardar el registro.";
     
     //CashOut
     public static final String COU_AMOUNT_WARNING = "Advertencia: El monto inicial no puede estar vacio, favor de capturar.";
