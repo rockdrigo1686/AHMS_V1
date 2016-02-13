@@ -13,12 +13,8 @@ import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MoneyMovement;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
