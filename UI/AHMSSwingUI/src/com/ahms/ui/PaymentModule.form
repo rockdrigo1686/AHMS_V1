@@ -40,7 +40,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jlCambio" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jlMontoCambio" pref="193" max="32767" attributes="0"/>
+                      <Component id="jtCardNumber" pref="196" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jbPago" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -67,8 +67,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jbPago" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jlMontoCambio" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jlCambio" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jtCardNumber" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -106,8 +106,14 @@
           </StringArray>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbTipoPagoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jtImporteRecibido">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="4"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jbPago">
       <Properties>
@@ -123,16 +129,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jlCambio">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cambio:"/>
+        <Property name="text" type="java.lang.String" value="Tarjeta:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jlMontoCambio">
+    <Component class="javax.swing.JTextField" name="jtCardNumber">
       <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Ubuntu" size="15" style="1"/>
-        </Property>
         <Property name="horizontalAlignment" type="int" value="4"/>
-        <Property name="text" type="java.lang.String" value="jLabel3"/>
       </Properties>
     </Component>
   </SubComponents>

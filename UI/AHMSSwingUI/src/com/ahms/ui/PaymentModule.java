@@ -5,10 +5,19 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.CashOutBoundary;
+import com.ahms.boundary.security.FolioTransactionBoundary;
 import com.ahms.boundary.security.PaymentTypesBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.PaymentTypes;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JDialog;
 
@@ -24,19 +33,45 @@ public class PaymentModule extends javax.swing.JDialog {
     private BigDecimal importeRestante = BigDecimal.ZERO;
     private PaymentTypesBoundary paymentTypesBoundary;
     private CheckOutForm parentDialog;
+    private Account account;
+    private CashOut currentShift;
+    private CashOutBoundary cashOutBoundary;
+    private String cardNumber = "";
+    private String folio = "";
+    private FolioTransactionBoundary folioTransactionBoundary;
     
-    public PaymentModule(CheckOutForm parent, boolean modal, BigDecimal total) {
+    public PaymentModule(CheckOutForm parent, boolean modal, BigDecimal total, Account _account) {
         super(parent, modal);
         initComponents();
+        account = _account;
         parentDialog = parent;
         paymentTypesBoundary = new PaymentTypesBoundary();
-        
+        cashOutBoundary = new CashOutBoundary();
         jlCambio.setVisible(false);
-        jlMontoCambio.setVisible(false);
+        jtCardNumber.setVisible(false);
         cargarTiposPago();
         
         importeTotal = total.setScale(2,RoundingMode.HALF_EVEN);
         jlTotal.setText("$ "+ importeTotal.toString());
+        
+        folioTransactionBoundary = new FolioTransactionBoundary();
+        //Obteniendo TUERNO
+        currentShift = cashOutBoundary.getCurrentShift(currentShift);
+        jtCardNumber.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (jtCardNumber.getText().length()== 4){
+                    e.consume();
+                }            
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+            });
+        
     }
     
     private void cargarTiposPago() {
@@ -64,7 +99,7 @@ public class PaymentModule extends javax.swing.JDialog {
         jtImporteRecibido = new javax.swing.JTextField();
         jbPago = new javax.swing.JButton();
         jlCambio = new javax.swing.JLabel();
-        jlMontoCambio = new javax.swing.JLabel();
+        jtCardNumber = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -77,6 +112,13 @@ public class PaymentModule extends javax.swing.JDialog {
         jLabel2.setText("Importe recibido:");
 
         jcbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbTipoPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbTipoPagoActionPerformed(evt);
+            }
+        });
+
+        jtImporteRecibido.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         jbPago.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money_dollar.png"))); // NOI18N
         jbPago.setText("Procesar pago");
@@ -87,11 +129,9 @@ public class PaymentModule extends javax.swing.JDialog {
             }
         });
 
-        jlCambio.setText("Cambio:");
+        jlCambio.setText("Tarjeta:");
 
-        jlMontoCambio.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlMontoCambio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlMontoCambio.setText("jLabel3");
+        jtCardNumber.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -112,7 +152,7 @@ public class PaymentModule extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jlCambio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlMontoCambio, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                        .addComponent(jtCardNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbPago)))
                 .addContainerGap())
@@ -133,8 +173,8 @@ public class PaymentModule extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbPago)
-                    .addComponent(jlMontoCambio)
-                    .addComponent(jlCambio))
+                    .addComponent(jlCambio)
+                    .addComponent(jtCardNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -143,42 +183,99 @@ public class PaymentModule extends javax.swing.JDialog {
 
     private void jbPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPagoActionPerformed
         PaymentTypes selectedPayment = (PaymentTypes) jcbTipoPago.getSelectedItem();
-        importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.UP);
+        importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
         //validaciones
-        switch(selectedPayment.getPayId()){
-            case 1: 
-                if(importePagado.compareTo(importeTotal) > 0) // importe pagado > importe total, hay que dar feria
-                {
-                    importeSobrante = importePagado.subtract(importeTotal).setScale(2,RoundingMode.HALF_EVEN);
-                    jlCambio.setText("Cambio:");
-                    jlCambio.setVisible(true);
-                    jlMontoCambio.setText(importeSobrante.toString());
-                    jlMontoCambio.setVisible(true);
-                    
-                    //TRANSACCIONES CORRESPONDIENTES
-                    
-                    //----------------------------------
-                } else { //si el importe pagado es menor o igual al importe total actualizar montos en checkout
-                    //TRANSACCIONES CORRESPONDIENTES ---
-                    
-                    //----------------------------------
-                    importeRestante = importeTotal.subtract(importePagado).setScale(2,RoundingMode.UP);
-                    jlCambio.setText("Restante:");
-                    jlCambio.setVisible(true);
-                    jlMontoCambio.setText(importeRestante.toString());
-                    jlMontoCambio.setVisible(true);
-                    
-                    //actualizar montos en el checkout
-                    parentDialog.totalPagado = parentDialog.totalPagado.add(importePagado);
-                    parentDialog.totalPending = parentDialog.totalOriginal.subtract(parentDialog.totalPagado).setScale(2, RoundingMode.UP);
-                    parentDialog.regenerateTotals();
-                    this.dispose();
-                }
-            break;
-            case 2: case 3: 
-            break;
+        int importeValida = importePagado.compareTo(importeTotal);
+        if(importeValida >= 0) // importe pagado > importe total, hay que dar feria
+        {
+            importeSobrante = importePagado.subtract(importeTotal).setScale(2,RoundingMode.HALF_EVEN);
+            parentDialog.totalCambio = importeSobrante;
+            parentDialog.totalPending = BigDecimal.ZERO;
+            parentDialog.totalPagado = parentDialog.totalOriginal;
+            if(importeValida > 0){
+                parentDialog.setCambio();
+            }                     
+            parentDialog.regenerateTotals();
+            //activar boton de cerrar cuenta
+            parentDialog.activeAccountClose();
+            
+            //TRANSACCIONES CORRESPONDIENTES
+            FolioTransaction folioTransaction = null;            
+            if(selectedPayment.getPayId() == 1){ // EFECTIVO
+                folioTransaction = new FolioTransaction();
+                folioTransaction.setActId(account);
+                folioTransaction.setCouId(currentShift);
+                folioTransaction.setPayId(selectedPayment);
+                folioTransaction.setFtrAmount(importeTotal);
+                folioTransaction.setFtrDteMod(new Date());
+                folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
+            } else { // TARJETAs
+                folioTransaction = new FolioTransaction();
+                folioTransaction.setActId(account);
+                folioTransaction.setCouId(currentShift);
+                folioTransaction.setPayId(selectedPayment);
+                folioTransaction.setFtrAmount(importeTotal);
+                //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
+                folioTransaction.setFtrCardNumber(jtCardNumber.getText());
+                folioTransaction.setFtrFolio(folio);  
+                folioTransaction.setFtrDteMod(new Date());
+                folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
+            }
+            folioTransactionBoundary.insert(folioTransaction);
+            //----------------------------------
+        } else { //si el importe pagado es menor o igual al importe total actualizar montos en checkout
+            importeRestante = importeTotal.subtract(importePagado).setScale(2,RoundingMode.UP);
+            //actualizar montos en el checkout
+            parentDialog.totalPagado = parentDialog.totalPagado.add(importePagado);
+            parentDialog.totalPending = parentDialog.totalOriginal.subtract(parentDialog.totalPagado).setScale(2, RoundingMode.UP);
+            parentDialog.regenerateTotals();
+            
+            //TRANSACCIONES CORRESPONDIENTES ---
+            FolioTransaction folioTransaction = null;            
+            if(selectedPayment.getPayId() == 1){ // EFECTIVO
+                folioTransaction = new FolioTransaction();
+                folioTransaction.setActId(account);
+                folioTransaction.setCouId(currentShift);
+                folioTransaction.setPayId(selectedPayment);
+                folioTransaction.setFtrAmount(importePagado);
+                folioTransaction.setFtrDteMod(new Date());
+                folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
+            } else { // TARJETAs
+                folioTransaction = new FolioTransaction();
+                folioTransaction.setActId(account);
+                folioTransaction.setCouId(currentShift);
+                folioTransaction.setPayId(selectedPayment);
+                folioTransaction.setFtrAmount(importePagado);
+                //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
+                folioTransaction.setFtrCardNumber(jtCardNumber.getText());
+                folioTransaction.setFtrFolio(folio);                
+                folioTransaction.setFtrDteMod(new Date());
+                folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
+            }
+            folioTransactionBoundary.insert(folioTransaction);
+            //----------------------------------
+            
         }
+        this.dispose();
     }//GEN-LAST:event_jbPagoActionPerformed
+
+    private void jcbTipoPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoPagoActionPerformed
+        try {
+            PaymentTypes type = (PaymentTypes) jcbTipoPago.getSelectedItem();
+            if(type.getPayId().equals(1)){
+                jlCambio.setVisible(false);
+                jtCardNumber.setVisible(false);
+                jtImporteRecibido.setText("");
+                //jtImporteRecibido.setEnabled(true);
+            } else {
+                jlCambio.setVisible(true);
+                jtCardNumber.setVisible(true);
+                jtImporteRecibido.setText(importeTotal.toString());
+                //jtImporteRecibido.setEnabled(false);
+            }
+        } catch (Exception e) {
+        }            
+    }//GEN-LAST:event_jcbTipoPagoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -210,7 +307,7 @@ public class PaymentModule extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PaymentModule dialog = new PaymentModule(new CheckOutForm(null, true, null), true, new BigDecimal(4500));
+                PaymentModule dialog = new PaymentModule(new CheckOutForm(null, true, null), true, new BigDecimal(4500), null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -228,8 +325,8 @@ public class PaymentModule extends javax.swing.JDialog {
     private javax.swing.JButton jbPago;
     private javax.swing.JComboBox jcbTipoPago;
     private javax.swing.JLabel jlCambio;
-    private javax.swing.JLabel jlMontoCambio;
     private javax.swing.JLabel jlTotal;
+    private javax.swing.JTextField jtCardNumber;
     private javax.swing.JTextField jtImporteRecibido;
     // End of variables declaration//GEN-END:variables
 }
