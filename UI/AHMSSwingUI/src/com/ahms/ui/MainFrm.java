@@ -1,8 +1,11 @@
 package com.ahms.ui;
 
 import com.ahms.boundary.security.AccountBoundary;
+import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.Rooms;
@@ -19,6 +22,7 @@ import java.util.Properties;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -39,6 +43,7 @@ public class MainFrm extends javax.swing.JFrame {
     private RoomsBoundary roomsBounday = null;
     private FloorsBoundary floorsBoundary = null;
     private AccountBoundary accountBoundary = null;
+    private AccountTransactionsBoundary accountTransactionsBoundary;
     private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
 
@@ -98,6 +103,8 @@ public class MainFrm extends javax.swing.JFrame {
         roomsBounday = new RoomsBoundary();
         floorsBoundary = new FloorsBoundary();
         accountBoundary = new AccountBoundary();
+        accountTransactionsBoundary = new AccountTransactionsBoundary();
+        jbCheckOut.setEnabled(false);
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS: Advanced Hotel Management System ");
@@ -121,7 +128,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     }
 
-    private void configGrid(List<Rooms> rooms) {
+    public void configGrid(List<Rooms> rooms) {
         Vector<String> columnNames = new Vector();
         columnNames.add("");
         columnNames.add("#");
@@ -194,30 +201,36 @@ public class MainFrm extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int clicks = e.getClickCount();
                 int row = jtDashboard.getSelectedRow();
-                String estatus = String.valueOf(jtDashboard.getValueAt(row, 7));
-                if (estatus.trim().toLowerCase().equals("mantenimiento")) {
-                    if (clicks > 1) {
-                        JOptionPane.showMessageDialog(null, "La habitación no esta disponible por el momento.");
+                String estatus = String.valueOf(jtDashboard.getValueAt(row, 7)).trim().toUpperCase();
+                if(clicks > 1){ // doble click
+                    if(estatus.equals("OCUPADO")){
+                        //llamar a agregar servicios
+                        Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
+                        RoomService roomService = new RoomService(null, true, roomObj);
+                        roomService.setVisible(true);
                     }
-                } else {
-                    if (clicks > 1) {
-//                        Account paramAct = new Account();
-////                        paramAct.setRmsId(new Rooms((int) jtDashboard.getValueAt(row, 8)));
-////                        Account acct = accountBoundary.findByRms(paramAct);
-////                        CheckOutForm checkOut = new CheckOutForm(parent, true, acct);
-////                        checkOut.setVisible(true);
-////                        checkOut.setAlwaysOnTop(true);
-
-                    } else {
-                        jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
-                        jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                } else {  // 1 click
+                    jbCheckOut.setEnabled(false);
+                    if(estatus.equals("OCUPADO")){
+                        jbCheckOut.setEnabled(true);
                     }
-                }
+                    jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
+                    jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                }                
             }
 
         });
     }
 
+    private Rooms getRoomFromDashboard(Integer rmsId){
+        Rooms room= null;
+        try {
+            
+        } catch (Exception e) {
+        }
+        return room;
+    }
+    
     private void configDatePickers() {
 
         Calendar calToday = Calendar.getInstance();
@@ -277,7 +290,7 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jcbPisos = new javax.swing.JComboBox();
-        jButton3 = new javax.swing.JButton();
+        jbCheckOut = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtDashboard = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
@@ -402,10 +415,10 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("CheckOut");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jbCheckOut.setText("CheckOut");
+        jbCheckOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jbCheckOutActionPerformed(evt);
             }
         });
 
@@ -419,7 +432,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(jbCheckOut)
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -429,7 +442,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(jbCheckOut))
                 .addContainerGap())
         );
 
@@ -903,11 +916,18 @@ public class MainFrm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-//        Account acct = accountBoundary.find(new Account(1));
-//        JDialog dialogCheckout = new CheckOutForm(this, true, acct);
-//        dialogCheckout.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void jbCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckOutActionPerformed
+        Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
+        AccountTransactions acctTran = new AccountTransactions();
+        acctTran.setRooms(new Rooms(roomSelected));
+        
+        AccountTransactions accountTran = accountTransactionsBoundary.findByRmsId(acctTran);
+        Account account = accountBoundary.find(new Account(accountTran.getActId().getActId()));
+        
+        JDialog dialogCheckout = new CheckOutForm(this, true, account.getCusId());
+        dialogCheckout.setLocationRelativeTo(this);
+        dialogCheckout.setVisible(true);
+    }//GEN-LAST:event_jbCheckOutActionPerformed
 
     private void btnIniciarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarTurnoActionPerformed
         // TODO add your handling code here:
@@ -931,7 +951,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnIniciarTurno;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -971,6 +990,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
+    private javax.swing.JButton jbCheckOut;
     private javax.swing.JComboBox jcbPisos;
     private javax.swing.JComboBox jcbTipoPago;
     private javax.swing.JLabel jlRegistroMaterno;
