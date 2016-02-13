@@ -6,6 +6,7 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -66,17 +67,17 @@ public class Account implements Serializable {
     private String actStatus;
     @Basic(optional = false)
     @Column(name = "act_total", nullable = false)
-    private long actTotal;
+    private BigDecimal actTotal;
     @Basic(optional = false)
     @Column(name = "act_dte_mod", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date actDteMod;
     @Column(name = "act_subtotal")
-    private Long actSubtotal;
+    private BigDecimal actSubtotal;
     @Column(name = "act_iva")
-    private Long actIva;
+    private BigDecimal actIva;
     @Column(name = "act_iva_amt")
-    private Long actIvaAmt;
+    private BigDecimal actIvaAmt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
@@ -97,7 +98,7 @@ public class Account implements Serializable {
         this.actId = actId;
     }
 
-    public Account(Integer actId, Date actFecIni, Date actFecFin, String actStatus, long actTotal, Date actDteMod) {
+    public Account(Integer actId, Date actFecIni, Date actFecFin, String actStatus, BigDecimal actTotal, Date actDteMod) {
         this.actId = actId;
         this.actFecIni = actFecIni;
         this.actFecFin = actFecFin;
@@ -138,11 +139,11 @@ public class Account implements Serializable {
         this.actStatus = actStatus;
     }
 
-    public long getActTotal() {
+    public BigDecimal getActTotal() {
         return actTotal;
     }
 
-    public void setActTotal(long actTotal) {
+    public void setActTotal(BigDecimal actTotal) {
         this.actTotal = actTotal;
     }
 
@@ -154,27 +155,27 @@ public class Account implements Serializable {
         this.actDteMod = actDteMod;
     }
 
-    public Long getActSubtotal() {
+    public BigDecimal getActSubtotal() {
         return actSubtotal;
     }
 
-    public void setActSubtotal(Long actSubtotal) {
+    public void setActSubtotal(BigDecimal actSubtotal) {
         this.actSubtotal = actSubtotal;
     }
 
-    public Long getActIva() {
+    public BigDecimal getActIva() {
         return actIva;
     }
 
-    public void setActIva(Long actIva) {
+    public void setActIva(BigDecimal actIva) {
         this.actIva = actIva;
     }
 
-    public Long getActIvaAmt() {
+    public BigDecimal getActIvaAmt() {
         return actIvaAmt;
     }
 
-    public void setActIvaAmt(Long actIvaAmt) {
+    public void setActIvaAmt(BigDecimal actIvaAmt) {
         this.actIvaAmt = actIvaAmt;
     }
 

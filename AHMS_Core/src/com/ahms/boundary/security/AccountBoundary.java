@@ -39,7 +39,7 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
 
     @Override
     public int update(Account obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return accountEM.update(obj);
     }
 
     @Override

@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AccountTransactions.findAll", query = "SELECT a FROM AccountTransactions a"),
     @NamedQuery(name = "AccountTransactions.findByAtrId", query = "SELECT a FROM AccountTransactions a WHERE a.accountTransactionsPK.atrId = :atrId"),
-    @NamedQuery(name = "AccountTransactions.findByRmsId", query = "SELECT a FROM AccountTransactions a WHERE a.accountTransactionsPK.rmsId = :rmsId"),
+    @NamedQuery(name = "AccountTransactions.findByRmsId", query = "SELECT a FROM AccountTransactions a WHERE a.accountTransactionsPK.rmsId = :rmsId AND a.accountTransactionsPK.atrId = 1 "),
     @NamedQuery(name = "AccountTransactions.findByAtrQuantity", query = "SELECT a FROM AccountTransactions a WHERE a.atrQuantity = :atrQuantity"),
     @NamedQuery(name = "AccountTransactions.findByAtrNotes", query = "SELECT a FROM AccountTransactions a WHERE a.atrNotes = :atrNotes"),
     @NamedQuery(name = "AccountTransactions.findByAtrStatus", query = "SELECT a FROM AccountTransactions a WHERE a.atrStatus = :atrStatus"),

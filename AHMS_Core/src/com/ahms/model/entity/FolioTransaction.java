@@ -6,11 +6,14 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -41,6 +44,7 @@ public class FolioTransaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ftr_id", nullable = false)
     private Integer ftrId;
@@ -49,9 +53,9 @@ public class FolioTransaction implements Serializable {
     private String ftrFolio;
     @Basic(optional = false)
     @Column(name = "ftr_amount", nullable = false)
-    private long ftrAmount;
+    private BigDecimal ftrAmount;
     @Basic(optional = false)
-    @Column(name = "ftr_card_number", nullable = false, length = 4)
+    @Column(name = "ftr_card_number", nullable = true, length = 4)
     private String ftrCardNumber;
     @Basic(optional = false)
     @Column(name = "ftr_dte_mod", nullable = false)
@@ -77,7 +81,7 @@ public class FolioTransaction implements Serializable {
         this.ftrId = ftrId;
     }
 
-    public FolioTransaction(Integer ftrId, String ftrFolio, long ftrAmount, String ftrCardNumber, Date ftrDteMod) {
+    public FolioTransaction(Integer ftrId, String ftrFolio, BigDecimal ftrAmount, String ftrCardNumber, Date ftrDteMod) {
         this.ftrId = ftrId;
         this.ftrFolio = ftrFolio;
         this.ftrAmount = ftrAmount;
@@ -101,11 +105,11 @@ public class FolioTransaction implements Serializable {
         this.ftrFolio = ftrFolio;
     }
 
-    public long getFtrAmount() {
+    public BigDecimal getFtrAmount() {
         return ftrAmount;
     }
 
-    public void setFtrAmount(long ftrAmount) {
+    public void setFtrAmount(BigDecimal ftrAmount) {
         this.ftrAmount = ftrAmount;
     }
 
