@@ -418,12 +418,12 @@ public class ShiftEndFrm extends javax.swing.JDialog {
 //            ftMap.put(UIConstants.PAYMENT_TYPE_CS, new ArrayList<FolioTransaction>());
             
             for (FolioTransaction ftObj : folioTransactionList) {
-                total += ftObj.getFtrAmount();
+                total += ftObj.getFtrAmount().doubleValue();
                 if (UIConstants.PAYMENT_TYPE_CS.equalsIgnoreCase(ftObj.getPayId().getPayDesc())) {
-                    totalCs += ftObj.getFtrAmount();
+                    totalCs += ftObj.getFtrAmount().doubleValue();
                     csModel.addRow(new  Object[]{"tarjeta: " + ftObj.getFtrCardNumber() + " Folio: " + ftObj.getFtrFolio(), ftObj.getFtrAmount()});
                 } else {
-                    totalTc += ftObj.getFtrAmount();
+                    totalTc += ftObj.getFtrAmount().doubleValue();
                     tcModel.addRow(new Object[]{"tarjeta: " + ftObj.getFtrCardNumber() + " Folio: " + ftObj.getFtrFolio(), ftObj.getFtrAmount()});
                 }
             }
