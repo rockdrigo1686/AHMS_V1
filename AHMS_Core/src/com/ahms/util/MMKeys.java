@@ -56,6 +56,6 @@ public class MMKeys {
     public static class Math{
         
         public final static String GP_KEY = "MTH";
-        public final static String IVA = "I.V.A";
+        public final static String IVA_KEY = "IVA";
     }
 }
