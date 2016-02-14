@@ -7,8 +7,11 @@ package com.ahms.ui;
 
 import com.ahms.boundary.core.CashOutBoundary;
 import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
@@ -130,11 +133,11 @@ public class ShiftFrm extends javax.swing.JDialog {
         if (txtFondo.getText() == null || txtFondo.getText().equalsIgnoreCase("")) {
             JOptionPane.showMessageDialog(this, UIConstants.ERROR_EMPY_AMOUNT);
         }
-        cashOut.setCouAmoIni(Long.parseLong(txtFondo.getText()));
-        cashOut.setCouMonEnd(0);
+        cashOut.setCouAmoIni(new BigDecimal(txtFondo.getText()));
+        cashOut.setCouMonEnd(BigDecimal.ZERO);
         cashOut.setCouDteIni(new Date());
         cashOut.setUsrId(mainUser);
-        cashOut.setCouStatus(UIConstants.SHIFT_STA_INI);
+        cashOut.setCouStatus(new MultiValue(MMKeys.Shift.STA_ABIERTO_KEY));
         if (cob.insert(cashOut) == 1) {
             parent.setCurrentShift(cashOut);
             this.dispose();

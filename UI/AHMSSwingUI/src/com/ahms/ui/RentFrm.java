@@ -11,13 +11,13 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
-import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
-import com.sun.webkit.UIClient;
 import java.awt.Font;
 import java.util.Calendar;
 import java.util.Date;
@@ -317,7 +317,7 @@ public class RentFrm extends javax.swing.JDialog {
         account.setActFecFin(dteSalida);
         account.setActFecIni(dteEntrada);
         account.setActUsrMod(mainUser);
-        account.setActStatus(UIConstants.STATUS_OPEN);
+        account.setActStatus(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY) );
         account.setCusId(client);
 
         List<AccountTransactions> atList = new VirtualFlow.ArrayLinkedList<>();
@@ -329,8 +329,8 @@ public class RentFrm extends javax.swing.JDialog {
             ac.setAtrDteMod(insDate);
             ac.setAtrNotes("Renta");
             ac.setAtrQuantity(1);
-            ac.setAtrStatus(1);
-            ac.setRooms((Rooms)model.getValueAt(i, 0));
+            ac.setAtrStatus(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY ));
+            ac.setRmsId((Rooms)model.getValueAt(i, 0));
             ac.setSrvId(null);
             ac.setAtrUsrMod(mainUser);
         }
