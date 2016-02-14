@@ -352,4 +352,7 @@ public class Users implements Serializable {
         return "com.ahms.boundary.Users[ usrId=" + usrId + " ]";
     }
 
+    public String getFullName() {
+        return this.usrName + " " + this.usrLst1 + " " + this.usrLst2;
+    }
 }
