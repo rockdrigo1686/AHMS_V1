@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "service_types", catalog = "db_ahms", schema = "", uniqueConstraints = {
@@ -41,7 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "ServiceTypes.findBySvtId", query = "SELECT s FROM ServiceTypes s WHERE s.svtId = :svtId"),
     @NamedQuery(name = "ServiceTypes.findBySvtCode", query = "SELECT s FROM ServiceTypes s WHERE s.svtCode = :svtCode"),
     @NamedQuery(name = "ServiceTypes.findBySvtDesc", query = "SELECT s FROM ServiceTypes s WHERE s.svtDesc = :svtDesc"),
-    @NamedQuery(name = "ServiceTypes.findBySvtStatus", query = "SELECT s FROM ServiceTypes s WHERE s.svtStatus = :svtStatus"),
     @NamedQuery(name = "ServiceTypes.findBySvtDteMod", query = "SELECT s FROM ServiceTypes s WHERE s.svtDteMod = :svtDteMod")})
 public class ServiceTypes implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -57,15 +56,15 @@ public class ServiceTypes implements Serializable {
     @Column(name = "SVT_DESC", nullable = false, length = 150)
     private String svtDesc;
     @Basic(optional = false)
-    @Column(name = "SVT_STATUS", nullable = false, length = 10)
-    private String svtStatus;
-    @Basic(optional = false)
     @Column(name = "SVT_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date svtDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtId", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
-    @JoinColumn(name = "SVT_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "SVT_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue svtStatus;
+    @JoinColumn(name = "SVT_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users svtUsrMod;
 
@@ -76,11 +75,10 @@ public class ServiceTypes implements Serializable {
         this.svtId = svtId;
     }
 
-    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, String svtStatus, Date svtDteMod) {
+    public ServiceTypes(Integer svtId, String svtCode, String svtDesc, Date svtDteMod) {
         this.svtId = svtId;
         this.svtCode = svtCode;
         this.svtDesc = svtDesc;
-        this.svtStatus = svtStatus;
         this.svtDteMod = svtDteMod;
     }
 
@@ -108,14 +106,6 @@ public class ServiceTypes implements Serializable {
         this.svtDesc = svtDesc;
     }
 
-    public String getSvtStatus() {
-        return svtStatus;
-    }
-
-    public void setSvtStatus(String svtStatus) {
-        this.svtStatus = svtStatus;
-    }
-
     public Date getSvtDteMod() {
         return svtDteMod;
     }
@@ -131,6 +121,14 @@ public class ServiceTypes implements Serializable {
 
     public void setServicesCollection(Collection<Services> servicesCollection) {
         this.servicesCollection = servicesCollection;
+    }
+
+    public MultiValue getSvtStatus() {
+        return svtStatus;
+    }
+
+    public void setSvtStatus(MultiValue svtStatus) {
+        this.svtStatus = svtStatus;
     }
 
     public Users getSvtUsrMod() {
@@ -163,7 +161,7 @@ public class ServiceTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.ServiceTypes[ svtId=" + svtId + " ]";
+        return "com.ahms.boundary.ServiceTypes[ svtId=" + svtId + " ]";
     }
     
 }

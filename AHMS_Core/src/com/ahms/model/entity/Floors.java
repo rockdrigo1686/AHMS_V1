@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "floors", catalog = "db_ahms", schema = "", uniqueConstraints = {
@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f"),
     @NamedQuery(name = "Floors.findByFlrId", query = "SELECT f FROM Floors f WHERE f.flrId = :flrId"),
     @NamedQuery(name = "Floors.findByFlrCode", query = "SELECT f FROM Floors f WHERE f.flrCode = :flrCode"),
-    @NamedQuery(name = "Floors.findByFlrStatus", query = "SELECT f FROM Floors f WHERE f.flrStatus = :flrStatus"),
     @NamedQuery(name = "Floors.findByFlrDteMod", query = "SELECT f FROM Floors f WHERE f.flrDteMod = :flrDteMod")})
 public class Floors implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -53,15 +52,15 @@ public class Floors implements Serializable {
     @Column(name = "FLR_CODE", nullable = false, length = 5)
     private String flrCode;
     @Basic(optional = false)
-    @Column(name = "FLR_STATUS", nullable = false, length = 15)
-    private String flrStatus;
-    @Basic(optional = false)
     @Column(name = "FLR_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date flrDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrId", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
-    @JoinColumn(name = "FLR_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "FLR_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue flrStatus;
+    @JoinColumn(name = "FLR_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users flrUsrMod;
 
@@ -72,10 +71,9 @@ public class Floors implements Serializable {
         this.flrId = flrId;
     }
 
-    public Floors(Integer flrId, String flrCode, String flrStatus, Date flrDteMod) {
+    public Floors(Integer flrId, String flrCode, Date flrDteMod) {
         this.flrId = flrId;
         this.flrCode = flrCode;
-        this.flrStatus = flrStatus;
         this.flrDteMod = flrDteMod;
     }
 
@@ -95,14 +93,6 @@ public class Floors implements Serializable {
         this.flrCode = flrCode;
     }
 
-    public String getFlrStatus() {
-        return flrStatus;
-    }
-
-    public void setFlrStatus(String flrStatus) {
-        this.flrStatus = flrStatus;
-    }
-
     public Date getFlrDteMod() {
         return flrDteMod;
     }
@@ -118,6 +108,14 @@ public class Floors implements Serializable {
 
     public void setRoomsCollection(Collection<Rooms> roomsCollection) {
         this.roomsCollection = roomsCollection;
+    }
+
+    public MultiValue getFlrStatus() {
+        return flrStatus;
+    }
+
+    public void setFlrStatus(MultiValue flrStatus) {
+        this.flrStatus = flrStatus;
     }
 
     public Users getFlrUsrMod() {
@@ -150,7 +148,7 @@ public class Floors implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Floors[ flrId=" + flrId + " ]";
+        return "com.ahms.boundary.Floors[ flrId=" + flrId + " ]";
     }
     
 }

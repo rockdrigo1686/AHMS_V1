@@ -38,54 +38,52 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
     @NamedQuery(name = "Account.findByActId", query = "SELECT a FROM Account a WHERE a.actId = :actId"),
+    @NamedQuery(name = "Account.findByActTotal", query = "SELECT a FROM Account a WHERE a.actTotal = :actTotal"),
     @NamedQuery(name = "Account.findByActFecIni", query = "SELECT a FROM Account a WHERE a.actFecIni = :actFecIni"),
     @NamedQuery(name = "Account.findByActFecFin", query = "SELECT a FROM Account a WHERE a.actFecFin = :actFecFin"),
-    @NamedQuery(name = "Account.findByActStatus", query = "SELECT a FROM Account a WHERE a.actStatus = :actStatus"),
-    @NamedQuery(name = "Account.findByActTotal", query = "SELECT a FROM Account a WHERE a.actTotal = :actTotal"),
     @NamedQuery(name = "Account.findByActDteMod", query = "SELECT a FROM Account a WHERE a.actDteMod = :actDteMod"),
     @NamedQuery(name = "Account.findByActSubtotal", query = "SELECT a FROM Account a WHERE a.actSubtotal = :actSubtotal"),
     @NamedQuery(name = "Account.findByActIva", query = "SELECT a FROM Account a WHERE a.actIva = :actIva"),
-    @NamedQuery(name = "Account.findByActIvaAmt", query = "SELECT a FROM Account a WHERE a.actIvaAmt = :actIvaAmt"),
-    @NamedQuery(name = "Account.findByCusId", query = "SELECT a FROM Account a WHERE a.cusId = :cusId")})
+    @NamedQuery(name = "Account.findByActIvaAmt", query = "SELECT a FROM Account a WHERE a.actIvaAmt = :actIvaAmt")})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "act_id", nullable = false)
+    @Column(name = "ACT_ID", nullable = false)
     private Integer actId;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "ACT_TOTAL", precision = 10, scale = 2)
+    private BigDecimal actTotal;
     @Basic(optional = false)
-    @Column(name = "act_fec_ini", nullable = false)
+    @Column(name = "ACT_FEC_INI", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date actFecIni;
     @Basic(optional = false)
-    @Column(name = "act_fec_fin", nullable = false)
+    @Column(name = "ACT_FEC_FIN", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date actFecFin;
     @Basic(optional = false)
-    @Column(name = "act_status", nullable = false, length = 20)
-    private String actStatus;
-    @Basic(optional = false)
-    @Column(name = "act_total", nullable = false)
-    private BigDecimal actTotal;
-    @Basic(optional = false)
-    @Column(name = "act_dte_mod", nullable = false)
+    @Column(name = "ACT_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date actDteMod;
-    @Column(name = "act_subtotal")
+    @Column(name = "ACT_SUBTOTAL", precision = 10, scale = 2)
     private BigDecimal actSubtotal;
-    @Column(name = "act_iva")
+    @Column(name = "ACT_IVA", precision = 10, scale = 2)
     private BigDecimal actIva;
-    @Column(name = "act_iva_amt")
+    @Column(name = "ACT_IVA_AMT", precision = 10, scale = 2)
     private BigDecimal actIvaAmt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<FolioTransaction> folioTransactionCollection;
-    @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
+    @JoinColumn(name = "CUS_ID", referencedColumnName = "CUS_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Customers cusId;
-    @JoinColumn(name = "act_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "ACT_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue actStatus;
+    @JoinColumn(name = "ACT_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users actUsrMod;
 
@@ -96,12 +94,10 @@ public class Account implements Serializable {
         this.actId = actId;
     }
 
-    public Account(Integer actId, Date actFecIni, Date actFecFin, String actStatus, BigDecimal actTotal, Date actDteMod) {
+    public Account(Integer actId, Date actFecIni, Date actFecFin, Date actDteMod) {
         this.actId = actId;
         this.actFecIni = actFecIni;
         this.actFecFin = actFecFin;
-        this.actStatus = actStatus;
-        this.actTotal = actTotal;
         this.actDteMod = actDteMod;
     }
 
@@ -111,6 +107,14 @@ public class Account implements Serializable {
 
     public void setActId(Integer actId) {
         this.actId = actId;
+    }
+
+    public BigDecimal getActTotal() {
+        return actTotal;
+    }
+
+    public void setActTotal(BigDecimal actTotal) {
+        this.actTotal = actTotal;
     }
 
     public Date getActFecIni() {
@@ -127,22 +131,6 @@ public class Account implements Serializable {
 
     public void setActFecFin(Date actFecFin) {
         this.actFecFin = actFecFin;
-    }
-
-    public String getActStatus() {
-        return actStatus;
-    }
-
-    public void setActStatus(String actStatus) {
-        this.actStatus = actStatus;
-    }
-
-    public BigDecimal getActTotal() {
-        return actTotal;
-    }
-
-    public void setActTotal(BigDecimal actTotal) {
-        this.actTotal = actTotal;
     }
 
     public Date getActDteMod() {
@@ -203,6 +191,14 @@ public class Account implements Serializable {
         this.cusId = cusId;
     }
 
+    public MultiValue getActStatus() {
+        return actStatus;
+    }
+
+    public void setActStatus(MultiValue actStatus) {
+        this.actStatus = actStatus;
+    }
+
     public Users getActUsrMod() {
         return actUsrMod;
     }
@@ -233,7 +229,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Account[ actId=" + actId + " ]";
+        return "com.ahms.boundary.Account[ actId=" + actId + " ]";
     }
     
 }

@@ -6,6 +6,7 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -29,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "rates", catalog = "db_ahms", schema = "")
@@ -39,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rates.findByRteId", query = "SELECT r FROM Rates r WHERE r.rteId = :rteId"),
     @NamedQuery(name = "Rates.findByRteDesc", query = "SELECT r FROM Rates r WHERE r.rteDesc = :rteDesc"),
     @NamedQuery(name = "Rates.findByRtePrice", query = "SELECT r FROM Rates r WHERE r.rtePrice = :rtePrice"),
-    @NamedQuery(name = "Rates.findByRteStatus", query = "SELECT r FROM Rates r WHERE r.rteStatus = :rteStatus"),
     @NamedQuery(name = "Rates.findByRteDteMod", query = "SELECT r FROM Rates r WHERE r.rteDteMod = :rteDteMod")})
 public class Rates implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -51,19 +51,20 @@ public class Rates implements Serializable {
     @Basic(optional = false)
     @Column(name = "RTE_DESC", nullable = false, length = 20)
     private String rteDesc;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
-    @Column(name = "RTE_PRICE", nullable = false)
-    private long rtePrice;
-    @Basic(optional = false)
-    @Column(name = "RTE_STATUS", nullable = false, length = 10)
-    private String rteStatus;
+    @Column(name = "RTE_PRICE", nullable = false, precision = 10, scale = 2)
+    private BigDecimal rtePrice;
     @Basic(optional = false)
     @Column(name = "RTE_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date rteDteMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteId", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
-    @JoinColumn(name = "RTE_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "RTE_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue rteStatus;
+    @JoinColumn(name = "RTE_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users rteUsrMod;
 
@@ -74,11 +75,10 @@ public class Rates implements Serializable {
         this.rteId = rteId;
     }
 
-    public Rates(Integer rteId, String rteDesc, long rtePrice, String rteStatus, Date rteDteMod) {
+    public Rates(Integer rteId, String rteDesc, BigDecimal rtePrice, Date rteDteMod) {
         this.rteId = rteId;
         this.rteDesc = rteDesc;
         this.rtePrice = rtePrice;
-        this.rteStatus = rteStatus;
         this.rteDteMod = rteDteMod;
     }
 
@@ -98,20 +98,12 @@ public class Rates implements Serializable {
         this.rteDesc = rteDesc;
     }
 
-    public long getRtePrice() {
+    public BigDecimal getRtePrice() {
         return rtePrice;
     }
 
-    public void setRtePrice(long rtePrice) {
+    public void setRtePrice(BigDecimal rtePrice) {
         this.rtePrice = rtePrice;
-    }
-
-    public String getRteStatus() {
-        return rteStatus;
-    }
-
-    public void setRteStatus(String rteStatus) {
-        this.rteStatus = rteStatus;
     }
 
     public Date getRteDteMod() {
@@ -129,6 +121,14 @@ public class Rates implements Serializable {
 
     public void setRoomsCollection(Collection<Rooms> roomsCollection) {
         this.roomsCollection = roomsCollection;
+    }
+
+    public MultiValue getRteStatus() {
+        return rteStatus;
+    }
+
+    public void setRteStatus(MultiValue rteStatus) {
+        this.rteStatus = rteStatus;
     }
 
     public Users getRteUsrMod() {
@@ -161,7 +161,7 @@ public class Rates implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Rates[ rteId=" + rteId + " ]";
+        return "com.ahms.boundary.Rates[ rteId=" + rteId + " ]";
     }
     
 }

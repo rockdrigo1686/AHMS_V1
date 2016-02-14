@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "profiles", catalog = "db_ahms", schema = "", uniqueConstraints = {
@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Profiles.findByProId", query = "SELECT p FROM Profiles p WHERE p.proId = :proId"),
     @NamedQuery(name = "Profiles.findByProCode", query = "SELECT p FROM Profiles p WHERE p.proCode = :proCode"),
     @NamedQuery(name = "Profiles.findByProName", query = "SELECT p FROM Profiles p WHERE p.proName = :proName"),
-    @NamedQuery(name = "Profiles.findByProStatus", query = "SELECT p FROM Profiles p WHERE p.proStatus = :proStatus"),
+    @NamedQuery(name = "Profiles.findByProUsrMod", query = "SELECT p FROM Profiles p WHERE p.proUsrMod = :proUsrMod"),
     @NamedQuery(name = "Profiles.findByProDteMod", query = "SELECT p FROM Profiles p WHERE p.proDteMod = :proDteMod")})
 public class Profiles implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -57,15 +57,15 @@ public class Profiles implements Serializable {
     @Column(name = "PRO_NAME", nullable = false, length = 50)
     private String proName;
     @Basic(optional = false)
-    @Column(name = "PRO_STATUS", nullable = false, length = 10)
-    private String proStatus;
+    @Column(name = "PRO_USR_MOD", nullable = false)
+    private int proUsrMod;
     @Basic(optional = false)
     @Column(name = "PRO_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date proDteMod;
-    @JoinColumn(name = "PRO_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "PRO_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Users proUsrMod;
+    private MultiValue proStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.EAGER)
     private Collection<Users> usersCollection;
 
@@ -76,11 +76,11 @@ public class Profiles implements Serializable {
         this.proId = proId;
     }
 
-    public Profiles(Integer proId, String proCode, String proName, String proStatus, Date proDteMod) {
+    public Profiles(Integer proId, String proCode, String proName, int proUsrMod, Date proDteMod) {
         this.proId = proId;
         this.proCode = proCode;
         this.proName = proName;
-        this.proStatus = proStatus;
+        this.proUsrMod = proUsrMod;
         this.proDteMod = proDteMod;
     }
 
@@ -108,12 +108,12 @@ public class Profiles implements Serializable {
         this.proName = proName;
     }
 
-    public String getProStatus() {
-        return proStatus;
+    public int getProUsrMod() {
+        return proUsrMod;
     }
 
-    public void setProStatus(String proStatus) {
-        this.proStatus = proStatus;
+    public void setProUsrMod(int proUsrMod) {
+        this.proUsrMod = proUsrMod;
     }
 
     public Date getProDteMod() {
@@ -124,12 +124,12 @@ public class Profiles implements Serializable {
         this.proDteMod = proDteMod;
     }
 
-    public Users getProUsrMod() {
-        return proUsrMod;
+    public MultiValue getProStatus() {
+        return proStatus;
     }
 
-    public void setProUsrMod(Users proUsrMod) {
-        this.proUsrMod = proUsrMod;
+    public void setProStatus(MultiValue proStatus) {
+        this.proStatus = proStatus;
     }
 
     @XmlTransient
@@ -163,7 +163,7 @@ public class Profiles implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Profiles[ proId=" + proId + " ]";
+        return "com.ahms.boundary.Profiles[ proId=" + proId + " ]";
     }
     
 }

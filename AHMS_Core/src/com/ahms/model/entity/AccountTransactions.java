@@ -11,9 +11,11 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -34,71 +36,66 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AccountTransactions.findAll", query = "SELECT a FROM AccountTransactions a"),
-    @NamedQuery(name = "AccountTransactions.findByAtrId", query = "SELECT a FROM AccountTransactions a WHERE a.accountTransactionsPK.atrId = :atrId"),
-    @NamedQuery(name = "AccountTransactions.findByRmsId", query = "SELECT a FROM AccountTransactions a WHERE a.accountTransactionsPK.rmsId = :rmsId AND a.accountTransactionsPK.atrId = 1 "),
+    @NamedQuery(name = "AccountTransactions.findByAtrId", query = "SELECT a FROM AccountTransactions a WHERE a.atrId = :atrId"),
     @NamedQuery(name = "AccountTransactions.findByAtrQuantity", query = "SELECT a FROM AccountTransactions a WHERE a.atrQuantity = :atrQuantity"),
     @NamedQuery(name = "AccountTransactions.findByAtrNotes", query = "SELECT a FROM AccountTransactions a WHERE a.atrNotes = :atrNotes"),
-    @NamedQuery(name = "AccountTransactions.findByAtrStatus", query = "SELECT a FROM AccountTransactions a WHERE a.atrStatus = :atrStatus"),
-    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod"),
-    @NamedQuery(name = "AccountTransactions.findRentsByActId", query = "SELECT a FROM AccountTransactions a WHERE a.actId = :actId and a.srvId is null")})
+    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod")})
 public class AccountTransactions implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrId", fetch = FetchType.EAGER)
-    private Collection<Guests> guestsCollection;
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected AccountTransactionsPK accountTransactionsPK;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "atr_quantity", nullable = false)
+    @Column(name = "ATR_ID", nullable = false)
+    private Integer atrId;
+    @Basic(optional = false)
+    @Column(name = "ATR_QUANTITY", nullable = false)
     private int atrQuantity;
-    @Column(name = "atr_notes", length = 250)
+    @Column(name = "ATR_NOTES", length = 250)
     private String atrNotes;
     @Basic(optional = false)
-    @Column(name = "atr_status", nullable = false)
-    private int atrStatus;
-    @Basic(optional = false)
-    @Column(name = "atr_dte_mod", nullable = false)
+    @Column(name = "ATR_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date atrDteMod;
-    @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
+    @JoinColumn(name = "ACT_ID", referencedColumnName = "ACT_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account actId;
-    @JoinColumn(name = "cou_id", referencedColumnName = "cou_id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "COU_ID", referencedColumnName = "COU_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private CashOut couId;
-    @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "ATR_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Rooms rooms;
-    @JoinColumn(name = "srv_id", referencedColumnName = "SRV_ID", nullable = false)
+    private MultiValue atrStatus;
+    @JoinColumn(name = "RMS_ID", referencedColumnName = "RMS_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Rooms rmsId;
+    @JoinColumn(name = "SRV_ID", referencedColumnName = "SRV_ID")
+    @ManyToOne(fetch = FetchType.EAGER)
     private Services srvId;
-    @JoinColumn(name = "atr_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "ATR_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users atrUsrMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrId", fetch = FetchType.EAGER)
+    private Collection<Guests> guestsCollection;
 
     public AccountTransactions() {
     }
 
-    public AccountTransactions(AccountTransactionsPK accountTransactionsPK) {
-        this.accountTransactionsPK = accountTransactionsPK;
+    public AccountTransactions(Integer atrId) {
+        this.atrId = atrId;
     }
 
-    public AccountTransactions(AccountTransactionsPK accountTransactionsPK, int atrQuantity, int atrStatus, Date atrDteMod) {
-        this.accountTransactionsPK = accountTransactionsPK;
+    public AccountTransactions(Integer atrId, int atrQuantity, Date atrDteMod) {
+        this.atrId = atrId;
         this.atrQuantity = atrQuantity;
-        this.atrStatus = atrStatus;
         this.atrDteMod = atrDteMod;
     }
 
-    public AccountTransactions(int atrId, int rmsId) {
-        this.accountTransactionsPK = new AccountTransactionsPK(atrId, rmsId);
+    public Integer getAtrId() {
+        return atrId;
     }
 
-    public AccountTransactionsPK getAccountTransactionsPK() {
-        return accountTransactionsPK;
-    }
-
-    public void setAccountTransactionsPK(AccountTransactionsPK accountTransactionsPK) {
-        this.accountTransactionsPK = accountTransactionsPK;
+    public void setAtrId(Integer atrId) {
+        this.atrId = atrId;
     }
 
     public int getAtrQuantity() {
@@ -115,14 +112,6 @@ public class AccountTransactions implements Serializable {
 
     public void setAtrNotes(String atrNotes) {
         this.atrNotes = atrNotes;
-    }
-
-    public int getAtrStatus() {
-        return atrStatus;
-    }
-
-    public void setAtrStatus(int atrStatus) {
-        this.atrStatus = atrStatus;
     }
 
     public Date getAtrDteMod() {
@@ -149,12 +138,20 @@ public class AccountTransactions implements Serializable {
         this.couId = couId;
     }
 
-    public Rooms getRooms() {
-        return rooms;
+    public MultiValue getAtrStatus() {
+        return atrStatus;
     }
 
-    public void setRooms(Rooms rooms) {
-        this.rooms = rooms;
+    public void setAtrStatus(MultiValue atrStatus) {
+        this.atrStatus = atrStatus;
+    }
+
+    public Rooms getRmsId() {
+        return rmsId;
+    }
+
+    public void setRmsId(Rooms rmsId) {
+        this.rmsId = rmsId;
     }
 
     public Services getSrvId() {
@@ -173,10 +170,19 @@ public class AccountTransactions implements Serializable {
         this.atrUsrMod = atrUsrMod;
     }
 
+    @XmlTransient
+    public Collection<Guests> getGuestsCollection() {
+        return guestsCollection;
+    }
+
+    public void setGuestsCollection(Collection<Guests> guestsCollection) {
+        this.guestsCollection = guestsCollection;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (accountTransactionsPK != null ? accountTransactionsPK.hashCode() : 0);
+        hash += (atrId != null ? atrId.hashCode() : 0);
         return hash;
     }
 
@@ -187,7 +193,7 @@ public class AccountTransactions implements Serializable {
             return false;
         }
         AccountTransactions other = (AccountTransactions) object;
-        if ((this.accountTransactionsPK == null && other.accountTransactionsPK != null) || (this.accountTransactionsPK != null && !this.accountTransactionsPK.equals(other.accountTransactionsPK))) {
+        if ((this.atrId == null && other.atrId != null) || (this.atrId != null && !this.atrId.equals(other.atrId))) {
             return false;
         }
         return true;
@@ -195,14 +201,7 @@ public class AccountTransactions implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.AccountTransactions[ accountTransactionsPK=" + accountTransactionsPK + " ]";
+        return "com.ahms.boundary.AccountTransactions[ atrId=" + atrId + " ]";
     }
-    @XmlTransient
-    public Collection<Guests> getGuestsCollection() {
-        return guestsCollection;
-    }
-
-    public void setGuestsCollection(Collection<Guests> guestsCollection) {
-        this.guestsCollection = guestsCollection;
-    }
+    
 }

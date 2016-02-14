@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "guests", catalog = "db_ahms", schema = "")
@@ -36,32 +36,31 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Guests.findByGstName", query = "SELECT g FROM Guests g WHERE g.gstName = :gstName"),
     @NamedQuery(name = "Guests.findByGstLst1", query = "SELECT g FROM Guests g WHERE g.gstLst1 = :gstLst1"),
     @NamedQuery(name = "Guests.findByGstLst2", query = "SELECT g FROM Guests g WHERE g.gstLst2 = :gstLst2"),
-    @NamedQuery(name = "Guests.findByGstDteMod", query = "SELECT g FROM Guests g WHERE g.gstDteMod = :gstDteMod"),
-    @NamedQuery(name = "Guests.findByAtrId", query = "SELECT g FROM Guests g WHERE g.atrId = :atrId")})
+    @NamedQuery(name = "Guests.findByGstDteMod", query = "SELECT g FROM Guests g WHERE g.gstDteMod = :gstDteMod")})
 public class Guests implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "gst_id", nullable = false)
+    @Column(name = "GST_ID", nullable = false)
     private Integer gstId;
     @Basic(optional = false)
-    @Column(name = "gst_name", nullable = false, length = 50)
+    @Column(name = "GST_NAME", nullable = false, length = 100)
     private String gstName;
     @Basic(optional = false)
-    @Column(name = "gst_lst_1", nullable = false, length = 50)
+    @Column(name = "GST_LST_1", nullable = false, length = 100)
     private String gstLst1;
     @Basic(optional = false)
-    @Column(name = "gst_lst_2", nullable = false, length = 50)
+    @Column(name = "GST_LST_2", nullable = false, length = 100)
     private String gstLst2;
     @Basic(optional = false)
-    @Column(name = "gst_dte_mod", nullable = false)
+    @Column(name = "GST_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date gstDteMod;
-    @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
+    @JoinColumn(name = "ATR_ID", referencedColumnName = "ATR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Account actId;
-    @JoinColumn(name = "gst_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    private AccountTransactions atrId;
+    @JoinColumn(name = "GST_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users gstUsrMod;
 
@@ -120,12 +119,12 @@ public class Guests implements Serializable {
         this.gstDteMod = gstDteMod;
     }
 
-    public Account getActId() {
-        return actId;
+    public AccountTransactions getAtrId() {
+        return atrId;
     }
 
-    public void setActId(Account actId) {
-        this.actId = actId;
+    public void setAtrId(AccountTransactions atrId) {
+        this.atrId = atrId;
     }
 
     public Users getGstUsrMod() {
@@ -158,7 +157,7 @@ public class Guests implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Guests[ gstId=" + gstId + " ]";
+        return "com.ahms.boundary.Guests[ gstId=" + gstId + " ]";
     }
     
 }

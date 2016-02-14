@@ -37,40 +37,36 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FolioTransaction.findByFtrFolio", query = "SELECT f FROM FolioTransaction f WHERE f.ftrFolio = :ftrFolio"),
     @NamedQuery(name = "FolioTransaction.findByFtrAmount", query = "SELECT f FROM FolioTransaction f WHERE f.ftrAmount = :ftrAmount"),
     @NamedQuery(name = "FolioTransaction.findByFtrCardNumber", query = "SELECT f FROM FolioTransaction f WHERE f.ftrCardNumber = :ftrCardNumber"),
-    @NamedQuery(name = "FolioTransaction.findByFtrDteMod", query = "SELECT f FROM FolioTransaction f WHERE f.ftrDteMod = :ftrDteMod"),
-    @NamedQuery(name = "FolioTransaction.findByCouId", query = "SELECT f FROM FolioTransaction f WHERE f.couId = :couId")
-})
+    @NamedQuery(name = "FolioTransaction.findByFtrDteMod", query = "SELECT f FROM FolioTransaction f WHERE f.ftrDteMod = :ftrDteMod")})
 public class FolioTransaction implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ftr_id", nullable = false)
+    @Column(name = "FTR_ID", nullable = false)
     private Integer ftrId;
-    @Basic(optional = false)
-    @Column(name = "ftr_folio", nullable = false, length = 50)
+    @Column(name = "FTR_FOLIO", length = 50)
     private String ftrFolio;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
-    @Column(name = "ftr_amount", nullable = false)
+    @Column(name = "FTR_AMOUNT", nullable = false, precision = 10, scale = 2)
     private BigDecimal ftrAmount;
-    @Basic(optional = false)
-    @Column(name = "ftr_card_number", nullable = true, length = 4)
+    @Column(name = "FTR_CARD_NUMBER", length = 4)
     private String ftrCardNumber;
     @Basic(optional = false)
-    @Column(name = "ftr_dte_mod", nullable = false)
+    @Column(name = "FTR_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date ftrDteMod;
-    @JoinColumn(name = "cou_id", referencedColumnName = "cou_id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private CashOut couId;
-    @JoinColumn(name = "act_id", referencedColumnName = "act_id", nullable = false)
+    @JoinColumn(name = "ACT_ID", referencedColumnName = "ACT_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Account actId;
-    @JoinColumn(name = "pay_id", referencedColumnName = "PAY_ID")
+    @JoinColumn(name = "COU_ID", referencedColumnName = "COU_ID")
     @ManyToOne(fetch = FetchType.EAGER)
+    private CashOut couId;
+    @JoinColumn(name = "PAY_ID", referencedColumnName = "PAY_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private PaymentTypes payId;
-    @JoinColumn(name = "ftr_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "FTR_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users ftrUsrMod;
 
@@ -81,11 +77,9 @@ public class FolioTransaction implements Serializable {
         this.ftrId = ftrId;
     }
 
-    public FolioTransaction(Integer ftrId, String ftrFolio, BigDecimal ftrAmount, String ftrCardNumber, Date ftrDteMod) {
+    public FolioTransaction(Integer ftrId, BigDecimal ftrAmount, Date ftrDteMod) {
         this.ftrId = ftrId;
-        this.ftrFolio = ftrFolio;
         this.ftrAmount = ftrAmount;
-        this.ftrCardNumber = ftrCardNumber;
         this.ftrDteMod = ftrDteMod;
     }
 
@@ -129,20 +123,20 @@ public class FolioTransaction implements Serializable {
         this.ftrDteMod = ftrDteMod;
     }
 
-    public CashOut getCouId() {
-        return couId;
-    }
-
-    public void setCouId(CashOut couId) {
-        this.couId = couId;
-    }
-
     public Account getActId() {
         return actId;
     }
 
     public void setActId(Account actId) {
         this.actId = actId;
+    }
+
+    public CashOut getCouId() {
+        return couId;
+    }
+
+    public void setCouId(CashOut couId) {
+        this.couId = couId;
     }
 
     public PaymentTypes getPayId() {
@@ -183,7 +177,7 @@ public class FolioTransaction implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.FolioTransaction[ ftrId=" + ftrId + " ]";
+        return "com.ahms.boundary.FolioTransaction[ ftrId=" + ftrId + " ]";
     }
-
+    
 }

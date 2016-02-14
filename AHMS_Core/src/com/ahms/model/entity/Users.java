@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "users", catalog = "db_ahms", schema = "")
@@ -38,67 +38,69 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUsrName", query = "SELECT u FROM Users u WHERE u.usrName = :usrName"),
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
-    @NamedQuery(name = "Users.findByUsrStatus", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus"),
+    @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd"),
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = 'Activo' and u.usrPwd = :usrPwd"),
-    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = 'Activo'"),
-    @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd")})
+    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = 'Activo'")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "usr_id", nullable = false)
+    @Column(name = "USR_ID", nullable = false)
     private Integer usrId;
     @Basic(optional = false)
     @Column(name = "USR_CODE", nullable = false, length = 6)
     private String usrCode;
     @Basic(optional = false)
-    @Column(name = "USR_NAME", nullable = false, length = 50)
+    @Column(name = "USR_NAME", nullable = false, length = 100)
     private String usrName;
     @Basic(optional = false)
-    @Column(name = "USR_LST_1", nullable = false, length = 50)
+    @Column(name = "USR_LST_1", nullable = false, length = 100)
     private String usrLst1;
-    @Column(name = "USR_LST_2", length = 50)
+    @Basic(optional = false)
+    @Column(name = "USR_LST_2", nullable = false, length = 100)
     private String usrLst2;
     @Basic(optional = false)
-    @Column(name = "USR_STATUS", nullable = false, length = 10)
-    private String usrStatus;
-    @Basic(optional = false)
-    @Column(name = "USR_PWD", nullable = false, length = 10)
+    @Column(name = "USR_PWD", nullable = false, length = 16)
     private String usrPwd;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mvaUsrMod", fetch = FetchType.EAGER)
+    private Collection<MultiValue> multiValueCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.EAGER)
     private Collection<Rates> ratesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proUsrMod", fetch = FetchType.EAGER)
-    private Collection<Profiles> profilesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.EAGER)
     private Collection<PaymentTypes> paymentTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvUsrMod", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
+    @JoinColumn(name = "USR_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue usrStatus;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrUsrMod", fetch = FetchType.EAGER)
     private Collection<Floors> floorsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rtyUsrMod", fetch = FetchType.EAGER)
+    private Collection<RoomTypes> roomTypesCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrUsrMod", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mmoUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mmoUsrMod", fetch = FetchType.EAGER)
     private Collection<MoneyMovement> moneyMovementCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrId", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrId", fetch = FetchType.EAGER)
     private Collection<CashOut> cashOutCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gstUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "gstUsrMod", fetch = FetchType.EAGER)
     private Collection<Guests> guestsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resUsrMod", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtUsrMod", fetch = FetchType.EAGER)
     private Collection<ServiceTypes> serviceTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusUsrMod", fetch = FetchType.EAGER)
     private Collection<Customers> customersCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ftrUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ftrUsrMod", fetch = FetchType.EAGER)
     private Collection<FolioTransaction> folioTransactionCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actUsrMod", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actUsrMod", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
 
     public Users() {
@@ -108,12 +110,12 @@ public class Users implements Serializable {
         this.usrId = usrId;
     }
 
-    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, String usrStatus, String usrPwd) {
+    public Users(Integer usrId, String usrCode, String usrName, String usrLst1, String usrLst2, String usrPwd) {
         this.usrId = usrId;
         this.usrCode = usrCode;
         this.usrName = usrName;
         this.usrLst1 = usrLst1;
-        this.usrStatus = usrStatus;
+        this.usrLst2 = usrLst2;
         this.usrPwd = usrPwd;
     }
 
@@ -157,14 +159,6 @@ public class Users implements Serializable {
         this.usrLst2 = usrLst2;
     }
 
-    public String getUsrStatus() {
-        return usrStatus;
-    }
-
-    public void setUsrStatus(String usrStatus) {
-        this.usrStatus = usrStatus;
-    }
-
     public String getUsrPwd() {
         return usrPwd;
     }
@@ -183,21 +177,21 @@ public class Users implements Serializable {
     }
 
     @XmlTransient
+    public Collection<MultiValue> getMultiValueCollection() {
+        return multiValueCollection;
+    }
+
+    public void setMultiValueCollection(Collection<MultiValue> multiValueCollection) {
+        this.multiValueCollection = multiValueCollection;
+    }
+
+    @XmlTransient
     public Collection<Rates> getRatesCollection() {
         return ratesCollection;
     }
 
     public void setRatesCollection(Collection<Rates> ratesCollection) {
         this.ratesCollection = ratesCollection;
-    }
-
-    @XmlTransient
-    public Collection<Profiles> getProfilesCollection() {
-        return profilesCollection;
-    }
-
-    public void setProfilesCollection(Collection<Profiles> profilesCollection) {
-        this.profilesCollection = profilesCollection;
     }
 
     @XmlTransient
@@ -218,6 +212,14 @@ public class Users implements Serializable {
         this.servicesCollection = servicesCollection;
     }
 
+    public MultiValue getUsrStatus() {
+        return usrStatus;
+    }
+
+    public void setUsrStatus(MultiValue usrStatus) {
+        this.usrStatus = usrStatus;
+    }
+
     public Profiles getProId() {
         return proId;
     }
@@ -233,6 +235,15 @@ public class Users implements Serializable {
 
     public void setFloorsCollection(Collection<Floors> floorsCollection) {
         this.floorsCollection = floorsCollection;
+    }
+
+    @XmlTransient
+    public Collection<RoomTypes> getRoomTypesCollection() {
+        return roomTypesCollection;
+    }
+
+    public void setRoomTypesCollection(Collection<RoomTypes> roomTypesCollection) {
+        this.roomTypesCollection = roomTypesCollection;
     }
 
     @XmlTransient
@@ -338,11 +349,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Users[ usrId=" + usrId + " ]";
-    }
-
-    public String getFullName() {
-        return this.usrName + " " + this.usrLst1 + " " + this.usrLst2;
+        return "com.ahms.boundary.Users[ usrId=" + usrId + " ]";
     }
 
 }

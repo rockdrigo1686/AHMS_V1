@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "customers", catalog = "db_ahms", schema = "")
@@ -54,40 +54,49 @@ public class Customers implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "cus_id", nullable = false)
+    @Column(name = "CUS_ID", nullable = false)
     private Integer cusId;
     @Basic(optional = false)
-    @Column(name = "cus_name", nullable = false, length = 50)
+    @Column(name = "CUS_NAME", nullable = false, length = 100)
     private String cusName;
     @Basic(optional = false)
-    @Column(name = "cus_lst_1", nullable = false, length = 50)
+    @Column(name = "CUS_LST_1", nullable = false, length = 100)
     private String cusLst1;
     @Basic(optional = false)
-    @Column(name = "cus_lst_2", nullable = false, length = 50)
+    @Column(name = "CUS_LST_2", nullable = false, length = 100)
     private String cusLst2;
-    @Column(name = "cus_address", length = 200)
+    @Basic(optional = false)
+    @Column(name = "CUS_ADDRESS", nullable = false, length = 200)
     private String cusAddress;
-    @Column(name = "cus_postal_code")
-    private Integer cusPostalCode;
-    @Column(name = "cus_state", length = 50)
+    @Basic(optional = false)
+    @Column(name = "CUS_POSTAL_CODE", nullable = false)
+    private int cusPostalCode;
+    @Basic(optional = false)
+    @Column(name = "CUS_STATE", nullable = false, length = 100)
     private String cusState;
-    @Column(name = "cus_city", length = 50)
+    @Basic(optional = false)
+    @Column(name = "CUS_CITY", nullable = false, length = 100)
     private String cusCity;
-    @Column(name = "cus_tel", length = 15)
+    @Column(name = "CUS_TEL", length = 15)
     private String cusTel;
-    @Column(name = "cus_rfc", length = 15)
+    @Column(name = "CUS_RFC", length = 15)
     private String cusRfc;
-    @Column(name = "cus_cel", length = 15)
+    @Column(name = "CUS_CEL", length = 15)
     private String cusCel;
-    @Column(name = "cus_email", length = 100)
+    @Column(name = "CUS_EMAIL", length = 100)
     private String cusEmail;
     @Basic(optional = false)
-    @Column(name = "cus_dte_mod", nullable = false)
+    @Column(name = "CUS_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date cusDteMod;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
+    private Collection<MoneyMovement> moneyMovementCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @JoinColumn(name = "cus_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "CUS_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue cusStatus;
+    @JoinColumn(name = "CUS_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users cusUsrMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
@@ -100,11 +109,15 @@ public class Customers implements Serializable {
         this.cusId = cusId;
     }
 
-    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, Date cusDteMod) {
+    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, String cusAddress, int cusPostalCode, String cusState, String cusCity, Date cusDteMod) {
         this.cusId = cusId;
         this.cusName = cusName;
         this.cusLst1 = cusLst1;
         this.cusLst2 = cusLst2;
+        this.cusAddress = cusAddress;
+        this.cusPostalCode = cusPostalCode;
+        this.cusState = cusState;
+        this.cusCity = cusCity;
         this.cusDteMod = cusDteMod;
     }
 
@@ -148,11 +161,11 @@ public class Customers implements Serializable {
         this.cusAddress = cusAddress;
     }
 
-    public Integer getCusPostalCode() {
+    public int getCusPostalCode() {
         return cusPostalCode;
     }
 
-    public void setCusPostalCode(Integer cusPostalCode) {
+    public void setCusPostalCode(int cusPostalCode) {
         this.cusPostalCode = cusPostalCode;
     }
 
@@ -213,12 +226,29 @@ public class Customers implements Serializable {
     }
 
     @XmlTransient
+    public Collection<MoneyMovement> getMoneyMovementCollection() {
+        return moneyMovementCollection;
+    }
+
+    public void setMoneyMovementCollection(Collection<MoneyMovement> moneyMovementCollection) {
+        this.moneyMovementCollection = moneyMovementCollection;
+    }
+
+    @XmlTransient
     public Collection<Reservation> getReservationCollection() {
         return reservationCollection;
     }
 
     public void setReservationCollection(Collection<Reservation> reservationCollection) {
         this.reservationCollection = reservationCollection;
+    }
+
+    public MultiValue getCusStatus() {
+        return cusStatus;
+    }
+
+    public void setCusStatus(MultiValue cusStatus) {
+        this.cusStatus = cusStatus;
     }
 
     public Users getCusUsrMod() {
@@ -260,7 +290,7 @@ public class Customers implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Customers[ cusId=" + cusId + " ]";
+        return "com.ahms.boundary.Customers[ cusId=" + cusId + " ]";
     }
     
 }
