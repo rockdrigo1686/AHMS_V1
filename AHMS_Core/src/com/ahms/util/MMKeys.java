@@ -33,6 +33,16 @@ public class MMKeys {
         public final static String STA_MOROSO = "Moroso";
         public final static String STA_MOROSO_KEY = "ACT_P";
     }
+   
+   public static class AccountsTransactions {
+       public final static String GP_KEY = "ACTR";
+       public final static String STA_PAGADO = "Pagado";
+       public final static String STA_PAGADO_KEY = "PAID";
+       public final static String STA_PENDIENTE = "Pendiente";
+       public final static String STA_PENDIENTE_KEY = "PEND";
+       public final static String STA_CANCELADO = "Cancelado";
+       public final static String STA_CANCELADO_KEY = "CANC";
+   }
 
     public static class Shift{
         
