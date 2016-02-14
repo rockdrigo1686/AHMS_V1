@@ -45,25 +45,6 @@ import javax.xml.bind.annotation.XmlTransient;
 public class MultiValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    public static final String STATUS_OPEN_DESC = "Abierto";
-    public static final String STATUS_PAID_DESC = "Pagado";
-    public static final String STATUS_CLOSED_DESC = "Cerrado";
-    public static final String STATUS_PENDING_DESC = "Pendiente";
-    public static final String STATUS_DELAYED_DESC = "Moroso";
-    public static final String STATUS_OPEN_KEY = "A";
-    public static final String STATUS_PAID_KEY = "P";
-    public static final String STATUS_CLOSED_KEY = "X";
-    public static final String STATUS_PENDING_KEY = "N";
-    public static final String STATUS_DELAYED_KEY = "D";
-
-    public static final String ROOM_STA_AVA = "Disponible";
-    public static final String ROOM_STA_RE = "Reservado";
-    public static final String ROOM_STA_TAK = "Ocupado";
-    public static final String ROOM_STA_MNT = "Mantenimiento";
-    public static final String ROOM_STA_AVA_KEY = "D";
-    public static final String ROOM_STA_RE_KEY = "R";
-    public static final String ROOM_STA_TAK_KEY = "O";
-    public static final String ROOM_STA_MNT_KEY = "M";
 
     @Id
     @Basic(optional = false)
