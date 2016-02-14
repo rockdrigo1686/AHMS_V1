@@ -53,9 +53,9 @@ public class MMKeys {
         public final static String STA_CERRADO_KEY = "SHF_E";
     }
 
-   public static class Users{
+   public static class General{
         
-        public final static String GP_KEY = "USR";
+        public final static String GP_KEY = "GRL";
         public final static String STA_ACTIVO = "Activo";
         public final static String STA_ACTIVO_KEY = "AC";
         public final static String STA_INACTIVO = "Inactivo";
