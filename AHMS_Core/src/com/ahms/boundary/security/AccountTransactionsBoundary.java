@@ -51,4 +51,7 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public List<AccountTransactions> findRentsByActId(AccountTransactions obj) {
+        return accountTransactionsEM.findRentsByActId(obj);
+    }
 }

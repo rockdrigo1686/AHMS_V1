@@ -6,8 +6,10 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -16,10 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,8 +39,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AccountTransactions.findByAtrQuantity", query = "SELECT a FROM AccountTransactions a WHERE a.atrQuantity = :atrQuantity"),
     @NamedQuery(name = "AccountTransactions.findByAtrNotes", query = "SELECT a FROM AccountTransactions a WHERE a.atrNotes = :atrNotes"),
     @NamedQuery(name = "AccountTransactions.findByAtrStatus", query = "SELECT a FROM AccountTransactions a WHERE a.atrStatus = :atrStatus"),
-    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod")})
+    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod"),
+    @NamedQuery(name = "AccountTransactions.findRentsByActId", query = "SELECT a FROM AccountTransactions a WHERE a.actId = :actId and a.srvId is null")})
 public class AccountTransactions implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrId", fetch = FetchType.EAGER)
+    private Collection<Guests> guestsCollection;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AccountTransactionsPK accountTransactionsPK;
@@ -190,5 +197,12 @@ public class AccountTransactions implements Serializable {
     public String toString() {
         return "com.ahms.model.entity.AccountTransactions[ accountTransactionsPK=" + accountTransactionsPK + " ]";
     }
-    
+    @XmlTransient
+    public Collection<Guests> getGuestsCollection() {
+        return guestsCollection;
+    }
+
+    public void setGuestsCollection(Collection<Guests> guestsCollection) {
+        this.guestsCollection = guestsCollection;
+    }
 }
