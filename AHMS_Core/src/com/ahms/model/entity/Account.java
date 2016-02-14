@@ -81,8 +81,6 @@ public class Account implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
-    private Collection<Guests> guestsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.EAGER)
     private Collection<FolioTransaction> folioTransactionCollection;
     @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -186,15 +184,6 @@ public class Account implements Serializable {
 
     public void setAccountTransactionsCollection(Collection<AccountTransactions> accountTransactionsCollection) {
         this.accountTransactionsCollection = accountTransactionsCollection;
-    }
-
-    @XmlTransient
-    public Collection<Guests> getGuestsCollection() {
-        return guestsCollection;
-    }
-
-    public void setGuestsCollection(Collection<Guests> guestsCollection) {
-        this.guestsCollection = guestsCollection;
     }
 
     @XmlTransient
