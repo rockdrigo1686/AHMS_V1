@@ -3,12 +3,15 @@ package com.ahms.ui;
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
+import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
@@ -49,6 +52,8 @@ public class MainFrm extends javax.swing.JFrame {
     private FloorsBoundary floorsBoundary = null;
     private AccountBoundary accountBoundary = null;
     private AccountTransactionsBoundary accountTransactionsBoundary;
+    private MultiValueBoundary multiValueBoundary;
+    private RoomTypesBoundary roomTypesBoundary;
     private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
 
@@ -109,6 +114,9 @@ public class MainFrm extends javax.swing.JFrame {
         floorsBoundary = new FloorsBoundary();
         accountBoundary = new AccountBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
+        multiValueBoundary = new MultiValueBoundary();
+        roomTypesBoundary = new RoomTypesBoundary();
+        
         jbCheckOut.setEnabled(false);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -117,12 +125,30 @@ public class MainFrm extends javax.swing.JFrame {
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
         configFloors(floorsBoundary.findAllAvailable());
+        
+        MultiValue multiValueDisp = new MultiValue();
+        multiValueDisp.setMvaType(MMKeys.Rooms.GP_KEY);
+        configDisponibilidad(multiValueBoundary.findByType(multiValueDisp));
+        
+        RoomTypes roomTypesActive = new RoomTypes();
+        roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
+        configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
     }
 
+    private void configTiposCuartos(List<RoomTypes> lstRoomTypes){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
+        this.jcbTipoCuarto.setModel(model);
+    }
+    
     private void configFloors(List<Floors> lstFloors) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
         this.jcbPisos.setModel(model);
 
+    }
+    
+    private void configDisponibilidad(List<MultiValue> lstMultiValueDisp){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(lstMultiValueDisp.toArray(new MultiValue[lstMultiValueDisp.size()]));
+        this.jcbDisponibilidad.setModel(model);
     }
 
     public void configGrid(List<Rooms> rooms) {
@@ -156,7 +182,7 @@ public class MainFrm extends javax.swing.JFrame {
             }
             vctRow.add(room.getRmsNumber());
             vctRow.add(room.getRmsDesc());
-            vctRow.add(room.getRmsBeds());
+            vctRow.add(room.getRmsBeds().getRtyBeds());
             vctRow.add(room.getRmsMaxOcu());
             vctRow.add(room.getRmsDteMod());
             vctRow.add(100);
@@ -211,8 +237,8 @@ public class MainFrm extends javax.swing.JFrame {
                     if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
                         jbCheckOut.setEnabled(true);
                     }
-                    jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
-                    jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                    //jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
+                    //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
                 }                
             }
 
@@ -288,6 +314,10 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jcbPisos = new javax.swing.JComboBox();
         jbCheckOut = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jcbDisponibilidad = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jcbTipoCuarto = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtDashboard = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
@@ -303,8 +333,6 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jtSubtotal = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        jtIdCuarto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jpFecEntContainer = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -421,6 +449,24 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Disponibilidad:");
+
+        jcbDisponibilidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbDisponibilidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbDisponibilidadActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Tipo:");
+
+        jcbTipoCuarto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbTipoCuarto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbTipoCuartoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -430,6 +476,14 @@ public class MainFrm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbDisponibilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jcbTipoCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jbCheckOut)
                 .addContainerGap())
@@ -441,7 +495,11 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbCheckOut))
+                    .addComponent(jbCheckOut)
+                    .addComponent(jLabel2)
+                    .addComponent(jcbDisponibilidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jcbTipoCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -515,11 +573,6 @@ public class MainFrm extends javax.swing.JFrame {
 
         jButton1.setText("Rentar");
 
-        jLabel7.setText("Id Cuarto:");
-
-        jtIdCuarto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jtIdCuarto.setEnabled(false);
-
         jLabel8.setText("Entrada:");
 
         javax.swing.GroupLayout jpFecEntContainerLayout = new javax.swing.GroupLayout(jpFecEntContainer);
@@ -569,10 +622,6 @@ public class MainFrm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
                     .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jtIdCuarto))
-                    .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                         .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9))
@@ -610,11 +659,7 @@ public class MainFrm extends javax.swing.JFrame {
                     .addComponent(jlRegistroMaterno))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlRegistroRfc)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jtIdCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(29, 29, 29)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(110, 110, 110)
                 .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -924,9 +969,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
         Rooms room = new Rooms();
-        Floors floor = new Floors();
-        floor.setFlrId(Integer.parseInt(this.jcbPisos.getSelectedItem().toString()));
-        room.setFlrId(floor);
+        room.setFlrId((Floors)this.jcbPisos.getSelectedItem());
         configGrid(roomsBounday.findByFloor(room));
     }//GEN-LAST:event_jcbPisosActionPerformed
 
@@ -989,6 +1032,20 @@ public class MainFrm extends javax.swing.JFrame {
         System.out.println(" response : " + response);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void jcbDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbDisponibilidadActionPerformed
+        
+        Rooms roomDisp = new Rooms();
+        roomDisp.setRmsStatus((MultiValue) jcbDisponibilidad.getSelectedItem());
+        configGrid(roomsBounday.findByRmsStatus(roomDisp));
+    }//GEN-LAST:event_jcbDisponibilidadActionPerformed
+
+    private void jcbTipoCuartoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoCuartoActionPerformed
+        
+        Rooms roomTypes = new Rooms();
+        roomTypes.setRmsBeds((RoomTypes) jcbTipoCuarto.getSelectedItem());
+        configGrid(roomsBounday.findByRmsBeds(roomTypes));
+    }//GEN-LAST:event_jcbTipoCuartoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnIniciarTurno;
@@ -1001,8 +1058,9 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
@@ -1036,7 +1094,9 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
     private javax.swing.JButton jbCheckOut;
+    private javax.swing.JComboBox jcbDisponibilidad;
     private javax.swing.JComboBox jcbPisos;
+    private javax.swing.JComboBox jcbTipoCuarto;
     private javax.swing.JComboBox jcbTipoPago;
     private javax.swing.JLabel jlRegistroMaterno;
     private javax.swing.JLabel jlRegistroMaterno1;
@@ -1056,7 +1116,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JSpinner jspNumeroPersonas;
     private javax.swing.JSpinner jspNumeroPersonas1;
     private javax.swing.JTable jtDashboard;
-    private javax.swing.JTextField jtIdCuarto;
     private javax.swing.JTextField jtIdCuarto1;
     private javax.swing.JTextField jtSubtotal;
     private javax.swing.JTextField jtSubtotal1;

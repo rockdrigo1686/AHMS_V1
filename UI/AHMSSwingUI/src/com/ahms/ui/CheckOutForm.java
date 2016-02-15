@@ -3,6 +3,7 @@ package com.ahms.ui;
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
@@ -35,6 +36,7 @@ public class CheckOutForm extends javax.swing.JDialog {
     private final AccountBoundary accountBoundary;
     private final RoomsBoundary roomsBoundary;
     private final AccountTransactionsBoundary accountTransactionsBoundary;
+    private MultiValueBoundary multiValueBoundary;
     private final MainFrm parentFrame;
     
     public CheckOutForm(java.awt.Frame parent, boolean modal, Customers customer) {
@@ -44,6 +46,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         accountBoundary = new AccountBoundary();
         roomsBoundary = new RoomsBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
+        multiValueBoundary = new MultiValueBoundary();
         jlCambio.setVisible(false);
         jlMontoCambio.setVisible(false);
         
@@ -394,10 +397,10 @@ public class CheckOutForm extends javax.swing.JDialog {
             for(AccountTransactions tran : account.getAccountTransactionsCollection()){
                 if(roomNumber == 0 || !roomNumber.equals(Integer.parseInt(tran.getRmsId().getRmsNumber()))){
                     roomNumber = Integer.parseInt(tran.getRmsId().getRmsNumber());
-                    tran.getRmsId().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
+                    tran.getRmsId().setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
                     roomsBoundary.update(tran.getRmsId());
                 }
-                tran.setAtrStatus(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY));
+                tran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
                 accountTransactionsBoundary.update(tran);
             }
         }
@@ -406,7 +409,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         acct.setActIvaAmt(totalIVA);
         acct.setActSubtotal(total);
         acct.setActTotal(totalAccount);
-        acct.setActStatus(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY));
+        acct.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
         accountBoundary.update(acct);
         //Cerrar dialog y actualizar el dashboard
         parentFrame.configGrid(roomsBoundary.searchAll(new Rooms()));
