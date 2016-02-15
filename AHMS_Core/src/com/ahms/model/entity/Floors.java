@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @UniqueConstraint(columnNames = {"FLR_CODE"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f WHERE f.flrStatus = :flrStatus "),
+    @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f "),
+    @NamedQuery(name = "Floors.findAllAvailable", query = "SELECT f FROM Floors f WHERE f.flrStatus = :flrStatus "),
     @NamedQuery(name = "Floors.findByFlrId", query = "SELECT f FROM Floors f WHERE f.flrId = :flrId"),
     @NamedQuery(name = "Floors.findByFlrCode", query = "SELECT f FROM Floors f WHERE f.flrCode = :flrCode"),
     @NamedQuery(name = "Floors.findByFlrDteMod", query = "SELECT f FROM Floors f WHERE f.flrDteMod = :flrDteMod")})
