@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "RoomTypes.findAll", query = "SELECT r FROM RoomTypes r"),
+    @NamedQuery(name = "RoomTypes.findActiveTypes", query = "SELECT r FROM RoomTypes r WHERE r.rtyStatus = :rtyStatus "),
     @NamedQuery(name = "RoomTypes.findByRtyId", query = "SELECT r FROM RoomTypes r WHERE r.rtyId = :rtyId"),
     @NamedQuery(name = "RoomTypes.findByRtyDescription", query = "SELECT r FROM RoomTypes r WHERE r.rtyDescription = :rtyDescription"),
     @NamedQuery(name = "RoomTypes.findByRtyBeds", query = "SELECT r FROM RoomTypes r WHERE r.rtyBeds = :rtyBeds"),
