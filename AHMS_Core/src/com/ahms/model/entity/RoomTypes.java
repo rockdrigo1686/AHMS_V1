@@ -160,7 +160,7 @@ public class RoomTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.RoomTypes[ rtyId=" + rtyId + " ]";
+        return getRtyDescription();
     }
     
 }
