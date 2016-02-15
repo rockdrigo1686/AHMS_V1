@@ -40,6 +40,10 @@ public class MultiValueBoundary implements AHMSBoundary<MultiValue>{
     public MultiValue findByKey(MultiValue obj) {
         return multiValueEM.findByKey(obj);
     }
+    
+    public List<MultiValue> findByType(MultiValue obj) {
+        return multiValueEM.findByType(obj);
+    }
 
     @Override
     public int insert(MultiValue obj) {
