@@ -420,6 +420,7 @@ public class ShiftEndFrm extends javax.swing.JDialog {
 //            ftMap.put(UIConstants.PAYMENT_TYPE_DC, new ArrayList<FolioTransaction>());
 //            ftMap.put(UIConstants.PAYMENT_TYPE_CS, new ArrayList<FolioTransaction>());
             
+            
             for (FolioTransaction ftObj : folioTransactionList) {
                 total.add(ftObj.getFtrAmount());
                 if (UIConstants.PAYMENT_TYPE_CS.equalsIgnoreCase(ftObj.getPayId().getPayDesc())) {

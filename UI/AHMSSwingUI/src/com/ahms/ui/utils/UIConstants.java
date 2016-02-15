@@ -46,5 +46,10 @@ public class UIConstants {
     //CashOut
     public static final String COU_AMOUNT_WARNING = "Advertencia: El monto inicial no puede estar vacio, favor de capturar.";
     public static final String COU_AMOUNT_ERROR = "Error: Turno no iniciado.";
+
+    //variables
+     public static final String PAYMENT_TYPE_CS ="Efectivo";
+     public static final String PAYMENT_TYPE_CC ="Tarjeta Credito";
+     public static final String PAYMENT_TYPE_DC ="Tarjeta Debito";
     
 }
