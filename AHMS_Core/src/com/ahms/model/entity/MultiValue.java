@@ -318,7 +318,7 @@ public class MultiValue implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.MultiValue[ mvaId=" + mvaId + " ]";
+        return getMvaDescription();
     }
 
 }

@@ -22,7 +22,7 @@ public class AccountTransactionsEM  extends AHMSEntityManager {
                 createEm();
             }
             TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findByRmsId", AccountTransactions.class);
-            query.setParameter("rmsId", accountTransactions.getRooms().getRmsId());
+            query.setParameter("rmsId", accountTransactions.getRmsId());
             return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

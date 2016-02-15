@@ -161,7 +161,7 @@ public class PaymentTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.PaymentTypes[ payId=" + payId + " ]";
+        return payDesc;
     }
     
 }

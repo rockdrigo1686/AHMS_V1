@@ -5,6 +5,7 @@
  */
 package com.ahms.model.entity;
 
+import com.ahms.util.MMKeys;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -37,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @UniqueConstraint(columnNames = {"FLR_CODE"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f"),
+    @NamedQuery(name = "Floors.findAll", query = "SELECT f FROM Floors f WHERE f.flrStatus = '" + MMKeys.Rooms.STA_DISPONIBLE_KEY + "' "),
     @NamedQuery(name = "Floors.findByFlrId", query = "SELECT f FROM Floors f WHERE f.flrId = :flrId"),
     @NamedQuery(name = "Floors.findByFlrCode", query = "SELECT f FROM Floors f WHERE f.flrCode = :flrCode"),
     @NamedQuery(name = "Floors.findByFlrDteMod", query = "SELECT f FROM Floors f WHERE f.flrDteMod = :flrDteMod")})
@@ -148,7 +149,7 @@ public class Floors implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Floors[ flrId=" + flrId + " ]";
+        return getFlrCode();
     }
     
 }
