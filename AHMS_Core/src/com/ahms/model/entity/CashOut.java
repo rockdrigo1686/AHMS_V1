@@ -68,9 +68,11 @@ public class CashOut implements Serializable {
     private Date couDteEnd;
     @OneToMany(mappedBy = "couId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
+    
     @JoinColumn(name = "COU_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private MultiValue couStatus;
+    
     @JoinColumn(name = "USR_ID", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users usrId;

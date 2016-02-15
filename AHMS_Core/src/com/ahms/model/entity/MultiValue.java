@@ -62,35 +62,37 @@ public class MultiValue implements Serializable {
     @Column(name = "MVA_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date mvaDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "rmsStatus", fetch = FetchType.EAGER)
     private Collection<Rooms> roomsCollection;
     @JoinColumn(name = "MVA_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users mvaUsrMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "rteStatus", fetch = FetchType.EAGER)
     private Collection<Rates> ratesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "proStatus", fetch = FetchType.EAGER)
     private Collection<Profiles> profilesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "payStatus", fetch = FetchType.EAGER)
     private Collection<PaymentTypes> paymentTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "srvStatus", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
  
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "flrStatus", fetch = FetchType.EAGER)
     private Collection<Floors> floorsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rtyStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "rtyStatus", fetch = FetchType.EAGER)
     private Collection<RoomTypes> roomTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "atrStatus", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couStatus", fetch = FetchType.EAGER)
+    
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "couStatus", fetch = FetchType.EAGER)
     private Collection<CashOut> cashOutCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resStatus", fetch = FetchType.EAGER)
+    
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "resStatus", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "svtStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "svtStatus", fetch = FetchType.EAGER)
     private Collection<ServiceTypes> serviceTypesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cusStatus", fetch = FetchType.EAGER)
     private Collection<Customers> customersCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actStatus", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "actStatus", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
 
     public MultiValue() {
