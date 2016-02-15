@@ -116,7 +116,7 @@ public class MainFrm extends javax.swing.JFrame {
         setExtendedState(Frame.MAXIMIZED_BOTH);
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
-        configFloors(floorsBoundary.searchAll(new Floors()));
+        configFloors(floorsBoundary.findAllAvailable());
     }
 
     private void configFloors(List<Floors> lstFloors) {
