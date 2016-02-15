@@ -21,7 +21,7 @@ public class MultiValueEM extends AHMSEntityManager {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<MultiValue> query = em.createNamedQuery("Account.findByMvaKey", MultiValue.class);
+            TypedQuery<MultiValue> query = em.createNamedQuery("MultiValue.findByMvaKey", MultiValue.class);
             query.setParameter("mvaKey", multivalue.getMvaKey());
             return query.getSingleResult();
         } catch (Exception e) {
