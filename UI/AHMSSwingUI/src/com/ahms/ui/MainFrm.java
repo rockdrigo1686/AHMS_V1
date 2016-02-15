@@ -8,10 +8,12 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Floors;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.MouseAdapter;
@@ -118,15 +120,7 @@ public class MainFrm extends javax.swing.JFrame {
     }
 
     private void configFloors(List<Floors> lstFloors) {
-        ArrayList<String> items = new ArrayList<>();
-        if (lstFloors != null && lstFloors.size() > 0) {
-            for (Floors lstFloor : lstFloors) {
-                if (lstFloor.getFlrStatus().trim().toUpperCase().equals("ACTIVO")) {
-                    items.add(lstFloor.getFlrId().toString());
-                }
-            }
-        }
-        DefaultComboBoxModel model = new DefaultComboBoxModel(items.toArray(new String[items.size()]));
+        DefaultComboBoxModel model = new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
         this.jcbPisos.setModel(model);
 
     }
@@ -146,17 +140,17 @@ public class MainFrm extends javax.swing.JFrame {
         Vector<Vector> rows = new Vector<>();
         for (Rooms room : rooms) {
             Vector vctRow = new Vector();
-            switch (room.getRmsStatus()) {
-                case "Disponible":
+            switch (room.getRmsStatus().getMvaKey()) {
+                case MMKeys.Rooms.STA_DISPONIBLE_KEY:
                     vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/green_ball.png")));
                     break;
-                case "Ocupado":
+                case MMKeys.Rooms.STA_OCUPADO_KEY:
                     vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/red_ball.png")));
                     break;
-                case "Reservado":
+                case MMKeys.Rooms.STA_RESERVADO_KEY:
                     vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/blue_ball.png")));
                     break;
-                case "Mantenimiento":
+                case MMKeys.Rooms.STA_MTO_KEY:
                     vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/grey_ball.png")));
                     break;
             }
@@ -204,9 +198,9 @@ public class MainFrm extends javax.swing.JFrame {
             public void mouseClicked(MouseEvent e) {
                 int clicks = e.getClickCount();
                 int row = jtDashboard.getSelectedRow();
-                String estatus = String.valueOf(jtDashboard.getValueAt(row, 7)).trim().toUpperCase();
+                MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
                 if(clicks > 1){ // doble click
-                    if(estatus.equals("OCUPADO")){
+                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
                         //llamar a agregar servicios
                         Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
                         RoomService roomService = new RoomService(null, true, roomObj);
@@ -214,7 +208,7 @@ public class MainFrm extends javax.swing.JFrame {
                     }
                 } else {  // 1 click
                     jbCheckOut.setEnabled(false);
-                    if(estatus.equals("OCUPADO")){
+                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
                         jbCheckOut.setEnabled(true);
                     }
                     jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
@@ -944,7 +938,7 @@ public class MainFrm extends javax.swing.JFrame {
     private void jbCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckOutActionPerformed
         Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
         AccountTransactions acctTran = new AccountTransactions();
-        acctTran.setRooms(new Rooms(roomSelected));
+        acctTran.setRmsId(new Rooms(roomSelected));
         
         AccountTransactions accountTran = accountTransactionsBoundary.findByRmsId(acctTran);
         Account account = accountBoundary.find(new Account(accountTran.getActId().getActId()));

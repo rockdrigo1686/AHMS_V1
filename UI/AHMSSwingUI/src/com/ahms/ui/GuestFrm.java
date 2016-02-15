@@ -269,16 +269,16 @@ public class GuestFrm extends javax.swing.JDialog {
                     gstReg = atrObj.getGuestsCollection().size();
                     for (Guests guests : atrObj.getGuestsCollection()) {
                         Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRooms().getRmsNumber());
+                        vctRow.add(atrObj.getRmsId().getRmsNumber());
                         vctRow.add(guests.getGstName());
                         vctRow.add(guests.getGstLst1());
                         vctRow.add(guests.getGstLst2());
                         rows.add(vctRow);//3840787890
                     }
                 }
-                while (gstReg<atrObj.getRooms().getRmsMaxOcu()) {
+                while (gstReg<atrObj.getRmsId().getRmsMaxOcu()) {
                     Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRooms().getRmsNumber());
+                        vctRow.add(atrObj.getRmsId().getRmsNumber());
                         vctRow.add("");
                         vctRow.add("");
                         vctRow.add("");
