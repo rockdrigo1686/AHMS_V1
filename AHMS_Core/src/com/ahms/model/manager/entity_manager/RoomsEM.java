@@ -59,7 +59,29 @@ public class RoomsEM extends AHMSEntityManager{
             }
         }
 
-    }    
+    }   
+    
+    public List<Rooms> findByRmsBeds(Rooms rooms) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Rooms> query = em.createNamedQuery("Rooms.findByRmsBeds", Rooms.class);
+            query.setParameter("rmsBeds", rooms.getRmsBeds());
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+
+    }   
     
     public List<Rooms> findAvailableByAmmount(Integer limit) {
         try {

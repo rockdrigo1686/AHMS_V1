@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rooms.findByRmsMaxOcu", query = "SELECT r FROM Rooms r WHERE r.rmsMaxOcu = :rmsMaxOcu"),
     @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc"),
     @NamedQuery(name = "Rooms.findByFlrId", query = "SELECT r FROM Rooms r WHERE r.flrId = :flrId"),
-    @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),})
+    @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),
+    @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds")})
 public class Rooms implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
