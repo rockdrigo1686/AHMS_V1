@@ -8,6 +8,7 @@ package com.ahms.ui;
 import com.ahms.boundary.core.CashOutBoundary;
 import com.ahms.boundary.core.FolioTransactionBoundary;
 import com.ahms.boundary.security.MoneyMovementBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MoneyMovement;
@@ -33,7 +34,7 @@ public class ShiftEndFrm extends javax.swing.JDialog {
     MainFrm parent = null;
     Users mainUser = null;
     CashOut currentShift = null;
-    BigDecimal saldoFinal = new BigDecimal(0.0);
+    double saldoFinal = 0.0;
 
     public ShiftEndFrm(MainFrm parent, boolean modal, Users mainUser, CashOut currentShift) {
         super(parent, modal);
@@ -298,9 +299,10 @@ public class ShiftEndFrm extends javax.swing.JDialog {
 
         int option = JOptionPane.showOptionDialog(parent, UIConstants.CONFIRM_SHIFT_END, null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"SI", "NO"}, rootPane);
         if (option == 0) {
+            MultiValueBoundary mvBoundary =  new  MultiValueBoundary();
             currentShift.setCouDteEnd(new Date());
-            currentShift.setCouMonEnd(saldoFinal);
-            currentShift.setCouStatus(new MultiValue(MMKeys.Shift.STA_CERRADO_KEY));
+            currentShift.setCouMonEnd(new BigDecimal(saldoFinal));
+            currentShift.setCouStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Shift.STA_CERRADO_KEY)));
             CashOutBoundary coBoundary = new CashOutBoundary();
             coBoundary.update(currentShift);
             parent.setCurrentShift(null);
@@ -405,10 +407,10 @@ public class ShiftEndFrm extends javax.swing.JDialog {
             }
         };
 
-        BigDecimal total = new BigDecimal(0.0);
-        BigDecimal totalTc = new BigDecimal(0.0);
-        BigDecimal totalCs =  new BigDecimal(0.0);
-        BigDecimal salidas =  new BigDecimal(0.0);
+        double total = 0.0;
+        double totalTc = 0.0;
+        double totalCs =  0.0;
+        double salidas =  0.0;
 
         //traemos las transacciones
         FolioTransaction ft = new FolioTransaction();
@@ -422,12 +424,12 @@ public class ShiftEndFrm extends javax.swing.JDialog {
             
             
             for (FolioTransaction ftObj : folioTransactionList) {
-                total.add(ftObj.getFtrAmount());
+                total+=ftObj.getFtrAmount().doubleValue();
                 if (UIConstants.PAYMENT_TYPE_CS.equalsIgnoreCase(ftObj.getPayId().getPayDesc())) {
-                    totalCs.add(ftObj.getFtrAmount());
+                    totalCs+=ftObj.getFtrAmount().doubleValue();
                     csModel.addRow(new  Object[]{"tarjeta: " + ftObj.getFtrCardNumber() + " Folio: " + ftObj.getFtrFolio(), ftObj.getFtrAmount()});
                 } else {
-                    totalTc.add(ftObj.getFtrAmount());
+                    totalTc+=ftObj.getFtrAmount().doubleValue();
                     tcModel.addRow(new Object[]{"tarjeta: " + ftObj.getFtrCardNumber() + " Folio: " + ftObj.getFtrFolio(), ftObj.getFtrAmount()});
                 }
             }
@@ -438,18 +440,18 @@ public class ShiftEndFrm extends javax.swing.JDialog {
         moneyMovementList = mmBoundary.searchByCouId(mm);
         if (moneyMovementList != null) {
             for (MoneyMovement mmObj : moneyMovementList) {
-                salidas.add( mmObj.getMmoCasIn().subtract(mmObj.getMmoCasOut()) );
+                salidas+= mmObj.getMmoCasIn().doubleValue()- mmObj.getMmoCasOut().doubleValue();
                 outModel.addRow(new Object[]{mmObj.getMmoDescription(), mmObj.getMmoCasIn().subtract(mmObj.getMmoCasOut())});
             }
         }
 
-        saldoFinal = total.add(currentShift.getCouAmoIni().add(salidas));
+        saldoFinal = total + currentShift.getCouAmoIni().doubleValue() + salidas;
 
         lblSaldoIni.setText(currentShift.getCouAmoIni().toString());
-        lblCards.setText(totalTc.toString());
-        lblCash.setText(totalCs.toString());
-        lblSaldoFin.setText(saldoFinal.toString());
-        lblOuts.setText(salidas.toString());
+        lblCards.setText(String.valueOf(totalTc));
+        lblCash.setText(String.valueOf(totalCs));
+        lblSaldoFin.setText(String.valueOf(saldoFinal));
+        lblOuts.setText(String.valueOf(salidas));
         lblNombre.setText(mainUser.getFullName());
         lblClave.setText(mainUser.getUsrCode());
 

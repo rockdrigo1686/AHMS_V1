@@ -6,6 +6,7 @@
 package com.ahms.ui;
 
 import com.ahms.boundary.core.CashOutBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
@@ -137,7 +138,8 @@ public class ShiftFrm extends javax.swing.JDialog {
         cashOut.setCouMonEnd(BigDecimal.ZERO);
         cashOut.setCouDteIni(new Date());
         cashOut.setUsrId(mainUser);
-        cashOut.setCouStatus(new MultiValue(MMKeys.Shift.STA_ABIERTO_KEY));
+         MultiValueBoundary mvBoundary =  new  MultiValueBoundary();
+        cashOut.setCouStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Shift.STA_CERRADO_KEY)));
         if (cob.insert(cashOut) == 1) {
             parent.setCurrentShift(cashOut);
             this.dispose();
