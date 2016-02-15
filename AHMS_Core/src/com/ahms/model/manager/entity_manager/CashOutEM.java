@@ -6,7 +6,9 @@
 package com.ahms.model.manager.entity_manager;
 
 import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.manager.AHMSEntityManager;
+import com.ahms.util.MMKeys;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -22,6 +24,7 @@ public class CashOutEM extends AHMSEntityManager {
                 createEm();
             }
             TypedQuery<CashOut> query = em.createNamedQuery("CashOut.findByCouStatus", CashOut.class);
+            query.setParameter("couStatus", new MultiValue(MMKeys.Shift.STA_ABIERTO_KEY));
             return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

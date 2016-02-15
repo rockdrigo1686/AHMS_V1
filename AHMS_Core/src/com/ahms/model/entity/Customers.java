@@ -89,8 +89,6 @@ public class Customers implements Serializable {
     @Column(name = "CUS_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date cusDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
-    private Collection<MoneyMovement> moneyMovementCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Reservation> reservationCollection;
     @JoinColumn(name = "CUS_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
@@ -223,15 +221,6 @@ public class Customers implements Serializable {
 
     public void setCusDteMod(Date cusDteMod) {
         this.cusDteMod = cusDteMod;
-    }
-
-    @XmlTransient
-    public Collection<MoneyMovement> getMoneyMovementCollection() {
-        return moneyMovementCollection;
-    }
-
-    public void setMoneyMovementCollection(Collection<MoneyMovement> moneyMovementCollection) {
-        this.moneyMovementCollection = moneyMovementCollection;
     }
 
     @XmlTransient

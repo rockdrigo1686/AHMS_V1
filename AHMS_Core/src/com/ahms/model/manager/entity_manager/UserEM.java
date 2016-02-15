@@ -5,8 +5,10 @@
  */
 package com.ahms.model.manager.entity_manager;
 
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
 import com.ahms.model.manager.AHMSEntityManager;
+import com.ahms.util.MMKeys;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
@@ -24,6 +26,7 @@ public class UserEM extends AHMSEntityManager {
             TypedQuery<Users> query = em.createNamedQuery("Users.login", Users.class);
             query.setParameter("usrCode", user);
             query.setParameter("usrPwd", password);
+            query.setParameter("usrStatus", new MultiValue(MMKeys.General.STA_ACTIVO_KEY));
             return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
@@ -46,6 +49,7 @@ public class UserEM extends AHMSEntityManager {
             }
             TypedQuery<Users> query = em.createNamedQuery("Users.findByPassword", Users.class);
             query.setParameter("usrPwd", password);
+            query.setParameter("usrStatus", new MultiValue(MMKeys.General.STA_ACTIVO_KEY));
             return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

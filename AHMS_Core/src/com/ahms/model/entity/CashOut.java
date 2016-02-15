@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CashOut.findByCouMonEnd", query = "SELECT c FROM CashOut c WHERE c.couMonEnd = :couMonEnd"),
     @NamedQuery(name = "CashOut.findByCouDteIni", query = "SELECT c FROM CashOut c WHERE c.couDteIni = :couDteIni"),
     @NamedQuery(name = "CashOut.findByCouDteEnd", query = "SELECT c FROM CashOut c WHERE c.couDteEnd = :couDteEnd"),
-    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = 'SHF_O'")})
+    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = :couStatus")})
 public class CashOut implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)

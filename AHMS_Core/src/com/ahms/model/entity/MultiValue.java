@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "MultiValue.findByMvaKey", query = "SELECT m FROM MultiValue m WHERE m.mvaKey = :mvaKey"),
     @NamedQuery(name = "MultiValue.findByMvaType", query = "SELECT m FROM MultiValue m WHERE m.mvaType = :mvaType"),
     @NamedQuery(name = "MultiValue.findByMvaDescription", query = "SELECT m FROM MultiValue m WHERE m.mvaDescription = :mvaDescription"),
-    @NamedQuery(name = "MultiValue.findByMvaValue", query = "SELECT m FROM MultiValue m WHERE m.mvaValue = :mvaValue"),
     @NamedQuery(name = "MultiValue.findByMvaDteMod", query = "SELECT m FROM MultiValue m WHERE m.mvaDteMod = :mvaDteMod")})
 public class MultiValue implements Serializable {
 
@@ -60,9 +59,6 @@ public class MultiValue implements Serializable {
     @Column(name = "MVA_DESCRIPTION", nullable = false, length = 100)
     private String mvaDescription;
     @Basic(optional = false)
-    @Column(name = "MVA_VALUE", nullable = false, length = 50)
-    private String mvaValue;
-    @Basic(optional = false)
     @Column(name = "MVA_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date mvaDteMod;
@@ -79,8 +75,7 @@ public class MultiValue implements Serializable {
     private Collection<PaymentTypes> paymentTypesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvStatus", fetch = FetchType.EAGER)
     private Collection<Services> servicesCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrStatus", fetch = FetchType.EAGER)
-    private Collection<Users> usersCollection;
+ 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "flrStatus", fetch = FetchType.EAGER)
     private Collection<Floors> floorsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rtyStatus", fetch = FetchType.EAGER)
@@ -110,7 +105,6 @@ public class MultiValue implements Serializable {
         this.mvaKey = mvaKey;
         this.mvaType = mvaType;
         this.mvaDescription = mvaDescription;
-        this.mvaValue = mvaValue;
         this.mvaDteMod = mvaDteMod;
     }
 
@@ -144,14 +138,6 @@ public class MultiValue implements Serializable {
 
     public void setMvaDescription(String mvaDescription) {
         this.mvaDescription = mvaDescription;
-    }
-
-    public String getMvaValue() {
-        return mvaValue;
-    }
-
-    public void setMvaValue(String mvaValue) {
-        this.mvaValue = mvaValue;
     }
 
     public Date getMvaDteMod() {
@@ -215,14 +201,7 @@ public class MultiValue implements Serializable {
         this.servicesCollection = servicesCollection;
     }
 
-    @XmlTransient
-    public Collection<Users> getUsersCollection() {
-        return usersCollection;
-    }
-
-    public void setUsersCollection(Collection<Users> usersCollection) {
-        this.usersCollection = usersCollection;
-    }
+   
 
     @XmlTransient
     public Collection<Floors> getFloorsCollection() {

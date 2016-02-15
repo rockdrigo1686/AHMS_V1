@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByUsrLst1", query = "SELECT u FROM Users u WHERE u.usrLst1 = :usrLst1"),
     @NamedQuery(name = "Users.findByUsrLst2", query = "SELECT u FROM Users u WHERE u.usrLst2 = :usrLst2"),
     @NamedQuery(name = "Users.findByUsrPwd", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd"),
-    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = 'AC' and u.usrPwd = :usrPwd"),
-    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = 'AC'")})
+    @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus and u.usrPwd = :usrPwd"),
+    @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = :usrStatus")})
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,8 +66,7 @@ public class Users implements Serializable {
     private String usrPwd;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.LAZY)
     private Collection<Rooms> roomsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mvaUsrMod", fetch = FetchType.LAZY)
-    private Collection<MultiValue> multiValueCollection;
+   
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.LAZY)
     private Collection<Rates> ratesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.LAZY)
@@ -77,6 +76,7 @@ public class Users implements Serializable {
     @JoinColumn(name = "USR_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private MultiValue usrStatus;
+    
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
@@ -176,14 +176,7 @@ public class Users implements Serializable {
         this.roomsCollection = roomsCollection;
     }
 
-    @XmlTransient
-    public Collection<MultiValue> getMultiValueCollection() {
-        return multiValueCollection;
-    }
-
-    public void setMultiValueCollection(Collection<MultiValue> multiValueCollection) {
-        this.multiValueCollection = multiValueCollection;
-    }
+  
 
     @XmlTransient
     public Collection<Rates> getRatesCollection() {
