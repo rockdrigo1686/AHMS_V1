@@ -357,28 +357,26 @@ public class GuestFrm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AccountBoundary accountBoundary= new AccountBoundary();
-                Account account = new Account(1);
-                account = accountBoundary.find(account);
-                SecurityBoundary secBound = new SecurityBoundary();
-                CashOutBoundary cashOutBoundary = new CashOutBoundary();
-                CashOut currentShift = null;
-                String user = "MD01";
-                String password = "marcos";
-                Users mainUser = secBound.login(user, password);
-                MainFrm form;
-                if (mainUser != null) {
-                    currentShift = cashOutBoundary.getCurrentShift();
-                    form = new MainFrm(mainUser, currentShift);
-                    GuestFrm dialog = new GuestFrm(form, true, account);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                }                
+//                AccountBoundary accountBoundary= new AccountBoundary();
+//                Account account = new Account(1);
+//                account = accountBoundary.find(account);
+//                SecurityBoundary secBound = new SecurityBoundary();
+//                String user = "MD01";
+//                String password = "marcos";
+//                Users mainUser = secBound.login(user, password);
+//                MainFrm form;
+//                if (mainUser != null) {
+//                    form = new MainFrm();                    
+//                    form.setMainUser(mainUser);
+//                    GuestFrm dialog = new GuestFrm(form, true, account);
+//                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+//                        @Override
+//                        public void windowClosing(java.awt.event.WindowEvent e) {
+//                            System.exit(0);
+//                        }
+//                    });
+//                    dialog.setVisible(true);
+//                }                
             }
         });
     }
@@ -393,76 +391,76 @@ public class GuestFrm extends javax.swing.JDialog {
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
-    private void fillGrid() {
-        
-        Vector<String> columnNames = new Vector();
-        columnNames.add("Cuarto");
-        columnNames.add("Nombre");
-        columnNames.add("Ap. Paterno");
-        columnNames.add("Ap. Materno");        
-
-        Vector<Vector> rows = new Vector<>();
-        accountTransactionsList = accountTransactionsBoundary.findRentsByActId(accountTransactions);
-        if(accountTransactionsList!=null&&accountTransactionsList.size()>0) {
-            
-            for(AccountTransactions atrObj:accountTransactionsList) {
-                atrObj.setGuestsCollection(guestsBoundary.findByAtrId(atrObj));
-                int gstReg = 0;
-                if(atrObj.getGuestsCollection() != null && atrObj.getGuestsCollection().size()>0) {
-                    gstReg = atrObj.getGuestsCollection().size();
-                    for (Guests guests : atrObj.getGuestsCollection()) {
-                        Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRmsId().getRmsNumber());
-                        vctRow.add(guests.getGstName());
-                        vctRow.add(guests.getGstLst1());
-                        vctRow.add(guests.getGstLst2());
-                        rows.add(vctRow);//3840787890
-                    }
-                }
-                while (gstReg<atrObj.getRmsId().getRmsMaxOcu()) {
-                    Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRmsId().getRmsNumber());
-                        vctRow.add("");
-                        vctRow.add("");
-                        vctRow.add("");
-                        rows.add(vctRow);
-                        gstReg++;
-                }
-            }
-        }
-        defaultTableModel = new DefaultTableModel(rows, columnNames) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public Class getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column>0;
-            }
-        };
-        jTable1.setModel(defaultTableModel);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(2).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
-        
-        jTable1.addMouseListener(new MouseAdapter() {
-            
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int clicks = e.getClickCount();
-                if(clicks>1) {
-                    int row = jTable1.getSelectedRow();
-                    // Remover renglon
-                }
-            }
-
-        });
-    }
+//    private void fillGrid() {
+//        
+//        Vector<String> columnNames = new Vector();
+//        columnNames.add("Cuarto");
+//        columnNames.add("Nombre");
+//        columnNames.add("Ap. Paterno");
+//        columnNames.add("Ap. Materno");        
+//
+//        Vector<Vector> rows = new Vector<>();
+//        accountTransactionsList = accountTransactionsBoundary.findRentsByActId(accountTransactions);
+//        if(accountTransactionsList!=null&&accountTransactionsList.size()>0) {
+//            
+//            for(AccountTransactions atrObj:accountTransactionsList) {
+//                atrObj.setGuestsCollection(guestsBoundary.findByAtrId(atrObj));
+//                int gstReg = 0;
+//                if(atrObj.getGuestsCollection() != null && atrObj.getGuestsCollection().size()>0) {
+//                    gstReg = atrObj.getGuestsCollection().size();
+//                    for (Guests guests : atrObj.getGuestsCollection()) {
+//                        Vector vctRow = new Vector();
+//                        vctRow.add(atrObj.getRmsId().getRmsNumber());
+//                        vctRow.add(guests.getGstName());
+//                        vctRow.add(guests.getGstLst1());
+//                        vctRow.add(guests.getGstLst2());
+//                        rows.add(vctRow);//3840787890
+//                    }
+//                }
+//                while (gstReg<atrObj.getRmsId().getRmsMaxOcu()) {
+//                    Vector vctRow = new Vector();
+//                        vctRow.add(atrObj.getRmsId().getRmsNumber());
+//                        vctRow.add("");
+//                        vctRow.add("");
+//                        vctRow.add("");
+//                        rows.add(vctRow);
+//                        gstReg++;
+//                }
+//            }
+//        }
+//        defaultTableModel = new DefaultTableModel(rows, columnNames) {
+//
+//            private static final long serialVersionUID = 1L;
+//
+//            @Override
+//            public Class getColumnClass(int column) {
+//                return getValueAt(0, column).getClass();
+//            }
+//
+//            @Override
+//            public boolean isCellEditable(int row, int column) {
+//                return column>0;
+//            }
+//        };
+//        jTable1.setModel(defaultTableModel);
+//        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
+//        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+//        jTable1.getColumnModel().getColumn(2).setMaxWidth(200);
+//        jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
+//        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+//        jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+//        
+//        jTable1.addMouseListener(new MouseAdapter() {
+//            
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                int clicks = e.getClickCount();
+//                if(clicks>1) {
+//                    int row = jTable1.getSelectedRow();
+//                    // Remover renglon
+//                }
+//            }
+//
+//        });
+//    }
 }
