@@ -33,6 +33,7 @@ public class PaymentModule extends javax.swing.JDialog {
     private BigDecimal importeRestante = BigDecimal.ZERO;
     private PaymentTypesBoundary paymentTypesBoundary;
     private CheckOutForm parentDialog;
+    private MainFrm parentFrm;
     private Account account;
     private CashOut currentShift;
     private CashOutBoundary cashOutBoundary;
@@ -45,6 +46,40 @@ public class PaymentModule extends javax.swing.JDialog {
         initComponents();
         account = _account;
         parentDialog = parent;
+        paymentTypesBoundary = new PaymentTypesBoundary();
+        cashOutBoundary = new CashOutBoundary();
+        jlCambio.setVisible(false);
+        jtCardNumber.setVisible(false);
+        cargarTiposPago();
+        
+        importeTotal = total.setScale(2,RoundingMode.HALF_EVEN);
+        jlTotal.setText("$ "+ importeTotal.toString());
+        
+        folioTransactionBoundary = new FolioTransactionBoundary();
+        //Obteniendo TUERNO
+        currentShift = cashOutBoundary.getCurrentShift(currentShift);
+        jtCardNumber.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (jtCardNumber.getText().length()== 4){
+                    e.consume();
+                }            
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {}
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+            });
+        
+    }
+    
+    public PaymentModule(MainFrm parent, boolean modal, BigDecimal total, Account _account) {
+        super(parent, modal);
+        initComponents();
+        account = _account;
+        parentFrm = parent;
         paymentTypesBoundary = new PaymentTypesBoundary();
         cashOutBoundary = new CashOutBoundary();
         jlCambio.setVisible(false);
@@ -102,6 +137,7 @@ public class PaymentModule extends javax.swing.JDialog {
         jtCardNumber = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jlTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

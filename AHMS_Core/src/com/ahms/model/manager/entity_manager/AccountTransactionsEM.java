@@ -9,6 +9,7 @@ import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.manager.AHMSEntityManager;
 import java.util.List;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -21,9 +22,8 @@ public class AccountTransactionsEM  extends AHMSEntityManager {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findByRmsId", AccountTransactions.class);
-            query.setParameter("rmsId", accountTransactions.getRooms().getRmsId());
-            return query.getSingleResult();
+            Query query = em.createNativeQuery("SELECT a.* FROM account_transactions a WHERE a.rms_id = " + accountTransactions.getRmsId().getRmsId().toString() + " LIMIT 1 ", AccountTransactions.class);
+            return (AccountTransactions) query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;

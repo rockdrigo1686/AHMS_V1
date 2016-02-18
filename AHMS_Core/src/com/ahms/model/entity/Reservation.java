@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "reservation", catalog = "db_ahms", schema = "")
@@ -35,37 +35,36 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reservation.findByResId", query = "SELECT r FROM Reservation r WHERE r.resId = :resId"),
     @NamedQuery(name = "Reservation.findByResFecIni", query = "SELECT r FROM Reservation r WHERE r.resFecIni = :resFecIni"),
     @NamedQuery(name = "Reservation.findByResFecFin", query = "SELECT r FROM Reservation r WHERE r.resFecFin = :resFecFin"),
-    @NamedQuery(name = "Reservation.findByResStatus", query = "SELECT r FROM Reservation r WHERE r.resStatus = :resStatus"),
     @NamedQuery(name = "Reservation.findByResDteMod", query = "SELECT r FROM Reservation r WHERE r.resDteMod = :resDteMod")})
 public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "res_id", nullable = false)
+    @Column(name = "RES_ID", nullable = false)
     private Integer resId;
     @Basic(optional = false)
-    @Column(name = "res_fec_ini", nullable = false)
+    @Column(name = "RES_FEC_INI", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date resFecIni;
     @Basic(optional = false)
-    @Column(name = "res_fec_fin", nullable = false)
+    @Column(name = "RES_FEC_FIN", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date resFecFin;
     @Basic(optional = false)
-    @Column(name = "res_status", nullable = false, length = 15)
-    private String resStatus;
-    @Basic(optional = false)
-    @Column(name = "res_dte_mod", nullable = false)
+    @Column(name = "RES_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date resDteMod;
-    @JoinColumn(name = "cus_id", referencedColumnName = "cus_id", nullable = false)
+    @JoinColumn(name = "CUS_ID", referencedColumnName = "CUS_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Customers cusId;
-    @JoinColumn(name = "rms_id", referencedColumnName = "RMS_ID", nullable = false)
+    @JoinColumn(name = "RES_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue resStatus;
+    @JoinColumn(name = "RMS_ID", referencedColumnName = "RMS_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Rooms rmsId;
-    @JoinColumn(name = "res_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "RES_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users resUsrMod;
 
@@ -76,11 +75,10 @@ public class Reservation implements Serializable {
         this.resId = resId;
     }
 
-    public Reservation(Integer resId, Date resFecIni, Date resFecFin, String resStatus, Date resDteMod) {
+    public Reservation(Integer resId, Date resFecIni, Date resFecFin, Date resDteMod) {
         this.resId = resId;
         this.resFecIni = resFecIni;
         this.resFecFin = resFecFin;
-        this.resStatus = resStatus;
         this.resDteMod = resDteMod;
     }
 
@@ -108,14 +106,6 @@ public class Reservation implements Serializable {
         this.resFecFin = resFecFin;
     }
 
-    public String getResStatus() {
-        return resStatus;
-    }
-
-    public void setResStatus(String resStatus) {
-        this.resStatus = resStatus;
-    }
-
     public Date getResDteMod() {
         return resDteMod;
     }
@@ -130,6 +120,14 @@ public class Reservation implements Serializable {
 
     public void setCusId(Customers cusId) {
         this.cusId = cusId;
+    }
+
+    public MultiValue getResStatus() {
+        return resStatus;
+    }
+
+    public void setResStatus(MultiValue resStatus) {
+        this.resStatus = resStatus;
     }
 
     public Rooms getRmsId() {
@@ -170,7 +168,7 @@ public class Reservation implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Reservation[ resId=" + resId + " ]";
+        return "com.ahms.boundary.Reservation[ resId=" + resId + " ]";
     }
     
 }

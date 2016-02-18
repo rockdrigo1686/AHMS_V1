@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,18 +30,17 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "payment_types", catalog = "db_ahms", schema = "", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"PAY_CODE"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PaymentTypes.findAll", query = "SELECT p FROM PaymentTypes p WHERE p.payStatus = 'Activo'"),
+    @NamedQuery(name = "PaymentTypes.findAll", query = "SELECT p FROM PaymentTypes p"),
     @NamedQuery(name = "PaymentTypes.findByPayId", query = "SELECT p FROM PaymentTypes p WHERE p.payId = :payId"),
     @NamedQuery(name = "PaymentTypes.findByPayCode", query = "SELECT p FROM PaymentTypes p WHERE p.payCode = :payCode"),
     @NamedQuery(name = "PaymentTypes.findByPayDesc", query = "SELECT p FROM PaymentTypes p WHERE p.payDesc = :payDesc"),
-    @NamedQuery(name = "PaymentTypes.findByPayStatus", query = "SELECT p FROM PaymentTypes p WHERE p.payStatus = :payStatus"),
     @NamedQuery(name = "PaymentTypes.findByPayDteMod", query = "SELECT p FROM PaymentTypes p WHERE p.payDteMod = :payDteMod")})
 public class PaymentTypes implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -56,16 +56,16 @@ public class PaymentTypes implements Serializable {
     @Column(name = "PAY_DESC", nullable = false, length = 150)
     private String payDesc;
     @Basic(optional = false)
-    @Column(name = "PAY_STATUS", nullable = false, length = 10)
-    private String payStatus;
-    @Basic(optional = false)
     @Column(name = "PAY_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date payDteMod;
-    @JoinColumn(name = "PAY_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "PAY_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue payStatus;
+    @JoinColumn(name = "PAY_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users payUsrMod;
-    @OneToMany(mappedBy = "payId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "payId", fetch = FetchType.EAGER)
     private Collection<FolioTransaction> folioTransactionCollection;
 
     public PaymentTypes() {
@@ -75,11 +75,10 @@ public class PaymentTypes implements Serializable {
         this.payId = payId;
     }
 
-    public PaymentTypes(Integer payId, String payCode, String payDesc, String payStatus, Date payDteMod) {
+    public PaymentTypes(Integer payId, String payCode, String payDesc, Date payDteMod) {
         this.payId = payId;
         this.payCode = payCode;
         this.payDesc = payDesc;
-        this.payStatus = payStatus;
         this.payDteMod = payDteMod;
     }
 
@@ -107,20 +106,20 @@ public class PaymentTypes implements Serializable {
         this.payDesc = payDesc;
     }
 
-    public String getPayStatus() {
-        return payStatus;
-    }
-
-    public void setPayStatus(String payStatus) {
-        this.payStatus = payStatus;
-    }
-
     public Date getPayDteMod() {
         return payDteMod;
     }
 
     public void setPayDteMod(Date payDteMod) {
         this.payDteMod = payDteMod;
+    }
+
+    public MultiValue getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(MultiValue payStatus) {
+        this.payStatus = payStatus;
     }
 
     public Users getPayUsrMod() {
@@ -162,7 +161,7 @@ public class PaymentTypes implements Serializable {
 
     @Override
     public String toString() {
-        return getPayDesc();
+        return payDesc;
     }
     
 }

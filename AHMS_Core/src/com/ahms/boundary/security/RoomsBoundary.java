@@ -25,6 +25,14 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
     public List<Rooms> findByFloor(Rooms room) {
         return roomsEm.findByFloor(room);
     }
+    
+    public List<Rooms> findByRmsStatus(Rooms room) {
+        return roomsEm.findByRmsStatus(room);
+    }
+    
+    public List<Rooms> findByRmsBeds(Rooms room) {
+        return roomsEm.findByRmsBeds(room);
+    }
 
     @Override
     public List<Rooms> search(Rooms obj) {

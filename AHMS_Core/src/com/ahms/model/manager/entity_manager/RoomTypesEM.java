@@ -5,26 +5,25 @@
  */
 package com.ahms.model.manager.entity_manager;
 
-import com.ahms.model.entity.Floors;
-import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.manager.AHMSEntityManager;
-import com.ahms.util.MMKeys;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
-public class FloorEM extends AHMSEntityManager{
-    public List<Floors> findAllAvailable() {
+public class RoomTypesEM extends AHMSEntityManager{
+    
+    public List<RoomTypes> findActiveTypes(RoomTypes roomTypes) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<Floors> query = em.createNamedQuery("Floors.findAllAvailable", Floors.class);
-            query.setParameter("flrStatus", new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
+            TypedQuery<RoomTypes> query = em.createNamedQuery("RoomTypes.findActiveTypes", RoomTypes.class);
+            query.setParameter("rtyStatus", roomTypes.getRtyStatus());
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
@@ -37,7 +36,7 @@ public class FloorEM extends AHMSEntityManager{
                 closeEm();
             }
         }
-        
+
     }
     
 }

@@ -23,6 +23,8 @@
     <class>com.ahms.model.entity.AccountTransactions</class>
     <class>com.ahms.model.entity.CashOut</class>
     <class>com.ahms.model.entity.MoneyMovement</class>
+    <class>com.ahms.model.entity.RoomTypes</class>
+    <class>com.ahms.model.entity.MultiValue</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_ahms"/>
       <property name="javax.persistence.jdbc.password" value="#5070Rock"/>

@@ -36,6 +36,10 @@ public class FloorsBoundary implements AHMSBoundary<Floors>{
         return floorEM.searchAll(obj);
     }
 
+    public List<Floors> findAllAvailable() {
+        return floorEM.findAllAvailable();
+    }
+    
     @Override
     public Floors find(Floors obj) {
         return (Floors)floorEM.find(obj);

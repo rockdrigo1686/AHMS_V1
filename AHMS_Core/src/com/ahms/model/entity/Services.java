@@ -6,10 +6,10 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "services", catalog = "db_ahms", schema = "", uniqueConstraints = {
@@ -42,7 +42,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Services.findBySrvCode", query = "SELECT s FROM Services s WHERE s.srvCode = :srvCode"),
     @NamedQuery(name = "Services.findBySrvName", query = "SELECT s FROM Services s WHERE s.srvName = :srvName"),
     @NamedQuery(name = "Services.findBySrvDesc", query = "SELECT s FROM Services s WHERE s.srvDesc = :srvDesc"),
-    @NamedQuery(name = "Services.findBySrvStatus", query = "SELECT s FROM Services s WHERE s.srvStatus = :srvStatus"),
     @NamedQuery(name = "Services.findBySrvPrice", query = "SELECT s FROM Services s WHERE s.srvPrice = :srvPrice"),
     @NamedQuery(name = "Services.findBySrvDteMod", query = "SELECT s FROM Services s WHERE s.srvDteMod = :srvDteMod")})
 public class Services implements Serializable {
@@ -61,23 +60,24 @@ public class Services implements Serializable {
     @Basic(optional = false)
     @Column(name = "SRV_DESC", nullable = false, length = 150)
     private String srvDesc;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
-    @Column(name = "SRV_STATUS", nullable = false, length = 10)
-    private String srvStatus;
-    @Basic(optional = false)
-    @Column(name = "SRV_PRICE", nullable = false)
-    private long srvPrice;
+    @Column(name = "SRV_PRICE", nullable = false, precision = 10, scale = 2)
+    private BigDecimal srvPrice;
     @Basic(optional = false)
     @Column(name = "SRV_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date srvDteMod;
+    @JoinColumn(name = "SRV_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue srvStatus;
     @JoinColumn(name = "SVT_ID", referencedColumnName = "SVT_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ServiceTypes svtId;
-    @JoinColumn(name = "SRV_USR_MOD", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "SRV_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users srvUsrMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "srvId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "srvId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
 
     public Services() {
@@ -87,12 +87,11 @@ public class Services implements Serializable {
         this.srvId = srvId;
     }
 
-    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, String srvStatus, long srvPrice, Date srvDteMod) {
+    public Services(Integer srvId, String srvCode, String srvName, String srvDesc, BigDecimal srvPrice, Date srvDteMod) {
         this.srvId = srvId;
         this.srvCode = srvCode;
         this.srvName = srvName;
         this.srvDesc = srvDesc;
-        this.srvStatus = srvStatus;
         this.srvPrice = srvPrice;
         this.srvDteMod = srvDteMod;
     }
@@ -129,19 +128,11 @@ public class Services implements Serializable {
         this.srvDesc = srvDesc;
     }
 
-    public String getSrvStatus() {
-        return srvStatus;
-    }
-
-    public void setSrvStatus(String srvStatus) {
-        this.srvStatus = srvStatus;
-    }
-
-    public long getSrvPrice() {
+    public BigDecimal getSrvPrice() {
         return srvPrice;
     }
 
-    public void setSrvPrice(long srvPrice) {
+    public void setSrvPrice(BigDecimal srvPrice) {
         this.srvPrice = srvPrice;
     }
 
@@ -151,6 +142,14 @@ public class Services implements Serializable {
 
     public void setSrvDteMod(Date srvDteMod) {
         this.srvDteMod = srvDteMod;
+    }
+
+    public MultiValue getSrvStatus() {
+        return srvStatus;
+    }
+
+    public void setSrvStatus(MultiValue srvStatus) {
+        this.srvStatus = srvStatus;
     }
 
     public ServiceTypes getSvtId() {
@@ -200,7 +199,7 @@ public class Services implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.Services[ srvId=" + srvId + " ]";
+        return "com.ahms.boundary.Services[ srvId=" + srvId + " ]";
     }
     
 }

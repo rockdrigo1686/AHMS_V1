@@ -10,6 +10,7 @@ import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.MoneyMovement;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -193,8 +194,8 @@ public class MoneyMovementFRM extends javax.swing.JDialog {
                 mm.setMmoUsrMod(mainUser);
                 mm.setMmoDteMod(modDte);
                 mm.setMmoDescription((String) mmModel.getValueAt(i, 0));
-                mm.setMmoCasOut((Long) mmModel.getValueAt(i, 1));
-                mm.setMmoCasIn((Long) mmModel.getValueAt(i, 2));
+                mm.setMmoCasOut((BigDecimal) mmModel.getValueAt(i, 1));
+                mm.setMmoCasIn((BigDecimal) mmModel.getValueAt(i, 2));
                 mmList.add(mm);
             }
             if (mmList.size() > 0) {

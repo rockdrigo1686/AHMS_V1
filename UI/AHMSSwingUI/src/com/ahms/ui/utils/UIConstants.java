@@ -11,13 +11,7 @@ package com.ahms.ui.utils;
  */
 public class UIConstants {
 
-    
-    // Estatus
-     public static final String STATUS_OPEN = "Abierto";
-     public static final String STATUS_PAID = "Pagado";
-     public static final String STATUS_CLOSED = "Cerrado";
-     public static final String STATUS_PEDING = "Pendiente";
-     public static final String STATUS_DELAYED = "Moroso";
+   
     
     //controlles de tarea
     public static final String BTN_LIMPIAR = "btnLimpiar";
@@ -27,16 +21,6 @@ public class UIConstants {
     public static final String BTN_GUARDAR = "btnGuardar";
     public static final String BTN_ELIMINAR = "btnEliminar";
     public static final String DOUBLE_CLICK = "DC";
-
-    //Estatus cuartos
-    public static final String ROOM_STA_AVA = "Disponible";
-    public static final String ROOM_STA_RE = "Reservado";
-    public static final String ROOM_STA_TAK = "Ocupado";
-    public static final String ROOM_STA_MNT = "Mantenimiento";
-    
-    //Estatus de Cuentas
-    public static final String ACCOUNT_ACTIVE = "Activo";
-    public static final String ACCOUNT_CLOSED = "Cerrado";
     
     //mensajes
     public static final String TYPE_WARNING = "Advertencia.";
@@ -62,8 +46,6 @@ public class UIConstants {
     //CashOut
     public static final String COU_AMOUNT_WARNING = "Advertencia: El monto inicial no puede estar vacio, favor de capturar.";
     public static final String COU_AMOUNT_ERROR = "Error: Turno no iniciado.";
-    public static final String SHIFT_STA_INI = "Abierto";
-    public static final String SHIFT_STA_CLS = "Cerrado";
 
     //variables
      public static final String PAYMENT_TYPE_CS ="Efectivo";

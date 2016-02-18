@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ahms.util;
+package com.ahms.model.entity;
 
 /**
  *
  * @author rsoto
  */
-public class dummy {
+public class ConfigurationBoundary {
+    
 }

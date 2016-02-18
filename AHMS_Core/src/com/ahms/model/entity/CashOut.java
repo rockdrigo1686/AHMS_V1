@@ -6,6 +6,7 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -29,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "cash_out", catalog = "db_ahms", schema = "")
@@ -41,40 +42,42 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CashOut.findByCouMonEnd", query = "SELECT c FROM CashOut c WHERE c.couMonEnd = :couMonEnd"),
     @NamedQuery(name = "CashOut.findByCouDteIni", query = "SELECT c FROM CashOut c WHERE c.couDteIni = :couDteIni"),
     @NamedQuery(name = "CashOut.findByCouDteEnd", query = "SELECT c FROM CashOut c WHERE c.couDteEnd = :couDteEnd"),
-    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = 'Abierto'")})
+    @NamedQuery(name = "CashOut.findByCouStatus", query = "SELECT c FROM CashOut c WHERE c.couStatus = :couStatus")})
 public class CashOut implements Serializable {
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
-    private Collection<FolioTransaction> folioTransactionCollection;
+    private Collection<MoneyMovement> moneyMovementCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "cou_id", nullable = false)
+    @Column(name = "COU_ID", nullable = false)
     private Integer couId;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
-    @Column(name = "cou_amo_ini", nullable = false)
-    private long couAmoIni;
+    @Column(name = "COU_AMO_INI", nullable = false, precision = 10, scale = 2)
+    private BigDecimal couAmoIni;
+    @Column(name = "COU_MON_END", precision = 10, scale = 2)
+    private BigDecimal couMonEnd;
     @Basic(optional = false)
-    @Column(name = "cou_mon_end", nullable = false)
-    private long couMonEnd;
-    @Basic(optional = false)
-    @Column(name = "cou_dte_ini", nullable = false)
+    @Column(name = "COU_DTE_INI", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date couDteIni;
-    @Basic(optional = false)
-    @Column(name = "cou_dte_end", nullable = false)
+    @Column(name = "COU_DTE_END")
     @Temporal(TemporalType.TIMESTAMP)
     private Date couDteEnd;
-    @Basic(optional = false)
-    @Column(name = "cou_status", nullable = false, length = 10)
-    private String couStatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "couId", fetch = FetchType.EAGER)
     private Collection<AccountTransactions> accountTransactionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "couId", fetch = FetchType.EAGER)
-    private Collection<MoneyMovement> moneyMovementCollection;
-    @JoinColumn(name = "usr_id", referencedColumnName = "usr_id", nullable = false)
+    
+    @JoinColumn(name = "COU_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private MultiValue couStatus;
+    
+    @JoinColumn(name = "USR_ID", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users usrId;
+    @OneToMany(mappedBy = "couId", fetch = FetchType.EAGER)
+    private Collection<FolioTransaction> folioTransactionCollection;
 
     public CashOut() {
     }
@@ -83,13 +86,10 @@ public class CashOut implements Serializable {
         this.couId = couId;
     }
 
-    public CashOut(Integer couId, long couAmoIni, long couMonEnd, Date couDteIni, Date couDteEnd, String couStatus) {
+    public CashOut(Integer couId, BigDecimal couAmoIni, Date couDteIni) {
         this.couId = couId;
         this.couAmoIni = couAmoIni;
-        this.couMonEnd = couMonEnd;
         this.couDteIni = couDteIni;
-        this.couDteEnd = couDteEnd;
-        this.couStatus = couStatus;
     }
 
     public Integer getCouId() {
@@ -100,19 +100,19 @@ public class CashOut implements Serializable {
         this.couId = couId;
     }
 
-    public long getCouAmoIni() {
+    public BigDecimal getCouAmoIni() {
         return couAmoIni;
     }
 
-    public void setCouAmoIni(long couAmoIni) {
+    public void setCouAmoIni(BigDecimal couAmoIni) {
         this.couAmoIni = couAmoIni;
     }
 
-    public long getCouMonEnd() {
+    public BigDecimal getCouMonEnd() {
         return couMonEnd;
     }
 
-    public void setCouMonEnd(long couMonEnd) {
+    public void setCouMonEnd(BigDecimal couMonEnd) {
         this.couMonEnd = couMonEnd;
     }
 
@@ -132,14 +132,6 @@ public class CashOut implements Serializable {
         this.couDteEnd = couDteEnd;
     }
 
-    public String getCouStatus() {
-        return couStatus;
-    }
-
-    public void setCouStatus(String couStatus) {
-        this.couStatus = couStatus;
-    }
-
     @XmlTransient
     public Collection<AccountTransactions> getAccountTransactionsCollection() {
         return accountTransactionsCollection;
@@ -149,13 +141,12 @@ public class CashOut implements Serializable {
         this.accountTransactionsCollection = accountTransactionsCollection;
     }
 
-    @XmlTransient
-    public Collection<MoneyMovement> getMoneyMovementCollection() {
-        return moneyMovementCollection;
+    public MultiValue getCouStatus() {
+        return couStatus;
     }
 
-    public void setMoneyMovementCollection(Collection<MoneyMovement> moneyMovementCollection) {
-        this.moneyMovementCollection = moneyMovementCollection;
+    public void setCouStatus(MultiValue couStatus) {
+        this.couStatus = couStatus;
     }
 
     public Users getUsrId() {
@@ -164,6 +155,15 @@ public class CashOut implements Serializable {
 
     public void setUsrId(Users usrId) {
         this.usrId = usrId;
+    }
+
+    @XmlTransient
+    public Collection<FolioTransaction> getFolioTransactionCollection() {
+        return folioTransactionCollection;
+    }
+
+    public void setFolioTransactionCollection(Collection<FolioTransaction> folioTransactionCollection) {
+        this.folioTransactionCollection = folioTransactionCollection;
     }
 
     @Override
@@ -188,16 +188,16 @@ public class CashOut implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.model.entity.CashOut[ couId=" + couId + " ]";
+        return "com.ahms.boundary.CashOut[ couId=" + couId + " ]";
     }
 
     @XmlTransient
-    public Collection<FolioTransaction> getFolioTransactionCollection() {
-        return folioTransactionCollection;
+    public Collection<MoneyMovement> getMoneyMovementCollection() {
+        return moneyMovementCollection;
     }
 
-    public void setFolioTransactionCollection(Collection<FolioTransaction> folioTransactionCollection) {
-        this.folioTransactionCollection = folioTransactionCollection;
+    public void setMoneyMovementCollection(Collection<MoneyMovement> moneyMovementCollection) {
+        this.moneyMovementCollection = moneyMovementCollection;
     }
-    
+
 }

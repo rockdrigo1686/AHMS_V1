@@ -6,6 +6,7 @@
 package com.ahms.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
 @Entity
 @Table(name = "money_movement", catalog = "db_ahms", schema = "")
@@ -36,30 +37,32 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MoneyMovement.findByMmoDescription", query = "SELECT m FROM MoneyMovement m WHERE m.mmoDescription = :mmoDescription"),
     @NamedQuery(name = "MoneyMovement.findByMmoCasOut", query = "SELECT m FROM MoneyMovement m WHERE m.mmoCasOut = :mmoCasOut"),
     @NamedQuery(name = "MoneyMovement.findByMmoCasIn", query = "SELECT m FROM MoneyMovement m WHERE m.mmoCasIn = :mmoCasIn"),
+    @NamedQuery(name = "MoneyMovement.findByMmoDteMod", query = "SELECT m FROM MoneyMovement m WHERE m.mmoDteMod = :mmoDteMod"),
     @NamedQuery(name = "MoneyMovement.findByCouId", query = "SELECT m FROM MoneyMovement m WHERE m.couId = :couId"),
-    @NamedQuery(name = "MoneyMovement.deleteByCouId", query = "Delete FROM MoneyMovement m WHERE m.couId = :couId"),
-    @NamedQuery(name = "MoneyMovement.findByMmoDteMod", query = "SELECT m FROM MoneyMovement m WHERE m.mmoDteMod = :mmoDteMod")})
+    @NamedQuery(name = "MoneyMovement.deleteByCouId", query = "Delete FROM MoneyMovement m WHERE m.couId = :couId")})
 public class MoneyMovement implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "mmo_id", nullable = false)
+    @Column(name = "MMO_ID", nullable = false)
     private Integer mmoId;
-    @Column(name = "mmo_description", length = 150)
+    @Column(name = "MMO_DESCRIPTION", length = 200)
     private String mmoDescription;
-    @Column(name = "mmo_cas_out")
-    private Long mmoCasOut;
-    @Column(name = "mmo_cas_in")
-    private Long mmoCasIn;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "MMO_CAS_OUT", precision = 10, scale = 2)
+    private BigDecimal mmoCasOut;
+    @Column(name = "MMO_CAS_IN", precision = 10, scale = 2)
+    private BigDecimal mmoCasIn;
     @Basic(optional = false)
-    @Column(name = "mmo_dte_mod", nullable = false)
+    @Column(name = "MMO_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date mmoDteMod;
-    @JoinColumn(name = "cou_id", referencedColumnName = "cou_id", nullable = false)
+    @JoinColumn(name = "COU_ID", referencedColumnName = "COU_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CashOut couId;
-    @JoinColumn(name = "mmo_usr_mod", referencedColumnName = "usr_id", nullable = false)
+    @JoinColumn(name = "MMO_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users mmoUsrMod;
 
@@ -91,19 +94,19 @@ public class MoneyMovement implements Serializable {
         this.mmoDescription = mmoDescription;
     }
 
-    public Long getMmoCasOut() {
+    public BigDecimal getMmoCasOut() {
         return mmoCasOut;
     }
 
-    public void setMmoCasOut(Long mmoCasOut) {
+    public void setMmoCasOut(BigDecimal mmoCasOut) {
         this.mmoCasOut = mmoCasOut;
     }
 
-    public Long getMmoCasIn() {
+    public BigDecimal getMmoCasIn() {
         return mmoCasIn;
     }
 
-    public void setMmoCasIn(Long mmoCasIn) {
+    public void setMmoCasIn(BigDecimal mmoCasIn) {
         this.mmoCasIn = mmoCasIn;
     }
 
@@ -155,5 +158,5 @@ public class MoneyMovement implements Serializable {
     public String toString() {
         return "com.ahms.model.entity.MoneyMovement[ mmoId=" + mmoId + " ]";
     }
-    
+
 }

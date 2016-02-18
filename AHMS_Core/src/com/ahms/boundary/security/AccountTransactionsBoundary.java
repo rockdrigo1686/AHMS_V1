@@ -38,7 +38,7 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
 
     @Override
     public int insert(AccountTransactions obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return accountTransactionsEM.insert(obj);
     }
 
     @Override
