@@ -149,6 +149,18 @@ public class MainFrm extends javax.swing.JFrame {
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
     }
+    
+    public void clearQuickRentInstance(){
+        quickRentRoomAssigned = null;
+        quickRentSubTotal = BigDecimal.ZERO;
+        quickRentIva = BigDecimal.ZERO;
+        quickRentTotal = BigDecimal.ZERO;
+        quickrentIvaPercent = BigDecimal.ZERO;
+        jlQRRoomNumber.setVisible(false);
+        jbQRAddGuests.setEnabled(false);
+        jbQRPagar.setEnabled(false);
+        
+    }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes){
         DefaultComboBoxModel model2= new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
@@ -1220,8 +1232,7 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentAccount.setActTotal(quickRentTotal);
         quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
         quickRentAccount.setAccountTransactionsCollection(null);
-        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));
-        
+        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));        
         accountBoundary.insert(quickRentAccount);
         
         //Insertando account transaction
@@ -1235,8 +1246,7 @@ public class MainFrm extends javax.swing.JFrame {
         rentTran.setCouId(currentShift);
         rentTran.setRmsId(quickRentRoomAssigned);
         rentTran.setSrvId(null);
-        //ArrayList<AccountTransactions> trans = new ArrayList<>();
-        //trans.add(rentTran);
+        rentTran.setActId(accountBoundary.findLastAccountInserted());
         accountTransactionsBoundary.insert(rentTran);
         
         //LLamando a paymentModule
