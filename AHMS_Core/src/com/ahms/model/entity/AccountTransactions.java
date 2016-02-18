@@ -39,7 +39,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccountTransactions.findByAtrId", query = "SELECT a FROM AccountTransactions a WHERE a.atrId = :atrId"),
     @NamedQuery(name = "AccountTransactions.findByAtrQuantity", query = "SELECT a FROM AccountTransactions a WHERE a.atrQuantity = :atrQuantity"),
     @NamedQuery(name = "AccountTransactions.findByAtrNotes", query = "SELECT a FROM AccountTransactions a WHERE a.atrNotes = :atrNotes"),
-    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod")})
+    @NamedQuery(name = "AccountTransactions.findByAtrDteMod", query = "SELECT a FROM AccountTransactions a WHERE a.atrDteMod = :atrDteMod"),
+    @NamedQuery(name = "AccountTransactions.findRentsByActId", query = "SELECT a FROM AccountTransactions a WHERE a.actId = :actId and a.srvId is null"),
+    @NamedQuery(name = "AccountTransactions.deleteByActId", query = "Delete FROM Guests g WHERE g.atrId in "
+                                                                  + " ( SELECT a FROM AccountTransactions a WHERE a.actId = :actId and a.srvId is null ) ")})
 public class AccountTransactions implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

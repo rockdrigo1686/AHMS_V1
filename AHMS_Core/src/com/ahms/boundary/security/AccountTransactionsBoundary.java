@@ -2,6 +2,7 @@ package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.Guests;
 import com.ahms.model.manager.entity_manager.AccountTransactionsEM;
 import java.util.List;
 
@@ -53,5 +54,9 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
     
     public List<AccountTransactions> findRentsByActId(AccountTransactions obj) {
         return accountTransactionsEM.findRentsByActId(obj);
+    }
+    
+    public Integer updateGuests(List<Guests> guestsList, AccountTransactions obj) {
+        return accountTransactionsEM.updateGuests(guestsList,obj);
     }
 }
