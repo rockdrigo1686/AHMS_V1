@@ -5,7 +5,6 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.manager.AHMSEntityManager;
 import java.util.List;
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public class AccountEM extends AHMSEntityManager{    
@@ -50,26 +49,6 @@ public class AccountEM extends AHMSEntityManager{
             }
         }
         
-    }
-    
-    public Account findLastAccountInserted() {
-        try {
-            if (em == null || !em.isOpen()) {
-                createEm();
-            }
-            Query query = em.createNativeQuery("select a.* from account a where a.act_id = (select max(b.act_id) from account b)", Account.class);
-            return (Account) query.getSingleResult();
-        } catch (Exception e) {
-            if (e instanceof NoResultException) {
-                return null;
-            } else {
-                throw e;
-            }
-        } finally { 
-            if (em != null) {
-                closeEm();
-            }
-        }
     }
     
 }
