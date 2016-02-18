@@ -5,17 +5,25 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.SecurityBoundary;
+import com.ahms.boundary.core.CashOutBoundary;
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.GuestsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Guests;
 import com.ahms.model.entity.Rooms;
+import com.ahms.model.entity.Users;
+import com.ahms.ui.utils.UIConstants;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.CellRendererPane;
@@ -42,6 +50,7 @@ public class GuestFrm extends javax.swing.JDialog {
     List<Guests> guestsList;
     List<AccountTransactions> accountTransactionsList;
     DefaultTableModel defaultTableModel;
+    MainFrm parentLocal;
     
     /**
      * Creates new form GuestFrm
@@ -51,6 +60,7 @@ public class GuestFrm extends javax.swing.JDialog {
      */
     public GuestFrm(java.awt.Frame parent, boolean modal, Account account) {
         super(parent, modal);
+        parentLocal = (MainFrm) parent;
         guestsBoundary = new GuestsBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         act = account;//Aqui se asignaria el valor del parent account
@@ -59,6 +69,79 @@ public class GuestFrm extends javax.swing.JDialog {
         initComponents();            
         fillGrid();
 //        act.setGuestsCollection(guestsList);
+    }
+    
+    private void fillGrid() {
+        
+        Vector<String> columnNames = new Vector();
+        columnNames.add("Cuarto");
+        columnNames.add("Nombre");
+        columnNames.add("Ap. Paterno");
+        columnNames.add("Ap. Materno");        
+
+        Vector<Vector> rows = new Vector<>();
+        accountTransactionsList = accountTransactionsBoundary.findRentsByActId(accountTransactions);
+        if(accountTransactionsList!=null&&accountTransactionsList.size()>0) {
+            
+            for(AccountTransactions atrObj:accountTransactionsList) {
+                atrObj.setGuestsCollection(guestsBoundary.findByAtrId(atrObj));
+                int gstReg = 0;
+                if(atrObj.getGuestsCollection() != null && atrObj.getGuestsCollection().size()>0) {
+                    gstReg = atrObj.getGuestsCollection().size();
+                    for (Guests guests : atrObj.getGuestsCollection()) {
+                        Vector vctRow = new Vector();
+                        vctRow.add(atrObj.getRmsId().getRmsNumber());
+                        vctRow.add(guests.getGstName());
+                        vctRow.add(guests.getGstLst1());
+                        vctRow.add(guests.getGstLst2());
+                        rows.add(vctRow);//3840787890
+                    }
+                }
+                while (gstReg<atrObj.getRmsId().getRmsMaxOcu()) {
+                    Vector vctRow = new Vector();
+                        vctRow.add(atrObj.getRmsId().getRmsNumber());
+                        vctRow.add("");
+                        vctRow.add("");
+                        vctRow.add("");
+                        rows.add(vctRow);
+                        gstReg++;
+                }
+            }
+        }
+        defaultTableModel = new DefaultTableModel(rows, columnNames) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column>0;
+            }
+        };
+        jTable1.setModel(defaultTableModel);
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
+        
+        jTable1.addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int clicks = e.getClickCount();
+                if(clicks>1) {
+                    int row = jTable1.getSelectedRow();
+                    // Remover renglon
+                }
+            }
+
+        });
     }
 
     /**
@@ -81,6 +164,7 @@ public class GuestFrm extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registro de Visitantes");
         setAlwaysOnTop(true);
+        setResizable(false);
 
         jPanel1.setBackground(java.awt.Color.white);
 
@@ -125,7 +209,6 @@ public class GuestFrm extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(jButton1);
-        jButton1.getAccessibleContext().setAccessibleName("Salir");
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772556_delete.png"))); // NOI18N
         jButton2.setText("Eliminar");
@@ -173,12 +256,20 @@ public class GuestFrm extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(jTable1.getSelectedRow()>-1) {
-            int resp = JOptionPane.showConfirmDialog(this,"¿Estás Seguro que deseas limpiar el registro seleccionado?", "Limpiar registro", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+            int resp = JOptionPane.showConfirmDialog(this,"¿Estás Seguro que deseas limpiar el(los) registro(s) seleccionado(s)?", "Limpiar registro", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
             
             if(resp==JOptionPane.YES_OPTION) { 
-                defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 1);
-                defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 2);
-                defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 3);
+                if(jTable1.getSelectedRowCount()>1) {
+                    for(int val:jTable1.getSelectedRows()) {
+                        defaultTableModel.setValueAt("", val, 1);
+                        defaultTableModel.setValueAt("", val, 2);
+                        defaultTableModel.setValueAt("", val, 3);
+                    }
+                } else {
+                    defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 1);
+                    defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 2);
+                    defaultTableModel.setValueAt("", jTable1.getSelectedRow(), 3);
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this, "Es necesario seleccionar un registro en la tabla.");
@@ -186,12 +277,53 @@ public class GuestFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-//        jTable1.();
+        if (null != jTable1.getCellEditor()) {
+            jTable1.getCellEditor().stopCellEditing();
+        }
+        ArrayList<Guests> guestsList = new ArrayList<Guests>();
+        accountTransactionsList = accountTransactionsBoundary.findRentsByActId(accountTransactions);
+        if(accountTransactionsList!=null&&accountTransactionsList.size()>0) {
+            for(int i=0; i<defaultTableModel.getRowCount();i++) {
+                Guests guest = new Guests();
+                guest.setGstDteMod(new Date(System.currentTimeMillis()));
+                guest.setGstUsrMod(parentLocal.getMainUser());
+                guest.setGstName((String) defaultTableModel.getValueAt(i, 1));
+                guest.setGstLst1((String) defaultTableModel.getValueAt(i, 2));
+                guest.setGstLst2((String) defaultTableModel.getValueAt(i, 3));
+                
+                for(AccountTransactions atrObj:accountTransactionsList) {
+                    if(atrObj.getRmsId().getRmsNumber().equalsIgnoreCase((String)defaultTableModel.getValueAt(i, 0))){
+                        guest.setAtrId(atrObj);
+                        break;
+                    }
+                }
+                if(
+                        (guest.getGstName()!=null&&!guest.getGstName().equalsIgnoreCase(""))&&
+                        (guest.getGstLst1()!=null&&!guest.getGstLst1().equalsIgnoreCase(""))&&
+                        (guest.getGstLst2()!=null&&!guest.getGstLst2().equalsIgnoreCase(""))                        
+                   ) {
+                    guestsList.add(guest);
+                } else {
+                    if(
+                        !((guest.getGstName()==null||guest.getGstName().equalsIgnoreCase(""))&&
+                        (guest.getGstLst1()==null||guest.getGstLst1().equalsIgnoreCase(""))&&
+                        (guest.getGstLst2()==null||guest.getGstLst2().equalsIgnoreCase("")))    
+                       ) {
+                        JOptionPane.showMessageDialog(this, " Es necesario Llenar las columnas Nombre, Ap. Paterno, Ap. Materno para los Visitantes registrados.");
+                        return;
+                    }
+                }
+            }
+            Integer resp = accountTransactionsBoundary.updateGuests(guestsList, accountTransactions);
+            if(resp>0) {
+                JOptionPane.showMessageDialog(this, " Los Vistantes se han guardado satisfactoriamente. ","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+            }
+        }
         
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -228,14 +360,25 @@ public class GuestFrm extends javax.swing.JDialog {
                 AccountBoundary accountBoundary= new AccountBoundary();
                 Account account = new Account(1);
                 account = accountBoundary.find(account);
-                GuestFrm dialog = new GuestFrm(new javax.swing.JFrame(), true, account);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                SecurityBoundary secBound = new SecurityBoundary();
+                CashOutBoundary cashOutBoundary = new CashOutBoundary();
+                CashOut currentShift = null;
+                String user = "MD01";
+                String password = "marcos";
+                Users mainUser = secBound.login(user, password);
+                MainFrm form;
+                if (mainUser != null) {
+                    currentShift = cashOutBoundary.getCurrentShift();
+                    form = new MainFrm(mainUser, currentShift);
+                    GuestFrm dialog = new GuestFrm(form, true, account);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                }                
             }
         });
     }
@@ -249,77 +392,4 @@ public class GuestFrm extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-
-    private void fillGrid() {
-        
-        Vector<String> columnNames = new Vector();
-        columnNames.add("Cuarto");
-        columnNames.add("Nombre");
-        columnNames.add("Ap. Paterno");
-        columnNames.add("Ap. Materno");        
-
-        Vector<Vector> rows = new Vector<>();
-        accountTransactionsList = accountTransactionsBoundary.findRentsByActId(accountTransactions);
-        if(accountTransactionsList!=null&&accountTransactionsList.size()>0) {
-            
-            for(AccountTransactions atrObj:accountTransactionsList) {
-                atrObj.setGuestsCollection(guestsBoundary.findByAtrId(atrObj));
-                int gstReg = 0;
-                if(atrObj.getGuestsCollection() != null && atrObj.getGuestsCollection().size()>0) {
-                    gstReg = atrObj.getGuestsCollection().size();
-                    for (Guests guests : atrObj.getGuestsCollection()) {
-                        Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRooms().getRmsNumber());
-                        vctRow.add(guests.getGstName());
-                        vctRow.add(guests.getGstLst1());
-                        vctRow.add(guests.getGstLst2());
-                        rows.add(vctRow);//3840787890
-                    }
-                }
-                while (gstReg<atrObj.getRooms().getRmsMaxOcu()) {
-                    Vector vctRow = new Vector();
-                        vctRow.add(atrObj.getRooms().getRmsNumber());
-                        vctRow.add("");
-                        vctRow.add("");
-                        vctRow.add("");
-                        rows.add(vctRow);
-                        gstReg++;
-                }
-            }
-        }
-        defaultTableModel = new DefaultTableModel(rows, columnNames) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public Class getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column>0;
-            }
-        };
-        jTable1.setModel(defaultTableModel);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(60);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(2).setMaxWidth(200);
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(150);
-        
-        jTable1.addMouseListener(new MouseAdapter() {
-            
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int clicks = e.getClickCount();
-                if(clicks>1) {
-                    int row = jTable1.getSelectedRow();
-                    // Remover renglon
-                }
-            }
-
-        });
-    }
 }
