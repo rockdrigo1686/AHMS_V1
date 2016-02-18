@@ -51,5 +51,8 @@ public class UIConstants {
      public static final String PAYMENT_TYPE_CS ="Efectivo";
      public static final String PAYMENT_TYPE_CC ="Tarjeta Credito";
      public static final String PAYMENT_TYPE_DC ="Tarjeta Debito";
+     public static final String INCOMPLETE_DATA= " Es necesario Llenar las columnas Nombre, Ap. Paterno, Ap. Materno para los Visitantes registrados.";
+     public static final String WARNING_SELECT_ONE = "Es necesario seleccionar un registro en la tabla.";
+     public static final String CONFIRM_CLEAN_RECORDS = "¿Estás Seguro que deseas limpiar el(los) registro(s) seleccionado(s)?";
     
 }
