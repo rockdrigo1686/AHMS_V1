@@ -256,7 +256,7 @@ public class GuestFrm extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         if(jTable1.getSelectedRow()>-1) {
-            int resp = JOptionPane.showConfirmDialog(this,"¿Estás Seguro que deseas limpiar el(los) registro(s) seleccionado(s)?", "Limpiar registro", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+            int resp = JOptionPane.showConfirmDialog(this,UIConstants.CONFIRM_CLEAN_RECORDS, "Limpiar registro", JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
             
             if(resp==JOptionPane.YES_OPTION) { 
                 if(jTable1.getSelectedRowCount()>1) {
@@ -272,7 +272,7 @@ public class GuestFrm extends javax.swing.JDialog {
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Es necesario seleccionar un registro en la tabla.");
+            JOptionPane.showMessageDialog(this, UIConstants.WARNING_SELECT_ONE);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -313,14 +313,14 @@ public class GuestFrm extends javax.swing.JDialog {
                         (guest.getGstLst1()==null||guest.getGstLst1().equalsIgnoreCase(""))&&
                         (guest.getGstLst2()==null||guest.getGstLst2().equalsIgnoreCase("")))    
                        ) {
-                        JOptionPane.showMessageDialog(this, " Es necesario Llenar las columnas Nombre, Ap. Paterno, Ap. Materno para los Visitantes registrados.");
+                        JOptionPane.showMessageDialog(this, UIConstants.INCOMPLETE_DATA);
                         return;
                     }
                 }
             }
             Integer resp = accountTransactionsBoundary.updateGuests(guestsList, accountTransactions);
             if(resp>0) {
-                JOptionPane.showMessageDialog(this, " Los Vistantes se han guardado satisfactoriamente. ","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE,"Mensaje",JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
         }
