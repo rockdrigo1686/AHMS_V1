@@ -35,6 +35,7 @@ public class UIConstants {
     public static final String SHIFT_ENDED =  "Turno Cerrado.";
     public static final String NOT_ENOUGH_ROOMS =   "No se encontraron suficientes cuartos disponibles, favor de verificar.";
     public static final String NO_AVAIL_ROOMS =   "No se encontraron cuartos disponibles.";
+    public static final String RESERVATION_OK = "Reservación exitosa.";
     
     //Errores
     public static final String ERROR_EMPY_AMOUNT = "Error: El monto inicial no puede estar vacio, favor de capturar.";
