@@ -273,7 +273,8 @@ public class MainFrm extends javax.swing.JFrame {
                     if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
                         //llamar a agregar servicios
                         Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                        RoomService roomService = new RoomService(null, true, roomObj);
+                        RoomService roomService = new RoomService(null, true, roomObj,currentShift);
+                        roomService.setLocationRelativeTo(e.getComponent().getParent().getParent().getParent());
                         roomService.setVisible(true);
                     }
                 } else {  // 1 click
