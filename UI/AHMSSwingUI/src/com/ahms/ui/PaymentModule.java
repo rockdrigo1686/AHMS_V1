@@ -12,20 +12,16 @@ import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
-import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.ui.utils.GeneralFunctions;
-import com.ahms.ui.utils.UIConstants;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 
 /**
  *
