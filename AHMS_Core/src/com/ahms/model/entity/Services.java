@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Services.findAll", query = "SELECT s FROM Services s"),
+    @NamedQuery(name = "Services.findAllByServiceType", query = "SELECT s FROM Services s WHERE s.svtId = :svtId "),
     @NamedQuery(name = "Services.findBySrvId", query = "SELECT s FROM Services s WHERE s.srvId = :srvId"),
     @NamedQuery(name = "Services.findBySrvCode", query = "SELECT s FROM Services s WHERE s.srvCode = :srvCode"),
     @NamedQuery(name = "Services.findBySrvName", query = "SELECT s FROM Services s WHERE s.srvName = :srvName"),
@@ -199,7 +200,7 @@ public class Services implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Services[ srvId=" + srvId + " ]";
+        return srvDesc;
     }
     
 }

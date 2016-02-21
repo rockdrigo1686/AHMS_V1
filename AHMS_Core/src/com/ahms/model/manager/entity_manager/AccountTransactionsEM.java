@@ -7,6 +7,7 @@ package com.ahms.model.manager.entity_manager;
 
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Guests;
+import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -46,6 +47,28 @@ public class AccountTransactionsEM extends AHMSEntityManager {
             }
             TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findRentsByActId", AccountTransactions.class);
             query.setParameter("actId", accountTransactions.getActId());
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+
+    }
+    
+    public List<AccountTransactions> findAllByRmsId(Rooms room) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findAllByRmsId", AccountTransactions.class);
+            query.setParameter("rmsId", room);
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

@@ -18,6 +18,28 @@ import javax.persistence.TypedQuery;
  * @author rsoto
  */
 public class RoomsEM extends AHMSEntityManager{
+    
+    public Rooms findByRmsId(Rooms room) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Rooms> query = em.createNamedQuery("Rooms.findByRmsId", Rooms.class);
+            query.setParameter("rmsId", room.getRmsId());
+            return query.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally { 
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
+    
     public List<Rooms> findByFloor(Rooms rooms) {
         try {
             if (em == null || !em.isOpen()) {
