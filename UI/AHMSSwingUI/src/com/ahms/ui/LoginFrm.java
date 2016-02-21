@@ -11,6 +11,7 @@ import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Color;
+import java.awt.Frame;
 
 /**
  *
@@ -137,6 +138,7 @@ public class LoginFrm extends javax.swing.JFrame {
             currentShift = cashOutBoundary.getCurrentShift();
 
             MainFrm form = new MainFrm(mainUser, currentShift);
+            form.setExtendedState(Frame.MAXIMIZED_BOTH);
             form.setVisible(true);
 
             dispose();

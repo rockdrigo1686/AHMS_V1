@@ -5,7 +5,24 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountTransactionsBoundary;
+import com.ahms.boundary.security.ServiceBoundary;
+import com.ahms.boundary.security.ServiceTypesBoundary;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
+import com.ahms.model.entity.ServiceTypes;
+import com.ahms.model.entity.Services;
+import com.ahms.util.MMKeys;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,6 +31,9 @@ import com.ahms.model.entity.Rooms;
 public class RoomService extends javax.swing.JDialog {
 
     private Rooms room = null;
+    private ServiceTypesBoundary serviceTypesBoundary;
+    private AccountTransactionsBoundary accountTransactionsBoundary;
+    private ServiceBoundary serviceBoundary;
 
     /**
      * Creates new form RoomService
@@ -27,6 +47,15 @@ public class RoomService extends javax.swing.JDialog {
         super(parent, modal);
         this.room = room;
         initComponents();
+        serviceTypesBoundary = new ServiceTypesBoundary();
+        accountTransactionsBoundary = new AccountTransactionsBoundary();
+        serviceBoundary = new ServiceBoundary();
+        loadServiceTypes(serviceTypesBoundary.searchAll(null));
+        idRMS.setText("Cuarto # " + room.getRmsNumber() + " - " + room.getRmsDesc());
+        
+        loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+        
+        
     }
     
     public RoomService(java.awt.Frame parent, boolean modal, Integer rms_id) {
@@ -35,6 +64,84 @@ public class RoomService extends javax.swing.JDialog {
         this.room.setRmsId(rms_id);
         initComponents();
         idRMS.setText(rms_id.toString());
+    }
+    
+    public void loadGrid(List<AccountTransactions> lstAccountTransactions){
+        //Columnas
+        Vector<String> columnNames = new Vector();
+        columnNames.add("Cuenta");
+        columnNames.add("#");
+        columnNames.add("Tipo");
+        columnNames.add("Servicio");
+        columnNames.add("Cantidad");
+        columnNames.add("Precio");
+        //Renglones
+        Vector<Vector> rows = new Vector<>();
+        for (AccountTransactions acctTran : lstAccountTransactions) {
+            Vector vctRow = new Vector();
+            vctRow.add(acctTran.getActId().getActId());
+            vctRow.add(acctTran.getAtrId());
+            vctRow.add(acctTran.getSrvId().getSvtId());
+            vctRow.add(acctTran.getAtrQuantity());
+            vctRow.add(acctTran.getSrvId().getSrvPrice());
+            rows.add(vctRow);
+        }
+        DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
+            private static final long serialVersionUID = 1L;
+            /*@Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }*/
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+        };
+        jtAccountTransactions.setModel(model);
+        jtAccountTransactions.setRowHeight(30);
+        jtAccountTransactions.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        jtAccountTransactions.getColumnModel().getColumn(0).setMaxWidth(80);
+        jtAccountTransactions.getColumnModel().getColumn(1).setMaxWidth(50);
+        jtAccountTransactions.getColumnModel().getColumn(2).setMaxWidth(200);
+        jtAccountTransactions.getColumnModel().getColumn(3).setMaxWidth(300);
+        jtAccountTransactions.getColumnModel().getColumn(4).setMaxWidth(100);
+        jtAccountTransactions.getColumnModel().getColumn(5).setMaxWidth(100);
+        
+        /*jtDashboard.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int clicks = e.getClickCount();
+                int row = jtDashboard.getSelectedRow();
+                MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
+                if(clicks > 1){ // doble click
+                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+                        //llamar a agregar servicios
+                        Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
+                        RoomService roomService = new RoomService(null, true, roomObj);
+                        roomService.setVisible(true);
+                    }
+                } else {  // 1 click
+                    jbCheckOut.setEnabled(false);
+                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+                        jbCheckOut.setEnabled(true);
+                    }
+                    //jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
+                    //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                }                
+            }
+
+        });*/
+    }
+    
+    private void loadServiceTypes(List<ServiceTypes> serviceTypes){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(serviceTypes.toArray(new ServiceTypes[serviceTypes.size()]));
+        jcbServiceTypes.setModel(model);
+    }
+    
+    private void loadServices(List<Services> lstServices){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(lstServices.toArray(new Services[lstServices.size()]));
+        jcbServices.setModel(model);
     }
 
     /**
@@ -48,14 +155,14 @@ public class RoomService extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jComboBox2 = new javax.swing.JComboBox();
+        jcbServiceTypes = new javax.swing.JComboBox();
+        jcbServices = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jtxtQuantity = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtAccountTransactions = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -67,20 +174,20 @@ public class RoomService extends javax.swing.JDialog {
 
         jLabel1.setText("Tipo de Servicio");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jcbServiceTypes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbServiceTypes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jcbServiceTypesActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setText("Servicio");
 
         jLabel3.setText("Cantidad");
 
-        jTextField1.setText("jTextField1");
+        jtxtQuantity.setText("1");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772552_add.png"))); // NOI18N
         jButton1.setText("Agregar");
@@ -93,15 +200,15 @@ public class RoomService extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jcbServiceTypes, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(4, 4, 4)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jcbServices, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -112,16 +219,16 @@ public class RoomService extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbServiceTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtAccountTransactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -132,7 +239,7 @@ public class RoomService extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtAccountTransactions);
 
         jPanel2.setBackground(java.awt.Color.white);
 
@@ -194,9 +301,11 @@ public class RoomService extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void jcbServiceTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbServiceTypesActionPerformed
+        //load Services
+        ServiceTypes typeselected = (ServiceTypes) jcbServiceTypes.getSelectedItem();
+        loadServices(serviceBoundary.findAllByServiceType(typeselected));
+    }//GEN-LAST:event_jcbServiceTypesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -245,15 +354,15 @@ public class RoomService extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox jcbServiceTypes;
+    private javax.swing.JComboBox jcbServices;
+    private javax.swing.JTable jtAccountTransactions;
+    private javax.swing.JTextField jtxtQuantity;
     // End of variables declaration//GEN-END:variables
 }

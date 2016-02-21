@@ -126,6 +126,7 @@ public class MainFrm extends javax.swing.JFrame {
         this.mainUser = mainUser;
         this.currentShift = currentShift;
         initComponents();
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         roomsBounday = new RoomsBoundary();
         floorsBoundary = new FloorsBoundary();
         accountBoundary = new AccountBoundary();
@@ -166,6 +167,13 @@ public class MainFrm extends javax.swing.JFrame {
         jbQRPagar.setEnabled(false);
         
     }
+    
+    public void clearQuickResInstance(){
+        quickResRoomAssigned = null;
+        jlQuickResRoomNumber.setVisible(false);
+        jbQuickResReserve.setEnabled(false);
+        
+    }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes){
         DefaultComboBoxModel modelquickRent= new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
@@ -173,7 +181,7 @@ public class MainFrm extends javax.swing.JFrame {
         DefaultComboBoxModel modelDashBoard = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbTipoCuarto.setModel(modelDashBoard);
         DefaultComboBoxModel modelQuickRes = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
-        this.jcbTipoCuarto.setModel(modelQuickRes);
+        this.jcbQuickResTipoCuarto.setModel(modelQuickRes);
     }
     
     private void configFloors(List<Floors> lstFloors) {
@@ -284,8 +292,9 @@ public class MainFrm extends javax.swing.JFrame {
     private Rooms getRoomFromDashboard(Integer rmsId){
         Rooms room= null;
         try {
-            
+            room = roomsBounday.findByRmsId(new Rooms(rmsId));
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return room;
     }
@@ -293,6 +302,8 @@ public class MainFrm extends javax.swing.JFrame {
     private void configDatePickers() {
 
         Calendar calToday = Calendar.getInstance();
+        Calendar calTomorrow = Calendar.getInstance();
+        calTomorrow.add(Calendar.DATE, 1);
 
         UtilDateModel modelEntrada = new UtilDateModel();
         Properties pEntrada = new Properties();
@@ -306,14 +317,14 @@ public class MainFrm extends javax.swing.JFrame {
         datePickerEntrada.setSize(223, 50);
         datePickerEntrada.setVisible(true);
         datePickerEntrada.setEnabled(true);
-        datePickerEntrada.getJFormattedTextField().setValue(Calendar.getInstance());
+        datePickerEntrada.getJFormattedTextField().setValue(calToday);
         this.jpFecEntContainer.add(datePickerEntrada);
 
         UtilDateModel modelSalida = new UtilDateModel();
         Properties pSalida = new Properties();
-        pSalida.put("text.today", calToday.get(Calendar.DATE));
-        pSalida.put("text.month", calToday.get(Calendar.MONTH + 1));
-        pSalida.put("text.year", calToday.get(Calendar.YEAR));
+        pSalida.put("text.today", calTomorrow.get(Calendar.DATE));
+        pSalida.put("text.month", calTomorrow.get(Calendar.MONTH + 1));
+        pSalida.put("text.year", calTomorrow.get(Calendar.YEAR));
         JDatePanelImpl datePanelSalida = new JDatePanelImpl(modelSalida, pSalida);
         JDatePickerImpl datePickerSalida = new JDatePickerImpl(datePanelSalida, new DateLabelFormatter());
         datePanelSalida.setFont(new Font("Arial", Font.PLAIN, 8));
@@ -321,8 +332,38 @@ public class MainFrm extends javax.swing.JFrame {
         datePickerSalida.setSize(223, 50);
         datePickerSalida.setVisible(true);
         datePickerSalida.setEnabled(true);
-        datePickerSalida.getJFormattedTextField().setValue(Calendar.getInstance());
+        datePickerSalida.getJFormattedTextField().setValue(calTomorrow);
         this.jpFecSalContainer.add(datePickerSalida);
+        
+        UtilDateModel modelEntradaRes = new UtilDateModel();
+        Properties pEntradaRes = new Properties();
+        pEntradaRes.put("text.today", calToday.get(Calendar.DATE));
+        pEntradaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
+        pEntradaRes.put("text.year", calToday.get(Calendar.YEAR));
+        JDatePanelImpl datePanelEntradaRes = new JDatePanelImpl(modelEntradaRes, pEntradaRes);
+        JDatePickerImpl datePickerEntradaRes = new JDatePickerImpl(datePanelEntradaRes, new DateLabelFormatter());
+        datePickerEntradaRes.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerEntradaRes.setLocation(0, 0);
+        datePickerEntradaRes.setSize(223, 50);
+        datePickerEntradaRes.setVisible(true);
+        datePickerEntradaRes.setEnabled(true);
+        datePickerEntradaRes.getJFormattedTextField().setValue(calToday);
+        this.jpFecEntContainerRes.add(datePickerEntradaRes);
+
+        UtilDateModel modelSalidaRes = new UtilDateModel();
+        Properties psalidaRes = new Properties();
+        psalidaRes.put("text.today", calToday.get(Calendar.DATE));
+        psalidaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
+        psalidaRes.put("text.year", calToday.get(Calendar.YEAR));
+        JDatePanelImpl datePanelSalidaRes = new JDatePanelImpl(modelSalidaRes, psalidaRes);
+        JDatePickerImpl datePickerSalidaRes = new JDatePickerImpl(datePanelSalidaRes, new DateLabelFormatter());
+        datePickerSalidaRes.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerSalidaRes.setLocation(0, 0);
+        datePickerSalidaRes.setSize(223, 50);
+        datePickerSalidaRes.setVisible(true);
+        datePickerSalidaRes.setEnabled(true);
+        datePickerSalidaRes.getJFormattedTextField().setValue(calTomorrow);
+        this.jpFecSalContainerRes.add(datePickerSalidaRes);
 
     }
 
@@ -394,9 +435,9 @@ public class MainFrm extends javax.swing.JFrame {
         jlRegistroRfc1 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
         jLabel14 = new javax.swing.JLabel();
-        jpFecEntContainer1 = new javax.swing.JPanel();
+        jpFecEntContainerRes = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        jpFecSalContainer1 = new javax.swing.JPanel();
+        jpFecSalContainerRes = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jbQuickResReserve = new javax.swing.JButton();
         jcbQuickResTipoCuarto = new javax.swing.JComboBox();
@@ -836,27 +877,27 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel14.setText("Entrada:");
 
-        javax.swing.GroupLayout jpFecEntContainer1Layout = new javax.swing.GroupLayout(jpFecEntContainer1);
-        jpFecEntContainer1.setLayout(jpFecEntContainer1Layout);
-        jpFecEntContainer1Layout.setHorizontalGroup(
-            jpFecEntContainer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout jpFecEntContainerResLayout = new javax.swing.GroupLayout(jpFecEntContainerRes);
+        jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
+        jpFecEntContainerResLayout.setHorizontalGroup(
+            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 212, Short.MAX_VALUE)
         );
-        jpFecEntContainer1Layout.setVerticalGroup(
-            jpFecEntContainer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jpFecEntContainerResLayout.setVerticalGroup(
+            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 32, Short.MAX_VALUE)
         );
 
         jLabel15.setText("Salida:");
 
-        javax.swing.GroupLayout jpFecSalContainer1Layout = new javax.swing.GroupLayout(jpFecSalContainer1);
-        jpFecSalContainer1.setLayout(jpFecSalContainer1Layout);
-        jpFecSalContainer1Layout.setHorizontalGroup(
-            jpFecSalContainer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jpFecSalContainerResLayout = new javax.swing.GroupLayout(jpFecSalContainerRes);
+        jpFecSalContainerRes.setLayout(jpFecSalContainerResLayout);
+        jpFecSalContainerResLayout.setHorizontalGroup(
+            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jpFecSalContainer1Layout.setVerticalGroup(
-            jpFecSalContainer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jpFecSalContainerResLayout.setVerticalGroup(
+            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 33, Short.MAX_VALUE)
         );
 
@@ -898,34 +939,38 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpFecSalContainer1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jpFecEntContainer1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jlRegistroNombre1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlRegistroPaterno1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlRegistroMaterno1))
-                    .addComponent(jlRegistroRfc1)
-                    .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcbQuickResTipoCuarto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbQuickResSearch))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(8, 8, 8)
-                        .addComponent(jlQuickResRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jlQuickResRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jlRegistroNombre1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlRegistroPaterno1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlRegistroMaterno1))
+                            .addComponent(jlRegistroRfc1)
+                            .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(93, 93, 93)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -943,12 +988,12 @@ public class MainFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpFecEntContainer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15)
-                    .addComponent(jpFecSalContainer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel16)
@@ -958,9 +1003,9 @@ public class MainFrm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(jlQuickResRoomNumber))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jbQuickResReserve)
-                .addGap(200, 200, 200))
+                .addGap(188, 188, 188))
         );
 
         jTabbedPane1.addTab("Reservaciones", jPanel2);
@@ -1270,6 +1315,9 @@ public class MainFrm extends javax.swing.JFrame {
         reservation.setResFecFin(calSalida.getTime());
         reservationBoundary.insert(reservation);
         GeneralFunctions.sendMessage(this, UIConstants.RESERVATION_OK + " Cuarto reservado: " + quickResRoomAssigned.getRmsNumber());
+        
+        configGrid(roomsBounday.searchAll(new Rooms()));
+        clearQuickResInstance();
     }//GEN-LAST:event_jbQuickResReserveActionPerformed
 
     private void jbQuickResSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuickResSearchActionPerformed
@@ -1359,9 +1407,9 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jlRegistroRfc1;
     private javax.swing.JLabel jlTurno;
     private javax.swing.JPanel jpFecEntContainer;
-    private javax.swing.JPanel jpFecEntContainer1;
+    private javax.swing.JPanel jpFecEntContainerRes;
     private javax.swing.JPanel jpFecSalContainer;
-    private javax.swing.JPanel jpFecSalContainer1;
+    private javax.swing.JPanel jpFecSalContainerRes;
     private javax.swing.JPanel jpRegistroRapido;
     private javax.swing.JSpinner jspNumeroPersonas;
     private javax.swing.JTable jtDashboard;
