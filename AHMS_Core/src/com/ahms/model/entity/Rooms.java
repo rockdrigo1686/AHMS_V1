@@ -224,4 +224,18 @@ public class Rooms implements Serializable {
         return "com.ahms.boundary.Rooms[ rmsId=" + rmsId + " ]";
     }
     
+    public Account getRespectiveAccount() {
+        try {
+            if(getAccountTransactionsCollection() != null && getAccountTransactionsCollection().size() > 0){
+                for(AccountTransactions i : getAccountTransactionsCollection()){
+                    if(i.getSrvId() == null){
+                        return i.getActId();                        
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -5,10 +5,13 @@
  */
 package com.ahms.model.manager.entity_manager;
 
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Guests;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
+import com.ahms.util.MMKeys;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -69,6 +72,8 @@ public class AccountTransactionsEM extends AHMSEntityManager {
             }
             TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findAllByRmsId", AccountTransactions.class);
             query.setParameter("rmsId", room);
+            MultiValueBoundary mlb = new MultiValueBoundary();
+            query.setParameter("atrStatus", mlb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)));
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
