@@ -52,6 +52,7 @@ import org.jdatepicker.impl.UtilDateModel;
  */
 public class MainFrm extends javax.swing.JFrame {
 
+    private Customers mainCustomer;
     private Users mainUser = null;
     private Boolean shiftOn = false;
     private RoomsBoundary roomsBounday = null;
@@ -70,10 +71,22 @@ public class MainFrm extends javax.swing.JFrame {
     private BigDecimal quickRentTotal = BigDecimal.ZERO;
     private BigDecimal quickrentIvaPercent = BigDecimal.ZERO;
 
+    MainFrm() {        
+    }
+
     private void fillData() {
 
     }
 
+    public Customers getMainCustomer() {
+        return mainCustomer;
+    }
+
+    public void setMainCustomer(Customers mainCustomer) {
+        this.mainCustomer = mainCustomer;
+    }
+
+    
     public Users getMainUser() {
         return mainUser;
     }
@@ -120,6 +133,7 @@ public class MainFrm extends javax.swing.JFrame {
      * @param currentShift
      */
     public MainFrm(Users mainUser, CashOut currentShift) {
+        this.setMainCustomer(new Customers());
         this.mainUser = mainUser;
         this.currentShift = currentShift;
         initComponents();
@@ -1078,7 +1092,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jbBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBuscarClienteActionPerformed
 
-        CustomerReg customerReg = new CustomerReg(this, true);
+        CustomerReg customerReg = new CustomerReg(this, true, this, this.getMainCustomer());
         customerReg.setVisible(true);
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
