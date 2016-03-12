@@ -54,5 +54,9 @@ public class UIConstants {
      public static final String INCOMPLETE_DATA= " Es necesario Llenar las columnas Nombre, Ap. Paterno, Ap. Materno para los Visitantes registrados.";
      public static final String WARNING_SELECT_ONE = "Es necesario seleccionar un registro en la tabla.";
      public static final String CONFIRM_CLEAN_RECORDS = "¿Estás Seguro que deseas limpiar el(los) registro(s) seleccionado(s)?";
+     public static final String CONFIRM_REGISTER_CUSTOMER = "No se encontraron registros con esas condiciones ¿Deseas registrar un cliente nuevo?";
+     public static final String ERROR_SELECTION_STATUS = "Únicamente se pueden seleccionar Clientes activos, es necesario activar el cliente antes de realizar alguna operación.";
+    public static final String ERROR_REQUIRED_MESSAGE = "Existen campos requeridos vacios, favor de verificar.";
+     
     
 }
