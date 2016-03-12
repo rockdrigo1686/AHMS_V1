@@ -1161,6 +1161,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         CustomerReg customerReg = new CustomerReg(this, true, this, this.getMainCustomer());
         customerReg.setVisible(true);
+        mainCustomer = customerReg.getCustomer();
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
     private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
