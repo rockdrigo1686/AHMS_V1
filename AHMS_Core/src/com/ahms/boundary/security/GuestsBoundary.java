@@ -36,21 +36,21 @@ public class GuestsBoundary implements AHMSBoundary<Guests>{
     public Guests find(Guests obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    @Override
-    public int insert(Guests obj) {
-        return guestsEM.insert(obj); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
-    public int delete(Guests obj) {
-        return guestsEM.delete(obj); //To change body of generated methods, choose Tools | Templates.
+    public int insert(Guests obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public int update(Guests obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public int delete(Guests obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    } 
     
     public List<Guests> findByAtrId(AccountTransactions obj) {
         return guestsEM.findByAtrId(obj);

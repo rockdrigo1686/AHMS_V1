@@ -161,7 +161,7 @@ public class ServiceTypes implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.ServiceTypes[ svtId=" + svtId + " ]";
+        return svtDesc;
     }
     
 }

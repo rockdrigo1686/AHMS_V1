@@ -1,32 +1,69 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountTransactionsBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
+import com.ahms.boundary.security.ServiceBoundary;
+import com.ahms.boundary.security.ServiceTypesBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.CashOut;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
+import com.ahms.model.entity.ServiceTypes;
+import com.ahms.model.entity.Services;
+import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 public class RoomService extends javax.swing.JDialog {
-
+    //Parent Entities
     private Rooms room = null;
+    private Account account = null;
+    private CashOut currentshift = null;
+    
+    //Necessary Boundaries
+    private MultiValueBoundary multiValueBoundary;
+    private ServiceTypesBoundary serviceTypesBoundary;
+    public AccountTransactionsBoundary accountTransactionsBoundary;
+    private ServiceBoundary serviceBoundary;
+    
+    //Other instances
+    List<AccountTransactions> currentGridsource = null;
 
-    /**
-     * Creates new form RoomService
-     */
+    public Rooms getGlobalroom(){
+        return room;
+    }
+    
     public RoomService(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    public RoomService(java.awt.Frame parent, boolean modal, Rooms room) {
+    public RoomService(java.awt.Frame parent, boolean modal, Rooms room, CashOut currentShift) {
         super(parent, modal);
         this.room = room;
+        this.currentshift = currentShift;
         initComponents();
+        account = room.getRespectiveAccount();
+        serviceTypesBoundary = new ServiceTypesBoundary();
+        accountTransactionsBoundary = new AccountTransactionsBoundary();
+        multiValueBoundary = new MultiValueBoundary();
+        serviceBoundary = new ServiceBoundary();
+        loadServiceTypes(serviceTypesBoundary.searchAll(null));
+        idRMS.setText("Cuarto # " + room.getRmsNumber() + " - " + room.getRmsDesc());        
+        loadGrid(accountTransactionsBoundary.findAllByRmsId(room));       
+        ServiceTypes typeselected = (ServiceTypes) jcbServiceTypes.getSelectedItem();
+        loadServices(serviceBoundary.findAllByServiceType(typeselected));
     }
     
     public RoomService(java.awt.Frame parent, boolean modal, Integer rms_id) {
@@ -35,6 +72,56 @@ public class RoomService extends javax.swing.JDialog {
         this.room.setRmsId(rms_id);
         initComponents();
         idRMS.setText(rms_id.toString());
+    }
+    
+    public void loadGrid(List<AccountTransactions> lstAccountTransactions){
+        currentGridsource = lstAccountTransactions;
+        //Columnas
+        Vector<String> columnNames = new Vector();
+        columnNames.add("Cuenta");
+        columnNames.add("#");
+        columnNames.add("Tipo");
+        columnNames.add("Servicio");
+        columnNames.add("Cantidad");
+        columnNames.add("Precio");
+        //Renglones
+        Vector<Vector> rows = new Vector<>();
+        for (AccountTransactions acctTran : lstAccountTransactions) {
+            Vector vctRow = new Vector();
+            vctRow.add(acctTran.getActId().getActId());
+            vctRow.add(acctTran.getAtrId());
+            vctRow.add(acctTran.getSrvId().getSvtId());
+            vctRow.add(acctTran.getSrvId());
+            vctRow.add(acctTran.getAtrQuantity());
+            vctRow.add(acctTran.getSrvId().getSrvPrice());
+            rows.add(vctRow);
+        }
+        DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jtAccountTransactions.setModel(model);
+        jtAccountTransactions.setRowHeight(30);
+        jtAccountTransactions.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        jtAccountTransactions.getColumnModel().getColumn(0).setMaxWidth(80);
+        jtAccountTransactions.getColumnModel().getColumn(1).setMaxWidth(50);
+        jtAccountTransactions.getColumnModel().getColumn(2).setMaxWidth(200);
+        jtAccountTransactions.getColumnModel().getColumn(3).setMaxWidth(400);
+        jtAccountTransactions.getColumnModel().getColumn(4).setMaxWidth(100);
+        jtAccountTransactions.getColumnModel().getColumn(5).setMaxWidth(100);        
+    }
+    
+    private void loadServiceTypes(List<ServiceTypes> serviceTypes){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(serviceTypes.toArray(new ServiceTypes[serviceTypes.size()]));
+        jcbServiceTypes.setModel(model);
+    }
+    
+    private void loadServices(List<Services> lstServices){
+        DefaultComboBoxModel model = new DefaultComboBoxModel(lstServices.toArray(new Services[lstServices.size()]));
+        jcbServices.setModel(model);
     }
 
     /**
@@ -46,20 +133,39 @@ public class RoomService extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jpopOptions = new javax.swing.JPopupMenu();
+        jmiPagar = new javax.swing.JMenuItem();
+        jmiCancelar = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jComboBox2 = new javax.swing.JComboBox();
+        jcbServiceTypes = new javax.swing.JComboBox();
+        jcbServices = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jtxtQuantity = new javax.swing.JTextField();
+        jbAddService = new javax.swing.JButton();
         idRMS = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtAccountTransactions = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
+
+        jmiPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money.png"))); // NOI18N
+        jmiPagar.setText("Pagar");
+        jmiPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiPagarActionPerformed(evt);
+            }
+        });
+        jpopOptions.add(jmiPagar);
+
+        jmiCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cancel.png"))); // NOI18N
+        jmiCancelar.setText("Cancelar");
+        jmiCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiCancelarActionPerformed(evt);
+            }
+        });
+        jpopOptions.add(jmiCancelar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -67,23 +173,33 @@ public class RoomService extends javax.swing.JDialog {
 
         jLabel1.setText("Tipo de Servicio");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jcbServiceTypes.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbServiceTypes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jcbServiceTypesActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbServices.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setText("Servicio");
 
         jLabel3.setText("Cantidad");
 
-        jTextField1.setText("jTextField1");
+        jtxtQuantity.setText("1");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772552_add.png"))); // NOI18N
-        jButton1.setText("Agregar");
+        jbAddService.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Add.png"))); // NOI18N
+        jbAddService.setText("Agregar");
+        jbAddService.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbAddServiceActionPerformed(evt);
+            }
+        });
+
+        idRMS.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        idRMS.setForeground(new java.awt.Color(183, 6, 6));
+        idRMS.setText("roomParent");
+        idRMS.setName("idRMS"); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -91,37 +207,44 @@ public class RoomService extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(4, 4, 4)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbServiceTypes, 0, 181, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbServices, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbAddService, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(idRMS)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(idRMS)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jcbServiceTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jcbServices, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
+                        .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addComponent(jbAddService, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtAccountTransactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -132,42 +255,17 @@ public class RoomService extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jtAccountTransactions.setComponentPopupMenu(jpopOptions);
+        jtAccountTransactions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(jtAccountTransactions);
 
-        jPanel2.setBackground(java.awt.Color.white);
-
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772619_notification_error.png"))); // NOI18N
-        jButton2.setText("Cancelar");
-
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772697_diskette.png"))); // NOI18N
-        jButton3.setText("Guardar");
-
-        idRMS.setText("jLabel4");
-        idRMS.setName("idRMS"); // NOI18N
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
-                .addComponent(idRMS)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(27, 27, 27)
-                .addComponent(jButton3)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(idRMS))
-                .addContainerGap())
-        );
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771618_17.png"))); // NOI18N
+        jButton3.setText("Salir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,28 +273,116 @@ public class RoomService extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void jcbServiceTypesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbServiceTypesActionPerformed
+        //load Services
+        ServiceTypes typeselected = (ServiceTypes) jcbServiceTypes.getSelectedItem();
+        loadServices(serviceBoundary.findAllByServiceType(typeselected));
+    }//GEN-LAST:event_jcbServiceTypesActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jbAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddServiceActionPerformed
+        //verificar cantidad valida
+        if(jtxtQuantity.getText().trim().length() <= 0){
+            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_QTY_NULL);
+            return;
+        }        
+        try {
+            AccountTransactions newService = new AccountTransactions();
+            newService.setActId(account);
+            newService.setCouId(currentshift);
+            newService.setRmsId(room);
+            Services serviceSel = (Services) jcbServices.getSelectedItem();
+            newService.setSrvId(serviceSel);
+            newService.setAtrQuantity(Integer.parseInt(jtxtQuantity.getText()));
+            newService.setAtrDteMod(Calendar.getInstance().getTime());
+            newService.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)));
+            newService.setAtrUsrMod(currentshift.getUsrId());
+            newService.setAtrNotes(serviceSel.getSvtId().getSvtDesc() + " - " + serviceSel.getSrvDesc());
+            accountTransactionsBoundary.insert(newService);
+            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_SUCCESS);
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room)); 
+        } catch (Exception e) {
+            e.printStackTrace();
+            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_ERROR);
+        }        
+    }//GEN-LAST:event_jbAddServiceActionPerformed
+
+    private void cancelService(AccountTransactions serviceToCancel){
+        try {
+            serviceToCancel.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
+            accountTransactionsBoundary.update(serviceToCancel);
+            GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_SUCCESS);
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+        } catch (Exception e) {
+            e.printStackTrace();
+            GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_ERROR);
+        }
+    }
+    
+    private void payService(AccountTransactions serviceToPay){
+        try {
+            PaymentModule paymentModule = new PaymentModule(this, true, serviceToPay);
+            paymentModule.setLocationRelativeTo(this);
+            paymentModule.setVisible(true);
+            
+            serviceToPay.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+            accountTransactionsBoundary.update(serviceToPay);
+            GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_SUCCESS);
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+        } catch (Exception e) {
+            e.printStackTrace();
+            GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_ERROR);
+        }
+    }
+    
+    private void jmiCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCancelarActionPerformed
+        //cancelar servicio
+        Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
+        for(AccountTransactions iAct : currentGridsource){
+            if(iAct.getAtrId().compareTo(atrIdSelected) == 0){
+                cancelService(iAct);
+                return;
+            }
+        }
+        
+    }//GEN-LAST:event_jmiCancelarActionPerformed
+
+    private void jmiPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPagarActionPerformed
+        //Pagar Servicio
+        Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
+        for(AccountTransactions iAct : currentGridsource){
+            if(iAct.getAtrId().compareTo(atrIdSelected) == 0){
+                payService(iAct);
+                return;
+            }
+        }
+        
+    }//GEN-LAST:event_jmiPagarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -242,18 +428,19 @@ public class RoomService extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel idRMS;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton jbAddService;
+    private javax.swing.JComboBox jcbServiceTypes;
+    private javax.swing.JComboBox jcbServices;
+    private javax.swing.JMenuItem jmiCancelar;
+    private javax.swing.JMenuItem jmiPagar;
+    private javax.swing.JPopupMenu jpopOptions;
+    private javax.swing.JTable jtAccountTransactions;
+    private javax.swing.JTextField jtxtQuantity;
     // End of variables declaration//GEN-END:variables
 }

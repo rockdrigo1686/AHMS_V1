@@ -48,6 +48,10 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
     public Rooms find(Rooms obj) {
         return (Rooms)roomsEm.find(obj);
     }
+    
+    public Rooms findByRmsId(Rooms obj) {
+        return roomsEm.findByRmsId(obj);
+    }
 
     @Override
     public int insert(Rooms obj) {

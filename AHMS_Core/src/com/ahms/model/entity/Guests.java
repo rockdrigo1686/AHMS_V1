@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Guests.findByGstName", query = "SELECT g FROM Guests g WHERE g.gstName = :gstName"),
     @NamedQuery(name = "Guests.findByGstLst1", query = "SELECT g FROM Guests g WHERE g.gstLst1 = :gstLst1"),
     @NamedQuery(name = "Guests.findByGstLst2", query = "SELECT g FROM Guests g WHERE g.gstLst2 = :gstLst2"),
-    @NamedQuery(name = "Guests.findByGstDteMod", query = "SELECT g FROM Guests g WHERE g.gstDteMod = :gstDteMod"),
-    @NamedQuery(name = "Guests.findByAtrId", query = "SELECT g FROM Guests g WHERE g.atrId = :atrId")})
+    @NamedQuery(name = "Guests.findByGstDteMod", query = "SELECT g FROM Guests g WHERE g.gstDteMod = :gstDteMod")})
 public class Guests implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

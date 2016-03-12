@@ -5,6 +5,7 @@
  */   
 package com.ahms.ui; 
        
+import java.awt.Frame;
 import javax.swing.UIManager;      
 import javax.swing.UnsupportedLookAndFeelException; 
    

@@ -172,7 +172,6 @@ public class CheckOutForm extends javax.swing.JDialog {
         jlMontoCambio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jpCabecera.setBackground(java.awt.Color.white);
 

@@ -35,6 +35,11 @@ public class UIConstants {
     public static final String SHIFT_ENDED =  "Turno Cerrado.";
     public static final String NOT_ENOUGH_ROOMS =   "No se encontraron suficientes cuartos disponibles, favor de verificar.";
     public static final String NO_AVAIL_ROOMS =   "No se encontraron cuartos disponibles.";
+    public static final String RESERVATION_OK = "Reservación exitosa.";
+    public static final String NEW_SERVICE_QTY_NULL = "Debe capturar una cantidad válida. Por favor verifique.";
+    public static final String NEW_SERVICE_SUCCESS = "Servicio agregado correctamente.";
+    public static final String CANCEL_SERVICE_SUCCESS = "Servico Cancelado.";
+    public static final String PAY_SERVICE_SUCCESS = "Servico Pagado.";
     
     //Errores
     public static final String ERROR_EMPY_AMOUNT = "Error: El monto inicial no puede estar vacio, favor de capturar.";
@@ -42,6 +47,9 @@ public class UIConstants {
     public static final String ERROR_AUT_CODE = "Error: Clave de autorizacion incorrecta.";
     public static final String ERROR_LOGIN = "Error: Clave de usuario o contraseña incorrecta.";
     public static final String ERROR_SAVE = "Error: No se pudo guardar el registro.";
+    public static final String NEW_SERVICE_ERROR = "Ocurrió un error al agregar el servicio. Intente nuevamente.";
+    public static final String CANCEL_SERVICE_ERROR = "No se pudo cancelar el servicio. Intente nuevamente.";
+    public static final String PAY_SERVICE_ERROR = "No se pudo pagar el servicio. Intente nuevamente.";
     
     //CashOut
     public static final String COU_AMOUNT_WARNING = "Advertencia: El monto inicial no puede estar vacio, favor de capturar.";

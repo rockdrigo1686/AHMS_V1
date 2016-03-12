@@ -5,7 +5,9 @@
  */
 package com.ahms.ui.utils;
 
+import java.awt.Component;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,5 +23,9 @@ public class GeneralFunctions {
             e.printStackTrace();
         }
         return days;
+    }
+    
+    public static void sendMessage(Component parent, String message) {
+        JOptionPane.showMessageDialog(parent, message);
     }
 }

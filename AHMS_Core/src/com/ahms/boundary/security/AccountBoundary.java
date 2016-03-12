@@ -33,6 +33,10 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
     public List<Account> findByCusId(Account obj) {
         return accountEM.findByCusId(obj);
     }
+    
+    public Account findLastAccountInserted() {
+        return accountEM.findLastAccountInserted();
+    }
 
     @Override
     public int insert(Account obj) {

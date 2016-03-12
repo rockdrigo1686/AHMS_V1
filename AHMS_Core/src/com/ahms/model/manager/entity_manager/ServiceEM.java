@@ -5,12 +5,39 @@
  */
 package com.ahms.model.manager.entity_manager;
 
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.ServiceTypes;
+import com.ahms.model.entity.Services;
 import com.ahms.model.manager.AHMSEntityManager;
+import java.util.List;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author rsoto
  */
 public class ServiceEM extends AHMSEntityManager{
+    public List<Services> findAllByServiceType(ServiceTypes type) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Services> query = em.createNamedQuery("Services.findAllByServiceType", Services.class);
+            query.setParameter("svtId", type);
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+        
+    }
     
 }
