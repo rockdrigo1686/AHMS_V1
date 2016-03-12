@@ -284,4 +284,8 @@ public class Customers implements Serializable {
         return "com.ahms.boundary.Customers[ cusId=" + cusId + " ]";
     }
     
+    public String getFullName(){
+        return this.cusName +" " + this.cusLst1+ " " + this.getCusLst2();
+    }
+    
 }
