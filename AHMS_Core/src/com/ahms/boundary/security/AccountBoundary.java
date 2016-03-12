@@ -2,7 +2,9 @@ package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Account;
+import com.ahms.model.entity.Customers;
 import com.ahms.model.manager.entity_manager.AccountEM;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AccountBoundary  implements AHMSBoundary<Account>{
@@ -45,6 +47,11 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
     @Override
     public int delete(Account obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Integer checkAccount(Customers cusObj) {
+        List<Account> list = accountEM.checkAccount(cusObj);
+        return list.size();
     }
 
     

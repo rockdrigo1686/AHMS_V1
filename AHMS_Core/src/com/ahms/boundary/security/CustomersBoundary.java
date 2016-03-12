@@ -8,6 +8,7 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.manager.entity_manager.CustomersEM;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,17 +39,21 @@ public class CustomersBoundary implements AHMSBoundary<Customers> {
 
     @Override
     public int insert(Customers obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customersEM.insert(obj);
     }
 
     @Override
     public int update(Customers obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customersEM.update(obj);
     }
 
     @Override
     public int delete(Customers obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customersEM.delete(obj);
+    }
+
+    public List<Customers> findByNameOrRfc(Customers customerFilter) {
+        return customersEM.findByNameOrRfc(customerFilter);
     }
     
 }
