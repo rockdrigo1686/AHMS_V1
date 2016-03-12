@@ -422,10 +422,8 @@ public class MainFrm extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jpRegistroRapido = new javax.swing.JPanel();
-        jlRegistroNombre = new javax.swing.JLabel();
-        jlRegistroPaterno = new javax.swing.JLabel();
-        jlRegistroMaterno = new javax.swing.JLabel();
-        jlRegistroRfc = new javax.swing.JLabel();
+        lblCustName = new javax.swing.JLabel();
+        lblRfc = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
         jpFecEntContainer = new javax.swing.JPanel();
@@ -663,17 +661,11 @@ public class MainFrm extends javax.swing.JFrame {
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jlRegistroNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroNombre.setText("Jorge Alfonso");
+        lblCustName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblCustName.setText("Cliente");
 
-        jlRegistroPaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroPaterno.setText("Castañeda");
-
-        jlRegistroMaterno.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroMaterno.setText("Gutierrez");
-
-        jlRegistroRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlRegistroRfc.setText("CAGJ860711BZ6");
+        lblRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblRfc.setText("RFC");
 
         jLabel8.setText("Entrada:");
 
@@ -786,13 +778,8 @@ public class MainFrm extends javax.swing.JFrame {
                     .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                         .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel11)
-                            .addComponent(jlRegistroRfc)
-                            .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
-                                .addComponent(jlRegistroNombre)
-                                .addGap(18, 18, 18)
-                                .addComponent(jlRegistroPaterno)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlRegistroMaterno))
+                            .addComponent(lblRfc)
+                            .addComponent(lblCustName)
                             .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(18, 18, 18)
@@ -818,7 +805,7 @@ public class MainFrm extends javax.swing.JFrame {
                                     .addComponent(jButton1)
                                     .addGap(18, 18, 18)
                                     .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 16, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
                         .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -833,12 +820,9 @@ public class MainFrm extends javax.swing.JFrame {
             jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlRegistroNombre)
-                    .addComponent(jlRegistroPaterno)
-                    .addComponent(jlRegistroMaterno))
+                .addComponent(lblCustName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlRegistroRfc)
+                .addComponent(lblRfc)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1162,6 +1146,8 @@ public class MainFrm extends javax.swing.JFrame {
         CustomerReg customerReg = new CustomerReg(this, true, this, this.getMainCustomer());
         customerReg.setVisible(true);
         mainCustomer = customerReg.getCustomer();
+        lblCustName.setText(mainCustomer.getFullName());
+        lblRfc.setText(mainCustomer.getCusRfc());
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
     private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
@@ -1302,7 +1288,8 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentAccount.setActTotal(quickRentTotal);
         quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
         quickRentAccount.setAccountTransactionsCollection(null);
-        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));        
+//        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));        
+        quickRentAccount.setCusId(mainCustomer);        
         accountBoundary.insert(quickRentAccount);
         
         //Insertando account transaction
@@ -1429,13 +1416,9 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jlQRSubTotal;
     private javax.swing.JLabel jlQRTotal;
     private javax.swing.JLabel jlQuickResRoomNumber;
-    private javax.swing.JLabel jlRegistroMaterno;
     private javax.swing.JLabel jlRegistroMaterno1;
-    private javax.swing.JLabel jlRegistroNombre;
     private javax.swing.JLabel jlRegistroNombre1;
-    private javax.swing.JLabel jlRegistroPaterno;
     private javax.swing.JLabel jlRegistroPaterno1;
-    private javax.swing.JLabel jlRegistroRfc;
     private javax.swing.JLabel jlRegistroRfc1;
     private javax.swing.JLabel jlTurno;
     private javax.swing.JPanel jpFecEntContainer;
@@ -1445,6 +1428,8 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JPanel jpRegistroRapido;
     private javax.swing.JSpinner jspNumeroPersonas;
     private javax.swing.JTable jtDashboard;
+    private javax.swing.JLabel lblCustName;
+    private javax.swing.JLabel lblRfc;
     // End of variables declaration//GEN-END:variables
 
 }

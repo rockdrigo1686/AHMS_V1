@@ -27,7 +27,7 @@ import javax.swing.table.DefaultTableModel;
  * @author rsoto
  */
 public class CustomerReg extends javax.swing.JDialog {
-    
+
     DefaultTableModel defaultTableModel;
     MainFrm mainLocal;
     java.awt.Frame parent;
@@ -35,9 +35,10 @@ public class CustomerReg extends javax.swing.JDialog {
     Customers localCustomer;
     CustomersBoundary customersBoundary;
     List<Customers> customersList;
-            
+
     /**
      * Creates new form CustomerReg
+     *
      * @param parent
      * @param modal
      * @param main
@@ -49,38 +50,38 @@ public class CustomerReg extends javax.swing.JDialog {
         this.parent = parent;
         localCustomer = customers;
         customersBoundary = new CustomersBoundary();
-        initComponents();        
+        initComponents();
         fillGrid(null);
     }
+
     public CustomerReg(java.awt.Dialog parent, boolean modal, Customers customers) {
         super(parent, modal);
         dialog = (java.awt.Dialog) parent;
         localCustomer = customers;
         customersBoundary = new CustomersBoundary();
-        initComponents();        
+        initComponents();
         fillGrid(null);
     }
-    
-    
+
     private void fillGrid(Customers customerFilter) {
-        
-        Vector<String> columnNames = new Vector();        
+
+        Vector<String> columnNames = new Vector();
         columnNames.add("Id");
         columnNames.add("Nombre");
         columnNames.add("Ap. Paterno");
-        columnNames.add("Ap. Materno");        
+        columnNames.add("Ap. Materno");
         columnNames.add("Rfc");
         columnNames.add("Estatus");
 
-        Vector<Vector> rows = new Vector<>();        
-        if(customerFilter != null) {
-            customerFilter.setCusName(customerFilter.getCusName()==null||"".equalsIgnoreCase(customerFilter.getCusName())?"%%":"%"+customerFilter.getCusName()+"%");
-            customerFilter.setCusLst1(customerFilter.getCusLst1()==null||"".equalsIgnoreCase(customerFilter.getCusLst1())?"%%":"%"+customerFilter.getCusLst1()+"%");
-            customerFilter.setCusLst2(customerFilter.getCusLst2()==null||"".equalsIgnoreCase(customerFilter.getCusLst2())?"%%":"%"+customerFilter.getCusLst2()+"%");
-            customerFilter.setCusRfc(customerFilter.getCusRfc()==null||"".equalsIgnoreCase(customerFilter.getCusRfc())?"%%":"%"+customerFilter.getCusRfc()+"%");
+        Vector<Vector> rows = new Vector<>();
+        if (customerFilter != null) {
+            customerFilter.setCusName(customerFilter.getCusName() == null || "".equalsIgnoreCase(customerFilter.getCusName()) ? "%%" : "%" + customerFilter.getCusName() + "%");
+            customerFilter.setCusLst1(customerFilter.getCusLst1() == null || "".equalsIgnoreCase(customerFilter.getCusLst1()) ? "%%" : "%" + customerFilter.getCusLst1() + "%");
+            customerFilter.setCusLst2(customerFilter.getCusLst2() == null || "".equalsIgnoreCase(customerFilter.getCusLst2()) ? "%%" : "%" + customerFilter.getCusLst2() + "%");
+            customerFilter.setCusRfc(customerFilter.getCusRfc() == null || "".equalsIgnoreCase(customerFilter.getCusRfc()) ? "%%" : "%" + customerFilter.getCusRfc() + "%");
             customersList = customersBoundary.findByNameOrRfc(customerFilter);
-            if(customersList!=null&&customersList.size()>0) {            
-                for(Customers cusObj:customersList) {
+            if (customersList != null && customersList.size() > 0) {
+                for (Customers cusObj : customersList) {
                     AccountBoundary accountBoundary = new AccountBoundary();
                     Vector vctRow = new Vector();
                     vctRow.add(cusObj);
@@ -92,9 +93,9 @@ public class CustomerReg extends javax.swing.JDialog {
                     rows.add(vctRow);
                 }
             } else {
-                int resp = JOptionPane.showConfirmDialog(this,UIConstants.CONFIRM_REGISTER_CUSTOMER, "Registro no encontrado", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);            
-                if(resp==JOptionPane.YES_OPTION) { 
-                    cleanNew();     
+                int resp = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_REGISTER_CUSTOMER, "Registro no encontrado", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (resp == JOptionPane.YES_OPTION) {
+                    cleanNew();
                     jTabbedPane1.setSelectedIndex(1);
                 } else {
 //                    cleanSearch();
@@ -117,11 +118,11 @@ public class CustomerReg extends javax.swing.JDialog {
         };
         jTable1.setModel(defaultTableModel);
         jTable1.getColumnModel().getColumn(0).setMaxWidth(1);
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);        
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);        
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);        
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);        
-        jTable1.getColumnModel().getColumn(1).setMaxWidth(80);        
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(200);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(80);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(1);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
@@ -129,28 +130,28 @@ public class CustomerReg extends javax.swing.JDialog {
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
         jTable1.getColumnModel().getColumn(1).setPreferredWidth(80);
 
-        
         jTable1.addMouseListener(new MouseAdapter() {
-            
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 int clicks = e.getClickCount();
                 int row = jTable1.getSelectedRow();
                 Customers customer = (Customers) jTable1.getValueAt(row, 0);
                 MultiValue estatus = (MultiValue) jTable1.getValueAt(row, 5);
-                
-                    if(clicks>1) { 
-                        if(estatus.getMvaKey().equals(MMKeys.General.STA_ACTIVO_KEY)) {                        
+
+                if (clicks > 1) {
+                    if (estatus.getMvaKey().equals(MMKeys.General.STA_ACTIVO_KEY)) {
                         localCustomer = customer;
-    //                        dispose();                        
+                        //                        dispose();                        
                     } else {
                         JOptionPane.showMessageDialog(null, UIConstants.ERROR_SELECTION_STATUS, "Error", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    AccountBoundary accountBoundary = new AccountBoundary();                    
-                    jButton3.setVisible(accountBoundary.checkAccount(localCustomer) > 0);                    
-                }
-                
+                } 
+//                else {
+//                    AccountBoundary accountBoundary = new AccountBoundary();
+//                    selectCustomer.setVisible(accountBoundary.checkAccount(localCustomer) > 0);
+//                }
+
             }
 
         });
@@ -180,7 +181,7 @@ public class CustomerReg extends javax.swing.JDialog {
         jPanel4 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        selectCustomer = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -302,11 +303,11 @@ public class CustomerReg extends javax.swing.JDialog {
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772648_notification_done.png"))); // NOI18N
-        jButton3.setText("Seleccionar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        selectCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772648_notification_done.png"))); // NOI18N
+        selectCustomer.setText("Seleccionar");
+        selectCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                selectCustomerActionPerformed(evt);
             }
         });
 
@@ -329,7 +330,7 @@ public class CustomerReg extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(selectCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -349,7 +350,7 @@ public class CustomerReg extends javax.swing.JDialog {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
                             .addComponent(jButton6)))
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(selectCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -628,15 +629,13 @@ public class CustomerReg extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextField13ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        if(
-            jTextField13.getText()!=null&&!"".equalsIgnoreCase(jTextField13.getText())&&
-            jTextField14.getText()!=null&&!"".equalsIgnoreCase(jTextField14.getText())&&
-            jTextField15.getText()!=null&&!"".equalsIgnoreCase(jTextField15.getText())&&
-            jTextField18.getText()!=null&&!"".equalsIgnoreCase(jTextField18.getText())&&
-            jTextField22.getText()!=null&&!"".equalsIgnoreCase(jTextField22.getText())&&
-            jTextField21.getText()!=null&&!"".equalsIgnoreCase(jTextField21.getText())            
-          ) {
-            localCustomer = new Customers();        
+        if (jTextField13.getText() != null && !"".equalsIgnoreCase(jTextField13.getText())
+                && jTextField14.getText() != null && !"".equalsIgnoreCase(jTextField14.getText())
+                && jTextField15.getText() != null && !"".equalsIgnoreCase(jTextField15.getText())
+                && jTextField18.getText() != null && !"".equalsIgnoreCase(jTextField18.getText())
+                && jTextField22.getText() != null && !"".equalsIgnoreCase(jTextField22.getText())
+                && jTextField21.getText() != null && !"".equalsIgnoreCase(jTextField21.getText())) {
+            localCustomer = new Customers();
             localCustomer.setCusName(jTextField13.getText());
             localCustomer.setCusLst1(jTextField14.getText());
             localCustomer.setCusLst2(jTextField15.getText());
@@ -650,14 +649,14 @@ public class CustomerReg extends javax.swing.JDialog {
             localCustomer.setCusEmail(jTextField23.getText());
             localCustomer.setCusUsrMod(mainLocal.getMainUser());
             localCustomer.setCusDteMod(new Date(System.currentTimeMillis()));
-            MultiValueBoundary multiValueBoundary = new MultiValueBoundary();            
+            MultiValueBoundary multiValueBoundary = new MultiValueBoundary();
             MultiValue activo = new MultiValue(MMKeys.General.STA_ACTIVO_KEY);
             localCustomer.setCusStatus(multiValueBoundary.findByKey(activo));
             int resp = customersBoundary.insert(localCustomer);
-            System.out.println("localCustomer.id()="+localCustomer.getCusId());
-                    
-            if(resp>0) {
-                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE,"Confirmación", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("localCustomer.id()=" + localCustomer.getCusId());
+
+            if (resp > 0) {
+                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE, "Confirmación", JOptionPane.INFORMATION_MESSAGE);
                 localCustomer = customersBoundary.find(localCustomer);
                 dispose();
             } else {
@@ -668,16 +667,17 @@ public class CustomerReg extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       this.localCustomer = (Customers) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+    private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
+        this.localCustomer = (Customers) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
         dispose();
 //        CheckOutForm checkOutForm = new CheckOutForm(parent, true, (Customers) jTable1.getValueAt(jTable1.getSelectedRow(), 0));
 //        checkOutForm.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_selectCustomerActionPerformed
 
-    public Customers getCustomer(){
+    public Customers getCustomer() {
         return this.localCustomer;
     }
+
     /**
      * @param args the command line arguments
      */
@@ -714,10 +714,10 @@ public class CustomerReg extends javax.swing.JDialog {
                 Users mainUser = secBound.login(user, password);
                 MainFrm form;
                 if (mainUser != null) {
-                    form = new MainFrm();                    
+                    form = new MainFrm();
                     form.setMainUser(mainUser);
                     form.setMainCustomer(new Customers());
-                    CustomerReg dialog = new CustomerReg(null, true, form,form.getMainCustomer());
+                    CustomerReg dialog = new CustomerReg(null, true, form, form.getMainCustomer());
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                         @Override
                         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -733,7 +733,6 @@ public class CustomerReg extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
@@ -778,6 +777,7 @@ public class CustomerReg extends javax.swing.JDialog {
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
+    private javax.swing.JButton selectCustomer;
     // End of variables declaration//GEN-END:variables
 
     private void cleanNew() {
@@ -788,12 +788,12 @@ public class CustomerReg extends javax.swing.JDialog {
         jTextField17.setText("");
         jTextField18.setText("");
         jTextField19.setText("");
-        jTextField20.setText("");        
+        jTextField20.setText("");
         jTextField21.setText("");
         jTextField22.setText("");
         jTextField23.setText("");
     }
-    
+
     private void cleanSearch() {
         jTextField1.setText("");
         jTextField2.setText("");

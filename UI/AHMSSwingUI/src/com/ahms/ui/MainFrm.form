@@ -527,14 +527,8 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel11" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jlRegistroRfc" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="jlRegistroNombre" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="jlRegistroPaterno" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="jlRegistroMaterno" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="lblRfc" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblCustName" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -567,7 +561,7 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
@@ -589,13 +583,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jlRegistroNombre" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlRegistroPaterno" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jlRegistroMaterno" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="lblCustName" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jlRegistroRfc" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblRfc" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jSeparator4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -669,36 +659,20 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jlRegistroNombre">
+                <Component class="javax.swing.JLabel" name="lblCustName">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Jorge Alfonso"/>
+                    <Property name="text" type="java.lang.String" value="Cliente"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jlRegistroPaterno">
+                <Component class="javax.swing.JLabel" name="lblRfc">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Ubuntu" size="15" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Casta&#xf1;eda"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jlRegistroMaterno">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Ubuntu" size="15" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Gutierrez"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jlRegistroRfc">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Ubuntu" size="15" style="1"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="CAGJ860711BZ6"/>
+                    <Property name="text" type="java.lang.String" value="RFC"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator4">
