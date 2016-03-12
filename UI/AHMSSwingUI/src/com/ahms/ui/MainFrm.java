@@ -156,8 +156,8 @@ public class MainFrm extends javax.swing.JFrame {
         jlQRRoomNumber.setVisible(false);
         jlQuickResRoomNumber.setVisible(false);
         jbCheckOut.setEnabled(false);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        //setLocationRelativeTo(null);
+        //setResizable(false);
         setTitle("AHMS: Advanced Hotel Management System ");
         setExtendedState(Frame.MAXIMIZED_BOTH);
         configDatePickers();
