@@ -114,10 +114,19 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="usrTxt">
+          <Properties>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="pwdTxt"/>
+            </Property>
+          </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="pwdTxt">
           <Properties>
+            <Property name="focusCycleRoot" type="boolean" value="true"/>
             <Property name="name" type="java.lang.String" value="" noResource="true"/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="loginBtn"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="loginBtn">
@@ -126,6 +135,9 @@
               <Image iconType="3" name="/com/ahms/ui/resources/img/1445772731_security_key.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Login"/>
+            <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="usrTxt"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginBtnActionPerformed"/>

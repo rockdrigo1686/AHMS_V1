@@ -58,10 +58,15 @@ public class LoginFrm extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
+        usrTxt.setNextFocusableComponent(pwdTxt);
+
+        pwdTxt.setFocusCycleRoot(true);
         pwdTxt.setName(""); // NOI18N
+        pwdTxt.setNextFocusableComponent(loginBtn);
 
         loginBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/1445772731_security_key.png"))); // NOI18N
         loginBtn.setText("Login");
+        loginBtn.setNextFocusableComponent(usrTxt);
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginBtnActionPerformed(evt);
