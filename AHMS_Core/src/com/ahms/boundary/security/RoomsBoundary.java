@@ -33,7 +33,7 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
     public List<Rooms> findByRmsBeds(Rooms room) {
         return roomsEm.findByRmsBeds(room);
     }
-
+    
     @Override
     public List<Rooms> search(Rooms obj) {
         return roomsEm.search(obj);
