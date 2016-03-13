@@ -3,8 +3,8 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.AccountEM;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccountBoundary  implements AHMSBoundary<Account>{
@@ -34,10 +34,6 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
         return accountEM.findByCusId(obj);
     }
     
-    public Account findLastAccountInserted() {
-        return accountEM.findLastAccountInserted();
-    }
-
     @Override
     public int insert(Account obj) {
        return accountEM.insert(obj);
@@ -56,6 +52,10 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
     public Integer checkAccount(Customers cusObj) {
         List<Account> list = accountEM.checkAccount(cusObj);
         return list.size();
+    }
+    
+    public Account getActiveAccountByRoom(Rooms room){
+        return accountEM.getActiveAccountByRoom(room);
     }
 
     

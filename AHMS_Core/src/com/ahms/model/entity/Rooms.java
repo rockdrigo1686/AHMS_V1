@@ -81,9 +81,9 @@ public class Rooms implements Serializable {
     @JoinColumn(name = "RMS_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Users rmsUsrMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.LAZY)
     private Collection<AccountTransactions> accountTransactionsCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsId", fetch = FetchType.LAZY)
     private Collection<Reservation> reservationCollection;
 
     public Rooms() {
@@ -224,18 +224,5 @@ public class Rooms implements Serializable {
         return "com.ahms.boundary.Rooms[ rmsId=" + rmsId + " ]";
     }
     
-    public Account getRespectiveAccount() {
-        try {
-            if(getAccountTransactionsCollection() != null && getAccountTransactionsCollection().size() > 0){
-                for(AccountTransactions i : getAccountTransactionsCollection()){
-                    if(i.getSrvId() == null){
-                        return i.getActId();                        
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+  
 }

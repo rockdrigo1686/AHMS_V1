@@ -4,6 +4,7 @@ package com.ahms.model.manager.entity_manager;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,12 +79,20 @@ public class AccountEM extends AHMSEntityManager{
         
     }
     
-    public Account findLastAccountInserted() {
-        try {
+    
+
+    public Account getActiveAccountByRoom(Rooms room) {
+           try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            Query query = em.createNativeQuery("select a.* from account a where a.act_id = (select max(b.act_id) from account b)", Account.class);
+            StringBuilder qr = new StringBuilder();
+            qr.append("select distinct ac.*, r.rms_id from rooms r ");
+            qr.append(" join account_transactions  ae on ae.rms_id = r.rms_id");
+            qr.append(" join account ac on ac.act_id = ae.act_id ");
+            qr.append(" where r.rms_id = ? and ac.act_status = 'ACT_A'");
+            Query query = em.createNativeQuery(qr.toString(), Account.class);
+            query.setParameter(1, room.getRmsId());
             return (Account) query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
