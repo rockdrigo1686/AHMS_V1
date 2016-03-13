@@ -513,7 +513,7 @@ public class PaymentModule extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                PaymentModule dialog = new PaymentModule(new CheckOutForm(null, true, null), true, new BigDecimal(4500), null);
+                PaymentModule dialog = new PaymentModule(new CheckOutForm(null, true, null,null), true, new BigDecimal(4500), null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

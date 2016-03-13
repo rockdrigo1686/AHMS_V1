@@ -65,7 +65,7 @@ public class RoomService extends javax.swing.JDialog {
         serviceBoundary = new ServiceBoundary();
         loadServiceTypes(serviceTypesBoundary.searchAll(null));
         idRMS.setText("Cuarto # " + room.getRmsNumber() + " - " + room.getRmsDesc());
-        loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+        loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         ServiceTypes typeselected = (ServiceTypes) jcbServiceTypes.getSelectedItem();
         loadServices(serviceBoundary.findAllByServiceType(typeselected));
     }
@@ -354,8 +354,8 @@ public class RoomService extends javax.swing.JDialog {
             newService.setAtrUsrMod(currentshift.getUsrId());
             newService.setAtrNotes(serviceSel.getSvtId().getSvtDesc() + " - " + serviceSel.getSrvDesc());
             accountTransactionsBoundary.insert(newService);
-            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_SUCCESS);
-            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+//            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_SUCCESS);
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
             e.printStackTrace();
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_ERROR);
@@ -367,7 +367,7 @@ public class RoomService extends javax.swing.JDialog {
             serviceToCancel.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
             accountTransactionsBoundary.update(serviceToCancel);
             GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_SUCCESS);
-            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
             e.printStackTrace();
             GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_ERROR);
@@ -383,7 +383,7 @@ public class RoomService extends javax.swing.JDialog {
             serviceToPay.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
             accountTransactionsBoundary.update(serviceToPay);
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_SUCCESS);
-            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
             e.printStackTrace();
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_ERROR);

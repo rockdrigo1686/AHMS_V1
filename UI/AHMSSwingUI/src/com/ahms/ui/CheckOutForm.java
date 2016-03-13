@@ -29,8 +29,8 @@ public class CheckOutForm extends javax.swing.JDialog {
     public BigDecimal totalPagado = BigDecimal.ZERO;
     public BigDecimal totalOriginal = BigDecimal.ZERO;
     public BigDecimal totalCambio = BigDecimal.ZERO;
-    private Account acct = null;
     private Customers customerGlobal;
+    private Rooms room;
     private Account account;
     private AccountBoundary accountBoundary;
     private RoomsBoundary roomsBoundary;
@@ -38,7 +38,7 @@ public class CheckOutForm extends javax.swing.JDialog {
     private MultiValueBoundary multiValueBoundary;
     private MainFrm parentFrame;
 
-    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account) {
+    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account, Rooms room) {
         super(parent, modal);
         initComponents();
         parentFrame = (MainFrm) parent;
@@ -47,6 +47,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         jlCambio.setVisible(false);
+        this.room = room;
         jlMontoCambio.setVisible(false);
         this.account = account;
         customerGlobal = account.getCusId();
@@ -84,10 +85,9 @@ public class CheckOutForm extends javax.swing.JDialog {
             vctColumns.add("Costo");
 
             total = BigDecimal.ZERO;
-
+            
             Vector<Vector> rows = new Vector<>();
-
-            for (AccountTransactions a : account.getAccountTransactionsCollection()) {
+            for (AccountTransactions a : accountTransactionsBoundary.findAllByRmsId(room, account)) {
                 if (!a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)) {
                     continue;
                 } //para discriminar los servicios que ya estan pagados o cancelados
@@ -376,11 +376,8 @@ public class CheckOutForm extends javax.swing.JDialog {
 
     private void jbPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPayActionPerformed
         //abrir PaymentModule
-        for (Account acc : customerGlobal.getAccountCollection()) {
-            acct = acc;
-            break;
-        }
-        PaymentModule paymentModule = new PaymentModule(this, true, totalPending, acct);
+       
+        PaymentModule paymentModule = new PaymentModule(this, true, totalPending, account);
         paymentModule.setLocationRelativeTo(this);
         paymentModule.setVisible(true);
     }//GEN-LAST:event_jbPayActionPerformed
@@ -404,12 +401,12 @@ public class CheckOutForm extends javax.swing.JDialog {
             }
         }
         //Actualizar montos de la cuenta y cerrarla
-        acct.setActIva(new BigDecimal(0.16));
-        acct.setActIvaAmt(totalIVA);
-        acct.setActSubtotal(total);
-        acct.setActTotal(totalAccount);
-        acct.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
-        accountBoundary.update(acct);
+        account.setActIva(new BigDecimal(0.16));
+        account.setActIvaAmt(totalIVA);
+        account.setActSubtotal(total);
+        account.setActTotal(totalAccount);
+        account.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
+        accountBoundary.update(account);
         //Cerrar dialog y actualizar el dashboard
         parentFrame.configGrid(roomsBoundary.searchAll(new Rooms()));
         this.dispose();
@@ -445,7 +442,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                CheckOutForm dialog = new CheckOutForm(new javax.swing.JFrame(), true, null);
+                CheckOutForm dialog = new CheckOutForm(new javax.swing.JFrame(), true, null,null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

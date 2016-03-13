@@ -1165,7 +1165,7 @@ public class MainFrm extends javax.swing.JFrame {
         Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
         Account account = accountBoundary.getActiveAccountByRoom(new Rooms(roomSelected));
         
-        JDialog dialogCheckout = new CheckOutForm(this, true, account);
+        JDialog dialogCheckout = new CheckOutForm(this, true, account,new Rooms(roomSelected));
         dialogCheckout.setLocationRelativeTo(this);
         dialogCheckout.setVisible(true);
     }//GEN-LAST:event_jbCheckOutActionPerformed
