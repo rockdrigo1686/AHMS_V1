@@ -1163,13 +1163,9 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jbCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckOutActionPerformed
         Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
-        AccountTransactions acctTran = new AccountTransactions();
-        acctTran.setRmsId(new Rooms(roomSelected));
+        Account account = accountBoundary.getActiveAccountByRoom(new Rooms(roomSelected));
         
-        AccountTransactions accountTran = accountTransactionsBoundary.findByRmsId(acctTran);
-        Account account = accountBoundary.find(new Account(accountTran.getActId().getActId()));
-        
-        JDialog dialogCheckout = new CheckOutForm(this, true, account.getCusId());
+        JDialog dialogCheckout = new CheckOutForm(this, true, account);
         dialogCheckout.setLocationRelativeTo(this);
         dialogCheckout.setVisible(true);
     }//GEN-LAST:event_jbCheckOutActionPerformed
@@ -1303,7 +1299,7 @@ public class MainFrm extends javax.swing.JFrame {
         rentTran.setCouId(currentShift);
         rentTran.setRmsId(quickRentRoomAssigned);
         rentTran.setSrvId(null);
-        rentTran.setActId(accountBoundary.findLastAccountInserted());
+        rentTran.setActId(quickRentAccount);
         accountTransactionsBoundary.insert(rentTran);
         
         //LLamando a paymentModule

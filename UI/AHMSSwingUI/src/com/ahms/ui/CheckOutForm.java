@@ -2,7 +2,6 @@ package com.ahms.ui;
 
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
-import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
@@ -10,7 +9,6 @@ import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
-import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -26,20 +24,21 @@ public class CheckOutForm extends javax.swing.JDialog {
 
     public BigDecimal totalAccount = BigDecimal.ZERO;
     public BigDecimal totalPending = BigDecimal.ZERO;
-    public BigDecimal total        = BigDecimal.ZERO;
-    public BigDecimal totalIVA     = BigDecimal.ZERO;
-    public BigDecimal totalPagado  = BigDecimal.ZERO; 
-    public BigDecimal totalOriginal= BigDecimal.ZERO; 
-    public BigDecimal totalCambio  = BigDecimal.ZERO; 
+    public BigDecimal total = BigDecimal.ZERO;
+    public BigDecimal totalIVA = BigDecimal.ZERO;
+    public BigDecimal totalPagado = BigDecimal.ZERO;
+    public BigDecimal totalOriginal = BigDecimal.ZERO;
+    public BigDecimal totalCambio = BigDecimal.ZERO;
     private Account acct = null;
-    private final Customers customerGlobal;
-    private final AccountBoundary accountBoundary;
-    private final RoomsBoundary roomsBoundary;
-    private final AccountTransactionsBoundary accountTransactionsBoundary;
+    private Customers customerGlobal;
+    private Account account;
+    private AccountBoundary accountBoundary;
+    private RoomsBoundary roomsBoundary;
+    private AccountTransactionsBoundary accountTransactionsBoundary;
     private MultiValueBoundary multiValueBoundary;
-    private final MainFrm parentFrame;
-    
-    public CheckOutForm(java.awt.Frame parent, boolean modal, Customers customer) {
+    private MainFrm parentFrame;
+
+    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
         parentFrame = (MainFrm) parent;
@@ -49,83 +48,85 @@ public class CheckOutForm extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         jlCambio.setVisible(false);
         jlMontoCambio.setVisible(false);
-        
-        customerGlobal = customer;
+        this.account = account;
+        customerGlobal = account.getCusId();
         jlNombre.setText(customerGlobal.getCusName() + " " + customerGlobal.getCusLst1() + " " + customerGlobal.getCusLst2() + " - " + customerGlobal.getCusRfc());
-        
+
         generateGridSimple(customerGlobal);
     }
-    
-    public void regenerateTotals(){
-        jlSubtotal.setText("$" +total.toString());
-        jlIVA.setText("$" +totalIVA.toString());
-        jlTotal.setText("$" +totalOriginal.toString());
-        jlPagado.setText("$" +totalPagado.toString());
-        jlPendiente.setText("$" +totalPending.toString());
+
+    public void regenerateTotals() {
+        jlSubtotal.setText("$" + total.toString());
+        jlIVA.setText("$" + totalIVA.toString());
+        jlTotal.setText("$" + totalOriginal.toString());
+        jlPagado.setText("$" + totalPagado.toString());
+        jlPendiente.setText("$" + totalPending.toString());
     }
-    
-    public void activeAccountClose(){
+
+    public void activeAccountClose() {
         jbPay.setEnabled(false);
         jbCloseAccount.setEnabled(true);
     }
-    
-    public void setCambio(){
+
+    public void setCambio() {
         jlCambio.setVisible(true);
         jlMontoCambio.setVisible(true);
         jlMontoCambio.setText("$" + totalCambio.toString());
     }
-    
-    private void generateGridSimple(Customers customer){
+
+    private void generateGridSimple(Customers customer) {
         try {
-            
+
             Vector<String> vctColumns = new Vector<>();
             vctColumns.add("Cuarto");
             vctColumns.add("Cantidad");
             vctColumns.add("Descripción");
             vctColumns.add("Costo");
-            
+
             total = BigDecimal.ZERO;
-            
+
             Vector<Vector> rows = new Vector<>();
-            for(Account account : customer.getAccountCollection()){
-                for(AccountTransactions a  : account.getAccountTransactionsCollection()){
-                    if(!a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)){continue;} //para discriminar los servicios que ya estan pagados o cancelados
-                    Vector<Object> vctRow = new Vector<>();
-                    vctRow.add(a.getRmsId().getRmsNumber());
-                    vctRow.add(a.getAtrQuantity());
-                    vctRow.add(a.getSrvId().getSrvDesc());
-                    vctRow.add((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue()));
-                    rows.add(vctRow);
-                    
-                    total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue())));
-                }
+
+            for (AccountTransactions a : account.getAccountTransactionsCollection()) {
+                if (!a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)) {
+                    continue;
+                } //para discriminar los servicios que ya estan pagados o cancelados
+                Vector<Object> vctRow = new Vector<>();
+                vctRow.add(a.getRmsId().getRmsNumber());
+                vctRow.add(a.getAtrQuantity());
+                vctRow.add(a.getSrvId().getSrvDesc());
+                vctRow.add((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue()));
+                rows.add(vctRow);
+
+                total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue())));
             }
-            
-            
+
             totalIVA = total.multiply(new BigDecimal(0.16));
             totalAccount = totalPending = total.add(totalIVA);
-            
+
             total = total.setScale(2, RoundingMode.HALF_EVEN);
             totalIVA = totalIVA.setScale(2, RoundingMode.HALF_EVEN);
             totalAccount = totalAccount.setScale(2, RoundingMode.HALF_EVEN);
             totalPending = totalPending.setScale(2, RoundingMode.HALF_EVEN);
             totalPagado = totalPagado.setScale(2, RoundingMode.HALF_EVEN);
-            
+
             totalOriginal = totalAccount;
             //vinculando al UI
             regenerateTotals();
-            
+
             DefaultTableModel model = new DefaultTableModel(rows, vctColumns) {
                 private static final long serialVersionUID = 1L;
+
                 @Override
                 public Class getColumnClass(int column) {
                     return getValueAt(0, column).getClass();
                 }
+
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
-                }   
-                
+                }
+
             };
             jtCheckoutDetalle.setModel(model);
             jtCheckoutDetalle.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -133,12 +134,11 @@ public class CheckOutForm extends javax.swing.JDialog {
             jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(100);
             jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(600);
             jtCheckoutDetalle.getColumnModel().getColumn(3).setMaxWidth(100);
-                                    
+
         } catch (Exception e) {
+            throw e;
         }
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -376,7 +376,7 @@ public class CheckOutForm extends javax.swing.JDialog {
 
     private void jbPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPayActionPerformed
         //abrir PaymentModule
-        for(Account acc : customerGlobal.getAccountCollection()){
+        for (Account acc : customerGlobal.getAccountCollection()) {
             acct = acc;
             break;
         }
@@ -392,9 +392,9 @@ public class CheckOutForm extends javax.swing.JDialog {
     private void jbCloseAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCloseAccountActionPerformed
         //Poner Disponible el Cuarto
         Integer roomNumber = 0;
-        for(Account account : customerGlobal.getAccountCollection()){
-            for(AccountTransactions tran : account.getAccountTransactionsCollection()){
-                if(roomNumber == 0 || !roomNumber.equals(Integer.parseInt(tran.getRmsId().getRmsNumber()))){
+        for (Account account : customerGlobal.getAccountCollection()) {
+            for (AccountTransactions tran : account.getAccountTransactionsCollection()) {
+                if (roomNumber == 0 || !roomNumber.equals(Integer.parseInt(tran.getRmsId().getRmsNumber()))) {
                     roomNumber = Integer.parseInt(tran.getRmsId().getRmsNumber());
                     tran.getRmsId().setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
                     roomsBoundary.update(tran.getRmsId());

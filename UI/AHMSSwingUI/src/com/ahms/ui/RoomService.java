@@ -1,5 +1,6 @@
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.ServiceBoundary;
@@ -26,24 +27,26 @@ import javax.swing.table.DefaultTableModel;
  * @author jorge
  */
 public class RoomService extends javax.swing.JDialog {
+
     //Parent Entities
     private Rooms room = null;
     private Account account = null;
     private CashOut currentshift = null;
-    
+
     //Necessary Boundaries
     private MultiValueBoundary multiValueBoundary;
     private ServiceTypesBoundary serviceTypesBoundary;
+    public AccountBoundary accountBoundary;
     public AccountTransactionsBoundary accountTransactionsBoundary;
     private ServiceBoundary serviceBoundary;
-    
+
     //Other instances
     List<AccountTransactions> currentGridsource = null;
 
-    public Rooms getGlobalroom(){
+    public Rooms getGlobalroom() {
         return room;
     }
-    
+
     public RoomService(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -54,18 +57,19 @@ public class RoomService extends javax.swing.JDialog {
         this.room = room;
         this.currentshift = currentShift;
         initComponents();
-        account = room.getRespectiveAccount();
+        accountBoundary = new AccountBoundary();
+        account = accountBoundary.getActiveAccountByRoom(room);
         serviceTypesBoundary = new ServiceTypesBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         serviceBoundary = new ServiceBoundary();
         loadServiceTypes(serviceTypesBoundary.searchAll(null));
-        idRMS.setText("Cuarto # " + room.getRmsNumber() + " - " + room.getRmsDesc());        
-        loadGrid(accountTransactionsBoundary.findAllByRmsId(room));       
+        idRMS.setText("Cuarto # " + room.getRmsNumber() + " - " + room.getRmsDesc());
+        loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
         ServiceTypes typeselected = (ServiceTypes) jcbServiceTypes.getSelectedItem();
         loadServices(serviceBoundary.findAllByServiceType(typeselected));
     }
-    
+
     public RoomService(java.awt.Frame parent, boolean modal, Integer rms_id) {
         super(parent, modal);
         this.room = new Rooms();
@@ -73,8 +77,8 @@ public class RoomService extends javax.swing.JDialog {
         initComponents();
         idRMS.setText(rms_id.toString());
     }
-    
-    public void loadGrid(List<AccountTransactions> lstAccountTransactions){
+
+    public void loadGrid(List<AccountTransactions> lstAccountTransactions) {
         currentGridsource = lstAccountTransactions;
         //Columnas
         Vector<String> columnNames = new Vector();
@@ -98,6 +102,7 @@ public class RoomService extends javax.swing.JDialog {
         }
         DefaultTableModel model = new DefaultTableModel(rows, columnNames) {
             private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -111,15 +116,15 @@ public class RoomService extends javax.swing.JDialog {
         jtAccountTransactions.getColumnModel().getColumn(2).setMaxWidth(200);
         jtAccountTransactions.getColumnModel().getColumn(3).setMaxWidth(400);
         jtAccountTransactions.getColumnModel().getColumn(4).setMaxWidth(100);
-        jtAccountTransactions.getColumnModel().getColumn(5).setMaxWidth(100);        
+        jtAccountTransactions.getColumnModel().getColumn(5).setMaxWidth(100);
     }
-    
-    private void loadServiceTypes(List<ServiceTypes> serviceTypes){
+
+    private void loadServiceTypes(List<ServiceTypes> serviceTypes) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(serviceTypes.toArray(new ServiceTypes[serviceTypes.size()]));
         jcbServiceTypes.setModel(model);
     }
-    
-    private void loadServices(List<Services> lstServices){
+
+    private void loadServices(List<Services> lstServices) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstServices.toArray(new Services[lstServices.size()]));
         jcbServices.setModel(model);
     }
@@ -147,7 +152,10 @@ public class RoomService extends javax.swing.JDialog {
         idRMS = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtAccountTransactions = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnSalir = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
 
         jmiPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money.png"))); // NOI18N
         jmiPagar.setText("Pagar");
@@ -211,7 +219,7 @@ public class RoomService extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbServiceTypes, 0, 181, Short.MAX_VALUE)
+                        .addComponent(jcbServiceTypes, 0, 208, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -221,10 +229,11 @@ public class RoomService extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbAddService, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jbAddService, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(idRMS)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,13 +268,39 @@ public class RoomService extends javax.swing.JDialog {
         jtAccountTransactions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jtAccountTransactions);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771618_17.png"))); // NOI18N
-        jButton3.setText("Salir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jToolBar1.setFloatable(false);
+        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cross.png"))); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.setFocusable(false);
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSalirActionPerformed(evt);
             }
         });
+        jToolBar1.add(btnSalir);
+
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/disk.png"))); // NOI18N
+        btnGuardar.setText("Guardar");
+        btnGuardar.setFocusable(false);
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnGuardar);
+
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/delete.png"))); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setFocusable(false);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnEliminar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -276,19 +311,18 @@ public class RoomService extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -301,16 +335,12 @@ public class RoomService extends javax.swing.JDialog {
         loadServices(serviceBoundary.findAllByServiceType(typeselected));
     }//GEN-LAST:event_jcbServiceTypesActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jbAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddServiceActionPerformed
-        //verificar cantidad valida
-        if(jtxtQuantity.getText().trim().length() <= 0){
+//verificar cantidad valida
+        if (jtxtQuantity.getText().trim().length() <= 0) {
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_QTY_NULL);
             return;
-        }        
+        }
         try {
             AccountTransactions newService = new AccountTransactions();
             newService.setActId(account);
@@ -325,14 +355,14 @@ public class RoomService extends javax.swing.JDialog {
             newService.setAtrNotes(serviceSel.getSvtId().getSvtDesc() + " - " + serviceSel.getSrvDesc());
             accountTransactionsBoundary.insert(newService);
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_SUCCESS);
-            loadGrid(accountTransactionsBoundary.findAllByRmsId(room)); 
+            loadGrid(accountTransactionsBoundary.findAllByRmsId(room));
         } catch (Exception e) {
             e.printStackTrace();
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_ERROR);
-        }        
+        }
     }//GEN-LAST:event_jbAddServiceActionPerformed
 
-    private void cancelService(AccountTransactions serviceToCancel){
+    private void cancelService(AccountTransactions serviceToCancel) {
         try {
             serviceToCancel.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
             accountTransactionsBoundary.update(serviceToCancel);
@@ -343,13 +373,13 @@ public class RoomService extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_ERROR);
         }
     }
-    
-    private void payService(AccountTransactions serviceToPay){
+
+    private void payService(AccountTransactions serviceToPay) {
         try {
             PaymentModule paymentModule = new PaymentModule(this, true, serviceToPay);
             paymentModule.setLocationRelativeTo(this);
             paymentModule.setVisible(true);
-            
+
             serviceToPay.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
             accountTransactionsBoundary.update(serviceToPay);
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_SUCCESS);
@@ -359,30 +389,44 @@ public class RoomService extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_ERROR);
         }
     }
-    
+
     private void jmiCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCancelarActionPerformed
         //cancelar servicio
         Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
-        for(AccountTransactions iAct : currentGridsource){
-            if(iAct.getAtrId().compareTo(atrIdSelected) == 0){
+        for (AccountTransactions iAct : currentGridsource) {
+            if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
                 cancelService(iAct);
                 return;
             }
         }
-        
+
     }//GEN-LAST:event_jmiCancelarActionPerformed
 
     private void jmiPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPagarActionPerformed
         //Pagar Servicio
         Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
-        for(AccountTransactions iAct : currentGridsource){
-            if(iAct.getAtrId().compareTo(atrIdSelected) == 0){
+        for (AccountTransactions iAct : currentGridsource) {
+            if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
                 payService(iAct);
                 return;
             }
         }
-        
+
     }//GEN-LAST:event_jmiPagarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+      
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -427,13 +471,16 @@ public class RoomService extends javax.swing.JDialog {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel idRMS;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbAddService;
     private javax.swing.JComboBox jcbServiceTypes;
     private javax.swing.JComboBox jcbServices;
