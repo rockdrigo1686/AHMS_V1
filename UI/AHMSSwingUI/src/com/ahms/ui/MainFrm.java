@@ -1233,7 +1233,10 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
         RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
-        for(Rooms room : tipoSeleccionado.getRoomsCollection()){
+        Rooms paramRoom = new Rooms();
+        paramRoom.setRmsBeds(tipoSeleccionado);
+        List<Rooms> roomsAvailableByType = roomsBounday.findByRmsBeds(paramRoom);
+        for(Rooms room : roomsAvailableByType){
             if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
                 quickRentRoomAssigned = room;
                 jlQRRoomNumber.setText(room.getRmsNumber());
