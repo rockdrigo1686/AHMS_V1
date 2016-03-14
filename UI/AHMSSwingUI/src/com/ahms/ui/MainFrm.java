@@ -24,6 +24,8 @@ import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
@@ -196,8 +198,15 @@ public class MainFrm extends javax.swing.JFrame {
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes){
         DefaultComboBoxModel modelquickRent= new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbQuickRentTipo.setModel(modelquickRent);
+        
         DefaultComboBoxModel modelDashBoard = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbTipoCuarto.setModel(modelDashBoard);
+        this.jcbTipoCuarto.addItemListener((ItemEvent arg0) -> {
+            Rooms roomTypes = new Rooms();
+            roomTypes.setRmsBeds((RoomTypes) jcbTipoCuarto.getSelectedItem());
+            configGrid(roomsBounday.findByRmsBeds(roomTypes));
+        });
+                
         DefaultComboBoxModel modelQuickRes = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbQuickResTipoCuarto.setModel(modelQuickRes);
     }
@@ -205,12 +214,21 @@ public class MainFrm extends javax.swing.JFrame {
     private void configFloors(List<Floors> lstFloors) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
         this.jcbPisos.setModel(model);
-
+        this.jcbPisos.addItemListener((ItemEvent arg0) -> {
+            Rooms room = new Rooms();
+            room.setFlrId((Floors)this.jcbPisos.getSelectedItem());
+            configGrid(roomsBounday.findByFloor(room));
+        });
     }
     
     private void configDisponibilidad(List<MultiValue> lstMultiValueDisp){
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstMultiValueDisp.toArray(new MultiValue[lstMultiValueDisp.size()]));
         this.jcbDisponibilidad.setModel(model);
+        this.jcbDisponibilidad.addItemListener((ItemEvent arg0)  ->  {
+             Rooms roomDisp = new Rooms();
+            roomDisp.setRmsStatus((MultiValue) jcbDisponibilidad.getSelectedItem());
+            configGrid(roomsBounday.findByRmsStatus(roomDisp));        
+        });        
     }
 
     public void configGrid(List<Rooms> rooms) {
@@ -268,7 +286,7 @@ public class MainFrm extends javax.swing.JFrame {
             }
 
         };
-        JFrame parent = this;
+        //JFrame parent = this;
         jtDashboard.setModel(model);
         jtDashboard.setRowHeight(50);
         jtDashboard.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -299,9 +317,7 @@ public class MainFrm extends javax.swing.JFrame {
                     jbCheckOut.setEnabled(false);
                     if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
                         jbCheckOut.setEnabled(true);
-                    }
-                    //jtIdCuarto.setText(String.valueOf(jtDashboard.getValueAt(row, 8)));
-                    //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, Integer.parseInt(jtDashboard.getValueAt(row, 4).toString()), 1));
+                    }                    
                 }                
             }
 
@@ -540,11 +556,6 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel1.setText("Piso: ");
 
         jcbPisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbPisos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbPisosActionPerformed(evt);
-            }
-        });
 
         jbCheckOut.setText("CheckOut");
         jbCheckOut.addActionListener(new java.awt.event.ActionListener() {
@@ -556,20 +567,10 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel2.setText("Disponibilidad:");
 
         jcbDisponibilidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbDisponibilidad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbDisponibilidadActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Tipo:");
 
         jcbTipoCuarto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbTipoCuarto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbTipoCuartoActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -717,11 +718,6 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel4.setText("Tipo de cuarto:");
 
         jcbQuickRentTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbQuickRentTipo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbQuickRentTipoActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("Subtotal:");
 
@@ -805,7 +801,7 @@ public class MainFrm extends javax.swing.JFrame {
                                     .addComponent(jButton1)
                                     .addGap(18, 18, 18)
                                     .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 16, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
                         .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1150,12 +1146,6 @@ public class MainFrm extends javax.swing.JFrame {
         lblRfc.setText(mainCustomer.getCusRfc());
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
-    private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
-        Rooms room = new Rooms();
-        room.setFlrId((Floors)this.jcbPisos.getSelectedItem());
-        configGrid(roomsBounday.findByFloor(room));
-    }//GEN-LAST:event_jcbPisosActionPerformed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
 
@@ -1210,26 +1200,6 @@ public class MainFrm extends javax.swing.JFrame {
         boolean response  =cp.getAutorization();
         System.out.println(" response : " + response);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jcbDisponibilidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbDisponibilidadActionPerformed
-        
-        Rooms roomDisp = new Rooms();
-        roomDisp.setRmsStatus((MultiValue) jcbDisponibilidad.getSelectedItem());
-        configGrid(roomsBounday.findByRmsStatus(roomDisp));
-    }//GEN-LAST:event_jcbDisponibilidadActionPerformed
-
-    private void jcbTipoCuartoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTipoCuartoActionPerformed
-        
-        Rooms roomTypes = new Rooms();
-        roomTypes.setRmsBeds((RoomTypes) jcbTipoCuarto.getSelectedItem());
-        configGrid(roomsBounday.findByRmsBeds(roomTypes));
-    }//GEN-LAST:event_jcbTipoCuartoActionPerformed
-
-    private void jcbQuickRentTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbQuickRentTipoActionPerformed
-        //actualizar el numero de personas segun el tipo de cuarto
-        RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
-        System.out.println(tipoSeleccionado.getRoomsCollection().size());
-    }//GEN-LAST:event_jcbQuickRentTipoActionPerformed
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
         RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
