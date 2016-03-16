@@ -54,7 +54,7 @@ import org.jdatepicker.impl.UtilDateModel;
  * @author rsoto
  */
 public class MainFrm extends javax.swing.JFrame {
-
+    
     private Customers mainCustomer;
     private Users mainUser = null;
     private Boolean shiftOn = false;
@@ -144,6 +144,7 @@ public class MainFrm extends javax.swing.JFrame {
         this.setMainCustomer(new Customers());
         this.mainUser = mainUser;
         this.currentShift = currentShift;
+        
         initComponents();
         setExtendedState(Frame.MAXIMIZED_BOTH);
         roomsBounday = new RoomsBoundary();
@@ -174,6 +175,8 @@ public class MainFrm extends javax.swing.JFrame {
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
+        
+        
     }
     
     public void clearQuickRentInstance(){
@@ -299,7 +302,7 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
-        jtDashboard.addMouseListener(new MouseAdapter() {
+        /*jtDashboard.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int clicks = e.getClickCount();
@@ -321,7 +324,7 @@ public class MainFrm extends javax.swing.JFrame {
                 }                
             }
 
-        });
+        });*/
     }
 
     private Rooms getRoomFromDashboard(Integer rmsId){
@@ -619,6 +622,11 @@ public class MainFrm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtDashboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtDashboardMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jtDashboard);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -893,7 +901,7 @@ public class MainFrm extends javax.swing.JFrame {
         jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
         jpFecEntContainerResLayout.setHorizontalGroup(
             jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 212, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jpFecEntContainerResLayout.setVerticalGroup(
             jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -906,7 +914,7 @@ public class MainFrm extends javax.swing.JFrame {
         jpFecSalContainerRes.setLayout(jpFecSalContainerResLayout);
         jpFecSalContainerResLayout.setHorizontalGroup(
             jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 196, Short.MAX_VALUE)
         );
         jpFecSalContainerResLayout.setVerticalGroup(
             jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -956,12 +964,13 @@ public class MainFrm extends javax.swing.JFrame {
                             .addComponent(jLabel14))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(28, 28, 28))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93))
+                        .addGap(105, 105, 105))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -979,11 +988,10 @@ public class MainFrm extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcbQuickResTipoCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jcbQuickResTipoCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbQuickResSearch)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1320,6 +1328,26 @@ public class MainFrm extends javax.swing.JFrame {
         }
         GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
+
+    private void jtDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDashboardMouseClicked
+        int clicks = evt.getClickCount();
+        int row = jtDashboard.getSelectedRow();
+        MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
+        if(clicks > 1){ // doble click
+            if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+                //llamar a agregar servicios
+                Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
+                RoomService roomService = new RoomService(null, true, roomObj,currentShift);
+                roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
+                roomService.setVisible(true);
+            }
+        } else {  // 1 click
+            jbCheckOut.setEnabled(false);
+            if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+                jbCheckOut.setEnabled(true);
+            }                    
+        } 
+    }//GEN-LAST:event_jtDashboardMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
