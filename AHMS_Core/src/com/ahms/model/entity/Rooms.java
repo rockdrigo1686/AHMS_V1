@@ -221,7 +221,7 @@ public class Rooms implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Rooms[ rmsId=" + rmsId + " ]";
+        return getRmsId().toString();
     }
     
   

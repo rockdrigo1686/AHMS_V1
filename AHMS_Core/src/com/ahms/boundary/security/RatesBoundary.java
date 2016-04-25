@@ -6,53 +6,49 @@
 package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
-import com.ahms.model.entity.RoomTypes;
-import com.ahms.model.manager.entity_manager.RoomTypesEM;
+import com.ahms.model.entity.Rates;
+import com.ahms.model.manager.entity_manager.RatesEM;
 import java.util.List;
 
 /**
  *
  * @author jorge
  */
-public class RoomTypesBoundary implements AHMSBoundary<RoomTypes>{
-
-    private RoomTypesEM roomTypesEM = null;
-
-    public RoomTypesBoundary() {
-        roomTypesEM = new RoomTypesEM();
-    }
+public class RatesBoundary implements AHMSBoundary<Rates>{
     
-    public List<RoomTypes> findActiveTypes(RoomTypes obj) {
-        return roomTypesEM.findActiveTypes(obj);
+    private RatesEM ratesEm = null;
+
+    public RatesBoundary() {
+        ratesEm = new RatesEM();
     }
-    
+
     @Override
-    public List<RoomTypes> search(RoomTypes obj) {
+    public List<Rates> search(Rates obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<RoomTypes> searchAll(RoomTypes obj) {
-        return roomTypesEM.searchAll(obj);
+    public List<Rates> searchAll(Rates obj) {
+        return ratesEm.searchAll(obj);
     }
 
     @Override
-    public RoomTypes find(RoomTypes obj) {
+    public Rates find(Rates obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int insert(RoomTypes obj) {
+    public int insert(Rates obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int update(RoomTypes obj) {
+    public int update(Rates obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int delete(RoomTypes obj) {
+    public int delete(Rates obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
