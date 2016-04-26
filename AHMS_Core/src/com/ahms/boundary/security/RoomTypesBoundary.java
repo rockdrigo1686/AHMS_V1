@@ -43,17 +43,17 @@ public class RoomTypesBoundary implements AHMSBoundary<RoomTypes>{
 
     @Override
     public int insert(RoomTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roomTypesEM.insert(obj);
     }
 
     @Override
     public int update(RoomTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roomTypesEM.update(obj);
     }
 
     @Override
     public int delete(RoomTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roomTypesEM.delete(obj);
     }
     
 }

@@ -342,7 +342,7 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Users[ usrId=" + usrId + " ]";
+        return getFullName();
     }
 
     public String getFullName() {
