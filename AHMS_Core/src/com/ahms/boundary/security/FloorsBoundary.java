@@ -47,17 +47,17 @@ public class FloorsBoundary implements AHMSBoundary<Floors>{
 
     @Override
     public int insert(Floors obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return floorEM.insert(obj);
     }
 
     @Override
     public int update(Floors obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return floorEM.update(obj);
     }
 
     @Override
     public int delete(Floors obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return floorEM.delete(obj);
     }
     
 }
