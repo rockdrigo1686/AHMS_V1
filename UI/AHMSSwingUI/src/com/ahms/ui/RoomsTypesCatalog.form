@@ -44,7 +44,7 @@
                   <Group type="102" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jlRtyId" min="-2" max="-2" attributes="0"/>
+                      <Component id="rtyId" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rtyDescription" min="-2" pref="203" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -54,7 +54,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rtyStatus" pref="119" max="32767" attributes="0"/>
+                      <Component id="rtyStatus" pref="131" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -69,7 +69,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jlRtyId" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="rtyId" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rtyDescription" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="rtyBeds" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -183,15 +183,27 @@
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Tipo de Cuarto:"/>
+        <Property name="name" type="java.lang.String" value="" noResource="true"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jlRtyId">
+    <Component class="javax.swing.JLabel" name="rtyId">
       <Properties>
-        <Property name="text" type="java.lang.String" value="id"/>
         <Property name="enabled" type="boolean" value="false"/>
+        <Property name="name" type="java.lang.String" value="rtyId" noResource="true"/>
       </Properties>
+      <BindingProperties>
+        <BindingProperty name="text" source="roomTypes" sourcePath="${rtyId}" target="rtyId" targetPath="text" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
     </Component>
     <Component class="javax.swing.JTextField" name="rtyDescription">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="rtyDescription" noResource="true"/>
+      </Properties>
+      <BindingProperties>
+        <BindingProperty name="text" source="roomTypes" sourcePath="${rtyDescription}" target="rtyDescription" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+        </BindingProperty>
+      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -201,7 +213,13 @@
     <Component class="javax.swing.JTextField" name="rtyBeds">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="name" type="java.lang.String" value="rtyBeds" noResource="true"/>
       </Properties>
+      <BindingProperties>
+        <BindingProperty name="text" source="roomTypes" sourcePath="${rtyBeds}" target="rtyBeds" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+        </BindingProperty>
+      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
@@ -218,7 +236,11 @@
             <StringItem index="3" value="Item 4"/>
           </StringArray>
         </Property>
+        <Property name="name" type="java.lang.String" value="rtystatus" noResource="true"/>
       </Properties>
+      <BindingProperties>
+        <BindingProperty name="selectedItem" source="roomTypes" sourcePath="${rtyStatus}" target="rtyStatus" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+      </BindingProperties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>

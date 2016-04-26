@@ -5,19 +5,25 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.ProfileBoundary;
 import com.ahms.boundary.security.RoomTypesBoundary;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Profiles;
 import com.ahms.model.entity.RoomTypes;
+import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -31,17 +37,24 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
 
     private List<RoomTypes> resultList = null;
     private RoomTypesBoundary roomTypesBoundary = null;
+    private MultiValueBoundary multiValueBoundary = null;
     private DefaultTableModel tableModel = null;
     private Map<String, Component> formComponentMap = new HashMap<String, Component>();
     private Map<String, Component> buttonMap = new HashMap<String, Component>();
     private FormManager formManager = null;
+    private Users userLogued = null;
     
-    public RoomsTypesCatalog(java.awt.Frame parent, boolean modal) {
+    public RoomsTypesCatalog(java.awt.Frame parent, boolean modal, Users logued) {
         super(parent, modal);
         initComponents();
+        userLogued = new Users(1);
         setResizable(false);
         setTitle("Tipos de Cuartos");
         roomTypesBoundary = new RoomTypesBoundary();
+        multiValueBoundary = new MultiValueBoundary();
+        MultiValue multiValue = new MultiValue();
+        multiValue.setMvaType(MMKeys.General.GP_KEY);
+        loadStatus(multiValueBoundary.findByType(multiValue));
         resultList = searchAll();
         //Creamos mapa de componentes
         formManager = new FormManager();
@@ -59,6 +72,11 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
             }
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+    }
+    
+    private void loadStatus(List<MultiValue> statusList){
+        DefaultComboBoxModel model= new DefaultComboBoxModel(statusList.toArray(new MultiValue[statusList.size()]));
+        this.rtyStatus.setModel(model);
     }
     
     private List<RoomTypes> searchAll() {
@@ -86,7 +104,7 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         jLabel1 = new javax.swing.JLabel();
-        jlRtyId = new javax.swing.JLabel();
+        rtyId = new javax.swing.JLabel();
         rtyDescription = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         rtyBeds = new javax.swing.JTextField();
@@ -186,17 +204,34 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
         jToolBar1.add(jSeparator5);
 
         jLabel1.setText("Tipo de Cuarto:");
+        jLabel1.setName(""); // NOI18N
 
-        jlRtyId.setText("id");
-        jlRtyId.setEnabled(false);
+        rtyId.setEnabled(false);
+        rtyId.setName("rtyId"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roomTypes, org.jdesktop.beansbinding.ELProperty.create("${rtyId}"), rtyId, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        rtyDescription.setName("rtyDescription"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roomTypes, org.jdesktop.beansbinding.ELProperty.create("${rtyDescription}"), rtyDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         jLabel3.setText("Camas:");
 
         rtyBeds.setToolTipText("");
+        rtyBeds.setName("rtyBeds"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roomTypes, org.jdesktop.beansbinding.ELProperty.create("${rtyBeds}"), rtyBeds, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
 
         jLabel2.setText("Estatus:");
 
         rtyStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        rtyStatus.setName("rtystatus"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roomTypes, org.jdesktop.beansbinding.ELProperty.create("${rtyStatus}"), rtyStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        bindingGroup.addBinding(binding);
 
         resultTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -223,7 +258,7 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jlRtyId)
+                        .addComponent(rtyId)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(rtyDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -233,7 +268,7 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rtyStatus, 0, 119, Short.MAX_VALUE)))
+                        .addComponent(rtyStatus, 0, 131, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -244,7 +279,7 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jlRtyId)
+                    .addComponent(rtyId)
                     .addComponent(rtyDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(rtyBeds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -299,8 +334,14 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        // TODO add your handling code here:
-        if (roomTypesBoundary.insert(roomTypes) == 1) {
+        RoomTypes newRty = new RoomTypes();
+        newRty.setRtyBeds(roomTypes.getRtyBeds());
+        newRty.setRtyDescription(roomTypes.getRtyDescription());
+        newRty.setRtyStatus(roomTypes.getRtyStatus());
+        newRty.setRtyUsrMod(userLogued);
+        newRty.setRtyDteMod(new Date());
+        
+        if (roomTypesBoundary.insert(newRty) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
         resultList = searchAll();
@@ -370,7 +411,7 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                RoomsTypesCatalog dialog = new RoomsTypesCatalog(new javax.swing.JFrame(), true);
+                RoomsTypesCatalog dialog = new RoomsTypesCatalog(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -396,11 +437,11 @@ public class RoomsTypesCatalog extends javax.swing.JDialog {
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JLabel jlRtyId;
     private javax.swing.JTable resultTable;
     private com.ahms.model.entity.RoomTypes roomTypes;
     private javax.swing.JTextField rtyBeds;
     private javax.swing.JTextField rtyDescription;
+    private javax.swing.JLabel rtyId;
     private javax.swing.JComboBox rtyStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
