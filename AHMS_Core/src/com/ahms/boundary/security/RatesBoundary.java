@@ -39,17 +39,17 @@ public class RatesBoundary implements AHMSBoundary<Rates>{
 
     @Override
     public int insert(Rates obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ratesEm.insert(obj);
     }
 
     @Override
     public int update(Rates obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ratesEm.update(obj);
     }
 
     @Override
     public int delete(Rates obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ratesEm.delete(obj);
     }
     
 }
