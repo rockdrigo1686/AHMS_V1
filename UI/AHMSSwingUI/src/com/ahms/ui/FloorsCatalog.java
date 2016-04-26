@@ -5,10 +5,10 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
-import com.ahms.boundary.security.RatesBoundary;
+import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
-import com.ahms.model.entity.Rates;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
 import com.ahms.ui.utils.JTableDoubleClickListener;
@@ -31,32 +31,32 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jorge
  */
-public class RatesCatalog extends javax.swing.JDialog {
+public class FloorsCatalog extends javax.swing.JDialog {
 
     /**
-     * Creates new form RatesCatalog
+     * Creates new form FloorsCatalog
      */
     
-    private RatesBoundary ratesBoundary = null;
+    private FloorsBoundary floorsBoundary = null;
     private Users userLogued = null;
-    private List<Rates> resultList = null;
+    private List<Floors> resultList = null;
     private MultiValueBoundary multiValueBoundary = null;
     private DefaultTableModel tableModel = null;
     private Map<String, Component> formComponentMap = new HashMap<String, Component>();
     private Map<String, Component> buttonMap = new HashMap<String, Component>();
     private FormManager formManager = null;
-        
-    public RatesCatalog(java.awt.Frame parent, boolean modal, Users logued) {
+    
+    public FloorsCatalog(java.awt.Frame parent, boolean modal, Users logued) {
         super(parent, modal);
         initComponents();
         
         userLogued = new Users(1);
         setResizable(false);
         setTitle("Tipos de Cuartos");
-        ratesBoundary = new RatesBoundary();
+        floorsBoundary = new FloorsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         MultiValue multiValue = new MultiValue();
-        multiValue.setMvaType(MMKeys.General.GP_KEY);
+        multiValue.setMvaType(MMKeys.Rooms.GP_KEY);
         loadStatus(multiValueBoundary.findByType(multiValue));
         resultList = searchAll();
         //Creamos mapa de componentes
@@ -68,7 +68,7 @@ public class RatesCatalog extends javax.swing.JDialog {
         resultTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                JTableDoubleClickListener.addDoubleCLick(e, ratesBean, resultList, formManager.getFormComponentMap());
+                JTableDoubleClickListener.addDoubleCLick(e, floorsBean, resultList, formManager.getFormComponentMap());
                 if (e.getClickCount() == 2) {
                     formManager.updateButtonMenuState(UIConstants.DOUBLE_CLICK);
                 }
@@ -79,15 +79,15 @@ public class RatesCatalog extends javax.swing.JDialog {
     
     private void loadStatus(List<MultiValue> statusList){
         DefaultComboBoxModel model= new DefaultComboBoxModel(statusList.toArray(new MultiValue[statusList.size()]));
-        this.rteStatus.setModel(model);
+        this.flrStatus.setModel(model);
     }
     
-    private List<Rates> searchAll() {
-        return ratesBoundary.searchAll(new Rates());
+    private List<Floors> searchAll() {
+        return floorsBoundary.searchAll(new Floors());
     }
     
     private void fillTable(JTable resultTable) {
-        String col[] = {"ID", "Descripción", "Precio", "Estatus", "Usuario Mod", "Fecha Mod"};
+        String col[] = {"ID", "Código", "Estatus", "Usuario Mod", "Fecha Mod"};
 
         tableModel = new DefaultTableModel(col, 0) {
             @Override
@@ -98,7 +98,7 @@ public class RatesCatalog extends javax.swing.JDialog {
 
         // The 0 argument is number rows.
         resultList.stream().forEach((next) -> {
-            tableModel.addRow(new Object[]{next.getRteId(), next.getRteDesc(), next.getRtePrice(), next.getRteStatus(), next.getRteUsrMod(), next.getRteDteMod()});
+            tableModel.addRow(new Object[]{next.getFlrId(), next.getFlrCode(), next.getFlrStatus(), next.getFlrUsrMod(), next.getFlrDteMod()});
         });
 
         resultTable.setModel(tableModel);
@@ -121,7 +121,7 @@ public class RatesCatalog extends javax.swing.JDialog {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        ratesBean = new com.ahms.model.entity.Rates();
+        floorsBean = new com.ahms.model.entity.Floors();
         jToolBar1 = new javax.swing.JToolBar();
         btnLimpiar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
@@ -129,30 +129,26 @@ public class RatesCatalog extends javax.swing.JDialog {
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnEditar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
+        btnEliminar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        rteDesc = new javax.swing.JTextField();
+        flrCode = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        rteStatus = new javax.swing.JComboBox();
+        flrStatus = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${roomsCollection}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("roomsCollection"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrCode}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("flrCode"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteDesc}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rteDesc"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrDteMod}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("flrDteMod"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteDteMod}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rteDteMod"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrId}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("flrId"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteId}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rteId"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrStatus}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("flrStatus"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rtePrice}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rtePrice"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrUsrMod}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("flrUsrMod"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteStatus}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rteStatus"));
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteUsrMod}"), ratesBean, org.jdesktop.beansbinding.BeanProperty.create("rteUsrMod"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${roomsCollection}"), floorsBean, org.jdesktop.beansbinding.BeanProperty.create("roomsCollection"));
         bindingGroup.addBinding(binding);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -217,6 +213,7 @@ public class RatesCatalog extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(btnGuardar);
+        jToolBar1.add(jSeparator5);
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772612_file_delete.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
@@ -228,34 +225,26 @@ public class RatesCatalog extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(btnEliminar);
-        jToolBar1.add(jSeparator5);
 
-        jLabel1.setText("Tarifa:");
+        jLabel1.setText("Codigo de Piso:");
 
-        rteDesc.setName("rteDesc"); // NOI18N
+        flrCode.setName("flrCode"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteDesc}"), rteDesc, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrCode}"), flrCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
-        rteDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+        flrCode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                rteDescKeyTyped(evt);
+                flrCodeKeyTyped(evt);
             }
         });
 
-        jLabel2.setText("Precio:");
+        jLabel2.setText("Estatus:");
 
-        jTextField2.setName("rtePrice"); // NOI18N
+        flrStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        flrStatus.setName("flrStatus"); // NOI18N
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rtePrice}"), jTextField2, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
-
-        jLabel3.setText("Estatus:");
-
-        rteStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        rteStatus.setName("rteStatus"); // NOI18N
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rteStatus}"), rteStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, floorsBean, org.jdesktop.beansbinding.ELProperty.create("${flrStatus}"), flrStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         resultTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -276,27 +265,18 @@ public class RatesCatalog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(4, 4, 4)
-                                .addComponent(rteDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rteStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(flrCode, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(flrStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -304,16 +284,14 @@ public class RatesCatalog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rteDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
+                    .addComponent(flrCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(rteStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(flrStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -330,20 +308,19 @@ public class RatesCatalog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        resultList = ratesBoundary.search(ratesBean);
+        resultList = floorsBoundary.search(floorsBean);
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_BUSCAR);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        Rates newRte = new Rates();
-        newRte.setRteDesc(ratesBean.getRteDesc());
-        newRte.setRtePrice(ratesBean.getRtePrice());
-        newRte.setRteStatus(ratesBean.getRteStatus());
-        newRte.setRteUsrMod(userLogued);
-        newRte.setRteDteMod(new Date());
+        Floors newFlr = new Floors();
+        newFlr.setFlrCode(floorsBean.getFlrCode());
+        newFlr.setFlrStatus(floorsBean.getFlrStatus());
+        newFlr.setFlrUsrMod(userLogued);
+        newFlr.setFlrDteMod(new Date());
 
-        if (ratesBoundary.insert(newRte) == 1) {
+        if (floorsBoundary.insert(newFlr) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
         resultList = searchAll();
@@ -358,8 +335,8 @@ public class RatesCatalog extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        if (ratesBean.getRteId()!= null) {
-            if (ratesBoundary.update(ratesBean) == 1) {
+        if (floorsBean.getFlrId()!= null) {
+            if (floorsBoundary.update(floorsBean) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
         }
@@ -372,7 +349,7 @@ public class RatesCatalog extends javax.swing.JDialog {
         // TODO add your handling code here:
         int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            if (ratesBoundary.delete(ratesBean) == 1) {
+            if (floorsBoundary.delete(floorsBean) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
             }
         }
@@ -381,11 +358,11 @@ public class RatesCatalog extends javax.swing.JDialog {
         formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void rteDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rteDescKeyTyped
-        if(this.rteDesc.getText().length() >= 20){
+    private void flrCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_flrCodeKeyTyped
+        if(this.flrCode.getText().length() >= 5){
             evt.consume();
         }
-    }//GEN-LAST:event_rteDescKeyTyped
+    }//GEN-LAST:event_flrCodeKeyTyped
 
     /**
      * @param args the command line arguments
@@ -404,20 +381,20 @@ public class RatesCatalog extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RatesCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FloorsCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RatesCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FloorsCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RatesCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FloorsCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RatesCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FloorsCatalog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                RatesCatalog dialog = new RatesCatalog(new javax.swing.JFrame(), true, null);
+                FloorsCatalog dialog = new FloorsCatalog(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -436,18 +413,16 @@ public class RatesCatalog extends javax.swing.JDialog {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnNuevo;
+    private com.ahms.model.entity.Floors floorsBean;
+    private javax.swing.JTextField flrCode;
+    private javax.swing.JComboBox flrStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JToolBar jToolBar1;
-    private com.ahms.model.entity.Rates ratesBean;
     private javax.swing.JTable resultTable;
-    private javax.swing.JTextField rteDesc;
-    private javax.swing.JComboBox rteStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }
