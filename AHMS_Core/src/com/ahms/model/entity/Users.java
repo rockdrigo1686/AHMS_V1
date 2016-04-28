@@ -7,6 +7,7 @@ package com.ahms.model.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +43,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus and u.usrPwd = :usrPwd"),
     @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = :usrStatus")})
 public class Users implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "mvaUsrMod", fetch = FetchType.LAZY)
+    private List<MultiValue> multiValueList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proUsrMod", fetch = FetchType.LAZY)
+    private List<Profiles> profilesList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -342,10 +347,28 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Users[ usrId=" + usrId + " ]";
+        return this.usrCode;
     }
 
     public String getFullName() {
         return this.usrName + " " + this.usrLst1 + " " + this.usrLst2;
+    }
+
+    @XmlTransient
+    public List<MultiValue> getMultiValueList() {
+        return multiValueList;
+    }
+
+    public void setMultiValueList(List<MultiValue> multiValueList) {
+        this.multiValueList = multiValueList;
+    }
+
+    @XmlTransient
+    public List<Profiles> getProfilesList() {
+        return profilesList;
+    }
+
+    public void setProfilesList(List<Profiles> profilesList) {
+        this.profilesList = profilesList;
     }
 }
