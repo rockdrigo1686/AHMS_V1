@@ -47,7 +47,7 @@ public class JTableDoubleClickListener {
                             }
                             if (com instanceof JComboBox) {
                                 JComboBox jComboBox = (JComboBox) com;
-                                jComboBox.setSelectedItem(tableField.get(enityBean).toString());                                
+                                jComboBox.setSelectedItem(tableField.get(enityBean));                                
                             }
                         }
                     } catch (NoSuchFieldException ex) {

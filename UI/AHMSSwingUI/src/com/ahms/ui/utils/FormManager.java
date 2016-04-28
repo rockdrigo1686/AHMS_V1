@@ -81,20 +81,22 @@ public class FormManager {
             }
         }
         //formulario
-        formComponentMap.values().stream().forEach((com) -> {
+//        formComponentMap.values().stream().forEach((com) -> {
+            for (Object com : formComponentMap.values()) {
+                
             if (com instanceof JTextField) {
                 JTextField jTextField = (JTextField) com;
                 jTextField.setText("");
                 jTextField.setEnabled(true);
             } else if (com instanceof JComboBox) {
                 JComboBox jComboBox = (JComboBox) com;
-                jComboBox.setSelectedItem(" ");
+                jComboBox.setSelectedIndex(0);
                 jComboBox.setEnabled(true);
             } else if (com instanceof JTable) {
                 JTable jTable = (JTable) com;
                 jTable.setEnabled(true);
             }
-        });
+        }
     }
 
     public void setEditFormStatus() {

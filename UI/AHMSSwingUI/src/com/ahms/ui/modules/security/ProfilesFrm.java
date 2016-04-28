@@ -5,22 +5,29 @@
  */
 package com.ahms.ui.modules.security;
 
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.ProfileBoundary;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Profiles;
+import com.ahms.model.entity.Users;
+import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.FormManager;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
@@ -33,10 +40,12 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
     private List<Profiles> resultList = null;
     private ProfileBoundary profileBoundary = null;
+    private MultiValueBoundary MMBoundary = null;
     private DefaultTableModel tableModel = null;
     private Map<String, Component> formComponentMap = new HashMap<String, Component>();
     private Map<String, Component> buttonMap = new HashMap<String, Component>();
     private FormManager formManager = null;
+    private MainFrm topFrame;
 
     /**
      * Creates new form ProfilesFrm
@@ -44,12 +53,19 @@ public class ProfilesFrm extends javax.swing.JFrame {
     public ProfilesFrm() {
 
         initComponents();
+        topFrame = (MainFrm) SwingUtilities.getWindowAncestor(this);
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Profiles");
         profileBoundary = new ProfileBoundary();
+        MMBoundary = new MultiValueBoundary();
         resultList = searchAll();
         //Creamos mapa de componentes
+        proStatus.addItem(new MultiValue());
+        for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
+            proStatus.addItem(obj);
+        }
+
         formManager = new FormManager();
         formManager.createComponentMaps(this);
         formManager.setDefaultFormStatus();
@@ -74,7 +90,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
     //</editor-fold>
     private void fillTable(JTable resultTable) {
-        String col[] = {"ID", "Clave", "Nombre", "Estatus", "Usuario Mod", "Fecha Mod"};
+        String col[] = {"ID", "Clave", "Nombre", "Estatus"};
 
         tableModel = new DefaultTableModel(col, 0) {
             @Override
@@ -83,9 +99,11 @@ public class ProfilesFrm extends javax.swing.JFrame {
             }
         };
 
+        
         // The 0 argument is number rows.
+        
         resultList.stream().forEach((next) -> {
-            tableModel.addRow(new Object[]{next.getProId(), next.getProCode(), next.getProName(), next.getProStatus(), next.getProUsrMod(), next.getProDteMod()});
+            tableModel.addRow(new Object[]{next.getProId(), next.getProCode(), next.getProName(), next.getProStatus()});
         });
 
         resultTable.setModel(tableModel);
@@ -165,7 +183,6 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
         jLabel3.setText("Estatus:");
 
-        proStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Activo", "Inactivo" }));
         proStatus.setName("proStatus"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proStatus}"), proStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
@@ -180,6 +197,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setMargin(new java.awt.Insets(0, 10, 0, 0));
+        jToolBar1.setMinimumSize(null);
         jToolBar1.setName("mainToolBar"); // NOI18N
 
         btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772664_file.png"))); // NOI18N
@@ -293,43 +311,36 @@ public class ProfilesFrm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator3)
-                            .addComponent(jSeparator1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
+                        .addGap(12, 12, 12)
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(proCode, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(proName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 137, Short.MAX_VALUE)))
+                        .addComponent(proCode, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(proName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 95, Short.MAX_VALUE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator3)
+                    .addComponent(jSeparator1))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(17, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 755, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(17, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -338,17 +349,13 @@ public class ProfilesFrm extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(proName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(373, 373, 373))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(196, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(43, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15))
         );
 
         bindingGroup.bind();
@@ -364,12 +371,12 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
         formManager.setDefaultFormStatus();
         /*try {
-            profile.resetProperties();
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+         profile.resetProperties();
+         } catch (IllegalArgumentException ex) {
+         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (IllegalAccessException ex) {
+         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
@@ -385,6 +392,9 @@ public class ProfilesFrm extends javax.swing.JFrame {
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
         System.out.println("nuevo");
+        profile.setProDteMod(new Date());
+//        profile.setProUsrMod(topFrame.getMainUser().getUsrId());
+        profile.setProUsrMod(new Users(1));
         if (profileBoundary.insert(profile) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
@@ -403,6 +413,10 @@ public class ProfilesFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("guardar");
         if (profile.getProId() != null) {
+            profile.setProDteMod(new Date());
+//            profile.setProUsrMod(topFrame.getMainUser().getUsrId());
+            profile.setProUsrMod(new Users(1));
+            
             if (profileBoundary.update(profile) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
@@ -424,6 +438,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
         resultList = searchAll();
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
+        formManager.setDefaultFormStatus();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
 //</editor-fold>
@@ -436,8 +451,8 @@ public class ProfilesFrm extends javax.swing.JFrame {
             /* Set the Nimbus look and feel */
             //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
             /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-            * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-            */
+             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+             */
 //        try {
 ////            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
 ////            javax.swing.UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
@@ -468,7 +483,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
 //        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
 //            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
-            
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //        //</editor-fold>
         } catch (InstantiationException ex) {
