@@ -161,7 +161,7 @@ public class Rates implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Rates[ rteId=" + rteId + " ]";
+        return getRteDesc();
     }
     
 }

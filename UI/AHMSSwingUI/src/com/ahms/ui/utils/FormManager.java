@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -35,6 +36,35 @@ public class FormManager {
     }
 
     public void createComponentMaps(JFrame frame) {
+        if (buttonMap == null) {
+            buttonMap = new HashMap<String, Component>();
+        }
+        if (formComponentMap == null) {
+            formComponentMap = new HashMap<String, Component>();
+        }
+
+        for (Component com : frame.getContentPane().getComponents()) {
+            if (com.getName() != null) {
+                if (com instanceof JToolBar) {
+                    for (Component jTbChild : ((JToolBar) com).getComponents()) {
+                        if (jTbChild instanceof JButton) {
+                            buttonMap.put(jTbChild.getName(), jTbChild);
+                        }
+                    }
+                } else if (com instanceof JScrollPane) {
+                   for (Component jSpChild : ((JScrollPane) com).getComponents()) {
+                        if (jSpChild instanceof JTable) {
+                            buttonMap.put(jSpChild.getName(), jSpChild);
+                        }
+                    }
+                } else {
+                    formComponentMap.put(com.getName(), com);
+                }
+            }
+        }
+    }
+    
+    public void createComponentMaps(JDialog frame) {
         if (buttonMap == null) {
             buttonMap = new HashMap<String, Component>();
         }

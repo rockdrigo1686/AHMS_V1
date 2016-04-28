@@ -55,7 +55,7 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
 
     @Override
     public int insert(Rooms obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roomsEm.insert(obj);
     }
 
     @Override
@@ -65,7 +65,7 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
 
     @Override
     public int delete(Rooms obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return roomsEm.delete(obj);
     }
     
      public List<Rooms> findAvailableByAmmount(Integer limit) {
