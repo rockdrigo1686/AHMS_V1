@@ -24,7 +24,7 @@ public class ServiceTypesBoundary implements AHMSBoundary<ServiceTypes>{
 
     @Override
     public List<ServiceTypes> search(ServiceTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceTypesEM.search(obj);
     }
 
     @Override
@@ -34,22 +34,22 @@ public class ServiceTypesBoundary implements AHMSBoundary<ServiceTypes>{
 
     @Override
     public ServiceTypes find(ServiceTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return  serviceTypesEM.find(obj);
     }
 
     @Override
     public int insert(ServiceTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceTypesEM.insert(obj);
     }
 
     @Override
     public int update(ServiceTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceTypesEM.update(obj);
     }
 
     @Override
     public int delete(ServiceTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceTypesEM.delete(obj);
     }
     
 }

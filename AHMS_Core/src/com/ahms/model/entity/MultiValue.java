@@ -8,6 +8,7 @@ package com.ahms.model.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "MultiValue.findByMvaDescription", query = "SELECT m FROM MultiValue m WHERE m.mvaDescription = :mvaDescription"),
     @NamedQuery(name = "MultiValue.findByMvaDteMod", query = "SELECT m FROM MultiValue m WHERE m.mvaDteMod = :mvaDteMod")})
 public class MultiValue implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usrStatus", fetch = FetchType.LAZY)
+    private List<Users> usersList;
 
     private static final long serialVersionUID = 1L;
 
@@ -100,6 +103,12 @@ public class MultiValue implements Serializable {
 
     public MultiValue(String mvaKey) {
         this.mvaKey = mvaKey;
+    }
+    
+    
+    public MultiValue(String mvaKey, String mvaDescription) {
+        this.mvaKey = mvaKey;
+        this.mvaDescription = mvaDescription;
     }
 
     public MultiValue(Integer mvaId, String mvaKey, String mvaType, String mvaDescription, String mvaValue, Date mvaDteMod) {
@@ -300,6 +309,15 @@ public class MultiValue implements Serializable {
     @Override
     public String toString() {
         return getMvaDescription();
+    }
+
+    @XmlTransient
+    public List<Users> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
     }
 
 }

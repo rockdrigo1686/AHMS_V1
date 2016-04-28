@@ -37,7 +37,7 @@ public class ProfileEM extends AHMSEntityManager<Profiles> {
                 sQuery.append(" AND p.proName = :proName");
                 paramMap.put("proName",profile.getProName());
             }
-            if (profile.getProStatus()!= null && !"".equals(profile.getProStatus())) {
+            if (profile.getProStatus()!= null && profile.getProStatus().getMvaKey()!=null) {
                 sQuery.append(" AND p.proStatus = :proStatus");
                 paramMap.put("proStatus",profile.getProStatus());
             }

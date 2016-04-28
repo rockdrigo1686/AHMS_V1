@@ -44,6 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Profiles.findByProUsrMod", query = "SELECT p FROM Profiles p WHERE p.proUsrMod = :proUsrMod"),
     @NamedQuery(name = "Profiles.findByProDteMod", query = "SELECT p FROM Profiles p WHERE p.proDteMod = :proDteMod")})
 public class Profiles implements Serializable {
+    @JoinColumn(name = "PRO_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Users proUsrMod;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,9 +59,6 @@ public class Profiles implements Serializable {
     @Basic(optional = false)
     @Column(name = "PRO_NAME", nullable = false, length = 50)
     private String proName;
-    @Basic(optional = false)
-    @Column(name = "PRO_USR_MOD", nullable = false)
-    private int proUsrMod;
     @Basic(optional = false)
     @Column(name = "PRO_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -76,7 +76,7 @@ public class Profiles implements Serializable {
         this.proId = proId;
     }
 
-    public Profiles(Integer proId, String proCode, String proName, int proUsrMod, Date proDteMod) {
+    public Profiles(Integer proId, String proCode, String proName, Users proUsrMod, Date proDteMod) {
         this.proId = proId;
         this.proCode = proCode;
         this.proName = proName;
@@ -108,11 +108,11 @@ public class Profiles implements Serializable {
         this.proName = proName;
     }
 
-    public int getProUsrMod() {
+    public Users getProUsrMod() {
         return proUsrMod;
     }
 
-    public void setProUsrMod(int proUsrMod) {
+    public void setProUsrMod(Users proUsrMod) {
         this.proUsrMod = proUsrMod;
     }
 
@@ -163,7 +163,7 @@ public class Profiles implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Profiles[ proId=" + proId + " ]";
+        return this.proName;
     }
     
 }
