@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author rsoto
+ * @author jorge
  */
 @Entity
 @Table(name = "customers", catalog = "db_ahms", schema = "")
@@ -49,6 +49,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customers.findByCusCel", query = "SELECT c FROM Customers c WHERE c.cusCel = :cusCel"),
     @NamedQuery(name = "Customers.findByCusEmail", query = "SELECT c FROM Customers c WHERE c.cusEmail = :cusEmail"),
     @NamedQuery(name = "Customers.findByCusDteMod", query = "SELECT c FROM Customers c WHERE c.cusDteMod = :cusDteMod"),
+    @NamedQuery(name = "Customers.findByCusInvoice", query = "SELECT c FROM Customers c WHERE c.cusInvoice = :cusInvoice"),
+    @NamedQuery(name = "Customers.findByCusPref", query = "SELECT c FROM Customers c WHERE c.cusPref = :cusPref"),
+    @NamedQuery(name = "Customers.findByCusCarPlates", query = "SELECT c FROM Customers c WHERE c.cusCarPlates = :cusCarPlates"),
     @NamedQuery(name = "Customers.findByNameOrRfc", query = "SELECT c FROM Customers c WHERE lower(c.cusName) like lower(:cusName) and lower(c.cusLst1) like lower(:cusLst1) "
                                                           + " and lower(c.cusLst2) like lower(:cusLst2) and (c.cusRfc is null or lower(c.cusRfc) like lower(:cusRfc))")})
 public class Customers implements Serializable {
@@ -91,16 +94,24 @@ public class Customers implements Serializable {
     @Column(name = "CUS_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date cusDteMod;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
-    private Collection<Reservation> reservationCollection;
+    @Basic(optional = false)
+    @Column(name = "CUS_INVOICE", nullable = false)
+    private boolean cusInvoice;
+    @Basic(optional = false)
+    @Column(name = "CUS_PREF", nullable = false)
+    private boolean cusPref;
+    @Column(name = "CUS_CAR_PLATES", length = 20)
+    private String cusCarPlates;
     @JoinColumn(name = "CUS_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private MultiValue cusStatus;
     @JoinColumn(name = "CUS_USR_MOD", referencedColumnName = "USR_ID", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Users cusUsrMod;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
     private Collection<Account> accountCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
+    private Collection<Reservation> reservationCollection;
 
     public Customers() {
     }
@@ -109,7 +120,7 @@ public class Customers implements Serializable {
         this.cusId = cusId;
     }
 
-    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, String cusAddress, int cusPostalCode, String cusState, String cusCity, Date cusDteMod) {
+    public Customers(Integer cusId, String cusName, String cusLst1, String cusLst2, String cusAddress, int cusPostalCode, String cusState, String cusCity, Date cusDteMod, boolean cusInvoice, boolean cusPref, String cusCarPlates) {
         this.cusId = cusId;
         this.cusName = cusName;
         this.cusLst1 = cusLst1;
@@ -119,6 +130,10 @@ public class Customers implements Serializable {
         this.cusState = cusState;
         this.cusCity = cusCity;
         this.cusDteMod = cusDteMod;
+        this.cusInvoice = cusInvoice;
+        this.cusPref = cusPref;
+        this.cusCarPlates = cusCarPlates;
+        
     }
 
     public Integer getCusId() {
@@ -225,13 +240,28 @@ public class Customers implements Serializable {
         this.cusDteMod = cusDteMod;
     }
 
-    @XmlTransient
-    public Collection<Reservation> getReservationCollection() {
-        return reservationCollection;
+    public boolean getCusInvoice() {
+        return cusInvoice;
     }
 
-    public void setReservationCollection(Collection<Reservation> reservationCollection) {
-        this.reservationCollection = reservationCollection;
+    public void setCusInvoice(boolean cusInvoice) {
+        this.cusInvoice = cusInvoice;
+    }
+
+    public boolean getCusPref() {
+        return cusPref;
+    }
+
+    public void setCusPref(boolean cusPref) {
+        this.cusPref = cusPref;
+    }
+
+    public String getCusCarPlates() {
+        return cusCarPlates;
+    }
+
+    public void setCusCarPlates(String cusCarPlates) {
+        this.cusCarPlates = cusCarPlates;
     }
 
     public MultiValue getCusStatus() {
@@ -249,7 +279,15 @@ public class Customers implements Serializable {
     public void setCusUsrMod(Users cusUsrMod) {
         this.cusUsrMod = cusUsrMod;
     }
+    @XmlTransient
+    public Collection<Reservation> getReservationCollection() {
+        return reservationCollection;
+    }
 
+    public void setReservationCollection(Collection<Reservation> reservationCollection) {
+        this.reservationCollection = reservationCollection;
+    }
+    
     @XmlTransient
     public Collection<Account> getAccountCollection() {
         return accountCollection;
@@ -281,7 +319,7 @@ public class Customers implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ahms.boundary.Customers[ cusId=" + cusId + " ]";
+        return getFullName();
     }
     
     public String getFullName(){
