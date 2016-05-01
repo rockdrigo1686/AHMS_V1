@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -49,6 +50,12 @@ public class JTableDoubleClickListener {
                                 JComboBox jComboBox = (JComboBox) com;
                                 jComboBox.setSelectedItem(tableField.get(enityBean));                                
                             }
+                            
+                            if (com instanceof JCheckBox) {
+                                JCheckBox jCheckBox = (JCheckBox) com;
+                                jCheckBox.setSelected((boolean) tableField.get(enityBean));                                
+                            }
+                            
                         }
                     } catch (NoSuchFieldException ex) {
                     } catch (SecurityException ex) {
