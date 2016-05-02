@@ -44,7 +44,9 @@ public class JTableDoubleClickListener {
                         if (com != null) {
                             if (com instanceof JTextField) {
                                 JTextField jTextField = (JTextField) com;
-                                jTextField.setText(tableField.get(enityBean).toString());
+                                if(tableField.get(enityBean) != null){
+                                    jTextField.setText(tableField.get(enityBean).toString());
+                                }                                
                             }
                             if (com instanceof JComboBox) {
                                 JComboBox jComboBox = (JComboBox) com;

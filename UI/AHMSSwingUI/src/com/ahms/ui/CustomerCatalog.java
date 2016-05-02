@@ -122,10 +122,28 @@ public class CustomerCatalog extends javax.swing.JDialog {
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
+        resultTable.getColumn("Nombre").setMaxWidth(150);
+        resultTable.getColumn("Paterno").setMaxWidth(150);
+        resultTable.getColumn("Materno").setMaxWidth(150);
+        resultTable.getColumn("Dirección").setMaxWidth(150);
+        resultTable.getColumn("Código Postal").setMaxWidth(150);
+        resultTable.getColumn("Estado").setMaxWidth(150);
+        resultTable.getColumn("Ciudad").setMaxWidth(150);
+        resultTable.getColumn("RFC").setMaxWidth(150);
+        resultTable.getColumn("Tel").setMaxWidth(150);
+        resultTable.getColumn("Cel").setMaxWidth(150);
+        resultTable.getColumn("Correo").setMaxWidth(150);
+        resultTable.getColumn("Placas").setMaxWidth(150);
+        resultTable.getColumn("Factura").setMaxWidth(150);
+        resultTable.getColumn("Preferencial").setMaxWidth(150);
+        resultTable.getColumn("Estatus").setMaxWidth(150);
+        resultTable.getColumn("Usuario Mod").setMaxWidth(150);
+        resultTable.getColumn("Fecha Mod").setMaxWidth(150);
         resultTable.setColumnSelectionAllowed(false);
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);
         resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
     }
 
@@ -407,6 +425,8 @@ public class CustomerCatalog extends javax.swing.JDialog {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, customersBean, org.jdesktop.beansbinding.ELProperty.create("${cusStatus}"), cusStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         resultTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

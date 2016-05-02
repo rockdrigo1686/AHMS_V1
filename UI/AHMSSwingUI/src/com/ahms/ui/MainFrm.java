@@ -5,6 +5,7 @@ import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
+import com.ahms.boundary.security.PreferenceDetailBoundary;
 import com.ahms.boundary.security.ReservationBoundary;
 import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
@@ -14,6 +15,7 @@ import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
@@ -68,6 +70,7 @@ public class MainFrm extends javax.swing.JFrame {
     private ReservationBoundary reservationBoundary;
     private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
+    private PreferenceDetailBoundary preferenceDetailBoundary  = null;
     
     //QuickRent Instances
     private Rooms quickRentRoomAssigned = null;
@@ -155,6 +158,7 @@ public class MainFrm extends javax.swing.JFrame {
         roomTypesBoundary = new RoomTypesBoundary();
         customersBoundary = new CustomersBoundary();
         reservationBoundary = new ReservationBoundary();
+        preferenceDetailBoundary = new PreferenceDetailBoundary();
         
         jlQRRoomNumber.setVisible(false);
         jlQuickResRoomNumber.setVisible(false);
@@ -302,29 +306,7 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
-        /*jtDashboard.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int clicks = e.getClickCount();
-                int row = jtDashboard.getSelectedRow();
-                MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
-                if(clicks > 1){ // doble click
-                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
-                        //llamar a agregar servicios
-                        Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                        RoomService roomService = new RoomService(null, true, roomObj,currentShift);
-                        roomService.setLocationRelativeTo(e.getComponent().getParent().getParent().getParent());
-                        roomService.setVisible(true);
-                    }
-                } else {  // 1 click
-                    jbCheckOut.setEnabled(false);
-                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
-                        jbCheckOut.setEnabled(true);
-                    }                    
-                }                
-            }
-
-        });*/
+        
     }
 
     private Rooms getRoomFromDashboard(Integer rmsId){
@@ -1231,8 +1213,14 @@ public class MainFrm extends javax.swing.JFrame {
                 Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
                 Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
                 long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
-                //JOptionPane.showMessageDialog(this,days);
-                quickRentSubTotal = quickRentRoomAssigned.getRteId().getRtePrice().multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+                
+                //verificar si el Customer tiene tasa preferencial ------------------------------------
+                PreferenceDetail preferenceDetail = new PreferenceDetail();
+                preferenceDetail.setCusId(mainCustomer);
+                PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+                // ------------------------------------------------------------------------------------
+                BigDecimal price = preference != null & preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+                quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
                 quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
                 quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
                 
