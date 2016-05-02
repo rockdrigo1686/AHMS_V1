@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "PreferenceDetail.findAll", query = "SELECT p FROM PreferenceDetail p"),
     @NamedQuery(name = "PreferenceDetail.findByPrefId", query = "SELECT p FROM PreferenceDetail p WHERE p.prefId = :prefId"),
-    @NamedQuery(name = "PreferenceDetail.findByPrefAmount", query = "SELECT p FROM PreferenceDetail p WHERE p.prefAmount = :prefAmount")})
+    @NamedQuery(name = "PreferenceDetail.findByPrefAmount", query = "SELECT p FROM PreferenceDetail p WHERE p.prefAmount = :prefAmount"),
+    @NamedQuery(name = "PreferenceDetail.findByCustomer", query = "SELECT p FROM PreferenceDetail p WHERE p.cusId = :cusId and p.rmsId = :rmsId")
+    })
 public class PreferenceDetail implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
