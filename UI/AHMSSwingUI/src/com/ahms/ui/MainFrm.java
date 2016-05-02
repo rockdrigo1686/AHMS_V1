@@ -190,7 +190,6 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentTotal = BigDecimal.ZERO;
         quickrentIvaPercent = BigDecimal.ZERO;
         jlQRRoomNumber.setVisible(false);
-        jbQRAddGuests.setEnabled(false);
         jbQRPagar.setEnabled(false);
         
     }
@@ -432,7 +431,6 @@ public class MainFrm extends javax.swing.JFrame {
         jpFecSalContainer = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jspNumeroPersonas = new javax.swing.JSpinner();
-        jbQRAddGuests = new javax.swing.JButton();
         jbQRPagar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jcbQuickRentTipo = new javax.swing.JComboBox();
@@ -446,7 +444,6 @@ public class MainFrm extends javax.swing.JFrame {
         jbQRSearchRoom = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jlQRRoomNumber = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jlRegistroNombre1 = new javax.swing.JLabel();
         jlRegistroPaterno1 = new javax.swing.JLabel();
@@ -686,13 +683,6 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel10.setText("Numero de Personas:");
 
-        jbQRAddGuests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack4/user_male_edit.png"))); // NOI18N
-        jbQRAddGuests.setText("Inquilinos");
-        jbQRAddGuests.setEnabled(false);
-        jbQRAddGuests.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbQRAddGuests.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jbQRAddGuests.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
         jbQRPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
         jbQRPagar.setText("Pagar");
         jbQRPagar.setEnabled(false);
@@ -742,8 +732,6 @@ public class MainFrm extends javax.swing.JFrame {
         jlQRRoomNumber.setText("RoomNmbr");
         jlQRRoomNumber.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout jpRegistroRapidoLayout = new javax.swing.GroupLayout(jpRegistroRapido);
         jpRegistroRapido.setLayout(jpRegistroRapidoLayout);
         jpRegistroRapidoLayout.setHorizontalGroup(
@@ -786,10 +774,7 @@ public class MainFrm extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jlQRTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpRegistroRapidoLayout.createSequentialGroup()
-                                    .addComponent(jbQRAddGuests, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton1)
-                                    .addGap(18, 18, 18)
+                                    .addGap(196, 196, 196)
                                     .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
@@ -852,15 +837,8 @@ public class MainFrm extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(jlQRTotal))
                 .addGap(18, 18, 18)
-                .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
-                        .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbQRAddGuests, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbQRPagar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(33, 33, 33))))
+                .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Check in ", jpRegistroRapido);
@@ -1201,7 +1179,7 @@ public class MainFrm extends javax.swing.JFrame {
                 quickRentRoomAssigned = room;
                 jlQRRoomNumber.setText(room.getRmsNumber());
                 jlQRRoomNumber.setVisible(true);
-                jbQRAddGuests.setEnabled(true);
+                
                 jbQRPagar.setEnabled(true);
                 jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
                 //generar totales de renta
@@ -1340,7 +1318,6 @@ public class MainFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnIniciarTurno;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1386,7 +1363,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
     private javax.swing.JButton jbCheckOut;
-    private javax.swing.JButton jbQRAddGuests;
     private javax.swing.JButton jbQRPagar;
     private javax.swing.JButton jbQRSearchRoom;
     private javax.swing.JButton jbQuickResReserve;
