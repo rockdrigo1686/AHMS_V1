@@ -15,13 +15,13 @@ import javax.persistence.TypedQuery;
  *
  * @author jorge
  */
-public class PreferenceDetailEM  extends AHMSEntityManager<PreferenceDetail> {
+public class PreferenceDetailEM  extends AHMSEntityManager{
     public PreferenceDetail searchByCusId(PreferenceDetail obj) {
         try {
-            if (em == null) {
+            if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<PreferenceDetail> query = em.createNamedQuery("PreferenceDetail.findByCustomer", PreferenceDetail.class);
+            TypedQuery<PreferenceDetail> query = em.createNamedQuery("PreferenceDetail.findByCus", PreferenceDetail.class);
             query.setParameter("cusId", obj.getCusId());
             query.setParameter("rmsId", obj.getRmsId());
             return query.getSingleResult();

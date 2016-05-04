@@ -8,6 +8,7 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.RoomsEM;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,6 +71,10 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
     
      public List<Rooms> findAvailableByAmmount(Integer limit) {
           return roomsEm.findAvailableByAmmount(limit);
+     }
+     
+     public List<Rooms> findAvailable(Rooms room, Date fecIni, Date fecFin){
+         return roomsEm.findAvailable(room, fecIni, fecFin);
      }
     
 }
