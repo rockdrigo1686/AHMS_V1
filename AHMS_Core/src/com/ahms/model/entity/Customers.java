@@ -320,6 +320,7 @@ public class Customers implements Serializable {
     @Override
     public String toString() {
         return getFullName();
+        
     }
     
     public String getFullName(){
