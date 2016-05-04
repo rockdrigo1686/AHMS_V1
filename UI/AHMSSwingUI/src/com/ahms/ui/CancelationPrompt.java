@@ -6,6 +6,7 @@
 package com.ahms.ui;
 
 import com.ahms.boundary.SecurityBoundary;
+import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Color;
 
@@ -15,6 +16,7 @@ import java.awt.Color;
  */
 public class CancelationPrompt extends javax.swing.JDialog {
     private boolean autorized;
+    private Users autUser;
 
     /**
      * Creates new form CancelationPrompt
@@ -22,6 +24,7 @@ public class CancelationPrompt extends javax.swing.JDialog {
     public CancelationPrompt(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.autUser = null;
     }
 
     /**
@@ -129,7 +132,8 @@ public class CancelationPrompt extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         SecurityBoundary secBoundary = new SecurityBoundary();
-        this.autorized = secBoundary.findByPassword(new String(txtPassword.getPassword())) != null;
+        this.autUser = secBoundary.findByPassword(new String(txtPassword.getPassword()));
+        this.autorized =  this.autUser!= null;
         if (!this.autorized) {
             lblError.setText(UIConstants.ERROR_AUT_CODE);
             lblError.setForeground(Color.red);
@@ -192,5 +196,9 @@ public class CancelationPrompt extends javax.swing.JDialog {
 
     public boolean getAutorization() {
         return this.autorized;
+    }
+    
+    public Users getAutUser(){
+        return this.autUser;
     }
 }
