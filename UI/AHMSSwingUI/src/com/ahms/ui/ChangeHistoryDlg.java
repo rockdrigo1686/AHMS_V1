@@ -225,7 +225,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ChangeHistoryDlg dialog = new ChangeHistoryDlg(new javax.swing.JFrame(), true, new Account(1), new Rooms(1));
+                ChangeHistoryDlg dialog = new ChangeHistoryDlg(new MainFrm(), true, new Account(1), new Rooms(1));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

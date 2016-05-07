@@ -5,11 +5,37 @@
  */
 package com.ahms.ui.modules.security;
 
+import com.ahms.boundary.security.ChangeHistoryBoundary;
+import com.ahms.model.entity.ChangeHistory;
+import com.ahms.ui.utils.DateLabelFormatter;
+import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.UIConstants;
+import java.awt.Component;
+import java.awt.Font;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 /**
  *
  * @author rsoto
  */
 public class ChangeHistoryFrm extends javax.swing.JDialog {
+
+    private List<ChangeHistory> resultList = null;
+    private ChangeHistoryBoundary bouHistory = null;
+    private DefaultTableModel tableModel = null;
+    private Map<String, Component> formComponentMap = new HashMap<String, Component>();
+    private Map<String, Component> buttonMap = new HashMap<String, Component>();
+    private FormManager formManager = null;
 
     /**
      * Creates new form ChangeHistoryFrm
@@ -17,6 +43,13 @@ public class ChangeHistoryFrm extends javax.swing.JDialog {
     public ChangeHistoryFrm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        configDatePickers();
+        formManager = new FormManager();
+        formManager.createComponentMaps(this);
+        formManager.setDefaultFormStatus();
+        bouHistory = new ChangeHistoryBoundary();
+        resultList = searchAll();
+        fillTable(resultTable);
     }
 
     /**
@@ -27,22 +60,220 @@ public class ChangeHistoryFrm extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
+
+        changeHistory1 = new com.ahms.model.entity.ChangeHistory();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnLimpiar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
+        jSeparator6 = new javax.swing.JToolBar.Separator();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jpFecEntContainerRes = new javax.swing.JPanel();
+        jpFecSalContainerRes = new javax.swing.JPanel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        resultTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.setMargin(new java.awt.Insets(0, 10, 0, 0));
+        jToolBar1.setName("mainToolBar"); // NOI18N
+
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772664_file.png"))); // NOI18N
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setFocusable(false);
+        btnLimpiar.setName("btLimpiar"); // NOI18N
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnLimpiar);
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772615_file_search.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.setFocusable(false);
+        btnBuscar.setName("btnBuscar"); // NOI18N
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnBuscar);
+        jToolBar1.add(jSeparator5);
+        jToolBar1.add(jSeparator6);
+
+        jLabel1.setText("Usuario: ");
+
+        jLabel2.setText("Usuario Autorización: ");
+
+        jLabel3.setText("de:");
+
+        jLabel4.setText("a:");
+
+        jTextField1.setName("chaUsr"); // NOI18N
+
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, changeHistory1, org.jdesktop.beansbinding.ELProperty.create("${chaUsr}"), jTextField1, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        jTextField2.setName("chaUsrAut"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, changeHistory1, org.jdesktop.beansbinding.ELProperty.create("${chaUsrAut}"), jTextField2, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        javax.swing.GroupLayout jpFecEntContainerResLayout = new javax.swing.GroupLayout(jpFecEntContainerRes);
+        jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
+        jpFecEntContainerResLayout.setHorizontalGroup(
+            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jpFecEntContainerResLayout.setVerticalGroup(
+            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 32, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jpFecSalContainerResLayout = new javax.swing.GroupLayout(jpFecSalContainerRes);
+        jpFecSalContainerRes.setLayout(jpFecSalContainerResLayout);
+        jpFecSalContainerResLayout.setHorizontalGroup(
+            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jpFecSalContainerResLayout.setVerticalGroup(
+            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 32, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setName("trSp"); // NOI18N
+
+        resultTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Clave", "Nombre", "Estatus", "Fecha Mod", "Usuario Mod"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        resultTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        resultTable.setName("resultTable"); // NOI18N
+        resultTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(resultTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel3))
+                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel4)))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        // TODO add your handling code here:
+
+        formManager.setDefaultFormStatus();
+        /*try {
+         profile.resetProperties();
+         } catch (IllegalArgumentException ex) {
+         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (IllegalAccessException ex) {
+         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
+        resultList = searchAll();
+        fillTable(resultTable);
+        formManager.setDefaultFormStatus();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        resultList = bouHistory.search(changeHistory1);
+        fillTable(resultTable);
+        formManager.updateButtonMenuState(UIConstants.BTN_BUSCAR);
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -86,6 +317,123 @@ public class ChangeHistoryFrm extends javax.swing.JDialog {
         });
     }
 
+    private void configDatePickers() {
+
+        Calendar calToday = Calendar.getInstance();
+        Calendar calTomorrow = Calendar.getInstance();
+        calTomorrow.add(Calendar.DATE, 1);
+
+        UtilDateModel modelEntrada = new UtilDateModel();
+        Properties pEntrada = new Properties();
+        pEntrada.put("text.today", calToday.get(Calendar.DATE));
+        pEntrada.put("text.month", calToday.get(Calendar.MONTH + 1));
+        pEntrada.put("text.year", calToday.get(Calendar.YEAR));
+        JDatePanelImpl datePanelEntrada = new JDatePanelImpl(modelEntrada, pEntrada);
+        JDatePickerImpl datePickerEntrada = new JDatePickerImpl(datePanelEntrada, new DateLabelFormatter());
+        datePickerEntrada.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerEntrada.setLocation(0, 0);
+        datePickerEntrada.setSize(223, 50);
+        datePickerEntrada.setVisible(true);
+        datePickerEntrada.setEnabled(true);
+        datePickerEntrada.getJFormattedTextField().setValue(calToday);
+        this.jpFecEntContainerRes.add(datePickerEntrada);
+
+        UtilDateModel modelSalida = new UtilDateModel();
+        Properties pSalida = new Properties();
+        pSalida.put("text.today", calTomorrow.get(Calendar.DATE));
+        pSalida.put("text.month", calTomorrow.get(Calendar.MONTH + 1));
+        pSalida.put("text.year", calTomorrow.get(Calendar.YEAR));
+        JDatePanelImpl datePanelSalida = new JDatePanelImpl(modelSalida, pSalida);
+        JDatePickerImpl datePickerSalida = new JDatePickerImpl(datePanelSalida, new DateLabelFormatter());
+        datePanelSalida.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerSalida.setLocation(0, 0);
+        datePickerSalida.setSize(223, 50);
+        datePickerSalida.setVisible(true);
+        datePickerSalida.setEnabled(true);
+        datePickerSalida.getJFormattedTextField().setValue(calTomorrow);
+        this.jpFecSalContainerRes.add(datePickerSalida);
+
+        UtilDateModel modelEntradaRes = new UtilDateModel();
+        Properties pEntradaRes = new Properties();
+        pEntradaRes.put("text.today", calToday.get(Calendar.DATE));
+        pEntradaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
+        pEntradaRes.put("text.year", calToday.get(Calendar.YEAR));
+        JDatePanelImpl datePanelEntradaRes = new JDatePanelImpl(modelEntradaRes, pEntradaRes);
+        JDatePickerImpl datePickerEntradaRes = new JDatePickerImpl(datePanelEntradaRes, new DateLabelFormatter());
+        datePickerEntradaRes.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerEntradaRes.setLocation(0, 0);
+        datePickerEntradaRes.setSize(223, 50);
+        datePickerEntradaRes.setVisible(true);
+        datePickerEntradaRes.setEnabled(true);
+        datePickerEntradaRes.getJFormattedTextField().setValue(calToday);
+        this.jpFecEntContainerRes.add(datePickerEntradaRes);
+
+        UtilDateModel modelSalidaRes = new UtilDateModel();
+        Properties psalidaRes = new Properties();
+        psalidaRes.put("text.today", calToday.get(Calendar.DATE));
+        psalidaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
+        psalidaRes.put("text.year", calToday.get(Calendar.YEAR));
+        JDatePanelImpl datePanelSalidaRes = new JDatePanelImpl(modelSalidaRes, psalidaRes);
+        JDatePickerImpl datePickerSalidaRes = new JDatePickerImpl(datePanelSalidaRes, new DateLabelFormatter());
+        datePickerSalidaRes.setFont(new Font("Arial", Font.PLAIN, 8));
+        datePickerSalidaRes.setLocation(0, 0);
+        datePickerSalidaRes.setSize(223, 50);
+        datePickerSalidaRes.setVisible(true);
+        datePickerSalidaRes.setEnabled(true);
+        datePickerSalidaRes.getJFormattedTextField().setValue(calTomorrow);
+        this.jpFecSalContainerRes.add(datePickerSalidaRes);
+
+    }
+
+    private List<ChangeHistory> searchAll() {
+        return bouHistory.searchAll(new ChangeHistory());
+    }
+
+    //</editor-fold>
+    private void fillTable(JTable resultTable) {
+        String col[] = {"ID", "Usuario", "Cuarto", "Motivo", "Cuarto Nuevo", "Autorizado Por", "Fecha"};
+
+        tableModel = new DefaultTableModel(col, 0) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
+
+        // The 0 argument is number rows.
+        resultList.stream().forEach((next) -> {
+            tableModel.addRow(new Object[]{next.getChaId(), next.getChaUsr(), next.getChaRmB().getRmsNumber(), next.getChaDescc(), next.getChaRmA().getRmsNumber(),
+                next.getChaUsrAut(), next.getChaDate()});
+        });
+
+        resultTable.setModel(tableModel);
+        resultTable.getColumn("ID").setMinWidth(0);
+        resultTable.getColumn("ID").setMaxWidth(0);
+        resultTable.setColumnSelectionAllowed(false);
+        resultTable.setCellSelectionEnabled(false);
+        resultTable.setRowSelectionAllowed(true);
+        resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiar;
+    private com.ahms.model.entity.ChangeHistory changeHistory1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator5;
+    private javax.swing.JToolBar.Separator jSeparator6;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JPanel jpFecEntContainerRes;
+    private javax.swing.JPanel jpFecSalContainerRes;
+    private javax.swing.JTable resultTable;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

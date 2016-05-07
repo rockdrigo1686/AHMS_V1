@@ -7,10 +7,8 @@ package com.ahms.ui;
 
 import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
-import com.ahms.boundary.security.RatesBoundary;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
-import com.ahms.model.entity.Rates;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
 import com.ahms.ui.utils.JTableDoubleClickListener;
