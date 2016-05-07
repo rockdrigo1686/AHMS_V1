@@ -8,6 +8,7 @@ package com.ahms.model.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,6 +48,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),
     @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds")})
 public class Rooms implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaRmB")
+    private List<ChangeHistory> changeHistoryList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaRmA")
+    private List<ChangeHistory> changeHistoryList1;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -222,6 +227,24 @@ public class Rooms implements Serializable {
     @Override
     public String toString() {
         return getRmsId().toString();
+    }
+
+    @XmlTransient
+    public List<ChangeHistory> getChangeHistoryList() {
+        return changeHistoryList;
+    }
+
+    public void setChangeHistoryList(List<ChangeHistory> changeHistoryList) {
+        this.changeHistoryList = changeHistoryList;
+    }
+
+    @XmlTransient
+    public List<ChangeHistory> getChangeHistoryList1() {
+        return changeHistoryList1;
+    }
+
+    public void setChangeHistoryList1(List<ChangeHistory> changeHistoryList1) {
+        this.changeHistoryList1 = changeHistoryList1;
     }
     
   
