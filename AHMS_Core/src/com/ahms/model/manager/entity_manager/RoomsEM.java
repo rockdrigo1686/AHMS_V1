@@ -21,8 +21,8 @@ import javax.persistence.TypedQuery;
  *
  * @author rsoto
  */
-public class RoomsEM extends AHMSEntityManager{
-    
+public class RoomsEM extends AHMSEntityManager {
+
     public Rooms findByRmsId(Rooms room) {
         try {
             if (em == null || !em.isOpen()) {
@@ -37,13 +37,13 @@ public class RoomsEM extends AHMSEntityManager{
             } else {
                 throw e;
             }
-        } finally { 
+        } finally {
             if (em != null) {
                 closeEm();
             }
         }
     }
-    
+
     public List<Rooms> findByFloor(Rooms rooms) {
         try {
             if (em == null || !em.isOpen()) {
@@ -65,7 +65,7 @@ public class RoomsEM extends AHMSEntityManager{
         }
 
     }
-    
+
     public List<Rooms> findByRmsStatus(Rooms rooms) {
         try {
             if (em == null || !em.isOpen()) {
@@ -86,8 +86,8 @@ public class RoomsEM extends AHMSEntityManager{
             }
         }
 
-    }   
-    
+    }
+
     public List<Rooms> findByRmsBeds(Rooms rooms) {
         try {
             if (em == null || !em.isOpen()) {
@@ -108,15 +108,25 @@ public class RoomsEM extends AHMSEntityManager{
             }
         }
 
-    }   
-    
+    }
+
     public List<Rooms> findAvailable(Rooms rooms, Date fecIni, Date fecFin) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Query query = em.createNativeQuery("select a.* from rooms a where a.rms_beds = " + rooms.getRmsBeds().getRtyId() + " and (a.rms_status = 'AV' or (a.rms_status = 'RS' AND a.rms_id in (select b.rms_id from reservation b     where b.res_fec_ini < "+ sdf.format(fecFin)  +" and b.res_fec_fin > "+ sdf.format(fecIni) + " )))", Rooms.class);
+            StringBuilder sb = new StringBuilder();
+            sb.append("select a.* from rooms a");
+            sb.append(" join reservation r on r.rms_id = a.rms_id");
+            sb.append(" where a.rms_beds = 1 ");
+            sb.append(" and a.rms_status = '"+MMKeys.Rooms.STA_DISPONIBLE_KEY+"' ");
+            sb.append(" or (a.rms_status = '"+MMKeys.Rooms.STA_RESERVADO_KEY+"' ");
+            sb.append(" AND ( (?1 < r.res_fec_fin   AND ?2 < r.res_fec_ini) or  ?1 > r.res_fec_fin) )");
+            
+            Query query = em.createNativeQuery(sb.toString(), Rooms.class);
+            query.setParameter(1, fecIni);
+            query.setParameter(2, fecFin);
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
@@ -129,14 +139,14 @@ public class RoomsEM extends AHMSEntityManager{
                 closeEm();
             }
         }
-    }   
-    
+    }
+
     public List<Rooms> findAvailableByAmmount(Integer limit) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            Query query = em.createNativeQuery("SELECT r.* FROM rooms r WHERE r.rms_status = '"+ MMKeys.Rooms.STA_DISPONIBLE_KEY +"' LIMIT " + limit , Rooms.class);
+            Query query = em.createNativeQuery("SELECT r.* FROM rooms r WHERE r.rms_status = '" + MMKeys.Rooms.STA_DISPONIBLE_KEY + "' LIMIT " + limit, Rooms.class);
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
@@ -151,33 +161,33 @@ public class RoomsEM extends AHMSEntityManager{
         }
 
     }
-    
+
     public List<Rooms> search(Rooms room) {
         try {
-            if (this.em == null || !this.em.isOpen() ) {
+            if (this.em == null || !this.em.isOpen()) {
                 this.createEm();
             }
             TypedQuery<Rooms> query;
-            Map<String,Object> paramMap = new HashMap<String,Object>();
+            Map<String, Object> paramMap = new HashMap<String, Object>();
             StringBuilder sQuery = new StringBuilder("SELECT r FROM Rooms r WHERE 1=1 ");
-            if (room.getRmsId()!= null) {
+            if (room.getRmsId() != null) {
                 sQuery.append(" AND r.rmsNumber =:rmsNumber");
-                paramMap.put("rmsNumber",room.getRmsNumber());
+                paramMap.put("rmsNumber", room.getRmsNumber());
             }
             if (room.getFlrId() != null) {
                 sQuery.append(" AND r.flrId = :flrId");
-                paramMap.put("flrId",room.getFlrId());
+                paramMap.put("flrId", room.getFlrId());
             }
-            if (room.getRmsStatus()!= null && !"".equals(room.getRmsStatus())) {
+            if (room.getRmsStatus() != null && !"".equals(room.getRmsStatus())) {
                 sQuery.append(" AND r.rmsStatus = :rmsStatus");
-                paramMap.put("rmsStatus",room.getRmsStatus());
+                paramMap.put("rmsStatus", room.getRmsStatus());
             }
             query = this.em.createQuery(sQuery.toString(), (Class<Rooms>) Rooms.class);
-            
+
             paramMap.keySet().stream().forEach((paramName) -> {
                 query.setParameter(paramName, paramMap.get(paramName));
             });
-            
+
             return query.getResultList();
 
         } catch (Exception e) {
