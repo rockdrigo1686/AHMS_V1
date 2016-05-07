@@ -22,10 +22,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author jorge
- */
 @Entity
 @Table(name = "customers", catalog = "db_ahms", schema = "")
 @XmlRootElement
