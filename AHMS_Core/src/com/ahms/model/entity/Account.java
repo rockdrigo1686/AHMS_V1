@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,6 +49,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.checkAccount", query = "select a from Account a where (a.actStatus = :actStatus1 or a.actStatus = :actStatus2) and a.cusId = :cusId ")
 })
 public class Account implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.LAZY)
+    private List<ChangeHistory> changeHistoryList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -232,6 +235,15 @@ public class Account implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.boundary.Account[ actId=" + actId + " ]";
+    }
+
+    @XmlTransient
+    public List<ChangeHistory> getChangeHistoryList() {
+        return changeHistoryList;
+    }
+
+    public void setChangeHistoryList(List<ChangeHistory> changeHistoryList) {
+        this.changeHistoryList = changeHistoryList;
     }
     
 }

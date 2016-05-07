@@ -43,6 +43,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus and u.usrPwd = :usrPwd"),
     @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = :usrStatus")})
 public class Users implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaUsrAut")
+    private List<ChangeHistory> changeHistoryList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaUsr")
+    private List<ChangeHistory> changeHistoryList1;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mvaUsrMod", fetch = FetchType.LAZY)
     private List<MultiValue> multiValueList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "proUsrMod", fetch = FetchType.LAZY)
@@ -370,5 +374,23 @@ public class Users implements Serializable {
 
     public void setProfilesList(List<Profiles> profilesList) {
         this.profilesList = profilesList;
+    }
+
+    @XmlTransient
+    public List<ChangeHistory> getChangeHistoryList() {
+        return changeHistoryList;
+    }
+
+    public void setChangeHistoryList(List<ChangeHistory> changeHistoryList) {
+        this.changeHistoryList = changeHistoryList;
+    }
+
+    @XmlTransient
+    public List<ChangeHistory> getChangeHistoryList1() {
+        return changeHistoryList1;
+    }
+
+    public void setChangeHistoryList1(List<ChangeHistory> changeHistoryList1) {
+        this.changeHistoryList1 = changeHistoryList1;
     }
 }

@@ -8,7 +8,6 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.ServiceTypes;
 import com.ahms.model.entity.Services;
-import com.ahms.model.manager.entity_manager.AccountEM;
 import com.ahms.model.manager.entity_manager.ServiceEM;
 import java.util.List;
 
@@ -26,12 +25,12 @@ public class ServiceBoundary implements AHMSBoundary<Services>{
 
     @Override
     public List<Services> search(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceEM.search(obj);
     }
 
     @Override
     public List<Services> searchAll(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceEM.searchAll(obj);
     }
     
     public List<Services> findAllByServiceType(ServiceTypes type) {
@@ -40,22 +39,22 @@ public class ServiceBoundary implements AHMSBoundary<Services>{
 
     @Override
     public Services find(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return serviceEM.find(obj);
     }
 
     @Override
     public int insert(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceEM.insert(obj);
     }
 
     @Override
     public int update(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceEM.update(obj);
     }
 
     @Override
     public int delete(Services obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return serviceEM.delete(obj);
     }
     
 }

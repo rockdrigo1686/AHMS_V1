@@ -8,6 +8,7 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.manager.entity_manager.ReservationEM;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,6 +51,10 @@ public class ReservationBoundary implements AHMSBoundary<Reservation>{
     @Override
     public int delete(Reservation obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void checkReservations(Date date) {
+        reservationEM.checkReservations(date);
     }
     
 }
