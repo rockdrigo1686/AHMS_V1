@@ -1184,7 +1184,6 @@ public class MainFrm extends javax.swing.JFrame {
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
             List<Rooms> roomsAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
             for(Rooms room : roomsAvailableByType){
-                //if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
                     quickRentRoomAssigned = room;
                     jlQRRoomNumber.setText(room.getRmsNumber());
                     jlQRRoomNumber.setVisible(true);
@@ -1211,7 +1210,6 @@ public class MainFrm extends javax.swing.JFrame {
                     jlQRIVA.setText(quickRentIva.toString());
                     jlQRTotal.setText(quickRentTotal.toString());                
                     return;
-                //}            
             }
             JOptionPane.showMessageDialog(this, UIConstants.NO_AVAIL_ROOMS);            
         } catch (Exception e) {
