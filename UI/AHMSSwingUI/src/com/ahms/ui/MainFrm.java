@@ -5,6 +5,7 @@ import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
+import com.ahms.boundary.security.PreferenceDetailBoundary;
 import com.ahms.boundary.security.ReservationBoundary;
 import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
@@ -14,6 +15,7 @@ import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
@@ -68,6 +70,7 @@ public class MainFrm extends javax.swing.JFrame {
     private ReservationBoundary reservationBoundary;
     private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
+    private PreferenceDetailBoundary preferenceDetailBoundary  = null;
     
     //QuickRent Instances
     private Rooms quickRentRoomAssigned = null;
@@ -155,6 +158,7 @@ public class MainFrm extends javax.swing.JFrame {
         roomTypesBoundary = new RoomTypesBoundary();
         customersBoundary = new CustomersBoundary();
         reservationBoundary = new ReservationBoundary();
+        preferenceDetailBoundary = new PreferenceDetailBoundary();
         
         jlQRRoomNumber.setVisible(false);
         jlQuickResRoomNumber.setVisible(false);
@@ -186,7 +190,6 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentTotal = BigDecimal.ZERO;
         quickrentIvaPercent = BigDecimal.ZERO;
         jlQRRoomNumber.setVisible(false);
-        jbQRAddGuests.setEnabled(false);
         jbQRPagar.setEnabled(false);
         
     }
@@ -302,29 +305,7 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
-        /*jtDashboard.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int clicks = e.getClickCount();
-                int row = jtDashboard.getSelectedRow();
-                MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
-                if(clicks > 1){ // doble click
-                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
-                        //llamar a agregar servicios
-                        Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                        RoomService roomService = new RoomService(null, true, roomObj,currentShift);
-                        roomService.setLocationRelativeTo(e.getComponent().getParent().getParent().getParent());
-                        roomService.setVisible(true);
-                    }
-                } else {  // 1 click
-                    jbCheckOut.setEnabled(false);
-                    if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
-                        jbCheckOut.setEnabled(true);
-                    }                    
-                }                
-            }
-
-        });*/
+        
     }
 
     private Rooms getRoomFromDashboard(Integer rmsId){
@@ -450,7 +431,6 @@ public class MainFrm extends javax.swing.JFrame {
         jpFecSalContainer = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jspNumeroPersonas = new javax.swing.JSpinner();
-        jbQRAddGuests = new javax.swing.JButton();
         jbQRPagar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jcbQuickRentTipo = new javax.swing.JComboBox();
@@ -464,7 +444,6 @@ public class MainFrm extends javax.swing.JFrame {
         jbQRSearchRoom = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jlQRRoomNumber = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jlRegistroNombre1 = new javax.swing.JLabel();
         jlRegistroPaterno1 = new javax.swing.JLabel();
@@ -704,13 +683,6 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel10.setText("Numero de Personas:");
 
-        jbQRAddGuests.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack4/user_male_edit.png"))); // NOI18N
-        jbQRAddGuests.setText("Inquilinos");
-        jbQRAddGuests.setEnabled(false);
-        jbQRAddGuests.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbQRAddGuests.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jbQRAddGuests.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
         jbQRPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
         jbQRPagar.setText("Pagar");
         jbQRPagar.setEnabled(false);
@@ -760,8 +732,6 @@ public class MainFrm extends javax.swing.JFrame {
         jlQRRoomNumber.setText("RoomNmbr");
         jlQRRoomNumber.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jButton1.setText("jButton1");
-
         javax.swing.GroupLayout jpRegistroRapidoLayout = new javax.swing.GroupLayout(jpRegistroRapido);
         jpRegistroRapido.setLayout(jpRegistroRapidoLayout);
         jpRegistroRapidoLayout.setHorizontalGroup(
@@ -804,10 +774,7 @@ public class MainFrm extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jlQRTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jpRegistroRapidoLayout.createSequentialGroup()
-                                    .addComponent(jbQRAddGuests, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton1)
-                                    .addGap(18, 18, 18)
+                                    .addGap(196, 196, 196)
                                     .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
@@ -870,15 +837,8 @@ public class MainFrm extends javax.swing.JFrame {
                     .addComponent(jLabel7)
                     .addComponent(jlQRTotal))
                 .addGap(18, 18, 18)
-                .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpRegistroRapidoLayout.createSequentialGroup()
-                        .addGroup(jpRegistroRapidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbQRAddGuests, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbQRPagar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpRegistroRapidoLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(33, 33, 33))))
+                .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Check in ", jpRegistroRapido);
@@ -1206,43 +1166,60 @@ public class MainFrm extends javax.swing.JFrame {
         CancelationPrompt cp = new CancelationPrompt(this, true);
         cp.setVisible(true);
         boolean response  =cp.getAutorization();
-        System.out.println(" response : " + response);
+        
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
-        RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
-        Rooms paramRoom = new Rooms();
-        paramRoom.setRmsBeds(tipoSeleccionado);
-        List<Rooms> roomsAvailableByType = roomsBounday.findByRmsBeds(paramRoom);
-        for(Rooms room : roomsAvailableByType){
-            if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
-                quickRentRoomAssigned = room;
-                jlQRRoomNumber.setText(room.getRmsNumber());
-                jlQRRoomNumber.setVisible(true);
-                jbQRAddGuests.setEnabled(true);
-                jbQRPagar.setEnabled(true);
-                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
-                //generar totales de renta
-                MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
-                quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-                
-                JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
-                JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
-                Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-                Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-                long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
-                //JOptionPane.showMessageDialog(this,days);
-                quickRentSubTotal = quickRentRoomAssigned.getRteId().getRtePrice().multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
-                
-                jlQRSubTotal.setText(quickRentSubTotal.toString());
-                jlQRIVA.setText(quickRentIva.toString());
-                jlQRTotal.setText(quickRentTotal.toString());                
-                return;
-            }            
+        try {
+            
+            RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
+            Rooms paramRoom = new Rooms();
+            paramRoom.setRmsBeds(tipoSeleccionado);
+            //List<Rooms> roomsAvailableByType = roomsBounday.findByRmsBeds(paramRoom);
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            List<Rooms> roomsAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
+            for(Rooms room : roomsAvailableByType){
+                if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
+                    quickRentRoomAssigned = room;
+                    jlQRRoomNumber.setText(room.getRmsNumber());
+                    jlQRRoomNumber.setVisible(true);
+
+                    jbQRPagar.setEnabled(true);
+                    jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+                    //generar totales de renta
+                    MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+                    quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+
+                    long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+                    //verificar si el Customer tiene tasa preferencial ------------------------------------
+                    PreferenceDetail preferenceDetail = new PreferenceDetail();
+                    preferenceDetail.setCusId(mainCustomer);
+                    preferenceDetail.setRmsId(room);
+                    PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+                    // ------------------------------------------------------------------------------------
+                    BigDecimal price = preference != null & preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+                    quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+                    quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+                    quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+
+                    jlQRSubTotal.setText(quickRentSubTotal.toString());
+                    jlQRIVA.setText(quickRentIva.toString());
+                    jlQRTotal.setText(quickRentTotal.toString());                
+                    return;
+                }            
+            }
+            JOptionPane.showMessageDialog(this, UIConstants.NO_AVAIL_ROOMS);            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
+            clearQuickRentInstance();
+            e.printStackTrace();
         }
-        JOptionPane.showMessageDialog(this, UIConstants.NO_AVAIL_ROOMS);
+        
+        
+        
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
 
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
@@ -1352,7 +1329,6 @@ public class MainFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem btnIniciarTurno;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1398,7 +1374,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jTable3;
     private javax.swing.JButton jbBuscarCliente;
     private javax.swing.JButton jbCheckOut;
-    private javax.swing.JButton jbQRAddGuests;
     private javax.swing.JButton jbQRPagar;
     private javax.swing.JButton jbQRSearchRoom;
     private javax.swing.JButton jbQuickResReserve;

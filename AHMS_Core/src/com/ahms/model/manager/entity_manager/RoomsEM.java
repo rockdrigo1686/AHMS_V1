@@ -8,6 +8,8 @@ package com.ahms.model.manager.entity_manager;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import com.ahms.util.MMKeys;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +108,27 @@ public class RoomsEM extends AHMSEntityManager{
             }
         }
 
+    }   
+    
+    public List<Rooms> findAvailable(Rooms rooms, Date fecIni, Date fecFin) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Query query = em.createNativeQuery("select a.* from rooms a where a.rms_beds = " + rooms.getRmsBeds().getRtyId() + " and (a.rms_status = 'AV' or (a.rms_status = 'RS' AND a.rms_id in (select b.rms_id from reservation b     where b.res_fec_ini < "+ sdf.format(fecFin)  +" and b.res_fec_fin > "+ sdf.format(fecIni) + " )))", Rooms.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
     }   
     
     public List<Rooms> findAvailableByAmmount(Integer limit) {

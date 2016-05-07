@@ -29,7 +29,7 @@ public class CustomersBoundary implements AHMSBoundary<Customers> {
 
     @Override
     public List<Customers> searchAll(Customers obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return customersEM.searchAll(obj);
     }
 
     @Override

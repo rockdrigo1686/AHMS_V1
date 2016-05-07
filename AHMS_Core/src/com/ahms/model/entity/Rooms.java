@@ -46,7 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rooms.findByRmsDesc", query = "SELECT r FROM Rooms r WHERE r.rmsDesc = :rmsDesc"),
     @NamedQuery(name = "Rooms.findByFlrId", query = "SELECT r FROM Rooms r WHERE r.flrId = :flrId"),
     @NamedQuery(name = "Rooms.findByRmsStatus", query = "SELECT r FROM Rooms r WHERE r.rmsStatus = :rmsStatus"),
-    @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds")})
+    @NamedQuery(name = "Rooms.findByRmsBeds", query = "SELECT r FROM Rooms r WHERE r.rmsBeds = :rmsBeds")/*,
+    @NamedQuery(name = "Rooms.findAvailable", query = "SELECT r FROM Rooms R WHERE R.rmsBeds = 1 and ( r.rmsStatus = 'AV' or (r.rmsStatus = 'RS' AND r.rmsId in ( SELECT b.rmsId FROM Reservation b WHERE b.resFecIni < :fechaFin AND b.resFecFin > :fechaIni )))")*/
+})
 public class Rooms implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaRmB")
     private List<ChangeHistory> changeHistoryList;
