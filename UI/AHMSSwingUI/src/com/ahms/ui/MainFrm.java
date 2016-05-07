@@ -1202,7 +1202,7 @@ public class MainFrm extends javax.swing.JFrame {
                     preferenceDetail.setRmsId(room);
                     PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
                     // ------------------------------------------------------------------------------------
-                    BigDecimal price = preference != null & preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+                    BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
                     quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
                     quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
                     quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
