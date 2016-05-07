@@ -22,8 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -41,13 +39,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ChangeHistory.findByChaDescc", query = "SELECT c FROM ChangeHistory c WHERE c.chaDescc = :chaDescc")})
 public class ChangeHistory implements Serializable {
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "cha_usr_aut_code", nullable = false, length = 255)
     private String chaUsrAutCode;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "cha_usr_code", nullable = false, length = 255)
     private String chaUsrCode;
     private static final long serialVersionUID = 1L;
@@ -57,13 +51,10 @@ public class ChangeHistory implements Serializable {
     @Column(name = "cha_id", nullable = false)
     private Integer chaId;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "cha_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date chaDate;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
     @Column(name = "cha_descc", nullable = false, length = 255)
     private String chaDescc;
     @JoinColumn(name = "cha_rm_b", referencedColumnName = "RMS_ID", nullable = false)
