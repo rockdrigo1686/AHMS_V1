@@ -6,7 +6,9 @@
 package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Reservation;
+import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.ReservationEM;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +47,7 @@ public class ReservationBoundary implements AHMSBoundary<Reservation>{
 
     @Override
     public int update(Reservation obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return reservationEM.update(obj);
     }
 
     @Override
@@ -53,8 +55,12 @@ public class ReservationBoundary implements AHMSBoundary<Reservation>{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void checkReservations(Date date) {
-        reservationEM.checkReservations(date);
+    public List<Reservation> checkReservations(Date date,MultiValue status) {
+        return reservationEM.checkReservations(date, status);
+    }
+    
+    public List<Reservation> findReservationByRoom(Rooms room, MultiValue status,Date date){
+        return reservationEM.findReservationByRoom(room, status, date);
     }
     
 }
