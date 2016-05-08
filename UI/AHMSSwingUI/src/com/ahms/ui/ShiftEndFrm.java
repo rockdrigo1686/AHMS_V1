@@ -17,6 +17,7 @@ import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -131,6 +132,7 @@ public class ShiftEndFrm extends javax.swing.JDialog {
                 "Descripcion", "Monto"
             }
         ));
+        tblCash.setPreferredSize(new java.awt.Dimension(400, 72));
         jScrollPane4.setViewportView(tblCash);
         if (tblCash.getColumnModel().getColumnCount() > 0) {
             tblCash.getColumnModel().getColumn(0).setResizable(false);
@@ -445,13 +447,14 @@ public class ShiftEndFrm extends javax.swing.JDialog {
             }
         }
 
+        DecimalFormat df = new DecimalFormat("$##,##0.00");
         saldoFinal = total + currentShift.getCouAmoIni().doubleValue() + salidas;
 
-        lblSaldoIni.setText(currentShift.getCouAmoIni().toString());
-        lblCards.setText(String.valueOf(totalTc));
-        lblCash.setText(String.valueOf(totalCs));
-        lblSaldoFin.setText(String.valueOf(saldoFinal));
-        lblOuts.setText(String.valueOf(salidas));
+        lblSaldoIni.setText(df.format(currentShift.getCouAmoIni()));
+        lblCards.setText(df.format(totalTc));
+        lblCash.setText(df.format(totalCs));
+        lblSaldoFin.setText(df.format(saldoFinal));
+        lblOuts.setText(df.format(salidas));
         lblNombre.setText(mainUser.getFullName());
         lblClave.setText(mainUser.getUsrCode());
 

@@ -1,7 +1,5 @@
 package com.ahms.ui;
 
-
-
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
@@ -22,6 +20,8 @@ import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.modules.security.ProfilesFrm;
+import com.ahms.ui.modules.security.UsersFrm;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -29,9 +29,6 @@ import com.ahms.util.MMKeys;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -58,7 +55,7 @@ import org.jdatepicker.impl.UtilDateModel;
  * @author rsoto
  */
 public class MainFrm extends javax.swing.JFrame {
-    
+
     private Customers mainCustomer;
     private Users mainUser = null;
     private Boolean shiftOn = false;
@@ -72,8 +69,8 @@ public class MainFrm extends javax.swing.JFrame {
     private ReservationBoundary reservationBoundary;
     private CashOut currentShift = null;
     private ArrayList<String> cuartos = new ArrayList<String>();
-    private PreferenceDetailBoundary preferenceDetailBoundary  = null;
-    
+    private PreferenceDetailBoundary preferenceDetailBoundary = null;
+
     //QuickRent Instances
     private Rooms quickRentRoomAssigned = null;
     private BigDecimal quickRentSubTotal = BigDecimal.ZERO;
@@ -83,8 +80,8 @@ public class MainFrm extends javax.swing.JFrame {
 
     //QuickRes Instances
     private Rooms quickResRoomAssigned = null;
-  
-    MainFrm() {        
+
+    MainFrm() {
     }
 
     private void fillData() {
@@ -99,7 +96,6 @@ public class MainFrm extends javax.swing.JFrame {
         this.mainCustomer = mainCustomer;
     }
 
-    
     public Users getMainUser() {
         return mainUser;
     }
@@ -149,7 +145,7 @@ public class MainFrm extends javax.swing.JFrame {
         this.setMainCustomer(new Customers());
         this.mainUser = mainUser;
         this.currentShift = currentShift;
-        
+
         initComponents();
         setExtendedState(Frame.MAXIMIZED_BOTH);
         roomsBounday = new RoomsBoundary();
@@ -161,7 +157,7 @@ public class MainFrm extends javax.swing.JFrame {
         customersBoundary = new CustomersBoundary();
         reservationBoundary = new ReservationBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
-        
+
         jlQRRoomNumber.setVisible(false);
         jlQuickResRoomNumber.setVisible(false);
         jbCheckOut.setEnabled(false);
@@ -173,19 +169,23 @@ public class MainFrm extends javax.swing.JFrame {
         configDatePickers();
         configGrid(roomsBounday.searchAll(new Rooms()));
         configFloors(floorsBoundary.findAllAvailable());
-        
+
         MultiValue multiValueDisp = new MultiValue();
         multiValueDisp.setMvaType(MMKeys.Rooms.GP_KEY);
         configDisponibilidad(multiValueBoundary.findByType(multiValueDisp));
-        
+
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
-        
-        
+
+        if (!MMKeys.Profiles.ADMI.equals(this.mainUser.getProId().getProCode())
+                && !MMKeys.Profiles.ACNT.equals(this.mainUser.getProId().getProCode())) {
+            menAdmin.setEnabled(false);
+            menConf.setEnabled(false);
+        }
     }
-    
-    public void clearQuickRentInstance(){
+
+    public void clearQuickRentInstance() {
         quickRentRoomAssigned = null;
         quickRentSubTotal = BigDecimal.ZERO;
         quickRentIva = BigDecimal.ZERO;
@@ -193,20 +193,20 @@ public class MainFrm extends javax.swing.JFrame {
         quickrentIvaPercent = BigDecimal.ZERO;
         jlQRRoomNumber.setVisible(false);
         jbQRPagar.setEnabled(false);
-        
+
     }
-    
-    public void clearQuickResInstance(){
+
+    public void clearQuickResInstance() {
         quickResRoomAssigned = null;
         jlQuickResRoomNumber.setVisible(false);
         jbQuickResReserve.setEnabled(false);
-        
+
     }
 
-    private void configTiposCuartos(List<RoomTypes> lstRoomTypes){
-        DefaultComboBoxModel modelquickRent= new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
+    private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
+        DefaultComboBoxModel modelquickRent = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbQuickRentTipo.setModel(modelquickRent);
-        
+
         DefaultComboBoxModel modelDashBoard = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbTipoCuarto.setModel(modelDashBoard);
         this.jcbTipoCuarto.addItemListener((ItemEvent arg0) -> {
@@ -214,29 +214,29 @@ public class MainFrm extends javax.swing.JFrame {
             roomTypes.setRmsBeds((RoomTypes) jcbTipoCuarto.getSelectedItem());
             configGrid(roomsBounday.findByRmsBeds(roomTypes));
         });
-                
+
         DefaultComboBoxModel modelQuickRes = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbQuickResTipoCuarto.setModel(modelQuickRes);
     }
-    
+
     private void configFloors(List<Floors> lstFloors) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
         this.jcbPisos.setModel(model);
         this.jcbPisos.addItemListener((ItemEvent arg0) -> {
             Rooms room = new Rooms();
-            room.setFlrId((Floors)this.jcbPisos.getSelectedItem());
+            room.setFlrId((Floors) this.jcbPisos.getSelectedItem());
             configGrid(roomsBounday.findByFloor(room));
         });
     }
-    
-    private void configDisponibilidad(List<MultiValue> lstMultiValueDisp){
+
+    private void configDisponibilidad(List<MultiValue> lstMultiValueDisp) {
         DefaultComboBoxModel model = new DefaultComboBoxModel(lstMultiValueDisp.toArray(new MultiValue[lstMultiValueDisp.size()]));
         this.jcbDisponibilidad.setModel(model);
-        this.jcbDisponibilidad.addItemListener((ItemEvent arg0)  ->  {
-             Rooms roomDisp = new Rooms();
+        this.jcbDisponibilidad.addItemListener((ItemEvent arg0) -> {
+            Rooms roomDisp = new Rooms();
             roomDisp.setRmsStatus((MultiValue) jcbDisponibilidad.getSelectedItem());
-            configGrid(roomsBounday.findByRmsStatus(roomDisp));        
-        });        
+            configGrid(roomsBounday.findByRmsStatus(roomDisp));
+        });
     }
 
     public void configGrid(List<Rooms> rooms) {
@@ -307,11 +307,11 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
-        
+
     }
 
-    private Rooms getRoomFromDashboard(Integer rmsId){
-        Rooms room= null;
+    private Rooms getRoomFromDashboard(Integer rmsId) {
+        Rooms room = null;
         try {
             room = roomsBounday.findByRmsId(new Rooms(rmsId));
         } catch (Exception e) {
@@ -319,7 +319,7 @@ public class MainFrm extends javax.swing.JFrame {
         }
         return room;
     }
-    
+
     private void configDatePickers() {
 
         Calendar calToday = Calendar.getInstance();
@@ -355,7 +355,7 @@ public class MainFrm extends javax.swing.JFrame {
         datePickerSalida.setEnabled(true);
         datePickerSalida.getJFormattedTextField().setValue(calTomorrow);
         this.jpFecSalContainer.add(datePickerSalida);
-        
+
         UtilDateModel modelEntradaRes = new UtilDateModel();
         Properties pEntradaRes = new Properties();
         pEntradaRes.put("text.today", calToday.get(Calendar.DATE));
@@ -465,12 +465,29 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         btnIniciarTurno = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        menAdmin = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        miProfiles = new javax.swing.JMenuItem();
+        miUsers = new javax.swing.JMenuItem();
+        menConf = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
+        jMenu8 = new javax.swing.JMenu();
+        jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1024,7 +1041,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jTabbedPane5.getAccessibleContext().setAccessibleName("Cuartos");
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer.png"))); // NOI18N
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer Document.png"))); // NOI18N
         jMenu1.setText("Movimientos");
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
@@ -1036,6 +1053,19 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
         jMenu1.add(jMenuItem3);
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer.png"))); // NOI18N
+        jMenuItem1.setText("Movimientos de cuartos");
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Appointment Urgent.png"))); // NOI18N
+        jMenuItem16.setText("Reservaciones");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem16);
 
         jMenuBar1.add(jMenu1);
 
@@ -1064,28 +1094,95 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771639_2.png"))); // NOI18N
-        jMenu3.setText("jMenu3");
+        menAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Desktop.png"))); // NOI18N
+        menAdmin.setText("Administracion");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771614_7.png"))); // NOI18N
-        jMenuItem1.setText("RoomService");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/chart_bar.png"))); // NOI18N
+        jMenu4.setText("Reportes");
+
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/blog.png"))); // NOI18N
+        jMenuItem13.setText("Gastos");
+        jMenu4.add(jMenuItem13);
+
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/blog.png"))); // NOI18N
+        jMenuItem14.setText("Ocupacion");
+        jMenu4.add(jMenuItem14);
+
+        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/blog.png"))); // NOI18N
+        jMenuItem15.setText("Corte de Caja");
+        jMenu4.add(jMenuItem15);
+
+        menAdmin.add(jMenu4);
+
+        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/group.png"))); // NOI18N
+        jMenu6.setText("Usuarios y Perfiles");
+
+        miProfiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
+        miProfiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/vcard.png"))); // NOI18N
+        miProfiles.setText("Perfiles");
+        miProfiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                miProfilesActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem1);
+        jMenu6.add(miProfiles);
 
-        jMenuItem4.setText("jMenuItem4");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        miUsers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
+        miUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/user.png"))); // NOI18N
+        miUsers.setText("Usuarios");
+        miUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                miUsersActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem4);
+        jMenu6.add(miUsers);
 
-        jMenuBar1.add(jMenu3);
+        menAdmin.add(jMenu6);
+
+        jMenuBar1.add(menAdmin);
+
+        menConf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Run.png"))); // NOI18N
+        menConf.setText("Configuracion");
+
+        jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/house.png"))); // NOI18N
+        jMenu7.setText("Pisos y Cuartos");
+
+        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem6.setText("Pisos");
+        jMenu7.add(jMenuItem6);
+
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem7.setText("Precios");
+        jMenu7.add(jMenuItem7);
+
+        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem8.setText("Tipos de Cuartos");
+        jMenu7.add(jMenuItem8);
+
+        jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem9.setText("Cuartos");
+        jMenu7.add(jMenuItem9);
+
+        menConf.add(jMenu7);
+
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/package.png"))); // NOI18N
+        jMenu8.setText("Servicios");
+
+        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem10.setText("Tipos de Servicios");
+        jMenu8.add(jMenuItem10);
+
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem11.setText("Servicios");
+        jMenu8.add(jMenuItem11);
+
+        menConf.add(jMenu8);
+
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money.png"))); // NOI18N
+        jMenuItem12.setText("Tipos de Pago");
+        menConf.add(jMenuItem12);
+
+        jMenuBar1.add(menConf);
 
         setJMenuBar(jMenuBar1);
 
@@ -1114,16 +1211,11 @@ public class MainFrm extends javax.swing.JFrame {
         lblRfc.setText(mainCustomer.getCusRfc());
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
     private void jbCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckOutActionPerformed
         Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
         Account account = accountBoundary.getActiveAccountByRoom(new Rooms(roomSelected));
-        
-        JDialog dialogCheckout = new CheckOutForm(this, true, account,new Rooms(roomSelected));
+
+        JDialog dialogCheckout = new CheckOutForm(this, true, account, new Rooms(roomSelected));
         dialogCheckout.setLocationRelativeTo(this);
         dialogCheckout.setVisible(true);
     }//GEN-LAST:event_jbCheckOutActionPerformed
@@ -1161,16 +1253,8 @@ public class MainFrm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        CancelationPrompt cp = new CancelationPrompt(this, true);
-        cp.setVisible(true);
-        boolean response  =cp.getAutorization();
-        
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
-        try {            
+        try {
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             Rooms paramRoom = new Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
@@ -1178,54 +1262,54 @@ public class MainFrm extends javax.swing.JFrame {
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
-            if(roomAvailableByType != null){
+            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime());
+            if (roomAvailableByType != null) {
                 quickRentRoomAssigned = roomAvailableByType;
                 jlQRRoomNumber.setText(roomAvailableByType.getRmsNumber());
                 jlQRRoomNumber.setVisible(true);
 
                 /*jbQRPagar.setEnabled(true);
-                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
-                //generar totales de renta
-                MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
-                quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+                 jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+                 //generar totales de renta
+                 MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+                 quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
 
-                long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
-                //verificar si el Customer tiene tasa preferencial ------------------------------------
-                PreferenceDetail preferenceDetail = new PreferenceDetail();
-                preferenceDetail.setCusId(mainCustomer);
-                preferenceDetail.setRmsId(roomAvailableByType);
-                PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
-                // ------------------------------------------------------------------------------------
-                BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
-                quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+                 long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+                 //verificar si el Customer tiene tasa preferencial ------------------------------------
+                 PreferenceDetail preferenceDetail = new PreferenceDetail();
+                 preferenceDetail.setCusId(mainCustomer);
+                 preferenceDetail.setRmsId(roomAvailableByType);
+                 PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+                 // ------------------------------------------------------------------------------------
+                 BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+                 quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+                 quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+                 quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
-                jlQRSubTotal.setText(quickRentSubTotal.toString());
-                jlQRIVA.setText(quickRentIva.toString());
-                jlQRTotal.setText(quickRentTotal.toString()); */
+                 jlQRSubTotal.setText(quickRentSubTotal.toString());
+                 jlQRIVA.setText(quickRentIva.toString());
+                 jlQRTotal.setText(quickRentTotal.toString()); */
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
-            }            
+            }
         } catch (Exception e) {
-            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage());
             clearQuickRentInstance();
             e.printStackTrace();
-        }        
+        }
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
 
-    private void updateQuickRentSubtotals(){
+    private void updateQuickRentSubtotals() {
         RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
         Rooms paramRoom = new Rooms();
         paramRoom.setRmsBeds(tipoSeleccionado);
-        
+
         JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
         JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
         Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
         Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-        Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
-        
+        Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime());
+
         jbQRPagar.setEnabled(true);
         jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
         //generar totales de renta
@@ -1237,18 +1321,18 @@ public class MainFrm extends javax.swing.JFrame {
         PreferenceDetail preferenceDetail = new PreferenceDetail();
         preferenceDetail.setCusId(mainCustomer);
         preferenceDetail.setRmsId(roomAvailableByType);
-        PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+        PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
         // ------------------------------------------------------------------------------------
-        BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+        BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice();
         quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
         quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
         quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
         jlQRSubTotal.setText(quickRentSubTotal.toString());
         jlQRIVA.setText(quickRentIva.toString());
-        jlQRTotal.setText(quickRentTotal.toString()); 
+        jlQRTotal.setText(quickRentTotal.toString());
     }
-    
+
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
         //actualizando el Room
         quickRentRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
@@ -1270,11 +1354,10 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
         quickRentAccount.setAccountTransactionsCollection(null);
 //        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));        
-        quickRentAccount.setCusId(mainCustomer);        
+        quickRentAccount.setCusId(mainCustomer);
         accountBoundary.insert(quickRentAccount);
-        
+
         //Insertando account transaction
-        
         AccountTransactions rentTran = new AccountTransactions();
         rentTran.setAtrDteMod(Calendar.getInstance().getTime());
         rentTran.setAtrNotes("Renta de Cuarto " + quickRentRoomAssigned.getRmsNumber());
@@ -1286,7 +1369,7 @@ public class MainFrm extends javax.swing.JFrame {
         rentTran.setSrvId(null);
         rentTran.setActId(quickRentAccount);
         accountTransactionsBoundary.insert(rentTran);
-        
+
         //LLamando a paymentModule
         PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
         paymentModule.setLocationRelativeTo(this);
@@ -1302,9 +1385,9 @@ public class MainFrm extends javax.swing.JFrame {
         //Actualizando el estatus del cuarto
         quickResRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_RESERVADO_KEY)));
         roomsBounday.update(quickResRoomAssigned);
-        
+
         //Reservando cuarto
-        Reservation reservation = new Reservation();                
+        Reservation reservation = new Reservation();
         reservation.setCusId(customersBoundary.find(new Customers(1)));
         reservation.setResDteMod(Calendar.getInstance().getTime());
         reservation.setResUsrMod(currentShift.getUsrId());
@@ -1314,7 +1397,7 @@ public class MainFrm extends javax.swing.JFrame {
         reservation.setResFecFin(calSalida.getTime());
         reservationBoundary.insert(reservation);
         GeneralFunctions.sendMessage(this, UIConstants.RESERVATION_OK + " Cuarto reservado: " + quickResRoomAssigned.getRmsNumber());
-        
+
         configGrid(roomsBounday.searchAll(new Rooms()));
         clearQuickResInstance();
     }//GEN-LAST:event_jbQuickResReserveActionPerformed
@@ -1328,41 +1411,57 @@ public class MainFrm extends javax.swing.JFrame {
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
-            if(roomAvailableByType != null){
+            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime());
+            if (roomAvailableByType != null) {
                 quickResRoomAssigned = roomAvailableByType;
                 jlQuickResRoomNumber.setText(roomAvailableByType.getRmsNumber());
                 jlQuickResRoomNumber.setVisible(true);
-                jbQuickResReserve.setEnabled(true); 
+                jbQuickResReserve.setEnabled(true);
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
             }
         } catch (Exception e) {
-            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage());
             //clearQuickRentInstance();
             e.printStackTrace();
-        }        
+        }
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
 
     private void jtDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDashboardMouseClicked
         int clicks = evt.getClickCount();
         int row = jtDashboard.getSelectedRow();
         MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
-        if(clicks > 1){ // doble click
-            if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+        if (clicks > 1) { // doble click
+            if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
                 //llamar a agregar servicios
                 Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                RoomService roomService = new RoomService(null, true, roomObj,currentShift);
+                RoomService roomService = new RoomService(null, true, roomObj, currentShift);
                 roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
                 roomService.setVisible(true);
             }
         } else {  // 1 click
             jbCheckOut.setEnabled(false);
-            if(estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)){
+            if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
                 jbCheckOut.setEnabled(true);
-            }                    
-        } 
+            }
+        }
     }//GEN-LAST:event_jtDashboardMouseClicked
+
+    private void miProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProfilesActionPerformed
+        // TODO add your handling code here:
+        ProfilesFrm profileFrm = new ProfilesFrm();
+        profileFrm.setVisible(true);
+    }//GEN-LAST:event_miProfilesActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void miUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miUsersActionPerformed
+        // TODO add your handling code here:
+        UsersFrm userFrm = new UsersFrm();
+        userFrm.setVisible(true);
+    }//GEN-LAST:event_miUsersActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1384,12 +1483,25 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
+    private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1440,6 +1552,10 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JTable jtDashboard;
     private javax.swing.JLabel lblCustName;
     private javax.swing.JLabel lblRfc;
+    private javax.swing.JMenu menAdmin;
+    private javax.swing.JMenu menConf;
+    private javax.swing.JMenuItem miProfiles;
+    private javax.swing.JMenuItem miUsers;
     // End of variables declaration//GEN-END:variables
 
 }
