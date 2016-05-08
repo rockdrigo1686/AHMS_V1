@@ -8,6 +8,7 @@ package com.ahms.model.manager.entity_manager;
 import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Guests;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
@@ -91,6 +92,34 @@ public class AccountTransactionsEM extends AHMSEntityManager {
         }
 
     }
+        
+    public List<AccountTransactions> findByCusId(Customers customer) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" SELECT t.* FROM account a ");
+            sbQuery.append(" INNER JOIN account_transactions t ");
+            sbQuery.append(" ON a.act_id = t.act_id ");
+            sbQuery.append(" WHERE a.cus_id = ?1 AND a.act_status = ?2 ");
+            Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
+            query.setParameter(1, customer.getCusId());
+            query.setParameter(2, MMKeys.Acounts.STA_ABIERTO_KEY);
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
+    
 
     public Integer updateGuests(List<Guests> mmList, AccountTransactions accountTransactions) {
         try {

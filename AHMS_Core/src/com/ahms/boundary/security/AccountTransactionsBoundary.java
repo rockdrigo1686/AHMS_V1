@@ -3,6 +3,7 @@ package com.ahms.boundary.security;
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Guests;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.AccountTransactionsEM;
@@ -37,6 +38,10 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
     @Override
     public AccountTransactions find(AccountTransactions obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<AccountTransactions> findByCusId(Customers customer) {
+        return accountTransactionsEM.findByCusId(customer);
     }
     
     public List<AccountTransactions> findAllByRmsId(Rooms room, Account account) {
