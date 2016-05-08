@@ -8,7 +8,6 @@ package com.ahms.model.manager.entity_manager;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import com.ahms.util.MMKeys;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,24 +109,27 @@ public class RoomsEM extends AHMSEntityManager {
 
     }
 
-    public List<Rooms> findAvailable(Rooms rooms, Date fecIni, Date fecFin) {
+    public Rooms findAvailable(Rooms rooms, Date fecIni, Date fecFin) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             StringBuilder sb = new StringBuilder();
             sb.append("select a.* from rooms a");
-            sb.append(" join reservation r on r.rms_id = a.rms_id");
-            sb.append(" where a.rms_beds = 1 ");
-            sb.append(" and a.rms_status = '"+MMKeys.Rooms.STA_DISPONIBLE_KEY+"' ");
-            sb.append(" or (a.rms_status = '"+MMKeys.Rooms.STA_RESERVADO_KEY+"' ");
-            sb.append(" AND ( (?1 < r.res_fec_fin   AND ?2 < r.res_fec_ini) or  ?1 > r.res_fec_fin) )");
+            sb.append(" left join reservation r on r.rms_id = a.rms_id and r.res_status = ?3 ");
+            sb.append(" where a.rms_beds = ?6 ");
+            sb.append(" and a.rms_status = ?4 ");
+            sb.append(" or (a.rms_status = ?5 ");
+            sb.append(" AND ( (?1 < r.res_fec_fin   AND ?2 < r.res_fec_ini) or  ?1 > r.res_fec_fin) ) LIMIT 1 ");
             
             Query query = em.createNativeQuery(sb.toString(), Rooms.class);
             query.setParameter(1, fecIni);
             query.setParameter(2, fecFin);
-            return query.getResultList();
+            query.setParameter(3, MMKeys.General.STA_ACTIVO_KEY);
+            query.setParameter(4, MMKeys.Rooms.STA_DISPONIBLE_KEY);
+            query.setParameter(5, MMKeys.Rooms.STA_RESERVADO_KEY);
+            query.setParameter(6, rooms.getRmsBeds().getRtyId());
+            return (Rooms) query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;

@@ -73,7 +73,7 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
           return roomsEm.findAvailableByAmmount(limit);
      }
      
-     public List<Rooms> findAvailable(Rooms room, Date fecIni, Date fecFin){
+     public Rooms findAvailable(Rooms room, Date fecIni, Date fecFin){
          return roomsEm.findAvailable(room, fecIni, fecFin);
      }
     
