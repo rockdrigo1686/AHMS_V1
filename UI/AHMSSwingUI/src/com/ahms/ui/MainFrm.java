@@ -1170,56 +1170,85 @@ public class MainFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
-        try {
-            
+        try {            
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             Rooms paramRoom = new Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
-            //List<Rooms> roomsAvailableByType = roomsBounday.findByRmsBeds(paramRoom);
             JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            List<Rooms> roomsAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
-            for(Rooms room : roomsAvailableByType){
-                    quickRentRoomAssigned = room;
-                    jlQRRoomNumber.setText(room.getRmsNumber());
-                    jlQRRoomNumber.setVisible(true);
+            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
+            if(roomAvailableByType != null){
+                quickRentRoomAssigned = roomAvailableByType;
+                jlQRRoomNumber.setText(roomAvailableByType.getRmsNumber());
+                jlQRRoomNumber.setVisible(true);
 
-                    jbQRPagar.setEnabled(true);
-                    jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
-                    //generar totales de renta
-                    MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
-                    quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+                /*jbQRPagar.setEnabled(true);
+                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+                //generar totales de renta
+                MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+                quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
 
-                    long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
-                    //verificar si el Customer tiene tasa preferencial ------------------------------------
-                    PreferenceDetail preferenceDetail = new PreferenceDetail();
-                    preferenceDetail.setCusId(mainCustomer);
-                    preferenceDetail.setRmsId(room);
-                    PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
-                    // ------------------------------------------------------------------------------------
-                    BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
-                    quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
-                    quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
-                    quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+                long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+                //verificar si el Customer tiene tasa preferencial ------------------------------------
+                PreferenceDetail preferenceDetail = new PreferenceDetail();
+                preferenceDetail.setCusId(mainCustomer);
+                preferenceDetail.setRmsId(roomAvailableByType);
+                PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+                // ------------------------------------------------------------------------------------
+                BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+                quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+                quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+                quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
-                    jlQRSubTotal.setText(quickRentSubTotal.toString());
-                    jlQRIVA.setText(quickRentIva.toString());
-                    jlQRTotal.setText(quickRentTotal.toString());                
-                    return;
-            }
-            JOptionPane.showMessageDialog(this, UIConstants.NO_AVAIL_ROOMS);            
+                jlQRSubTotal.setText(quickRentSubTotal.toString());
+                jlQRIVA.setText(quickRentIva.toString());
+                jlQRTotal.setText(quickRentTotal.toString()); */
+            } else {
+                GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
+            }            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
             clearQuickRentInstance();
             e.printStackTrace();
-        }
-        
-        
-        
+        }        
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
 
+    private void updateQuickRentSubtotals(){
+        RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
+        Rooms paramRoom = new Rooms();
+        paramRoom.setRmsBeds(tipoSeleccionado);
+        
+        JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
+        JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
+        Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+        Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+        Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
+        
+        jbQRPagar.setEnabled(true);
+        jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+        //generar totales de renta
+        MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+        quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+
+        long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+        //verificar si el Customer tiene tasa preferencial ------------------------------------
+        PreferenceDetail preferenceDetail = new PreferenceDetail();
+        preferenceDetail.setCusId(mainCustomer);
+        preferenceDetail.setRmsId(roomAvailableByType);
+        PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);                
+        // ------------------------------------------------------------------------------------
+        BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice(); 
+        quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+        quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+        quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+
+        jlQRSubTotal.setText(quickRentSubTotal.toString());
+        jlQRIVA.setText(quickRentIva.toString());
+        jlQRTotal.setText(quickRentTotal.toString()); 
+    }
+    
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
         //actualizando el Room
         quickRentRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
@@ -1291,17 +1320,28 @@ public class MainFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jbQuickResReserveActionPerformed
 
     private void jbQuickResSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuickResSearchActionPerformed
-        RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickResTipoCuarto.getSelectedItem();
-        for(Rooms room : tipoSeleccionado.getRoomsCollection()){
-            if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
-                quickResRoomAssigned = room;
-                jlQuickResRoomNumber.setText(room.getRmsNumber());
+        try {
+            RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickResTipoCuarto.getSelectedItem();
+            Rooms paramRoom = new Rooms();
+            paramRoom.setRmsBeds(tipoSeleccionado);
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom,calEntrada.getTime(), calSalida.getTime());
+            if(roomAvailableByType != null){
+                quickResRoomAssigned = roomAvailableByType;
+                jlQuickResRoomNumber.setText(roomAvailableByType.getRmsNumber());
                 jlQuickResRoomNumber.setVisible(true);
-                jbQuickResReserve.setEnabled(true);                
-                return;
-            }            
-        }
-        GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
+                jbQuickResReserve.setEnabled(true); 
+            } else {
+                GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
+            }
+        } catch (Exception e) {
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage()); 
+            //clearQuickRentInstance();
+            e.printStackTrace();
+        }        
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
 
     private void jtDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDashboardMouseClicked
