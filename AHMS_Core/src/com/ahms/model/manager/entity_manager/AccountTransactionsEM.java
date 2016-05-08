@@ -29,7 +29,8 @@ public class AccountTransactionsEM extends AHMSEntityManager {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            Query query = em.createNativeQuery("SELECT a.* FROM account_transactions a WHERE a.rms_id = " + accountTransactions.getRmsId().getRmsId() + " LIMIT 1 ", AccountTransactions.class);
+            Query query = em.createNativeQuery("SELECT a.* FROM account_transactions a WHERE a.rms_id = ?1 LIMIT 1 ", AccountTransactions.class);
+            query.setParameter(1, accountTransactions.getRmsId().getRmsId());
             return (AccountTransactions) query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
