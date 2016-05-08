@@ -68,6 +68,7 @@ public class CustomerCatalog extends javax.swing.JDialog {
                 JTableDoubleClickListener.addDoubleCLick(e, customersBean, resultList, formManager.getFormComponentMap());
                 if (e.getClickCount() == 2) {
                     formManager.updateButtonMenuState(UIConstants.DOUBLE_CLICK);
+                    btnPref.setEnabled(false);
                 }
             }
         });
@@ -122,27 +123,46 @@ public class CustomerCatalog extends javax.swing.JDialog {
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
         resultTable.getColumn("Nombre").setMaxWidth(150);
+        resultTable.getColumn("Nombre").setWidth(150);
         resultTable.getColumn("Paterno").setMaxWidth(150);
+        resultTable.getColumn("Paterno").setWidth(150);
         resultTable.getColumn("Materno").setMaxWidth(150);
+        resultTable.getColumn("Materno").setWidth(150);
         resultTable.getColumn("Dirección").setMaxWidth(150);
+        resultTable.getColumn("Dirección").setWidth(150);
         resultTable.getColumn("Código Postal").setMaxWidth(150);
+        resultTable.getColumn("Código Postal").setWidth(150);
         resultTable.getColumn("Estado").setMaxWidth(150);
+        resultTable.getColumn("Estado").setWidth(150);
         resultTable.getColumn("Ciudad").setMaxWidth(150);
+        resultTable.getColumn("Ciudad").setWidth(150);
         resultTable.getColumn("RFC").setMaxWidth(150);
+        resultTable.getColumn("RFC").setWidth(150);
         resultTable.getColumn("Tel").setMaxWidth(150);
+        resultTable.getColumn("Tel").setWidth(150);
         resultTable.getColumn("Cel").setMaxWidth(150);
+        resultTable.getColumn("Cel").setWidth(150);
         resultTable.getColumn("Correo").setMaxWidth(150);
+        resultTable.getColumn("Correo").setWidth(150);
         resultTable.getColumn("Placas").setMaxWidth(150);
+        resultTable.getColumn("Placas").setWidth(150);
         resultTable.getColumn("Factura").setMaxWidth(150);
+        resultTable.getColumn("Factura").setWidth(150);
         resultTable.getColumn("Preferencial").setMaxWidth(150);
+        resultTable.getColumn("Preferencial").setWidth(150);
         resultTable.getColumn("Estatus").setMaxWidth(150);
+        resultTable.getColumn("Estatus").setWidth(150);
         resultTable.getColumn("Usuario Mod").setMaxWidth(150);
+        resultTable.getColumn("Usuario Mod").setWidth(150);
         resultTable.getColumn("Fecha Mod").setMaxWidth(150);
+        resultTable.getColumn("Fecha Mod").setWidth(150);
+        
         resultTable.setColumnSelectionAllowed(false);
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);
         resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+        
+        //resultTable.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 
     }
 
@@ -161,6 +181,7 @@ public class CustomerCatalog extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
+        btnPref = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         cusName = new javax.swing.JTextField();
         cusLst1 = new javax.swing.JTextField();
@@ -306,6 +327,20 @@ public class CustomerCatalog extends javax.swing.JDialog {
         jToolBar1.add(btnEliminar);
         jToolBar1.add(jSeparator5);
 
+        btnPref.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Star.png"))); // NOI18N
+        btnPref.setText("Preferencias");
+        btnPref.setEnabled(false);
+        btnPref.setFocusable(false);
+        btnPref.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnPref.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnPref.setName("btnPref"); // NOI18N
+        btnPref.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrefActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnPref);
+
         jLabel1.setText("Nombre:");
 
         cusName.setName("cusName"); // NOI18N
@@ -417,6 +452,12 @@ public class CustomerCatalog extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, customersBean, org.jdesktop.beansbinding.ELProperty.create("${cusPref}"), cusPref, org.jdesktop.beansbinding.BeanProperty.create("selected"));
         bindingGroup.addBinding(binding);
 
+        cusPref.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cusPrefActionPerformed(evt);
+            }
+        });
+
         jLabel11.setText("Estatus:");
 
         cusStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -438,6 +479,7 @@ public class CustomerCatalog extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        resultTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane1.setViewportView(resultTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -601,6 +643,11 @@ public class CustomerCatalog extends javax.swing.JDialog {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         formManager.updateButtonMenuState(UIConstants.BTN_EDITAR);
+         if(cusPref.isSelected()){
+            btnPref.setEnabled(true);
+        } else {
+            btnPref.setEnabled(false);
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -639,6 +686,18 @@ public class CustomerCatalog extends javax.swing.JDialog {
     private void cusCityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cusCityActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cusCityActionPerformed
+
+    private void btnPrefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrefActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPrefActionPerformed
+
+    private void cusPrefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cusPrefActionPerformed
+        if(cusPref.isSelected()){
+            btnPref.setEnabled(true);
+        } else {
+            btnPref.setEnabled(false);
+        }
+    }//GEN-LAST:event_cusPrefActionPerformed
 
     /**
      * @param args the command line arguments
@@ -689,6 +748,7 @@ public class CustomerCatalog extends javax.swing.JDialog {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnPref;
     private javax.swing.JTextField cusAddress;
     private javax.swing.JTextField cusCarPlates;
     private javax.swing.JTextField cusCel;

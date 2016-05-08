@@ -10,10 +10,16 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.util.MMKeys;
+import java.awt.Color;
+import java.awt.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -37,6 +43,7 @@ public class CheckOutForm extends javax.swing.JDialog {
     private AccountTransactionsBoundary accountTransactionsBoundary;
     private MultiValueBoundary multiValueBoundary;
     private MainFrm parentFrame;
+    private Map<Integer,Integer> mapInactiveRows = new HashMap<Integer,Integer>();
 
     public CheckOutForm(java.awt.Frame parent, boolean modal, Account account, Rooms room) {
         super(parent, modal);
@@ -78,6 +85,8 @@ public class CheckOutForm extends javax.swing.JDialog {
     private void generateGridSimple(Customers customer) {
         try {
 
+            mapInactiveRows = new HashMap<Integer,Integer>();
+            
             Vector<String> vctColumns = new Vector<>();
             vctColumns.add("Cuarto");
             vctColumns.add("Cantidad");
@@ -87,18 +96,23 @@ public class CheckOutForm extends javax.swing.JDialog {
             total = BigDecimal.ZERO;
             
             Vector<Vector> rows = new Vector<>();
-            for (AccountTransactions a : accountTransactionsBoundary.findAllByRmsId(room, account)) {
-                if (!a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)) {
-                    continue;
-                } //para discriminar los servicios que ya estan pagados o cancelados
+            List<AccountTransactions> resultList = accountTransactionsBoundary.findByCusId(customer);
+            Integer contador = 0;
+            for (AccountTransactions a : resultList) {
                 Vector<Object> vctRow = new Vector<>();
                 vctRow.add(a.getRmsId().getRmsNumber());
                 vctRow.add(a.getAtrQuantity());
-                vctRow.add(a.getSrvId().getSrvDesc());
-                vctRow.add((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue()));
+                vctRow.add(a.getSrvId() != null ? a.getSrvId().getSrvDesc() : a.getAtrNotes());
+                vctRow.add(a.getSrvId() != null ? (a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue()) : "");
                 rows.add(vctRow);
 
-                total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue())));
+                if (a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)) {
+                    //solo sumar al total los que estan pendientes por pagar
+                    total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue())));
+                } else {
+                    mapInactiveRows.put(contador, contador);
+                }
+                contador++;
             }
 
             totalIVA = total.multiply(new BigDecimal(0.16));
@@ -126,7 +140,7 @@ public class CheckOutForm extends javax.swing.JDialog {
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
-
+                
             };
             jtCheckoutDetalle.setModel(model);
             jtCheckoutDetalle.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
@@ -134,6 +148,26 @@ public class CheckOutForm extends javax.swing.JDialog {
             jtCheckoutDetalle.getColumnModel().getColumn(1).setMaxWidth(100);
             jtCheckoutDetalle.getColumnModel().getColumn(2).setMaxWidth(600);
             jtCheckoutDetalle.getColumnModel().getColumn(3).setMaxWidth(100);
+            jtCheckoutDetalle.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
+            {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+                {
+                    final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    if(mapInactiveRows.containsKey(row)){
+                        c.setBackground(Color.ORANGE);                        
+                    } else {
+                        c.setBackground(Color.WHITE);
+                    }
+                    return c;
+                }
+            });
+            
+            /*for (int i=0; i<resultList.size();i++) {
+                if(!resultList.get(i).getAtrStatus().getMvaKey().equals("PEND")){
+                    
+                }
+            }*/
 
         } catch (Exception e) {
             throw e;

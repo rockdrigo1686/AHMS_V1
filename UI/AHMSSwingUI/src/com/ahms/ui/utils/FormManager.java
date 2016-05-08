@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -122,6 +123,10 @@ public class FormManager {
                 JComboBox jComboBox = (JComboBox) com;
                 jComboBox.setSelectedIndex(0);
                 jComboBox.setEnabled(true);
+            } else if (com instanceof JCheckBox) {
+                JCheckBox jCheckBox = (JCheckBox) com;
+                jCheckBox.setSelected(false);
+                jCheckBox.setEnabled(true);
             } else if (com instanceof JTable) {
                 JTable jTable = (JTable) com;
                 jTable.setEnabled(true);
@@ -137,6 +142,9 @@ public class FormManager {
             } else if (com instanceof JComboBox) {
                 JComboBox jComboBox = (JComboBox) com;
                 jComboBox.setEnabled(true);
+            } else if (com instanceof JCheckBox) {
+                JCheckBox jCheckBox = (JCheckBox) com;
+                jCheckBox.setEnabled(true);
             } else if (com instanceof JTable) {
                 JTable jTable = (JTable) com;
                 jTable.setEnabled(false);
@@ -152,6 +160,9 @@ public class FormManager {
             } else if (com instanceof JComboBox) {
                 JComboBox jComboBox = (JComboBox) com;
                 jComboBox.setEnabled(false);
+            } else if (com instanceof JCheckBox) {
+                JCheckBox jCheckBox = (JCheckBox) com;
+                jCheckBox.setEnabled(false);
             } else if (com instanceof JTable) {
                 JTable jTable = (JTable) com;
                 jTable.setEnabled(true);
