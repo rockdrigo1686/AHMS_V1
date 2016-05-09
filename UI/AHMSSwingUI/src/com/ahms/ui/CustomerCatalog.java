@@ -12,6 +12,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
@@ -688,7 +689,12 @@ public class CustomerCatalog extends javax.swing.JDialog {
     }//GEN-LAST:event_cusCityActionPerformed
 
     private void btnPrefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrefActionPerformed
-        // TODO add your handling code here:
+        if(customersBean != null && customersBean.getCusId()  != null){
+            SetPreferencesDialog preferences = new SetPreferencesDialog(this, true, customersBean);
+            preferences.setVisible(true);
+        } else {
+            GeneralFunctions.sendMessage(this, "Es necesario guardar el cliente previamente.");
+        }        
     }//GEN-LAST:event_btnPrefActionPerformed
 
     private void cusPrefActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cusPrefActionPerformed
