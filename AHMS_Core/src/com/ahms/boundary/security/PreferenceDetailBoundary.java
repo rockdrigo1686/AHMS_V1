@@ -6,6 +6,7 @@
 package com.ahms.boundary.security;
 
 import com.ahms.boundary.AHMSBoundary;
+import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.manager.entity_manager.PreferenceDetailEM;
 import java.util.List;
@@ -33,21 +34,27 @@ public class PreferenceDetailBoundary implements AHMSBoundary<PreferenceDetail> 
 
     @Override
     public int insert(PreferenceDetail obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return preferenceDetailEM.insert(obj);
     }
 
     @Override
     public int update(PreferenceDetail obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return preferenceDetailEM.update(obj);
     }
 
     @Override
     public int delete(PreferenceDetail obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return preferenceDetailEM.delete(obj);
     }
+    
     public PreferenceDetail searchByCusId(PreferenceDetail obj) { 
          preferenceDetailEM = new PreferenceDetailEM();
          return preferenceDetailEM.searchByCusId(obj);
-     }
+    }
+    
+    public List<PreferenceDetail> findPreferences(Customers customer){
+        preferenceDetailEM = new PreferenceDetailEM();
+        return preferenceDetailEM.findByCustomer(customer);
+    }
     
 }
