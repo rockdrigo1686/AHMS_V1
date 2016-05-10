@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.manager.entity_manager.FloorEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,7 +44,12 @@ public class FloorsBoundary implements AHMSBoundary<Floors>{
     
     @Override
     public Floors find(Floors obj) {
-        return (Floors)floorEM.find(obj);
+        try {
+            return (Floors)floorEM.find(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(FloorsBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.ahms.model.entity.ServiceTypes;
 import com.ahms.model.entity.Services;
 import com.ahms.model.manager.entity_manager.ServiceEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,7 +41,12 @@ public class ServiceBoundary implements AHMSBoundary<Services>{
 
     @Override
     public Services find(Services obj) {
-       return serviceEM.find(obj);
+        try {
+            return serviceEM.find(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(ServiceBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

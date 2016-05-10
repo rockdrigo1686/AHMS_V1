@@ -228,7 +228,7 @@ public class Rooms implements Serializable {
 
     @Override
     public String toString() {
-        return getRmsId().toString();
+        return getRmsNumber();
     }
 
     @XmlTransient

@@ -66,7 +66,7 @@ public class Profiles implements Serializable {
     @JoinColumn(name = "PRO_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private MultiValue proStatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId", fetch = FetchType.LAZY)
     private Collection<Users> usersCollection;
 
     public Profiles() {

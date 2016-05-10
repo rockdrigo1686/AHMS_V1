@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Profiles;
 import com.ahms.model.manager.entity_manager.ProfileEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +26,12 @@ public class ProfileBoundary implements AHMSBoundary<Profiles> {
 
     @Override
     public List<Profiles> search(Profiles obj) {
-        return profileEm.search(obj);
+        try {
+            return profileEm.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(ProfileBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -34,7 +41,12 @@ public class ProfileBoundary implements AHMSBoundary<Profiles> {
 
     @Override
     public Profiles find(Profiles obj) {
-         return profileEm.find(obj);
+        try {
+            return profileEm.find(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(ProfileBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

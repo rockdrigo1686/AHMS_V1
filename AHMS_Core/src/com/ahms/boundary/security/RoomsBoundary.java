@@ -10,6 +10,8 @@ import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.RoomsEM;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,7 +49,12 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
 
     @Override
     public Rooms find(Rooms obj) {
-        return (Rooms)roomsEm.find(obj);
+         try {
+             return (Rooms)roomsEm.find(obj);
+         } catch (Exception ex) {
+             Logger.getLogger(RoomsBoundary.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         return null;
     }
     
     public Rooms findByRmsId(Rooms obj) {

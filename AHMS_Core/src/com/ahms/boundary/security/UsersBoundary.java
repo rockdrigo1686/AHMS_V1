@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Users;
 import com.ahms.model.manager.entity_manager.UserEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,7 +37,12 @@ public class UsersBoundary implements AHMSBoundary<Users>{
 
     @Override
     public Users find(Users obj) {
-        return  userEM.find(obj);
+        try {
+            return  userEM.find(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(UsersBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
