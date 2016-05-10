@@ -1212,12 +1212,12 @@ public class MainFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
     private void jbCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCheckOutActionPerformed
-        Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
-        Account account = accountBoundary.getActiveAccountByRoom(new Rooms(roomSelected));
-
-        JDialog dialogCheckout = new CheckOutForm(this, true, account, new Rooms(roomSelected));
-        dialogCheckout.setLocationRelativeTo(this);
-        dialogCheckout.setVisible(true);
+//        Integer roomSelected = Integer.parseInt(String.valueOf(jtDashboard.getModel().getValueAt(jtDashboard.getSelectedRow(), 1)));
+//        Account account = accountBoundary.getActiveAccountByRoom(new Rooms(roomSelected));
+//
+//        JDialog dialogCheckout = new CheckOutForm(this, true, account, new Rooms(roomSelected));
+//        dialogCheckout.setLocationRelativeTo(this);
+//        dialogCheckout.setVisible(true);
     }//GEN-LAST:event_jbCheckOutActionPerformed
 
     private void btnIniciarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarTurnoActionPerformed

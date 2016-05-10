@@ -7,7 +7,10 @@ package com.ahms.ui;
 
 import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.Rooms;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -22,15 +25,19 @@ public class AccountSearch extends javax.swing.JDialog {
     private Customers customer = null;
     private AccountBoundary accountB = null;
     private List<Account> resultList = null;
+    private List<Rooms> roomList = null;
     private DefaultTableModel tableModel = null;
+    private MainFrm topFrame;
 
     /**
      * Creates new form AccountSearch
      */
-    public AccountSearch(java.awt.Frame parent, boolean modal) {
+    public AccountSearch(MainFrm parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        topFrame = parent;
         accountB = new AccountBoundary();
+        roomList = new ArrayList<>();
     }
 
     /**
@@ -46,7 +53,7 @@ public class AccountSearch extends javax.swing.JDialog {
         lblCus = new javax.swing.JLabel();
         jbBuscarCliente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        resultTable = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         jbSalir1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -69,7 +76,7 @@ public class AccountSearch extends javax.swing.JDialog {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        resultTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -80,7 +87,7 @@ public class AccountSearch extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(resultTable);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -100,12 +107,22 @@ public class AccountSearch extends javax.swing.JDialog {
         jButton1.setText("Cambiar Cuarto");
         jButton1.setFocusable(false);
         jButton1.setPreferredSize(new java.awt.Dimension(140, 28));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton1);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
         jButton2.setText("Pagar");
         jButton2.setFocusable(false);
         jButton2.setPreferredSize(new java.awt.Dimension(80, 28));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -163,6 +180,34 @@ public class AccountSearch extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_jbSalir1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Account row = null;
+        row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+        if (row != null) {
+            CheckOutForm checkOutForm = new CheckOutForm(this, true, row);
+            checkOutForm.setVisible(rootPaneCheckingEnabled);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Account row = null;
+        Rooms room = null;
+        row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+        if (!roomList.isEmpty() && roomList.size() > 1) {
+            SelectRoom select = new SelectRoom(this, true, roomList);
+            select.setVisible(true);
+            room = select.getSelectedRoom();
+        } else {
+            room = roomList.get(0);
+        }
+        if (room != null) {
+            ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
+            chDlg.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     private List<Account> searchAccounts(Customers customer) {
         Account account = new Account();
         account.setCusId(customer);
@@ -171,7 +216,7 @@ public class AccountSearch extends javax.swing.JDialog {
 
     //</editor-fold>
     private void fillTable(JTable resultTable) {
-        String col[] = {"ID", "Cliente", "Fecha de Entrada","Fecha de Salida","Total", "Estatus"};
+        String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", "Total", "Estatus"};
 
         tableModel = new DefaultTableModel(col, 0) {
             @Override
@@ -181,9 +226,14 @@ public class AccountSearch extends javax.swing.JDialog {
         };
 
         // The 0 argument is number rows.
-//        resultList.stream().forEach((next) -> {
-//            tableModel.addRow(new Object[]{next.getProId(), next.getProCode(), next.getProName(), next.getProStatus()});
-//        });
+        resultList.stream().forEach((next) -> {
+            tableModel.addRow(new Object[]{next.getActId(), next.getActFecIni(), next.getActFecFin(), next.getActTotal(), next.getActStatus()});
+            for (AccountTransactions at : next.getAccountTransactionsCollection()) {
+                if (at.getSrvId() == null) {
+                    roomList.add(at.getRmsId());
+                }
+            }
+        });
 
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
@@ -225,7 +275,7 @@ public class AccountSearch extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AccountSearch dialog = new AccountSearch(new javax.swing.JFrame(), true);
+                AccountSearch dialog = new AccountSearch(new MainFrm(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -243,10 +293,10 @@ public class AccountSearch extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbBuscarCliente;
     private javax.swing.JButton jbSalir1;
     private javax.swing.JLabel lblCus;
+    private javax.swing.JTable resultTable;
     // End of variables declaration//GEN-END:variables
 }

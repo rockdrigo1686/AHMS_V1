@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import javax.swing.JDialog;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -35,30 +36,29 @@ public class CheckOutForm extends javax.swing.JDialog {
     public BigDecimal totalPagado = BigDecimal.ZERO;
     public BigDecimal totalOriginal = BigDecimal.ZERO;
     public BigDecimal totalCambio = BigDecimal.ZERO;
-    private Customers customerGlobal;
-    private Rooms room;
-    private Account account;
-    private AccountBoundary accountBoundary;
-    private RoomsBoundary roomsBoundary;
-    private AccountTransactionsBoundary accountTransactionsBoundary;
-    private MultiValueBoundary multiValueBoundary;
-    private MainFrm parentFrame;
-    private Map<Integer,Integer> mapInactiveRows = new HashMap<Integer,Integer>();
+    private Customers customerGlobal = null;
+    private Account account= null;;
+    private AccountBoundary accountBoundary= null;;
+    private RoomsBoundary roomsBoundary= null;;
+    private AccountTransactionsBoundary accountTransactionsBoundary= null;;
+    private MultiValueBoundary multiValueBoundary= null;;
+    private JDialog parentFrame = null;;
+    private Map<Integer,Integer> mapInactiveRows = null;
 
-    public CheckOutForm(java.awt.Frame parent, boolean modal, Account account, Rooms room) {
+    public CheckOutForm(JDialog parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
-        parentFrame = (MainFrm) parent;
+        mapInactiveRows = new HashMap<Integer,Integer>();
+        parentFrame =  parent;
         accountBoundary = new AccountBoundary();
         roomsBoundary = new RoomsBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         jlCambio.setVisible(false);
-        this.room = room;
         jlMontoCambio.setVisible(false);
         this.account = account;
         customerGlobal = account.getCusId();
-        jlNombre.setText(customerGlobal.getCusName() + " " + customerGlobal.getCusLst1() + " " + customerGlobal.getCusLst2() + " - " + customerGlobal.getCusRfc());
+        jlNombre.setText(customerGlobal.getFullName()+ " - " + customerGlobal.getCusRfc());
 
         generateGridSimple(customerGlobal);
     }
@@ -442,7 +442,6 @@ public class CheckOutForm extends javax.swing.JDialog {
         account.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
         accountBoundary.update(account);
         //Cerrar dialog y actualizar el dashboard
-        parentFrame.configGrid(roomsBoundary.searchAll(new Rooms()));
         this.dispose();
     }//GEN-LAST:event_jbCloseAccountActionPerformed
 
@@ -476,7 +475,7 @@ public class CheckOutForm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                CheckOutForm dialog = new CheckOutForm(new javax.swing.JFrame(), true, null,null);
+                CheckOutForm dialog = new CheckOutForm(new JDialog(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

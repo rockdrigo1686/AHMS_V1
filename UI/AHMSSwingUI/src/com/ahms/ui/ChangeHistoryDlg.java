@@ -17,6 +17,7 @@ import com.ahms.util.MMKeys;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
@@ -32,11 +33,10 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     /**
      * Creates new form Change
      */
-    public ChangeHistoryDlg(java.awt.Frame parent, boolean modal, Account account, Rooms room) {
+    public ChangeHistoryDlg(javax.swing.JDialog parent, boolean modal, Account account, Rooms room, Users user) {
         super(parent, modal);
         initComponents();
-        this.parent  = (MainFrm) parent;
-        changeHistory.setChaUsr(this.parent.getMainUser());
+        changeHistory.setChaUsr(user);
         changeHistory.setActId(account);
         changeHistory.setChaRmB(room);
         
@@ -225,7 +225,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ChangeHistoryDlg dialog = new ChangeHistoryDlg(new MainFrm(), true, new Account(1), new Rooms(1));
+                ChangeHistoryDlg dialog = new ChangeHistoryDlg(new JDialog(), true, new Account(1), new Rooms(1), new Users(1));
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
