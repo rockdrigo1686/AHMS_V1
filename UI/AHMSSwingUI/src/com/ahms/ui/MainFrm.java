@@ -1371,9 +1371,9 @@ public class MainFrm extends javax.swing.JFrame {
         accountTransactionsBoundary.insert(rentTran);
 
         //LLamando a paymentModule
-        PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
+        /*PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
         paymentModule.setLocationRelativeTo(this);
-        paymentModule.setVisible(true);
+        paymentModule.setVisible(true);*/
     }//GEN-LAST:event_jbQRPagarActionPerformed
 
     private void jbQuickResReserveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuickResReserveActionPerformed
