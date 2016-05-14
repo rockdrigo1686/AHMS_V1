@@ -16,7 +16,6 @@ import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -40,11 +39,13 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         changeHistory.setActId(account);
         changeHistory.setChaRmB(room);
         
-        lblCustomer.setText(account.getCusId().getCusName());
+        lblCustomer.setText(account.getCusId().getFullName());
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
         lblDate.setText(sf.format(new Date()));
-        lblRoomA.setText(room.getRmsNumber() +": " + room.getRmsDesc());
-        btnSaveChange.setEnabled(false);
+        lblRoom.setText( lblRoom.getText()+ " " + room.getRmsNumber() +": " + room.getRmsDesc());
+        jbGuardar.setEnabled(false);
+        
+        searchRoom();
     }
 
     /**
@@ -65,14 +66,15 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDesc = new javax.swing.JTextArea();
         lblRoomA = new javax.swing.JLabel();
-        jbQRSearchRoom = new javax.swing.JButton();
-        btnSaveChange = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jbSalir = new javax.swing.JButton();
+        jbGuardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblCustomer.setText("jLabel1");
 
-        lblDate.setText("jLabel1");
+        lblDate.setText("dd/mm/yyyy");
 
         lblRoom.setText("Cuarto: ");
 
@@ -88,19 +90,26 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
 
         lblRoomA.setText("Nuevo Cuarto:");
 
-        jbQRSearchRoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/find.png"))); // NOI18N
-        jbQRSearchRoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbQRSearchRoomActionPerformed(evt);
-            }
-        });
+        jToolBar1.setRollover(true);
 
-        btnSaveChange.setText("jButton1");
-        btnSaveChange.addActionListener(new java.awt.event.ActionListener() {
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cross.png"))); // NOI18N
+        jbSalir.setFocusable(false);
+        jbSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveChangeActionPerformed(evt);
+                jbSalirActionPerformed(evt);
             }
         });
+        jToolBar1.add(jbSalir);
+
+        jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/disk.png"))); // NOI18N
+        jbGuardar.setToolTipText("Guardar");
+        jbGuardar.setFocusable(false);
+        jbGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbGuardarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jbGuardar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,21 +118,17 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblRoomA, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(jbQRSearchRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSaveChange))
+                        .addComponent(lblCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                        .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCustomer)
-                                .addGap(290, 290, 290)
-                                .addComponent(lblDate))
+                            .addComponent(lblRoomA, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
-                            .addComponent(lblRoom)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblRoom))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -131,21 +136,20 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCustomer)
                     .addComponent(lblDate))
                 .addGap(18, 18, 18)
                 .addComponent(lblRoom)
-                .addGap(18, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSaveChange)
-                    .addComponent(lblRoomA)
-                    .addComponent(jbQRSearchRoom))
-                .addGap(31, 31, 31))
+                .addGap(19, 19, 19)
+                .addComponent(lblRoomA, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         bindingGroup.bind();
@@ -153,28 +157,13 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
-        RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
-        Rooms paramRoom = new Rooms();
-        paramRoom.setRmsBeds(tipoSeleccionado);
-        RoomsBoundary roomsBoundary = new RoomsBoundary();
-        List<Rooms> roomsAvailableByType = roomsBoundary.findByRmsBeds(paramRoom);
-        for(Rooms room : roomsAvailableByType){
-            if(room.getRmsStatus().getMvaKey().equals(MMKeys.Rooms.STA_DISPONIBLE_KEY)){
-                changeHistory.setChaRmA(room);
-                lblRoomA.setText(lblRoomA.getText()+ " "+room.getRmsNumber());
-               
-                btnSaveChange.setEnabled(true);
-                                //generar totales de renta
-                
-            }
-        }
-        JOptionPane.showMessageDialog(this, UIConstants.NO_AVAIL_ROOMS);
-    }//GEN-LAST:event_jbQRSearchRoomActionPerformed
-
-    private void btnSaveChangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveChangeActionPerformed
+    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
         // TODO add your handling code here:
-        CancelationPrompt cp = new CancelationPrompt(parent, true);
+        this.dispose();
+    }//GEN-LAST:event_jbSalirActionPerformed
+
+    private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
+ CancelationPrompt cp = new CancelationPrompt(parent, true);
         cp.setVisible(true);
         boolean response  =cp.getAutorization();
         Users autUser = cp.getAutUser();
@@ -189,10 +178,10 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             chb.insert(changeHistory);
             rmb.insert(changeHistory.getChaRmA());
             rmb.insert(changeHistory.getChaRmB());
-            
-             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
+
+            JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
-    }//GEN-LAST:event_btnSaveChangeActionPerformed
+    }//GEN-LAST:event_jbGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -236,13 +225,26 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             }
         });
     }
+    private void searchRoom() {
+                RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
+        Rooms paramRoom = new Rooms();
+        paramRoom.setRmsBeds(tipoSeleccionado);
+        RoomsBoundary roomsBoundary = new RoomsBoundary();
+        Rooms roomAvailable= roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin());
+                changeHistory.setChaRmA(roomAvailable);
+                lblRoomA.setText(lblRoomA.getText()+ " "+roomAvailable.getRmsNumber());
+                jbGuardar.setEnabled(true);
+                                //generar totales de renta
+                
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSaveChange;
     private com.ahms.model.entity.ChangeHistory changeHistory;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton jbQRSearchRoom;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton jbGuardar;
+    private javax.swing.JButton jbSalir;
     private javax.swing.JLabel lblCustomer;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblRoom;
@@ -250,4 +252,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private javax.swing.JTextArea txtDesc;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -10,6 +10,7 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Rooms;
+import com.ahms.ui.utils.GeneralFunctions;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -62,9 +63,11 @@ public class AccountSearch extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Droid Sans", 1, 14)); // NOI18N
         jLabel1.setText("Cliente:");
         jLabel1.setPreferredSize(new java.awt.Dimension(50, 15));
 
+        lblCus.setFont(new java.awt.Font("Droid Sans", 1, 14)); // NOI18N
         lblCus.setPreferredSize(new java.awt.Dimension(150, 15));
 
         jbBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772770_search-80px.png"))); // NOI18N
@@ -93,7 +96,7 @@ public class AccountSearch extends javax.swing.JDialog {
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jbSalir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cross.png"))); // NOI18N
-        jbSalir1.setText("Salir");
+        jbSalir1.setToolTipText("Salir");
         jbSalir1.setFocusable(false);
         jbSalir1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,9 +107,9 @@ public class AccountSearch extends javax.swing.JDialog {
         jToolBar1.add(jSeparator1);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer.png"))); // NOI18N
-        jButton1.setText("Cambiar Cuarto");
+        jButton1.setToolTipText("Cambiar cuarto");
         jButton1.setFocusable(false);
-        jButton1.setPreferredSize(new java.awt.Dimension(140, 28));
+        jButton1.setPreferredSize(new java.awt.Dimension(50, 28));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -115,9 +118,9 @@ public class AccountSearch extends javax.swing.JDialog {
         jToolBar1.add(jButton1);
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
-        jButton2.setText("Pagar");
+        jButton2.setToolTipText("Pagar Cuenta");
         jButton2.setFocusable(false);
-        jButton2.setPreferredSize(new java.awt.Dimension(80, 28));
+        jButton2.setPreferredSize(new java.awt.Dimension(50, 28));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -134,12 +137,11 @@ public class AccountSearch extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -150,12 +152,12 @@ public class AccountSearch extends javax.swing.JDialog {
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(lblCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jbBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jbBuscarCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -171,7 +173,8 @@ public class AccountSearch extends javax.swing.JDialog {
         customerReg.setVisible(true);
         customer = customerReg.getCustomer();
         lblCus.setText(customer.getFullName());
-        searchAccounts(customer);
+        resultList = searchAccounts(customer);
+        fillTable(resultTable);
 
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
@@ -183,10 +186,22 @@ public class AccountSearch extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Account row = null;
-        row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
-        if (row != null) {
-            CheckOutForm checkOutForm = new CheckOutForm(this, true, row);
-            checkOutForm.setVisible(rootPaneCheckingEnabled);
+        if (resultList == null) {
+            GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
+        } else {
+            try {
+                if (resultList.size() == 1) {
+                    row = resultList.get(0);
+                } else {
+                    row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                }
+            } catch (IndexOutOfBoundsException e) {
+                GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
+            }
+            if (row != null) {
+                CheckOutForm checkOutForm = new CheckOutForm(this, true, row);
+                checkOutForm.setVisible(rootPaneCheckingEnabled);
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -194,17 +209,30 @@ public class AccountSearch extends javax.swing.JDialog {
         // TODO add your handling code here:
         Account row = null;
         Rooms room = null;
-        row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
-        if (!roomList.isEmpty() && roomList.size() > 1) {
-            SelectRoom select = new SelectRoom(this, true, roomList);
-            select.setVisible(true);
-            room = select.getSelectedRoom();
+        if (resultList == null) {
+            GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
-            room = roomList.get(0);
-        }
-        if (room != null) {
-            ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
-            chDlg.setVisible(true);
+            try {
+                if (resultList.size() == 1) {
+                    row = resultList.get(0);
+                } else {
+                    row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                }
+            } catch (IndexOutOfBoundsException e) {
+                GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
+            }
+
+            if (!roomList.isEmpty() && roomList.size() > 1) {
+                SelectRoom select = new SelectRoom(this, true, roomList);
+                select.setVisible(true);
+                room = select.getSelectedRoom();
+            } else {
+                room = roomList.get(0);
+            }
+            if (room != null) {
+                ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
+                chDlg.setVisible(true);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
