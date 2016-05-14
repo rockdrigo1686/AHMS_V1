@@ -64,6 +64,7 @@ public class AccountEM extends AHMSEntityManager{
             }
             TypedQuery<Account> query = em.createNamedQuery("Account.findByCusId", Account.class);
             query.setParameter("cusId", account.getCusId());
+            query.setParameter("actStatus",new MultiValue("ACT_A"));
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
