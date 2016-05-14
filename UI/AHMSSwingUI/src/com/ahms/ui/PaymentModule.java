@@ -36,7 +36,7 @@ public class PaymentModule extends javax.swing.JDialog {
     private PaymentTypesBoundary paymentTypesBoundary;
     private CheckOutForm parentDialog = null;
     private RoomService payServiceDialog = null;
-    private MainFrm parentFrm = null;
+    private QuickRentDialog parentQuickRent = null;
     private Account account;
     private CashOut currentShift;
     private CashOutBoundary cashOutBoundary;
@@ -112,11 +112,11 @@ public class PaymentModule extends javax.swing.JDialog {
         
     }
     
-    public PaymentModule(MainFrm parent, boolean modal, BigDecimal total, Account _account) {
+    public PaymentModule(QuickRentDialog parent, boolean modal, BigDecimal total, Account _account) {
         super(parent, modal);
         initComponents();
         account = _account;
-        parentFrm = parent;
+        parentQuickRent = parent;
         paymentTypesBoundary = new PaymentTypesBoundary();
         cashOutBoundary = new CashOutBoundary();
         jlCambio.setVisible(false);
@@ -330,7 +330,7 @@ public class PaymentModule extends javax.swing.JDialog {
                 //----------------------------------           
             }
         
-        } else if(parentFrm != null){ // si fue llamado desde un mainForm
+        } else if(parentQuickRent != null){ // si fue llamado desde un mainForm
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
             if(importeValida >= 0) // importe pagado > importe total, hay que dar feria
@@ -394,9 +394,10 @@ public class PaymentModule extends javax.swing.JDialog {
                 return;
             }
             //limpiar quickRent y actualizar grid en MainForm
-            RoomsBoundary roomsBounday = new RoomsBoundary();
+            //ACTUALIZAR CON LOS CAMBIOS EN EL QUICKRENT ************************************************
+            /*RoomsBoundary roomsBounday = new RoomsBoundary();
             parentFrm.configGrid(roomsBounday.searchAll(new Rooms()));
-            parentFrm.clearQuickRentInstance();
+            parentFrm.clearQuickRentInstance();*/
             
         } else if(payServiceDialog != null){ //fue llamado para pago de 1 servicio
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
