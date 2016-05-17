@@ -143,7 +143,6 @@ public class MainFrm extends javax.swing.JFrame {
         reservationBoundary = new ReservationBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
 
-     
         this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         //setLocationRelativeTo(null);
         //setResizable(false);
@@ -173,19 +172,16 @@ public class MainFrm extends javax.swing.JFrame {
         quickRentIva = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         quickrentIvaPercent = BigDecimal.ZERO;
-     
 
     }
 
     public void clearQuickResInstance() {
         quickResRoomAssigned = null;
-      
 
     }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
         DefaultComboBoxModel modelquickRent = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
-       
 
         DefaultComboBoxModel modelDashBoard = new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
         this.jcbTipoCuarto.setModel(modelDashBoard);
@@ -299,7 +295,6 @@ public class MainFrm extends javax.swing.JFrame {
         return room;
     }
 
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -411,6 +406,11 @@ public class MainFrm extends javax.swing.JFrame {
 
         btnCheckinDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/test.png"))); // NOI18N
         btnCheckinDlg.setToolTipText("Check in");
+        btnCheckinDlg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckinDlgActionPerformed(evt);
+            }
+        });
 
         btnSearchAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/search.png"))); // NOI18N
         btnSearchAcc.setToolTipText("Busqueda de Cuentas");
@@ -569,8 +569,7 @@ public class MainFrm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTabbedPane5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -813,7 +812,7 @@ public class MainFrm extends javax.swing.JFrame {
                 roomService.setVisible(true);
             }
         } else {  // 1 click
-            
+
         }
     }//GEN-LAST:event_jtDashboardMouseClicked
 
@@ -831,9 +830,15 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void btnSearchAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAccActionPerformed
         // TODO add your handling code here:
-        AccountSearch accSearch = new AccountSearch(this, true);
+        AccountSearch accSearch = new AccountSearch(this, true, "AC");
         accSearch.setVisible(true);
     }//GEN-LAST:event_btnSearchAccActionPerformed
+
+    private void btnCheckinDlgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckinDlgActionPerformed
+        // TODO add your handling code here:
+        AccountSearch accSearch = new AccountSearch(this, true, "RS");
+        accSearch.setVisible(true);
+    }//GEN-LAST:event_btnCheckinDlgActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

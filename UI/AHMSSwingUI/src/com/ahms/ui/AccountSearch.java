@@ -6,9 +6,11 @@
 package com.ahms.ui;
 
 import com.ahms.boundary.security.AccountBoundary;
+import com.ahms.boundary.security.ReservationBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.Rooms;
 import com.ahms.ui.utils.GeneralFunctions;
 import java.util.ArrayList;
@@ -25,20 +27,24 @@ public class AccountSearch extends javax.swing.JDialog {
 
     private Customers customer = null;
     private AccountBoundary accountB = null;
-    private List<Account> resultList = null;
+    private ReservationBoundary resB = null;
+    private List<?> resultList = null;
     private List<Rooms> roomList = null;
     private DefaultTableModel tableModel = null;
     private MainFrm topFrame;
+    private static final String AC = "AC";
+    private static final String RS = "RS";
+    private String action = "";
 
     /**
      * Creates new form AccountSearch
      */
-    public AccountSearch(MainFrm parent, boolean modal) {
+    public AccountSearch(MainFrm parent, boolean modal, String action) {
         super(parent, modal);
         initComponents();
-        topFrame = parent;
-        accountB = new AccountBoundary();
-        roomList = new ArrayList<>();
+        this.topFrame = parent;
+        this.roomList = new ArrayList<>();
+        this.action = action;
     }
 
     /**
@@ -173,10 +179,17 @@ public class AccountSearch extends javax.swing.JDialog {
         customerReg.setVisible(true);
         customer = customerReg.getCustomer();
         lblCus.setText(customer.getFullName());
-        resultList = searchAccounts(customer);
+        if (AC.equalsIgnoreCase(action)) {
+            resultList = searchAccounts(customer);
+
+        } else {
+            resultList = searchReservation(customer);
+        }
+
         fillTable(resultTable);
 
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
+
 
     private void jbSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalir1ActionPerformed
         // TODO add your handling code here:
@@ -186,14 +199,15 @@ public class AccountSearch extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Account row = null;
-        if (resultList == null) {
+        List<Account> accountList =  (List<Account>) resultList;
+        if (accountList == null) {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
             try {
-                if (resultList.size() == 1) {
-                    row = resultList.get(0);
+                if (accountList.size() == 1) {
+                    row = accountList.get(0);
                 } else {
-                    row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                    row = accountList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
                 }
             } catch (IndexOutOfBoundsException e) {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
@@ -209,14 +223,15 @@ public class AccountSearch extends javax.swing.JDialog {
         // TODO add your handling code here:
         Account row = null;
         Rooms room = null;
-        if (resultList == null) {
+        List<Account> accountList =  (List<Account>) this.resultList;
+        if (accountList == null) {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
             try {
-                if (resultList.size() == 1) {
-                    row = resultList.get(0);
+                if (accountList.size() == 1) {
+                    row = accountList.get(0);
                 } else {
-                    row = resultList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                    row = accountList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
                 }
             } catch (IndexOutOfBoundsException e) {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
@@ -238,8 +253,14 @@ public class AccountSearch extends javax.swing.JDialog {
 
     private List<Account> searchAccounts(Customers customer) {
         Account account = new Account();
+        this.accountB = new AccountBoundary();
         account.setCusId(customer);
         return accountB.findByCusId(account);
+    }
+    private List<Reservation> searchReservation(Customers customer) {
+        Reservation res = new Reservation();
+        this.resB = new ReservationBoundary();
+        return this.resB.search(res);
     }
 
     //</editor-fold>
@@ -252,9 +273,9 @@ public class AccountSearch extends javax.swing.JDialog {
                 return false;
             }
         };
-
+        List<Account> accountList =  (List<Account>) this.resultList;
         // The 0 argument is number rows.
-        resultList.stream().forEach((next) -> {
+        accountList.stream().forEach((next) -> {
             tableModel.addRow(new Object[]{next.getActId(), next.getActFecIni(), next.getActFecFin(), next.getActTotal(), next.getActStatus()});
             for (AccountTransactions at : next.getAccountTransactionsCollection()) {
                 if (at.getSrvId() == null) {
@@ -303,7 +324,7 @@ public class AccountSearch extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AccountSearch dialog = new AccountSearch(new MainFrm(), true);
+                AccountSearch dialog = new AccountSearch(new MainFrm(), true, "AC");
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -327,4 +348,6 @@ public class AccountSearch extends javax.swing.JDialog {
     private javax.swing.JLabel lblCus;
     private javax.swing.JTable resultTable;
     // End of variables declaration//GEN-END:variables
+
+    
 }
