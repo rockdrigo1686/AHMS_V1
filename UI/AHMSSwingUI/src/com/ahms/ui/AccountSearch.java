@@ -258,6 +258,7 @@ public class AccountSearch extends javax.swing.JDialog {
         return accountB.findByCusId(account);
     }
     private List<Reservation> searchReservation(Customers customer) {
+        //TODO crear buscar res by customer 
         Reservation res = new Reservation();
         this.resB = new ReservationBoundary();
         return this.resB.search(res);
