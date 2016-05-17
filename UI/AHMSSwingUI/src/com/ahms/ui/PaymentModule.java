@@ -394,11 +394,7 @@ public class PaymentModule extends javax.swing.JDialog {
                 return;
             }
             //limpiar quickRent y actualizar grid en MainForm
-            //ACTUALIZAR CON LOS CAMBIOS EN EL QUICKRENT ************************************************
-            /*RoomsBoundary roomsBounday = new RoomsBoundary();
-            parentFrm.configGrid(roomsBounday.searchAll(new Rooms()));
-            parentFrm.clearQuickRentInstance();*/
-            
+            parentQuickRent.totalPaid = true;            
         } else if(payServiceDialog != null){ //fue llamado para pago de 1 servicio
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);

@@ -13,6 +13,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.RoomTypes;
+import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -51,14 +52,17 @@ public class QuickRentDialog extends javax.swing.JDialog {
     private CashOut currentShift = null;
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
     
+    public boolean totalPaid = false;
+    
     public QuickRentDialog(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
         initComponents();
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
         
-        lblCustName.setText(mainCustomer.getFullName());
-        lblRfc.setText(mainCustomer.getCusRfc());
+        //lblCustName.setText(mainCustomer.getFullName());
+        //lblRfc.setText(mainCustomer.getCusRfc());
+        jbtnLoadCustomer.setEnabled(false);
         
         roomsBounday = new RoomsBoundary();
         accountBoundary = new AccountBoundary();
@@ -67,7 +71,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
 
-        jlQRRoomNumber.setVisible(false);
+        jlQRRoomNumber.setText("-");
         configDatePickers();
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
@@ -135,7 +139,6 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jbQRSearchRoom = new javax.swing.JButton();
         jlQRRoomNumber = new javax.swing.JLabel();
         jspNumeroPersonas = new javax.swing.JSpinner();
-        jSeparator6 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -143,16 +146,18 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jlQRIVA = new javax.swing.JLabel();
         jlQRSubTotal = new javax.swing.JLabel();
         jbQRPagar = new javax.swing.JButton();
+        jbtnLoadCustomer = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblCustName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         lblCustName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCustName.setText("Cliente");
+        lblCustName.setText("Cliente sin especificar");
 
         lblRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         lblRfc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblRfc.setText("RFC");
+        lblRfc.setText("-");
 
         jLabel8.setText("Entrada:");
 
@@ -173,7 +178,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jpFecSalContainer.setLayout(jpFecSalContainerLayout);
         jpFecSalContainerLayout.setHorizontalGroup(
             jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 310, Short.MAX_VALUE)
         );
         jpFecSalContainerLayout.setVerticalGroup(
             jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,15 +214,15 @@ public class QuickRentDialog extends javax.swing.JDialog {
 
         jlQRTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlQRTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRTotal.setText("total");
+        jlQRTotal.setText("-");
 
         jlQRIVA.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlQRIVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRIVA.setText("iva");
+        jlQRIVA.setText("-");
 
         jlQRSubTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlQRSubTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRSubTotal.setText("subtotal");
+        jlQRSubTotal.setText("-");
 
         jbQRPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
         jbQRPagar.setText("Pagar");
@@ -231,60 +236,78 @@ public class QuickRentDialog extends javax.swing.JDialog {
             }
         });
 
+        jbtnLoadCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772636_user_manage.png"))); // NOI18N
+        jbtnLoadCustomer.setText("Buscar Cliente");
+        jbtnLoadCustomer.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jbtnLoadCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jbtnLoadCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnLoadCustomerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator4)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jpFecSalContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jpFecEntContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblCustName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblRfc, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel11)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jbQRSearchRoom)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
+                            .addComponent(jlQRIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlQRTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(116, 116, 116))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCustName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblRfc, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator1)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(79, 79, 79)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jlQRTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(58, 58, 58))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGap(88, 88, 88)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jpFecSalContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jpFecEntContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jbtnLoadCustomer)
+                                        .addGap(0, 293, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jbQRSearchRoom))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jlQRIVA, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                            .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addGap(22, 22, 22)))
+                .addGap(90, 90, 90))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -297,47 +320,49 @@ public class QuickRentDialog extends javax.swing.JDialog {
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpFecEntContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpFecSalContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                        .addComponent(jpFecEntContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jbQRSearchRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
                             .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jbQRSearchRoom)
-                        .addGap(76, 76, 76)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jpFecSalContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbtnLoadCustomer)))
+                .addGap(24, 24, 24)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jlQRIVA))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jlQRTotal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jbQRPagar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlQRIVA)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlQRTotal)
+                            .addComponent(jLabel7)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jbQRPagar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -345,46 +370,60 @@ public class QuickRentDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
-        //actualizando el Room
-        quickRentRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
-        roomsBounday.update(quickRentRoomAssigned);
-        //aperturando la cuenta
-        JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
-        JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
-        Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-        Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-        Account quickRentAccount = new Account();
-        quickRentAccount.setActDteMod(Calendar.getInstance().getTime());
-        quickRentAccount.setActUsrMod(currentShift.getUsrId());
-        quickRentAccount.setActFecIni(calEntrada.getTime());
-        quickRentAccount.setActFecFin(calSalida.getTime());
-        quickRentAccount.setActIva(quickrentIvaPercent);
-        quickRentAccount.setActIvaAmt(quickRentIva);
-        quickRentAccount.setActSubtotal(quickRentSubTotal);
-        quickRentAccount.setActTotal(quickRentTotal);
-        quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
-        quickRentAccount.setAccountTransactionsCollection(null);
-        //        quickRentAccount.setCusId(customersBoundary.find(new Customers(1)));
-        quickRentAccount.setCusId(mainCustomer);
-        accountBoundary.insert(quickRentAccount);
+        if(mainCustomer != null && mainCustomer.getCusId() != null){
+            try {
+                //aperturando la cuenta
+                JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
+                JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
+                Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+                Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+                Account quickRentAccount = new Account();
+                quickRentAccount.setActDteMod(Calendar.getInstance().getTime());
+                quickRentAccount.setActUsrMod(currentShift.getUsrId());
+                //quickRentAccount.setActUsrMod(new Users(1));
+                quickRentAccount.setActFecIni(calEntrada.getTime());
+                quickRentAccount.setActFecFin(calSalida.getTime());
+                quickRentAccount.setActIva(quickrentIvaPercent);
+                quickRentAccount.setActIvaAmt(quickRentIva);
+                quickRentAccount.setActSubtotal(quickRentSubTotal);
+                quickRentAccount.setActTotal(quickRentTotal);
+                quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
+                quickRentAccount.setAccountTransactionsCollection(null);
+                quickRentAccount.setCusId(mainCustomer);
+                accountBoundary.insert(quickRentAccount);
 
-        //Insertando account transaction
-        AccountTransactions rentTran = new AccountTransactions();
-        rentTran.setAtrDteMod(Calendar.getInstance().getTime());
-        rentTran.setAtrNotes("Renta de Cuarto " + quickRentRoomAssigned.getRmsNumber());
-        rentTran.setAtrQuantity(1);
-        rentTran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-        rentTran.setAtrUsrMod(currentShift.getUsrId());
-        rentTran.setCouId(currentShift);
-        rentTran.setRmsId(quickRentRoomAssigned);
-        rentTran.setSrvId(null);
-        rentTran.setActId(quickRentAccount);
-        accountTransactionsBoundary.insert(rentTran);
+                //Insertando account transaction
+                AccountTransactions rentTran = new AccountTransactions();
+                rentTran.setAtrDteMod(Calendar.getInstance().getTime());
+                rentTran.setAtrNotes("Renta de Cuarto " + quickRentRoomAssigned.getRmsNumber());
+                rentTran.setAtrQuantity(1);
+                rentTran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                rentTran.setAtrUsrMod(currentShift.getUsrId());
+                //rentTran.setAtrUsrMod(new Users(1));
+                rentTran.setCouId(currentShift);
+                rentTran.setRmsId(quickRentRoomAssigned);
+                rentTran.setSrvId(null);
+                rentTran.setActId(quickRentAccount);
+                accountTransactionsBoundary.insert(rentTran);
 
-        //LLamando a paymentModule
-        PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
-        paymentModule.setLocationRelativeTo(this);
-        paymentModule.setVisible(true);
+                //LLamando a paymentModule
+                PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
+                paymentModule.setLocationRelativeTo(this);
+                paymentModule.setVisible(true);
+                
+                //actualizando el Room
+                quickRentRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
+                roomsBounday.update(quickRentRoomAssigned);
+                
+                if(totalPaid){
+                    GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
+                    this.dispose();
+                }
+                
+            } catch (Exception e) {
+                GeneralFunctions.sendMessage(this, "Ocurrio un error. Por favor contacte con servicio técnico. \n Error: " + e.getMessage());
+            }            
+        }        
     }//GEN-LAST:event_jbQRPagarActionPerformed
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
@@ -400,31 +439,11 @@ public class QuickRentDialog extends javax.swing.JDialog {
             if (roomAvailableByType != null) {
                 quickRentRoomAssigned = roomAvailableByType;
                 jlQRRoomNumber.setText(roomAvailableByType.getRmsNumber());
-                jlQRRoomNumber.setVisible(true);
-
-                jbQRPagar.setEnabled(true);
-                jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
-                //generar totales de renta
-                MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
-                quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-
-                long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
-                //verificar si el Customer tiene tasa preferencial ------------------------------------
-                PreferenceDetail preferenceDetail = new PreferenceDetail();
-                preferenceDetail.setCusId(mainCustomer);
-                preferenceDetail.setRmsId(roomAvailableByType);
-                PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
-                // ------------------------------------------------------------------------------------
-                BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice();
-                quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
-                quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
-
-                jlQRSubTotal.setText(quickRentSubTotal.toString());
-                jlQRIVA.setText(quickRentIva.toString());
-                jlQRTotal.setText(quickRentTotal.toString()); 
+                jlQRRoomNumber.setVisible(true);                
+                jbtnLoadCustomer.setEnabled(true);
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
+                jbtnLoadCustomer.setEnabled(false);
             }
         } catch (Exception e) {
             GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage());
@@ -432,6 +451,49 @@ public class QuickRentDialog extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
+
+    private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
+        CustomerReg loadCustomer = new CustomerReg(this, true, mainCustomer);
+        loadCustomer.setVisible(true);
+        mainCustomer = loadCustomer.localCustomer;
+        
+        if(mainCustomer != null && mainCustomer.getCusId() != null){
+            //------------------------------------------------        
+            lblCustName.setText(mainCustomer.getFullName());
+            lblRfc.setText(mainCustomer.getCusRfc());
+            //------------------------------------------------
+            RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
+            com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
+            paramRoom.setRmsBeds(tipoSeleccionado);
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+
+            jbQRPagar.setEnabled(true);
+            jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+            //generar totales de renta
+            MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+            quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+
+            long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+            //verificar si el Customer tiene tasa preferencial ------------------------------------
+            PreferenceDetail preferenceDetail = new PreferenceDetail();
+            preferenceDetail.setCusId(mainCustomer);
+            preferenceDetail.setRmsId(quickRentRoomAssigned);
+            PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
+            // ------------------------------------------------------------------------------------
+            BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice();
+            quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
+            quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+            quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+
+            jlQRSubTotal.setText(quickRentSubTotal.toString());
+            jlQRIVA.setText(quickRentIva.toString());
+            jlQRTotal.setText(quickRentTotal.toString());
+        }
+         
+    }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
 
     public void clearQuickRentInstance() {
         quickRentRoomAssigned = null;
@@ -495,10 +557,11 @@ public class QuickRentDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JButton jbQRPagar;
     private javax.swing.JButton jbQRSearchRoom;
+    private javax.swing.JButton jbtnLoadCustomer;
     private javax.swing.JComboBox jcbQuickRentTipo;
     private javax.swing.JLabel jlQRIVA;
     private javax.swing.JLabel jlQRRoomNumber;
