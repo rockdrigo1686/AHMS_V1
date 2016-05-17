@@ -39,15 +39,14 @@ public class QuickResDialog extends javax.swing.JDialog {
         initComponents();
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
-        jlCusName.setText(mainCustomer.getFullName());
-        jlRFC.setText(mainCustomer.getCusRfc());
         
         roomsBounday = new RoomsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
         reservationBoundary = new ReservationBoundary();
-        
-        jlQuickResRoomNumber.setVisible(false);
+        jbQuickResReserve.setEnabled(false);
+        jbtnLoadCustomer.setEnabled(false);
+        jlQuickResRoomNumber.setText("-");
         configDatePickers();
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
@@ -122,16 +121,17 @@ public class QuickResDialog extends javax.swing.JDialog {
         jlQuickResRoomNumber = new javax.swing.JLabel();
         jbQuickResSearch = new javax.swing.JButton();
         jbQuickResReserve = new javax.swing.JButton();
+        jbtnLoadCustomer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jlCusName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlCusName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlCusName.setText("CUSNAME");
+        jlCusName.setText("Cliente sin especificar");
 
         jlRFC.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlRFC.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlRFC.setText("RFC");
+        jlRFC.setText("-");
 
         jLabel14.setText("Entrada:");
 
@@ -189,6 +189,17 @@ public class QuickResDialog extends javax.swing.JDialog {
             }
         });
 
+        jbtnLoadCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772636_user_manage.png"))); // NOI18N
+        jbtnLoadCustomer.setText("Cargar Cliente");
+        jbtnLoadCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbtnLoadCustomer.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jbtnLoadCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbtnLoadCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnLoadCustomerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -219,12 +230,14 @@ public class QuickResDialog extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcbQuickResTipoCuarto, 0, 137, Short.MAX_VALUE)
+                                .addComponent(jcbQuickResTipoCuarto, 0, 162, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jbQuickResSearch)))
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtnLoadCustomer)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -258,7 +271,9 @@ public class QuickResDialog extends javax.swing.JDialog {
                     .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlQuickResRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jbQuickResReserve)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbQuickResReserve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jbtnLoadCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -305,8 +320,11 @@ public class QuickResDialog extends javax.swing.JDialog {
                 quickResRoomAssigned = roomAvailableByType;
                 jlQuickResRoomNumber.setText(roomAvailableByType.getRmsNumber());
                 jlQuickResRoomNumber.setVisible(true);
-                jbQuickResReserve.setEnabled(true);
+                //jbQuickResReserve.setEnabled(true);
+                jbtnLoadCustomer.setEnabled(true);
             } else {
+                jbtnLoadCustomer.setEnabled(false);
+                jbQuickResReserve.setEnabled(false);
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
             }
         } catch (Exception e) {
@@ -315,6 +333,17 @@ public class QuickResDialog extends javax.swing.JDialog {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
+
+    private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
+        CustomerReg loadCustomer = new CustomerReg(this, true, mainCustomer);
+        loadCustomer.setVisible(true);
+        mainCustomer = loadCustomer.localCustomer;
+        if(mainCustomer != null && mainCustomer.getCusId() != null){
+            jbQuickResReserve.setEnabled(true);
+            jlCusName.setText(mainCustomer.getFullName());
+            jlRFC.setText(mainCustomer.getCusRfc());
+        }
+    }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,6 +395,7 @@ public class QuickResDialog extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JButton jbQuickResReserve;
     private javax.swing.JButton jbQuickResSearch;
+    private javax.swing.JButton jbtnLoadCustomer;
     private javax.swing.JComboBox jcbQuickResTipoCuarto;
     private javax.swing.JLabel jlCusName;
     private javax.swing.JLabel jlQuickResRoomNumber;

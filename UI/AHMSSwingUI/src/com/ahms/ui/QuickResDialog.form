@@ -54,7 +54,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jcbQuickResTipoCuarto" pref="137" max="32767" attributes="0"/>
+                              <Component id="jcbQuickResTipoCuarto" pref="162" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jbQuickResSearch" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -65,6 +65,8 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="jbtnLoadCustomer" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="jbQuickResReserve" min="-2" pref="92" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -107,7 +109,10 @@
                   <Component id="jlQuickResRoomNumber" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="jbQuickResReserve" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jbQuickResReserve" max="32767" attributes="0"/>
+                  <Component id="jbtnLoadCustomer" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -120,7 +125,7 @@
           <Font name="Ubuntu" size="15" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="CUSNAME"/>
+        <Property name="text" type="java.lang.String" value="Cliente sin especificar"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jlRFC">
@@ -129,7 +134,7 @@
           <Font name="Ubuntu" size="15" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="RFC"/>
+        <Property name="text" type="java.lang.String" value="-"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator7">
@@ -231,6 +236,20 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbQuickResReserveActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jbtnLoadCustomer">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/ahms/ui/resources/1445772636_user_manage.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Cargar Cliente"/>
+        <Property name="horizontalTextPosition" type="int" value="0"/>
+        <Property name="verticalAlignment" type="int" value="3"/>
+        <Property name="verticalTextPosition" type="int" value="3"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnLoadCustomerActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
