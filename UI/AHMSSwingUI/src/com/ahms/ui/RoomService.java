@@ -152,9 +152,10 @@ public class RoomService extends javax.swing.JDialog {
         idRMS = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtAccountTransactions = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
-        btnSalir = new javax.swing.JButton();
+        jToolBar3 = new javax.swing.JToolBar();
+        btnEditar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
         btnEliminar = new javax.swing.JButton();
 
         jmiPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money.png"))); // NOI18N
@@ -219,7 +220,7 @@ public class RoomService extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbServiceTypes, 0, 208, Short.MAX_VALUE)
+                        .addComponent(jcbServiceTypes, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -229,7 +230,7 @@ public class RoomService extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtxtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbAddService, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jbAddService, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(idRMS)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -268,39 +269,44 @@ public class RoomService extends javax.swing.JDialog {
         jtAccountTransactions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jtAccountTransactions);
 
-        jToolBar1.setFloatable(false);
-        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToolBar3.setFloatable(false);
+        jToolBar3.setRollover(true);
+        jToolBar3.setMargin(new java.awt.Insets(0, 10, 0, 0));
+        jToolBar3.setName("mainToolBar"); // NOI18N
 
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cross.png"))); // NOI18N
-        btnSalir.setText("Salir");
-        btnSalir.setFocusable(false);
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772634_document_delete.png"))); // NOI18N
+        btnEditar.setText("Cancelar");
+        btnEditar.setFocusable(false);
+        btnEditar.setName("btnEditar"); // NOI18N
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnSalir);
+        jToolBar3.add(btnEditar);
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/disk.png"))); // NOI18N
-        btnGuardar.setText("Guardar");
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772648_notification_done.png"))); // NOI18N
+        btnGuardar.setText("Pagar");
         btnGuardar.setFocusable(false);
-        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGuardar.setName("btnGuardar"); // NOI18N
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnGuardar);
+        jToolBar3.add(btnGuardar);
+        jToolBar3.add(jSeparator5);
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/delete.png"))); // NOI18N
-        btnEliminar.setText("Eliminar");
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772619_notification_error.png"))); // NOI18N
         btnEliminar.setFocusable(false);
+        btnEliminar.setLabel("Salir");
+        btnEliminar.setName("btnEliminar"); // NOI18N
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnEliminar);
+        jToolBar3.add(btnEliminar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -309,21 +315,28 @@ public class RoomService extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 947, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 947, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(337, Short.MAX_VALUE)))
         );
 
         pack();
@@ -336,7 +349,6 @@ public class RoomService extends javax.swing.JDialog {
     }//GEN-LAST:event_jcbServiceTypesActionPerformed
 
     private void jbAddServiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddServiceActionPerformed
-//verificar cantidad valida
         if (jtxtQuantity.getText().trim().length() <= 0) {
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_QTY_NULL);
             return;
@@ -354,7 +366,6 @@ public class RoomService extends javax.swing.JDialog {
             newService.setAtrUsrMod(currentshift.getUsrId());
             newService.setAtrNotes(serviceSel.getSvtId().getSvtDesc() + " - " + serviceSel.getSrvDesc());
             accountTransactionsBoundary.insert(newService);
-//            GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_SUCCESS);
             loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
             e.printStackTrace();
@@ -391,14 +402,20 @@ public class RoomService extends javax.swing.JDialog {
     }
 
     private void jmiCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCancelarActionPerformed
-        //cancelar servicio
-        Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
-        for (AccountTransactions iAct : currentGridsource) {
-            if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
-                cancelService(iAct);
-                return;
+        CancelationPrompt cancelation = new CancelationPrompt(null, true);
+        cancelation.setVisible(true);
+        if(cancelation.getAutorization()){
+            //cancelar servicio
+            Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
+            for (AccountTransactions iAct : currentGridsource) {
+                if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
+                    cancelService(iAct);
+                    return;
+                }
             }
-        }
+        } else {
+            GeneralFunctions.sendMessage(this, "No se realizo la cancelacion.");
+        } 
 
     }//GEN-LAST:event_jmiCancelarActionPerformed
 
@@ -414,19 +431,36 @@ public class RoomService extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jmiPagarActionPerformed
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-        //this.setVisible(false);
-    }//GEN-LAST:event_btnSalirActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        CancelationPrompt cancelation = new CancelationPrompt(null, true);
+        cancelation.setVisible(true);
+        if(cancelation.getAutorization()){
+            //cancelar servicio
+            Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
+            for (AccountTransactions iAct : currentGridsource) {
+                if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
+                    cancelService(iAct);
+                    return;
+                }
+            }
+        } else {
+            GeneralFunctions.sendMessage(this, "No se realizo la cancelacion.");
+        }        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-      
+        //Pagar Servicio
+        Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
+        for (AccountTransactions iAct : currentGridsource) {
+            if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
+                payService(iAct);
+                return;
+            }
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-
+        this.dispose();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
@@ -472,16 +506,17 @@ public class RoomService extends javax.swing.JDialog {
 //    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel idRMS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar.Separator jSeparator5;
+    private javax.swing.JToolBar jToolBar3;
     private javax.swing.JButton jbAddService;
     private javax.swing.JComboBox jcbServiceTypes;
     private javax.swing.JComboBox jcbServices;
