@@ -62,5 +62,10 @@ public class ReservationBoundary implements AHMSBoundary<Reservation>{
     public List<Reservation> findReservationByRoom(Rooms room, MultiValue status,Date date){
         return reservationEM.findReservationByRoom(room, status, date);
     }
+
+    public List<Reservation> searchByCusId(Reservation res) {
+        return reservationEM.searchByCusId(res);
+    }
+
     
 }
