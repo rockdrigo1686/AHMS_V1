@@ -69,4 +69,26 @@ public class ReservationEM extends AHMSEntityManager<Reservation> {
         }
     }
 
+    public List<Reservation> searchByCusId(Reservation res) {
+         try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Reservation> query = em.createNamedQuery("Reservation.findByCusId", Reservation.class);
+            query.setParameter("cusId", res.getCusId());
+             query.setParameter("status", new MultiValue(MMKeys.General.STA_ACTIVO_KEY));
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
+
 }

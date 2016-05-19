@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Reservation.findByResFecFin", query = "SELECT r FROM Reservation r WHERE r.resFecFin = :resFecFin"),
     @NamedQuery(name = "Reservation.findByRmsId", query = "SELECT r FROM Reservation r WHERE r.rmsId = :rmsId AND r.resStatus =:status AND r.resFecIni >= :date"),
     @NamedQuery(name = "Reservation.checkReservation", query = "SELECT r FROM Reservation r WHERE r.resFecIni < :date AND r.resStatus = :status"),
+    @NamedQuery(name = "Reservation.findByCusId", query = "SELECT r FROM Reservation r WHERE r.cusId = :cusId AND r.resStatus = :status"),
     @NamedQuery(name = "Reservation.findByResDteMod", query = "SELECT r FROM Reservation r WHERE r.resDteMod = :resDteMod")})
 public class Reservation implements Serializable {
     private static final long serialVersionUID = 1L;

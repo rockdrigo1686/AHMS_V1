@@ -13,6 +13,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.Rooms;
 import com.ahms.ui.utils.GeneralFunctions;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JTable;
@@ -199,7 +200,7 @@ public class AccountSearch extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Account row = null;
-        List<Account> accountList =  (List<Account>) resultList;
+        List<Account> accountList = (List<Account>) resultList;
         if (accountList == null) {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
@@ -223,7 +224,7 @@ public class AccountSearch extends javax.swing.JDialog {
         // TODO add your handling code here:
         Account row = null;
         Rooms room = null;
-        List<Account> accountList =  (List<Account>) this.resultList;
+        List<Account> accountList = (List<Account>) this.resultList;
         if (accountList == null) {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
@@ -257,33 +258,45 @@ public class AccountSearch extends javax.swing.JDialog {
         account.setCusId(customer);
         return accountB.findByCusId(account);
     }
+
     private List<Reservation> searchReservation(Customers customer) {
         //TODO crear buscar res by customer 
         Reservation res = new Reservation();
+        res.setCusId(customer);
         this.resB = new ReservationBoundary();
-        return this.resB.search(res);
+        return this.resB.searchByCusId(res);
     }
 
     //</editor-fold>
     private void fillTable(JTable resultTable) {
-        String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", "Total", "Estatus"};
-
+        String cDesc = AC.equalsIgnoreCase(action)?"Total":"Cuarto";
+        String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", cDesc, "Estatus"};
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         tableModel = new DefaultTableModel(col, 0) {
             @Override
             public boolean isCellEditable(int rowIndex, int mColIndex) {
                 return false;
             }
         };
-        List<Account> accountList =  (List<Account>) this.resultList;
-        // The 0 argument is number rows.
-        accountList.stream().forEach((next) -> {
-            tableModel.addRow(new Object[]{next.getActId(), next.getActFecIni(), next.getActFecFin(), next.getActTotal(), next.getActStatus()});
-            for (AccountTransactions at : next.getAccountTransactionsCollection()) {
-                if (at.getSrvId() == null) {
-                    roomList.add(at.getRmsId());
+        if (AC.equalsIgnoreCase(action)) {
+            List<Account> accountList = (List<Account>) this.resultList;
+            // The 0 argument is number rows.
+            accountList.stream().forEach((next) -> {
+                tableModel.addRow(new Object[]{next.getActId(), sd.format(next.getActFecIni()), sd.format(next.getActFecFin()), next.getActTotal(), next.getActStatus()});
+                for (AccountTransactions at : next.getAccountTransactionsCollection()) {
+                    if (at.getSrvId() == null) {
+                        roomList.add(at.getRmsId());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            List<Reservation> accountList = (List<Reservation>) this.resultList;
+            // The 0 argument is number rows.
+            accountList.stream().forEach((next) -> {
+                tableModel.addRow(new Object[]{next.getResId(), sd.format(next.getResFecIni()), sd.format(next.getResFecFin()), next.getRmsId().getRmsNumber(), next.getResStatus()});
+                
+            });
+        }
 
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
@@ -350,5 +363,4 @@ public class AccountSearch extends javax.swing.JDialog {
     private javax.swing.JTable resultTable;
     // End of variables declaration//GEN-END:variables
 
-    
 }
