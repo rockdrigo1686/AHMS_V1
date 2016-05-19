@@ -409,6 +409,7 @@ public class RoomService extends javax.swing.JDialog {
             Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
             for (AccountTransactions iAct : currentGridsource) {
                 if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
+                    iAct.setAtrUsrMod(cancelation.getAutUser());
                     cancelService(iAct);
                     return;
                 }
@@ -439,6 +440,7 @@ public class RoomService extends javax.swing.JDialog {
             Integer atrIdSelected = (Integer) jtAccountTransactions.getModel().getValueAt(jtAccountTransactions.getSelectedRow(), 1);
             for (AccountTransactions iAct : currentGridsource) {
                 if (iAct.getAtrId().compareTo(atrIdSelected) == 0) {
+                    iAct.setAtrUsrMod(cancelation.getAutUser());
                     cancelService(iAct);
                     return;
                 }
