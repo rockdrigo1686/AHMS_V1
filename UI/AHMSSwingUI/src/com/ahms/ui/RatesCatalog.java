@@ -78,8 +78,11 @@ public class RatesCatalog extends javax.swing.JDialog {
     }
     
     private void loadStatus(List<MultiValue> statusList){
-        DefaultComboBoxModel model= new DefaultComboBoxModel(statusList.toArray(new MultiValue[statusList.size()]));
-        this.rteStatus.setModel(model);
+        this.rteStatus.removeAllItems();
+        this.rteStatus.addItem(new MultiValue());
+        for(MultiValue status : statusList){
+            this.rteStatus.addItem(status);
+        }
     }
     
     private List<Rates> searchAll() {
