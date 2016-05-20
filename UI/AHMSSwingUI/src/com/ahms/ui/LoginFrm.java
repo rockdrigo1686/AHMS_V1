@@ -12,6 +12,10 @@ import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 /**
  *
@@ -27,6 +31,14 @@ public class LoginFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("AHMS Login");
+        Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doLogin();
+            }
+        };
+
+        pwdTxt.addActionListener(action);
 
     }
 
@@ -132,6 +144,22 @@ public class LoginFrm extends javax.swing.JFrame {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
+        doLogin();
+    }//GEN-LAST:event_loginBtnActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblError;
+    private javax.swing.JButton loginBtn;
+    private javax.swing.JPasswordField pwdTxt;
+    private javax.swing.JTextField usrTxt;
+    // End of variables declaration//GEN-END:variables
+
+    private void doLogin() {
         SecurityBoundary secBound = new SecurityBoundary();
         CashOutBoundary cashOutBoundary = new CashOutBoundary();
         CashOut currentShift = null;
@@ -147,21 +175,9 @@ public class LoginFrm extends javax.swing.JFrame {
             form.setVisible(true);
 
             dispose();
-        }else{
+        } else {
             lblError.setText(UIConstants.ERROR_LOGIN);
             lblError.setForeground(Color.red);
-        }               
-    }//GEN-LAST:event_loginBtnActionPerformed
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblError;
-    private javax.swing.JButton loginBtn;
-    private javax.swing.JPasswordField pwdTxt;
-    private javax.swing.JTextField usrTxt;
-    // End of variables declaration//GEN-END:variables
+        }
+    }
 }

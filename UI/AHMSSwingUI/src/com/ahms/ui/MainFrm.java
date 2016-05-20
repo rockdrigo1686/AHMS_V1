@@ -16,6 +16,10 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
+import com.ahms.reports.CancelacionesRp;
+import com.ahms.reports.CorteCajaRp;
+import com.ahms.reports.OcupacionRp;
+import com.ahms.reports.ServiciosRp;
 import com.ahms.ui.modules.security.ProfilesFrm;
 import com.ahms.ui.modules.security.UsersFrm;
 import com.ahms.ui.utils.UIConstants;
@@ -343,6 +347,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuItem13 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
         jMenuItem15 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         miProfiles = new javax.swing.JMenuItem();
         miUsers = new javax.swing.JMenuItem();
@@ -648,16 +653,40 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu4.setText("Reportes");
 
         jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
-        jMenuItem13.setText("Gastos");
+        jMenuItem13.setText("Serivicios");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem13);
 
         jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
         jMenuItem14.setText("Ocupacion");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem14);
 
         jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
         jMenuItem15.setText("Corte de Caja");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem15);
+
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
+        jMenuItem4.setText("Cancelaciones");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem4);
 
         menAdmin.add(jMenu4);
 
@@ -840,6 +869,30 @@ public class MainFrm extends javax.swing.JFrame {
         accSearch.setVisible(true);
     }//GEN-LAST:event_btnCheckinDlgActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        CancelacionesRp rep = new CancelacionesRp(this, true);
+        rep.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        // TODO add your handling code here:
+        ServiciosRp  rep = new ServiciosRp(this, true);
+        rep.setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        // TODO add your handling code here:
+        OcupacionRp rep = new OcupacionRp(this, true);
+        rep.setVisible(true);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        // TODO add your handling code here:
+        CorteCajaRp rep = new CorteCajaRp(this, true);
+        rep.setVisible(true);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckinDlg;
@@ -867,6 +920,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
