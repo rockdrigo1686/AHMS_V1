@@ -10,8 +10,6 @@ import com.ahms.boundary.security.PreferenceDetailBoundary;
 import com.ahms.boundary.security.ReservationBoundary;
 import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
-import com.ahms.model.entity.Account;
-import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
@@ -28,6 +26,7 @@ import com.ahms.ui.modules.security.ProfilesFrm;
 import com.ahms.ui.modules.security.UsersFrm;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -44,8 +43,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -170,7 +171,7 @@ public class MainFrm extends javax.swing.JFrame {
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
-        
+
         fillMessageBoard();
 
         if (!MMKeys.Profiles.ADMI.equals(this.mainUser.getProId().getProCode())
@@ -178,8 +179,8 @@ public class MainFrm extends javax.swing.JFrame {
             menAdmin.setEnabled(false);
             menConf.setEnabled(false);
         }
-        
-         Action action = new AbstractAction() {
+
+        Action action = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 configGrid(roomsBounday.searchAll(new Rooms()));
@@ -187,7 +188,7 @@ public class MainFrm extends javax.swing.JFrame {
         };
 
         txtRoomNumber.addActionListener(action);
-        
+
     }
 
     public void clearQuickRentInstance() {
@@ -207,53 +208,51 @@ public class MainFrm extends javax.swing.JFrame {
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
         this.jcbTipoCuarto.removeAllItems();
         this.jcbTipoCuarto.addItem(new RoomTypes());
-        for(RoomTypes roomType : lstRoomTypes){
+        for (RoomTypes roomType : lstRoomTypes) {
             this.jcbTipoCuarto.addItem(roomType);
         }
         this.jcbTipoCuarto.addItemListener((ItemEvent arg0) -> {
             Rooms roomTypes = new Rooms();
-            if(this.jcbTipoCuarto.getSelectedIndex() <= 0){
+            if (this.jcbTipoCuarto.getSelectedIndex() <= 0) {
                 configGrid(roomsBounday.searchAll(roomTypes));
-            } 
-            else {
+            } else {
                 roomTypes.setRmsBeds((RoomTypes) jcbTipoCuarto.getSelectedItem());
                 configGrid(roomsBounday.findByRmsBeds(roomTypes));
-            }            
+            }
         });
     }
 
     private void configFloors(List<Floors> lstFloors) {
         this.jcbPisos.removeAllItems();
         this.jcbPisos.addItem(new Floors());
-        for(Floors floor : lstFloors){
+        for (Floors floor : lstFloors) {
             this.jcbPisos.addItem(floor);
         }
         this.jcbPisos.addItemListener((ItemEvent arg0) -> {
-            if(this.jcbPisos.getSelectedIndex() <= 0){
+            if (this.jcbPisos.getSelectedIndex() <= 0) {
                 configGrid(roomsBounday.searchAll(new Rooms()));
             } else {
                 Rooms room = new Rooms();
                 room.setFlrId((Floors) this.jcbPisos.getSelectedItem());
                 configGrid(roomsBounday.findByFloor(room));
-            }            
+            }
         });
     }
 
     private void configDisponibilidad(List<MultiValue> lstMultiValueDisp) {
         this.jcbDisponibilidad.removeAllItems();
         this.jcbDisponibilidad.addItem(new MultiValue());
-        for(MultiValue multi : lstMultiValueDisp){
+        for (MultiValue multi : lstMultiValueDisp) {
             this.jcbDisponibilidad.addItem(multi);
         }
         this.jcbDisponibilidad.addItemListener((ItemEvent arg0) -> {
             Rooms roomDisp = new Rooms();
-            if(jcbDisponibilidad.getSelectedIndex() <= 0){
+            if (jcbDisponibilidad.getSelectedIndex() <= 0) {
                 configGrid(roomsBounday.searchAll(roomDisp));
-            }
-            else{
+            } else {
                 roomDisp.setRmsStatus((MultiValue) jcbDisponibilidad.getSelectedItem());
                 configGrid(roomsBounday.findByRmsStatus(roomDisp));
-            }            
+            }
         });
     }
 
@@ -431,10 +430,6 @@ public class MainFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setBackground(new java.awt.Color(192, 59, 59));
-
-        jPanel7.setBackground(new java.awt.Color(254, 254, 254));
-
         jLabel1.setText("Piso: ");
 
         jcbPisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -542,8 +537,6 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jToolBar1.setRollover(true);
-
         btnRentDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/building.png"))); // NOI18N
         btnRentDlg.setToolTipText("Renta de cuartos");
         btnRentDlg.addActionListener(new java.awt.event.ActionListener() {
@@ -580,8 +573,6 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(btnSearchAcc);
-
-        jToolBar2.setRollover(true);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pencil.png"))); // NOI18N
         jButton1.setFocusable(false);
@@ -788,9 +779,9 @@ public class MainFrm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -879,7 +870,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
-        ServiciosRp  rep = new ServiciosRp(this, true);
+        ServiciosRp rep = new ServiciosRp(this, true);
         rep.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
@@ -918,9 +909,12 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        AddMessage add = new AddMessage(this, true, mainUser);
+        add.setVisible(true);
+        fillMessageBoard();
     }//GEN-LAST:event_jButton1ActionPerformed
-private void fillMessageBoard() {
-        String col[] = {"ID", "Mesaje", "Fecha","Usuario"};
+    private void fillMessageBoard() {
+        String col[] = {"ID", "Mensaje", "Fecha", "Usuario"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         DefaultTableModel tableModel = new DefaultTableModel(col, 0) {
             @Override
@@ -929,20 +923,38 @@ private void fillMessageBoard() {
             }
         };
         MessageBoardBoundary messageBoundary = new MessageBoardBoundary();
-            List<MessageBoard> messages =  messageBoundary.searchAll(new MessageBoard());
-            // The 0 argument is number rows.
-            messages.stream().forEach((next) -> {
-                tableModel.addRow(new Object[]{next.getMsgId(), next.getMsgMessage(), sd.format(next.getMsgDate()), next.getMsgUser().getFullName()});
-            });
+        List<MessageBoard> messages = messageBoundary.searchAll(new MessageBoard());
+        // The 0 argument is number rows.
+        messages.stream().forEach((next) -> {
+            tableModel.addRow(new Object[]{next.getMsgId(), next.getMsgMessage(), sd.format(next.getMsgDate()), next.getMsgUser().getFullName()});
+        });
+
+        final JTextArea textArea = new JTextArea();
+
+        messageBoard.setDefaultRenderer(Object.class, new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                textArea.setText(value.toString());
+                textArea.setWrapStyleWord(true);
+                textArea.setLineWrap(true);
+                return textArea;
+            }
+
+        });
+
+        
+        int lines = 18*7;
+        messageBoard.setRowHeight(lines);
         messageBoard.setModel(tableModel);
         messageBoard.getColumn("ID").setMinWidth(0);
         messageBoard.getColumn("ID").setMaxWidth(0);
-        messageBoard.setColumnSelectionAllowed(false);
-        messageBoard.setCellSelectionEnabled(false);
+        messageBoard.setColumnSelectionAllowed(true);
         messageBoard.setRowSelectionAllowed(true);
         messageBoard.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //set TableCellRenderer into a specified JTable column class
 
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckinDlg;
@@ -1001,7 +1013,5 @@ private void fillMessageBoard() {
     private javax.swing.JMenuItem miUsers;
     private javax.swing.JTextField txtRoomNumber;
     // End of variables declaration//GEN-END:variables
-
-    
 
 }

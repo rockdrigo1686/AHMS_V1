@@ -87,7 +87,7 @@
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Component id="jLabel3" alignment="0" min="-2" pref="58" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace pref="27" max="32767" attributes="0"/>
                   <Component id="lblError" min="-2" max="-2" attributes="0"/>
@@ -99,7 +99,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack4/user_male_white_orange.png"/>
+              <Image iconType="3" name="/com/ahms/ui/resources/user.png"/>
             </Property>
           </Properties>
         </Component>
@@ -132,7 +132,7 @@
         <Component class="javax.swing.JButton" name="loginBtn">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/img/1445772731_security_key.png"/>
+              <Image iconType="3" name="/com/ahms/ui/resources/1445772731_security_key.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Login"/>
             <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">

@@ -64,7 +64,7 @@ public class LoginFrm extends javax.swing.JFrame {
 
         jPanel1.setBackground(java.awt.Color.white);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack4/user_male_white_orange.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/user.png"))); // NOI18N
 
         jLabel1.setText("Usuario");
 
@@ -76,7 +76,7 @@ public class LoginFrm extends javax.swing.JFrame {
         pwdTxt.setName(""); // NOI18N
         pwdTxt.setNextFocusableComponent(loginBtn);
 
-        loginBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/img/1445772731_security_key.png"))); // NOI18N
+        loginBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772731_security_key.png"))); // NOI18N
         loginBtn.setText("Login");
         loginBtn.setNextFocusableComponent(usrTxt);
         loginBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -123,7 +123,7 @@ public class LoginFrm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(pwdTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2)))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(lblError))
         );
