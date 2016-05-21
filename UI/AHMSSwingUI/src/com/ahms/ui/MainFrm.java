@@ -4,14 +4,18 @@ import com.ahms.boundary.security.AccountBoundary;
 import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.CustomersBoundary;
 import com.ahms.boundary.security.FloorsBoundary;
+import com.ahms.boundary.security.MessageBoardBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.PreferenceDetailBoundary;
 import com.ahms.boundary.security.ReservationBoundary;
 import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
+import com.ahms.model.entity.MessageBoard;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
@@ -28,6 +32,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -39,6 +44,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -164,6 +170,8 @@ public class MainFrm extends javax.swing.JFrame {
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
+        
+        fillMessageBoard();
 
         if (!MMKeys.Profiles.ADMI.equals(this.mainUser.getProId().getProCode())
                 && !MMKeys.Profiles.ACNT.equals(this.mainUser.getProId().getProCode())) {
@@ -179,6 +187,7 @@ public class MainFrm extends javax.swing.JFrame {
         };
 
         txtRoomNumber.addActionListener(action);
+        
     }
 
     public void clearQuickRentInstance() {
@@ -343,11 +352,7 @@ public class MainFrm extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
         jSeparator5 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jTabbedPane5 = new javax.swing.JTabbedPane();
-        jPanel4 = new javax.swing.JPanel();
-        jSeparator3 = new javax.swing.JSeparator();
+        jPanel2 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jcbPisos = new javax.swing.JComboBox();
@@ -359,14 +364,17 @@ public class MainFrm extends javax.swing.JFrame {
         txtRoomNumber = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtDashboard = new javax.swing.JTable();
-        jPanel6 = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        messageBoard = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
         btnRentDlg = new javax.swing.JButton();
         btnResDlg = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnCheckinDlg = new javax.swing.JButton();
         btnSearchAcc = new javax.swing.JButton();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -423,8 +431,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(java.awt.SystemColor.controlLtHighlight);
-        jPanel1.setToolTipText("");
+        jPanel2.setBackground(new java.awt.Color(192, 59, 59));
 
         jPanel7.setBackground(new java.awt.Color(254, 254, 254));
 
@@ -463,7 +470,7 @@ public class MainFrm extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -499,50 +506,45 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtDashboard);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        messageBoard.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(messageBoard);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator3)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        jTabbedPane5.addTab("Cuartos", jPanel4);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1007, Short.MAX_VALUE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
-        );
-
-        jTabbedPane5.addTab("tools", jPanel6);
-
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         jToolBar1.setRollover(true);
 
-        btnRentDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pencil.png"))); // NOI18N
+        btnRentDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/building.png"))); // NOI18N
         btnRentDlg.setToolTipText("Renta de cuartos");
         btnRentDlg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -579,37 +581,29 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSearchAcc);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTabbedPane5)
-                        .addGap(10, 10, 10))
-                    .addComponent(jSeparator1))
-                .addContainerGap())
-        );
+        jToolBar2.setRollover(true);
 
-        jTabbedPane5.getAccessibleContext().setAccessibleName("Cuartos");
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pencil.png"))); // NOI18N
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButton1);
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/repeat.png"))); // NOI18N
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jToolBar2.add(jButton2);
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer Document.png"))); // NOI18N
         jMenu1.setText("Movimientos");
@@ -784,14 +778,20 @@ public class MainFrm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -847,23 +847,6 @@ public class MainFrm extends javax.swing.JFrame {
         userFrm.setVisible(true);
     }//GEN-LAST:event_miUsersActionPerformed
 
-    private void jtDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDashboardMouseClicked
-        int clicks = evt.getClickCount();
-        int row = jtDashboard.getSelectedRow();
-        MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
-        if (clicks > 1) { // doble click
-            if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
-                //llamar a agregar servicios
-                Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                RoomService roomService = new RoomService(null, true, roomObj, currentShift);
-                roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
-                roomService.setVisible(true);
-            }
-        } else {  // 1 click
-
-        }
-    }//GEN-LAST:event_jtDashboardMouseClicked
-
     private void btnRentDlgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentDlgActionPerformed
         // TODO add your handling code here:
         QuickRentDialog qRentDilg = new QuickRentDialog(this, true, mainCustomer, currentShift);
@@ -912,6 +895,54 @@ public class MainFrm extends javax.swing.JFrame {
         rep.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
+    private void jtDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtDashboardMouseClicked
+        int clicks = evt.getClickCount();
+        int row = jtDashboard.getSelectedRow();
+        MultiValue estatus = (MultiValue) jtDashboard.getValueAt(row, 7);
+        if (clicks > 1) { // doble click
+            if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
+                //llamar a agregar servicios
+                Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
+                RoomService roomService = new RoomService(null, true, roomObj, currentShift);
+                roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
+                roomService.setVisible(true);
+            }
+        } else {  // 1 click
+
+        }
+    }//GEN-LAST:event_jtDashboardMouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        fillMessageBoard();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+private void fillMessageBoard() {
+        String col[] = {"ID", "Mesaje", "Fecha","Usuario"};
+        SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        DefaultTableModel tableModel = new DefaultTableModel(col, 0) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        };
+        MessageBoardBoundary messageBoundary = new MessageBoardBoundary();
+            List<MessageBoard> messages =  messageBoundary.searchAll(new MessageBoard());
+            // The 0 argument is number rows.
+            messages.stream().forEach((next) -> {
+                tableModel.addRow(new Object[]{next.getMsgId(), next.getMsgMessage(), sd.format(next.getMsgDate()), next.getMsgUser().getFullName()});
+            });
+        messageBoard.setModel(tableModel);
+        messageBoard.getColumn("ID").setMinWidth(0);
+        messageBoard.getColumn("ID").setMaxWidth(0);
+        messageBoard.setColumnSelectionAllowed(false);
+        messageBoard.setCellSelectionEnabled(false);
+        messageBoard.setRowSelectionAllowed(true);
+        messageBoard.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckinDlg;
@@ -919,6 +950,8 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnRentDlg;
     private javax.swing.JButton btnResDlg;
     private javax.swing.JButton btnSearchAcc;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -945,31 +978,30 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JComboBox jcbDisponibilidad;
     private javax.swing.JComboBox jcbPisos;
     private javax.swing.JComboBox jcbTipoCuarto;
     private javax.swing.JTable jtDashboard;
     private javax.swing.JMenu menAdmin;
     private javax.swing.JMenu menConf;
+    private javax.swing.JTable messageBoard;
     private javax.swing.JMenuItem miProfiles;
     private javax.swing.JMenuItem miUsers;
     private javax.swing.JTextField txtRoomNumber;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }
