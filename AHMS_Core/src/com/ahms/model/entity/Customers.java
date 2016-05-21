@@ -3,6 +3,7 @@ package com.ahms.model.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -46,6 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customers.findByNameOrRfc", query = "SELECT c FROM Customers c WHERE lower(c.cusName) like lower(:cusName) and lower(c.cusLst1) like lower(:cusLst1) "
                                                           + " and lower(c.cusLst2) like lower(:cusLst2) and (c.cusRfc is null or lower(c.cusRfc) like lower(:cusRfc))")})
 public class Customers implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cusId", fetch = FetchType.EAGER)
+    private List<PreferenceDetail> preferenceDetailList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -316,6 +319,15 @@ public class Customers implements Serializable {
     
     public String getFullName(){
         return this.cusName +" " + this.cusLst1+ " " + this.getCusLst2();
+    }
+
+    @XmlTransient
+    public List<PreferenceDetail> getPreferenceDetailList() {
+        return preferenceDetailList;
+    }
+
+    public void setPreferenceDetailList(List<PreferenceDetail> preferenceDetailList) {
+        this.preferenceDetailList = preferenceDetailList;
     }
     
 }

@@ -109,7 +109,7 @@ public class RoomsEM extends AHMSEntityManager {
 
     }
 
-    public Rooms findAvailable(Rooms rooms, Date fecIni, Date fecFin) {
+    public List<Rooms> findAvailable(Rooms rooms, Date fecIni, Date fecFin, int numRooms) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
@@ -120,7 +120,7 @@ public class RoomsEM extends AHMSEntityManager {
             sb.append(" where a.rms_beds = ?6 ");
             sb.append(" and a.rms_status = ?4 ");
             sb.append(" or (a.rms_status = ?5 ");
-            sb.append(" AND ( (?1 < r.res_fec_fin   AND ?2 < r.res_fec_ini) or  ?1 > r.res_fec_fin) ) LIMIT 1 ");
+            sb.append(" AND ( (?1 < r.res_fec_fin   AND ?2 < r.res_fec_ini) or  ?1 > r.res_fec_fin) ) LIMIT ?7 ");
             
             Query query = em.createNativeQuery(sb.toString(), Rooms.class);
             query.setParameter(1, fecIni);
@@ -129,7 +129,8 @@ public class RoomsEM extends AHMSEntityManager {
             query.setParameter(4, MMKeys.Rooms.STA_DISPONIBLE_KEY);
             query.setParameter(5, MMKeys.Rooms.STA_RESERVADO_KEY);
             query.setParameter(6, rooms.getRmsBeds().getRtyId());
-            return (Rooms) query.getSingleResult();
+            query.setParameter(7, numRooms);
+            return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,9 +32,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PreferenceDetail.findAll", query = "SELECT p FROM PreferenceDetail p"),
     @NamedQuery(name = "PreferenceDetail.findByPrefId", query = "SELECT p FROM PreferenceDetail p WHERE p.prefId = :prefId"),
     @NamedQuery(name = "PreferenceDetail.findByPrefAmount", query = "SELECT p FROM PreferenceDetail p WHERE p.prefAmount = :prefAmount"),
-    @NamedQuery(name = "PreferenceDetail.findByCus", query = "SELECT p FROM PreferenceDetail p WHERE p.cusId = :cusId and p.rmsId = :rmsId")
+    @NamedQuery(name = "PreferenceDetail.findByCus", query = "SELECT p FROM PreferenceDetail p WHERE p.cusId = :cusId and p.rtyId = :rtyId")
     })
 public class PreferenceDetail implements Serializable {
+    @JoinColumn(name = "RTY_ID", referencedColumnName = "RTY_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private RoomTypes rtyId;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,10 +51,7 @@ public class PreferenceDetail implements Serializable {
     @JoinColumn(name = "CUS_ID", referencedColumnName = "CUS_ID", nullable = false)
     @ManyToOne(optional = false)
     private Customers cusId;
-    @JoinColumn(name = "RMS_ID", referencedColumnName = "RMS_ID", nullable = false)
-    @ManyToOne(optional = false)
-    private Rooms rmsId;
-
+    
     public PreferenceDetail() {
     }
 
@@ -87,14 +88,6 @@ public class PreferenceDetail implements Serializable {
         this.cusId = cusId;
     }
 
-    public Rooms getRmsId() {
-        return rmsId;
-    }
-
-    public void setRmsId(Rooms rmsId) {
-        this.rmsId = rmsId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -118,6 +111,14 @@ public class PreferenceDetail implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.model.entity.PreferenceDetail[ prefId=" + prefId + " ]";
+    }
+
+    public RoomTypes getRtyId() {
+        return rtyId;
+    }
+
+    public void setRtyId(RoomTypes rtyId) {
+        this.rtyId = rtyId;
     }
     
 }

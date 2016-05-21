@@ -25,7 +25,7 @@ public class PreferenceDetailEM  extends AHMSEntityManager{
             }
             TypedQuery<PreferenceDetail> query = em.createNamedQuery("PreferenceDetail.findByCus", PreferenceDetail.class);
             query.setParameter("cusId", obj.getCusId());
-            query.setParameter("rmsId", obj.getRmsId());
+            query.setParameter("rtyId", obj.getRtyId());
             return query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {

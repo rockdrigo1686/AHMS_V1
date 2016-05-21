@@ -50,6 +50,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Account.checkAccount", query = "select a from Account a where (a.actStatus = :actStatus1 or a.actStatus = :actStatus2) and a.cusId = :cusId ")
 })
 public class Account implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ACT_NUM_PEOPLE", nullable = false)
+    private int actNumPeople;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actId", fetch = FetchType.LAZY)
     private List<ChangeHistory> changeHistoryList;
     private static final long serialVersionUID = 1L;
@@ -245,6 +248,14 @@ public class Account implements Serializable {
 
     public void setChangeHistoryList(List<ChangeHistory> changeHistoryList) {
         this.changeHistoryList = changeHistoryList;
+    }
+
+    public int getActNumPeople() {
+        return actNumPeople;
+    }
+
+    public void setActNumPeople(int actNumPeople) {
+        this.actNumPeople = actNumPeople;
     }
     
 }

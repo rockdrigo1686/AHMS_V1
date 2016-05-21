@@ -8,6 +8,7 @@ package com.ahms.model.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "RoomTypes.findByRtyBeds", query = "SELECT r FROM RoomTypes r WHERE r.rtyBeds = :rtyBeds"),
     @NamedQuery(name = "RoomTypes.findByRtyDteMod", query = "SELECT r FROM RoomTypes r WHERE r.rtyDteMod = :rtyDteMod")})
 public class RoomTypes implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rtyId", fetch = FetchType.EAGER)
+    private List<PreferenceDetail> preferenceDetailList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -161,6 +164,15 @@ public class RoomTypes implements Serializable {
     @Override
     public String toString() {
         return getRtyDescription();
+    }
+
+    @XmlTransient
+    public List<PreferenceDetail> getPreferenceDetailList() {
+        return preferenceDetailList;
+    }
+
+    public void setPreferenceDetailList(List<PreferenceDetail> preferenceDetailList) {
+        this.preferenceDetailList = preferenceDetailList;
     }
     
 }
