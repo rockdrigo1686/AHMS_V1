@@ -6,6 +6,8 @@
 package com.ahms.ui.utils;
 
 import java.awt.Component;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 
@@ -27,5 +29,17 @@ public class GeneralFunctions {
     
     public static void sendMessage(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message);
+    }
+    
+    public static String formatAmount(BigDecimal amount){
+        String formatted = "";
+        DecimalFormat df = new DecimalFormat("$ ##,##0.00");
+        try {
+            formatted = df.format(amount.doubleValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+            formatted = amount.toString();
+        }
+        return formatted;
     }
 }

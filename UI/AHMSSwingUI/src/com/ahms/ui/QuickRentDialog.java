@@ -51,6 +51,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
     
     public boolean totalPaid = false;
+    public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
     
     public QuickRentDialog(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
@@ -67,17 +68,17 @@ public class QuickRentDialog extends javax.swing.JDialog {
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
 
-        jlQRRoomNumber.setText("-");
         configDatePickers();
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
-        configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
-
+        configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));        
     }
     
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
         jcbQuickRentTipo.removeAllItems();
-        jcbQuickRentTipo.addItem(new RoomTypes());
+        RoomTypes newRt = new RoomTypes();
+        newRt.setRtyDescription("Seleccionar...");
+        jcbQuickRentTipo.addItem(newRt);
         for (RoomTypes roomType : lstRoomTypes) {
             jcbQuickRentTipo.addItem(roomType);
         }
@@ -124,24 +125,12 @@ public class QuickRentDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panel1 = new java.awt.Panel();
-        lblCustName = new javax.swing.JLabel();
-        lblRfc = new javax.swing.JLabel();
-        jbtnLoadCustomer = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jlQRSubTotal = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jlQRIVA = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jlQRTotal = new javax.swing.JLabel();
-        jbQRPagar = new javax.swing.JButton();
-        panel2 = new java.awt.Panel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jspNumeroPersonas = new javax.swing.JSpinner();
+        jlNumber = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jcbQuickRentTipo = new javax.swing.JComboBox();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jlQRRoomNumber = new javax.swing.JLabel();
-        jspNumeroPersonas = new javax.swing.JSpinner();
         jbQRSearchRoom = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         jLabel1 = new javax.swing.JLabel();
@@ -149,132 +138,36 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jSplitPane2 = new javax.swing.JSplitPane();
         jLabel2 = new javax.swing.JLabel();
         jpFecSalContainer = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jspNumeroCuartos = new javax.swing.JSpinner();
         jSeparator1 = new javax.swing.JSeparator();
-        panel4 = new java.awt.Panel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jbtnLoadCustomer = new javax.swing.JButton();
+        jlQRTotal = new javax.swing.JLabel();
+        jlQRIVA = new javax.swing.JLabel();
+        jlQRSubTotal = new javax.swing.JLabel();
+        lblCustName = new javax.swing.JLabel();
+        lblRfc = new javax.swing.JLabel();
+        jbQRPagar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        lbPrecioCuarto = new javax.swing.JLabel();
         label1 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
-        lblCustName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        lblCustName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCustName.setText("Cliente sin especificar");
+        jLabel10.setText("Personas:");
 
-        lblRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        lblRfc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblRfc.setText("-");
-
-        jbtnLoadCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772636_user_manage.png"))); // NOI18N
-        jbtnLoadCustomer.setToolTipText("Buscar Cliente");
-        jbtnLoadCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbtnLoadCustomer.setLabel("Cliente");
-        jbtnLoadCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbtnLoadCustomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnLoadCustomerActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("Subtotal:");
-
-        jlQRSubTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlQRSubTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRSubTotal.setText("-");
-
-        jLabel6.setText("IVA:");
-
-        jlQRIVA.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlQRIVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRIVA.setText("-");
-
-        jLabel7.setText("Total:");
-
-        jlQRTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlQRTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRTotal.setText("-");
-
-        jbQRPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
-        jbQRPagar.setText("Pagar");
-        jbQRPagar.setEnabled(false);
-        jbQRPagar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jbQRPagar.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jbQRPagar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jbQRPagar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbQRPagarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
-        panel1.setLayout(panel1Layout);
-        panel1Layout.setHorizontalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblRfc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(panel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                                        .addComponent(jbtnLoadCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jlQRTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jlQRIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(lblCustName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        panel1Layout.setVerticalGroup(
-            panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblCustName, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlQRIVA)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jlQRTotal)
-                    .addComponent(jLabel7))
-                .addGap(10, 10, 10)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbQRPagar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jbtnLoadCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        panel2.setForeground(new java.awt.Color(1, 1, 1));
+        jlNumber.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jlNumber.setText("Cuarto(s) disponible(s):");
 
         jLabel4.setText("Tipo de cuarto:");
         jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
 
         jcbQuickRentTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel11.setText("Número de cuarto:");
-
-        jLabel10.setText("Personas:");
-
-        jlQRRoomNumber.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlQRRoomNumber.setForeground(new java.awt.Color(232, 43, 43));
-        jlQRRoomNumber.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQRRoomNumber.setText("RoomNmbr");
-        jlQRRoomNumber.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         jbQRSearchRoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/find.png"))); // NOI18N
         jbQRSearchRoom.addActionListener(new java.awt.event.ActionListener() {
@@ -296,7 +189,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jpFecEntContainer.setLayout(jpFecEntContainerLayout);
         jpFecEntContainerLayout.setHorizontalGroup(
             jpFecEntContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 221, Short.MAX_VALUE)
         );
         jpFecEntContainerLayout.setVerticalGroup(
             jpFecEntContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,7 +211,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
         jpFecSalContainer.setLayout(jpFecSalContainerLayout);
         jpFecSalContainerLayout.setHorizontalGroup(
             jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 217, Short.MAX_VALUE)
+            .addGap(0, 227, Short.MAX_VALUE)
         );
         jpFecSalContainerLayout.setVerticalGroup(
             jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -327,82 +220,190 @@ public class QuickRentDialog extends javax.swing.JDialog {
 
         jSplitPane2.setRightComponent(jpFecSalContainer);
 
+        jLabel3.setText("Número de Cuartos:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jlNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSplitPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbQuickRentTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jbQRSearchRoom))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jspNumeroCuartos, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                            .addComponent(jspNumeroPersonas))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jspNumeroCuartos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jbQRSearchRoom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
-        panel2.setLayout(panel2Layout);
-        panel2Layout.setHorizontalGroup(
-            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(panel2Layout.createSequentialGroup()
-                            .addComponent(jLabel10)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel2Layout.createSequentialGroup()
-                            .addComponent(jLabel11)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(panel2Layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jbQRSearchRoom))))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        panel2Layout.setVerticalGroup(
-            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
+        jLabel7.setText("Total:");
+
+        jLabel6.setText("IVA:");
+
+        jLabel5.setText("Subtotal:");
+
+        jbtnLoadCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445772636_user_manage.png"))); // NOI18N
+        jbtnLoadCustomer.setToolTipText("Buscar Cliente");
+        jbtnLoadCustomer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbtnLoadCustomer.setLabel("Cliente");
+        jbtnLoadCustomer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbtnLoadCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnLoadCustomerActionPerformed(evt);
+            }
+        });
+
+        jlQRTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlQRTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlQRTotal.setText("-");
+
+        jlQRIVA.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlQRIVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlQRIVA.setText("-");
+
+        jlQRSubTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlQRSubTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlQRSubTotal.setText("-");
+
+        lblCustName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblCustName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCustName.setText("Cliente sin especificar");
+
+        lblRfc.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblRfc.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblRfc.setText("-");
+
+        jbQRPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
+        jbQRPagar.setText("Pagar");
+        jbQRPagar.setEnabled(false);
+        jbQRPagar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jbQRPagar.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jbQRPagar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jbQRPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbQRPagarActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Precio por Cuarto:");
+
+        lbPrecioCuarto.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lbPrecioCuarto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbPrecioCuarto.setText("-");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator1)
-                    .addGroup(panel2Layout.createSequentialGroup()
-                        .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jbtnLoadCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSplitPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jbQRSearchRoom))
-                        .addGap(13, 13, 13)
-                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlQRRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jlQRTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlQRIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlQRSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel8)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lbPrecioCuarto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(lblRfc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblCustName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(lbPrecioCuarto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlQRIVA)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlQRTotal)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbtnLoadCustomer)
+                    .addComponent(jbQRPagar))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(7, 7, 7)
+                    .addComponent(lblCustName, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(lblRfc, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(190, 190, 190)))
         );
 
         label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         label1.setText("RENTAS");
-
-        javax.swing.GroupLayout panel4Layout = new javax.swing.GroupLayout(panel4);
-        panel4.setLayout(panel4Layout);
-        panel4Layout.setHorizontalGroup(
-            panel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        panel4Layout.setVerticalGroup(
-            panel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -410,24 +411,27 @@ public class QuickRentDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(panel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator1)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -499,11 +503,15 @@ public class QuickRentDialog extends javax.swing.JDialog {
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            com.ahms.model.entity.Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime());
-            if (roomAvailableByType != null) {
-                quickRentRoomAssigned = roomAvailableByType;
-                jlQRRoomNumber.setText(roomAvailableByType.getRmsNumber());
-                jlQRRoomNumber.setVisible(true);                
+            
+            int numRooms = (int) jspNumeroCuartos.getValue();
+            roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(),numRooms);
+            if (roomAvailableByTypeLst != null && roomAvailableByTypeLst.size() > 0) {
+                jlNumber.setText("Cuarto(s) disponible(s):");
+                for(com.ahms.model.entity.Rooms roomAvailableByType : roomAvailableByTypeLst){
+                    //quickRentRoomAssigned = roomAvailableByType;
+                    jlNumber.setText(jlNumber.getText() + "  " +  roomAvailableByType.getRmsNumber());
+                }                
                 jbtnLoadCustomer.setEnabled(true);
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
@@ -535,7 +543,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
 
             jbQRPagar.setEnabled(true);
-            jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
+            //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
             //generar totales de renta
             MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
             quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
@@ -544,17 +552,24 @@ public class QuickRentDialog extends javax.swing.JDialog {
             //verificar si el Customer tiene tasa preferencial ------------------------------------
             PreferenceDetail preferenceDetail = new PreferenceDetail();
             preferenceDetail.setCusId(mainCustomer);
-            preferenceDetail.setRmsId(quickRentRoomAssigned);
+            preferenceDetail.setRtyId((RoomTypes) jcbQuickRentTipo.getSelectedItem());
             PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
             // ------------------------------------------------------------------------------------
-            BigDecimal price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : quickRentRoomAssigned.getRteId().getRtePrice();
-            quickRentSubTotal = price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN);
-            quickRentIva = quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN);
+            quickRentSubTotal = BigDecimal.ZERO;
+            quickRentIva = BigDecimal.ZERO;
+            quickRentTotal = BigDecimal.ZERO;
+            BigDecimal price = BigDecimal.ZERO;
+            for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+                price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : room.getRteId().getRtePrice();
+                quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
+                quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));                
+            }
             quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
-
-            jlQRSubTotal.setText(quickRentSubTotal.toString());
-            jlQRIVA.setText(quickRentIva.toString());
-            jlQRTotal.setText(quickRentTotal.toString());
+            
+            lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
+            jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
+            jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
+            jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
         }
          
     }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
@@ -565,7 +580,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
         quickRentIva = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         quickrentIvaPercent = BigDecimal.ZERO;
-        jlQRRoomNumber.setVisible(false);
+       //jlNumber.setVisible(false);
         jbQRPagar.setEnabled(false);
 
     }
@@ -615,12 +630,15 @@ public class QuickRentDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
@@ -628,18 +646,17 @@ public class QuickRentDialog extends javax.swing.JDialog {
     private javax.swing.JButton jbQRSearchRoom;
     private javax.swing.JButton jbtnLoadCustomer;
     private javax.swing.JComboBox jcbQuickRentTipo;
+    private javax.swing.JLabel jlNumber;
     private javax.swing.JLabel jlQRIVA;
-    private javax.swing.JLabel jlQRRoomNumber;
     private javax.swing.JLabel jlQRSubTotal;
     private javax.swing.JLabel jlQRTotal;
     private javax.swing.JPanel jpFecEntContainer;
     private javax.swing.JPanel jpFecSalContainer;
+    private javax.swing.JSpinner jspNumeroCuartos;
     private javax.swing.JSpinner jspNumeroPersonas;
     private java.awt.Label label1;
+    private javax.swing.JLabel lbPrecioCuarto;
     private javax.swing.JLabel lblCustName;
     private javax.swing.JLabel lblRfc;
-    private java.awt.Panel panel1;
-    private java.awt.Panel panel2;
-    private java.awt.Panel panel4;
     // End of variables declaration//GEN-END:variables
 }
