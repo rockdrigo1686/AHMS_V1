@@ -179,6 +179,9 @@ public class CancelacionesRp extends javax.swing.JDialog {
         String fileXML = "/home/rsoto/Documents/AHMS/files/XML_CORTE.xml";
         String fileXLS = "/home/rsoto/Documents/AHMS/files/XSL_CORTE_CAJA.xsl";
         String fileOut = "/home/rsoto/Documents/AHMS/files/XSL_CORTE_CAJA.pdf";
+        //String fileOutWin = "C:/AHMS/Reportes/PDF/XSL_CORTE_CAJA.pdf";
+        //String fileXMLWin = "C:/AHMS/Reportes/Fuente/XML_CORTE.xml";
+        //String fileXLSWin = "C:/AHMS/reportes/Plantillas/XSL_CORTE_CAJA.xsl";
         try {
             FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
         } catch (Exception ex) {
