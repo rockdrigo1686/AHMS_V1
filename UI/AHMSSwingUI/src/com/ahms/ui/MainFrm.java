@@ -183,7 +183,18 @@ public class MainFrm extends javax.swing.JFrame {
         Action action = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                configGrid(roomsBounday.searchAll(new Rooms()));
+                String roomNumber = txtRoomNumber.getText().trim();
+                if(roomNumber != null && roomNumber.length() > 0){
+                    com.ahms.model.entity.Rooms roomFind = new com.ahms.model.entity.Rooms();
+                    roomFind.setRmsNumber(roomNumber);
+                    roomFind = roomsBounday.findByRmsNumber(roomFind);
+                    if(roomFind.getRmsId() != null){
+                        ArrayList<com.ahms.model.entity.Rooms> lst = new ArrayList<>();
+                        lst.add(roomFind);
+                        configGrid(lst);
+                    }                    
+                }
+                
             }
         };
 
