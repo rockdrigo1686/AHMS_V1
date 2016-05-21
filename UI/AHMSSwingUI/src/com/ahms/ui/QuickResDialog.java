@@ -33,6 +33,7 @@ public class QuickResDialog extends javax.swing.JDialog {
     private CashOut currentShift = null;
     
     private ReservationBoundary reservationBoundary;
+    public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
     
     public QuickResDialog(java.awt.Frame parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
@@ -45,8 +46,7 @@ public class QuickResDialog extends javax.swing.JDialog {
         roomTypesBoundary = new RoomTypesBoundary();
         reservationBoundary = new ReservationBoundary();
         jbQuickResReserve.setEnabled(false);
-        jbtnLoadCustomer.setEnabled(false);
-        jlQuickResRoomNumber.setText("-");
+        jbtnLoadCustomer.setEnabled(false);        
         configDatePickers();
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
@@ -55,10 +55,8 @@ public class QuickResDialog extends javax.swing.JDialog {
     }
     
     public void clearQuickResInstance() {
-        quickResRoomAssigned = null;
-        jlQuickResRoomNumber.setVisible(false);
+        quickResRoomAssigned = null;        
         jbQuickResReserve.setEnabled(false);
-
     }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
@@ -116,12 +114,13 @@ public class QuickResDialog extends javax.swing.JDialog {
         jpFecEntContainerRes = new javax.swing.JPanel();
         jpFecSalContainerRes = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
+        jlCuartos = new javax.swing.JLabel();
         jcbQuickResTipoCuarto = new javax.swing.JComboBox();
-        jlQuickResRoomNumber = new javax.swing.JLabel();
         jbQuickResSearch = new javax.swing.JButton();
         jbQuickResReserve = new javax.swing.JButton();
         jbtnLoadCustomer = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jspNumRooms = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -165,15 +164,9 @@ public class QuickResDialog extends javax.swing.JDialog {
 
         jLabel16.setText("Tipo de Cuarto:");
 
-        jLabel12.setText("Numero de Cuarto:");
+        jlCuartos.setText("Cuarto(s) asigando(s):");
 
         jcbQuickResTipoCuarto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jlQuickResRoomNumber.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
-        jlQuickResRoomNumber.setForeground(new java.awt.Color(232, 43, 43));
-        jlQuickResRoomNumber.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jlQuickResRoomNumber.setText("RoomNmbr");
-        jlQuickResRoomNumber.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         jbQuickResSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/find.png"))); // NOI18N
         jbQuickResSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -204,6 +197,8 @@ public class QuickResDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setText("Número de Cuartos:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,35 +206,40 @@ public class QuickResDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jlCusName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jlRFC, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlCuartos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jbtnLoadCustomer)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jlQuickResRoomNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jspNumRooms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel14)
-                                .addComponent(jLabel15))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jLabel16)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jcbQuickResTipoCuarto, 0, 142, Short.MAX_VALUE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jbQuickResSearch))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(56, 56, 56)
+                                    .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jlCusName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jlRFC, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jbtnLoadCustomer)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jbQuickResReserve, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel14)
+                                            .addComponent(jLabel15))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jcbQuickResTipoCuarto, 0, 142, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jbQuickResSearch))))
+                            .addGap(0, 0, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,17 +260,19 @@ public class QuickResDialog extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jspNumRooms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel16)
                         .addComponent(jcbQuickResTipoCuarto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jbQuickResSearch))
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlQuickResRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jlCuartos, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jbQuickResReserve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jbtnLoadCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -286,21 +288,25 @@ public class QuickResDialog extends javax.swing.JDialog {
         Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
         Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
 
-        //Actualizando el estatus del cuarto
-        quickResRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_RESERVADO_KEY)));
-        roomsBounday.update(quickResRoomAssigned);
+        for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+            //Actualizando el estatus del cuarto
+            room.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_RESERVADO_KEY)));
+            roomsBounday.update(room);
 
-        //Reservando cuarto
-        Reservation reservation = new Reservation();
-        reservation.setCusId(mainCustomer);
-        reservation.setResDteMod(Calendar.getInstance().getTime());
-        reservation.setResUsrMod(currentShift.getUsrId());
-        reservation.setResStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
-        reservation.setRmsId(quickResRoomAssigned);
-        reservation.setResFecIni(calEntrada.getTime());
-        reservation.setResFecFin(calSalida.getTime());
-        reservationBoundary.insert(reservation);
-        GeneralFunctions.sendMessage(this, UIConstants.RESERVATION_OK + " Cuarto reservado: " + quickResRoomAssigned.getRmsNumber());
+            //Reservando cuarto
+            Reservation reservation = new Reservation();
+            reservation.setCusId(mainCustomer);
+            reservation.setResDteMod(Calendar.getInstance().getTime());
+            reservation.setResUsrMod(currentShift.getUsrId());
+            reservation.setResStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
+            reservation.setRmsId(room);
+            reservation.setResFecIni(calEntrada.getTime());
+            reservation.setResFecFin(calSalida.getTime());
+            reservationBoundary.insert(reservation);
+        }
+        
+        
+        GeneralFunctions.sendMessage(this, UIConstants.RESERVATION_OK);
 
         //configGrid(roomsBounday.searchAll(new Rooms()));
         clearQuickResInstance();
@@ -315,12 +321,14 @@ public class QuickResDialog extends javax.swing.JDialog {
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            com.ahms.model.entity.Rooms roomAvailableByType = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime());
-            if (roomAvailableByType != null) {
-                quickResRoomAssigned = roomAvailableByType;
-                jlQuickResRoomNumber.setText(roomAvailableByType.getRmsNumber());
-                jlQuickResRoomNumber.setVisible(true);
-                //jbQuickResReserve.setEnabled(true);
+            
+            int numRooms = (int) jspNumRooms.getValue();
+            roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(),numRooms);
+            if (roomAvailableByTypeLst != null && roomAvailableByTypeLst.size() > 0) {
+                jlCuartos.setText("Cuarto(s) disponible(s):");
+                for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+                    jlCuartos.setText(jlCuartos.getText() + "  " +  room.getRmsNumber());
+                }                
                 jbtnLoadCustomer.setEnabled(true);
             } else {
                 jbtnLoadCustomer.setEnabled(false);
@@ -388,7 +396,7 @@ public class QuickResDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
@@ -397,10 +405,11 @@ public class QuickResDialog extends javax.swing.JDialog {
     private javax.swing.JButton jbQuickResSearch;
     private javax.swing.JButton jbtnLoadCustomer;
     private javax.swing.JComboBox jcbQuickResTipoCuarto;
+    private javax.swing.JLabel jlCuartos;
     private javax.swing.JLabel jlCusName;
-    private javax.swing.JLabel jlQuickResRoomNumber;
     private javax.swing.JLabel jlRFC;
     private javax.swing.JPanel jpFecEntContainerRes;
     private javax.swing.JPanel jpFecSalContainerRes;
+    private javax.swing.JSpinner jspNumRooms;
     // End of variables declaration//GEN-END:variables
 }

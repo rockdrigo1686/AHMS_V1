@@ -2,10 +2,12 @@ package com.ahms.ui;
 
 import com.ahms.boundary.security.FloorsBoundary;
 import com.ahms.boundary.security.PreferenceDetailBoundary;
+import com.ahms.boundary.security.RoomTypesBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.PreferenceDetail;
+import com.ahms.model.entity.RoomTypes;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import java.math.BigDecimal;
@@ -23,8 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class SetPreferencesDialog extends javax.swing.JDialog {
 
     private Customers mainCustomer = null;
-    private FloorsBoundary floorsBoundary = null;
-    private RoomsBoundary roomsBoundary = null;
+    private RoomTypesBoundary roomTypesBoundary = null;
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
     private DefaultTableModel tableModel = null;
     private List<PreferenceDetail> resultList = null;
@@ -34,10 +35,8 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         mainCustomer = customer;
-        floorsBoundary = new FloorsBoundary();
-        roomsBoundary = new RoomsBoundary();
+        roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
-        configFloors();
         resultList = preferenceDetailBoundary.findPreferences(mainCustomer);
         configTable();
         this.jcbCuartos.removeAllItems();
@@ -46,7 +45,7 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         this.jbtnNew.setEnabled(true);
         this.jbtnUpd.setEnabled(false);
         
-        configRooms((Floors) jcbPisos.getSelectedItem());
+        configRooms();
         this.jlName.setText(mainCustomer.getFullName());
     }
     
@@ -54,10 +53,8 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         mainCustomer = customer;
-        floorsBoundary = new FloorsBoundary();
-        roomsBoundary = new RoomsBoundary();
+        roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
-        configFloors();
         resultList = preferenceDetailBoundary.findPreferences(mainCustomer);
         configTable();
         this.jcbCuartos.removeAllItems();
@@ -66,27 +63,25 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         this.jbtnNew.setEnabled(true);
         this.jbtnUpd.setEnabled(false);
         
-        configRooms((Floors) jcbPisos.getSelectedItem());
+        configRooms();
         this.jlName.setText(mainCustomer.getFullName());
     }
     
-    private void configFloors(){
-        List<Floors> lstFloors = floorsBoundary.searchAll(new Floors());
-        DefaultComboBoxModel model = new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
-        this.jcbPisos.setModel(model);
-    }
     
-    private void configRooms(Floors floor){
-        com.ahms.model.entity.Rooms room = new com.ahms.model.entity.Rooms();
-        room.setFlrId(floor);
-        List<com.ahms.model.entity.Rooms> lstRooms = roomsBoundary.findByFloor(room);
-        DefaultComboBoxModel model = new DefaultComboBoxModel(lstRooms.toArray(new com.ahms.model.entity.Rooms[lstRooms.size()]));
-        this.jcbCuartos.setModel(model);
+    private void configRooms(){
+        List<RoomTypes> types = roomTypesBoundary.searchAll(new RoomTypes());
+        jcbCuartos.removeAllItems();
+        RoomTypes blankRoomType = new RoomTypes();
+        blankRoomType.setRtyDescription("Seleccionar...");
+        jcbCuartos.addItem(blankRoomType);
+        for(RoomTypes type : types){
+            jcbCuartos.addItem(type);
+        }        
     }
     
     private void configTable(){
         
-        String col[] = {"ROW","PREF_ID", "CUS_ID","RMS_ID","Cuarto", "Monto"};
+        String col[] = {"ROW","PREF_ID", "CUS_ID","RTY_ID","Tipo", "Monto"};
 
         tableModel = new DefaultTableModel(col, 0) {
             @Override
@@ -101,8 +96,8 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
                 next,
                 next.getPrefId(), 
                 next.getCusId(),
-                next.getRmsId(),
-                next.getRmsId().getRmsDesc(), 
+                next.getRtyId(),
+                next.getRtyId().getRtyDescription(), 
                 next.getPrefAmount()});
         });
 
@@ -113,10 +108,10 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         resultTable.getColumn("PREF_ID").setMaxWidth(0);
         resultTable.getColumn("CUS_ID").setMaxWidth(0);
         resultTable.getColumn("CUS_ID").setMinWidth(0);
-        resultTable.getColumn("RMS_ID").setMinWidth(0);
-        resultTable.getColumn("RMS_ID").setMaxWidth(0);        
-        resultTable.getColumn("Cuarto").setMaxWidth(180);
-        resultTable.getColumn("Cuarto").setMinWidth(180);
+        resultTable.getColumn("RTY_ID").setMinWidth(0);
+        resultTable.getColumn("RTY_ID").setMaxWidth(0);        
+        resultTable.getColumn("Tipo").setMaxWidth(180);
+        resultTable.getColumn("Tipo").setMinWidth(180);
         resultTable.getColumn("Monto").setMaxWidth(180);
         resultTable.getColumn("Monto").setMinWidth(180);
         resultTable.setColumnSelectionAllowed(false);
@@ -131,18 +126,17 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jlName = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jcbPisos = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jcbCuartos = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jtxtMonto = new javax.swing.JTextField();
+        jToolBar1 = new javax.swing.JToolBar();
+        jbtnClr = new javax.swing.JButton();
         jbtnUpd = new javax.swing.JButton();
         jbtnNew = new javax.swing.JButton();
         jbtnDel = new javax.swing.JButton();
-        jbtnClr = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -150,16 +144,7 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         jlName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlName.setText("JORGE ACLFONSO CASTAÑEDA GUTIERREZ");
 
-        jLabel2.setText("Piso:");
-
-        jcbPisos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jcbPisos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbPisosActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Cuarto:");
+        jLabel3.setText("Tipo:");
 
         jcbCuartos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -184,111 +169,95 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
 
         jLabel4.setText("Monto:");
 
-        jbtnUpd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771624_1.png"))); // NOI18N
-        jbtnUpd.setToolTipText("ACTUALIZAR");
-        jbtnUpd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnUpdActionPerformed(evt);
-            }
-        });
+        jToolBar1.setRollover(true);
 
-        jbtnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771614_7.png"))); // NOI18N
-        jbtnNew.setToolTipText("NUEVO");
-        jbtnNew.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnNewActionPerformed(evt);
-            }
-        });
-
-        jbtnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771618_17.png"))); // NOI18N
-        jbtnDel.setToolTipText("ELIMINAR");
-        jbtnDel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnDelActionPerformed(evt);
-            }
-        });
-
-        jbtnClr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/1445771577_12.png"))); // NOI18N
+        jbtnClr.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772664_file.png"))); // NOI18N
+        jbtnClr.setText("Limpiar");
         jbtnClr.setToolTipText("LIMPIAR");
         jbtnClr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnClrActionPerformed(evt);
             }
         });
+        jToolBar1.add(jbtnClr);
+
+        jbtnUpd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772617_file_edit.png"))); // NOI18N
+        jbtnUpd.setText("Actualizar");
+        jbtnUpd.setToolTipText("ACTUALIZAR");
+        jbtnUpd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnUpdActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jbtnUpd);
+
+        jbtnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772609_file_add.png"))); // NOI18N
+        jbtnNew.setText("Nuevo");
+        jbtnNew.setToolTipText("NUEVO");
+        jbtnNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnNewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jbtnNew);
+
+        jbtnDel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/1445772612_file_delete.png"))); // NOI18N
+        jbtnDel.setText("Eliminar");
+        jbtnDel.setToolTipText("ELIMINAR");
+        jbtnDel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnDelActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jbtnDel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jlName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(60, 60, 60)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jcbCuartos, 0, 122, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jcbCuartos, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
-                        .addGap(3, 3, 3)
-                        .addComponent(jtxtMonto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnClr)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnUpd)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnNew)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnDel)))
+                        .addComponent(jtxtMonto))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jlName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jlName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jcbPisos)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jcbCuartos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jbtnUpd, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                        .addComponent(jbtnDel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnClr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnNew, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jtxtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jcbCuartos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
+                        .addComponent(jtxtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         jlName.getAccessibleContext().setAccessibleName("jlCustomer");
-        jcbPisos.getAccessibleContext().setAccessibleName("jcbPisos");
         jcbCuartos.getAccessibleContext().setAccessibleName("jcbCuartos");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jcbPisosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPisosActionPerformed
-        configRooms((Floors) jcbPisos.getSelectedItem());
-    }//GEN-LAST:event_jcbPisosActionPerformed
-
     private void jbtnClrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnClrActionPerformed
-        this.jcbPisos.setSelectedIndex(0);
+        this.jcbCuartos.setSelectedIndex(0);
         this.jtxtMonto.setText("");
         this.jbtnNew.setEnabled(true);
         this.jbtnDel.setEnabled(false);
@@ -298,7 +267,7 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
     private void jbtnUpdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnUpdActionPerformed
         if(selectedPreference != null){
             selectedPreference.setPrefAmount(new BigDecimal(this.jtxtMonto.getText()));
-            selectedPreference.setRmsId((com.ahms.model.entity.Rooms) this.jcbCuartos.getSelectedItem());
+            selectedPreference.setRtyId((RoomTypes) this.jcbCuartos.getSelectedItem());
             selectedPreference.setCusId(mainCustomer);
             if(preferenceDetailBoundary.update(selectedPreference) > 0){
                 GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_UPDATE);
@@ -319,7 +288,7 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
         PreferenceDetail newPreferenceDetail = new PreferenceDetail();
         newPreferenceDetail.setCusId(mainCustomer);
         newPreferenceDetail.setPrefAmount(new BigDecimal(this.jtxtMonto.getText()));
-        newPreferenceDetail.setRmsId((com.ahms.model.entity.Rooms) this.jcbCuartos.getSelectedItem());
+        newPreferenceDetail.setRtyId((RoomTypes) this.jcbCuartos.getSelectedItem());
         if(preferenceDetailBoundary.insert(newPreferenceDetail) > 0){
             GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
             resultList = preferenceDetailBoundary.findPreferences(mainCustomer);
@@ -356,8 +325,7 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
             this.jbtnUpd.setEnabled(true);
             
             this.jtxtMonto.setText(selectedPreference.getPrefAmount().toString());
-            this.jcbPisos.setSelectedItem(selectedPreference.getRmsId().getFlrId());
-            this.jcbCuartos.setSelectedItem(selectedPreference.getRmsId());            
+            this.jcbCuartos.setSelectedItem(selectedPreference.getRtyId());
         }
     }//GEN-LAST:event_resultTableMouseClicked
 
@@ -404,16 +372,15 @@ public class SetPreferencesDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbtnClr;
     private javax.swing.JButton jbtnDel;
     private javax.swing.JButton jbtnNew;
     private javax.swing.JButton jbtnUpd;
     private javax.swing.JComboBox jcbCuartos;
-    private javax.swing.JComboBox jcbPisos;
     private javax.swing.JLabel jlName;
     private javax.swing.JTextField jtxtMonto;
     private javax.swing.JTable resultTable;
