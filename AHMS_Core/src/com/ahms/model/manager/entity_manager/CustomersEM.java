@@ -16,7 +16,7 @@ import javax.persistence.TypedQuery;
  *
  * @author jorge
  */
-public class CustomersEM extends AHMSEntityManager{
+public class CustomersEM extends AHMSEntityManager<Customers>{
     public Customers find(Customers customers) {
         try {
             if (em == null || !em.isOpen()) {

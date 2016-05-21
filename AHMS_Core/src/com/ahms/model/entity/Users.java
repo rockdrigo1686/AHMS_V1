@@ -43,6 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus and u.usrPwd = :usrPwd"),
     @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = :usrStatus")})
 public class Users implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "msgUser", fetch = FetchType.EAGER)
+    private List<MessageBoard> messageBoardList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaUsrAut")
     private List<ChangeHistory> changeHistoryList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaUsr")
@@ -392,5 +394,14 @@ public class Users implements Serializable {
 
     public void setChangeHistoryList1(List<ChangeHistory> changeHistoryList1) {
         this.changeHistoryList1 = changeHistoryList1;
+    }
+
+    @XmlTransient
+    public List<MessageBoard> getMessageBoardList() {
+        return messageBoardList;
+    }
+
+    public void setMessageBoardList(List<MessageBoard> messageBoardList) {
+        this.messageBoardList = messageBoardList;
     }
 }
