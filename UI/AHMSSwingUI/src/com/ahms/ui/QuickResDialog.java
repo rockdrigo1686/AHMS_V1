@@ -34,10 +34,12 @@ public class QuickResDialog extends javax.swing.JDialog {
     
     private ReservationBoundary reservationBoundary;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
+    private MainFrm parentFrm = null;
     
-    public QuickResDialog(java.awt.Frame parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
+    public QuickResDialog(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
         initComponents();
+        parentFrm = parent;
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
         
@@ -304,12 +306,11 @@ public class QuickResDialog extends javax.swing.JDialog {
             reservation.setResFecFin(calSalida.getTime());
             reservationBoundary.insert(reservation);
         }
-        
-        
         GeneralFunctions.sendMessage(this, UIConstants.RESERVATION_OK);
-
-        //configGrid(roomsBounday.searchAll(new Rooms()));
-        clearQuickResInstance();
+        RoomsBoundary roomsBoundary = new RoomsBoundary();
+        parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
+        this.dispose();
+        //clearQuickResInstance();
     }//GEN-LAST:event_jbQuickResReserveActionPerformed
 
     private void jbQuickResSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuickResSearchActionPerformed

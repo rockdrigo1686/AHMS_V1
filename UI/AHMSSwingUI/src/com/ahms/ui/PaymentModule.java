@@ -44,6 +44,8 @@ public class PaymentModule extends javax.swing.JDialog {
     private String folio = "";
     private FolioTransactionBoundary folioTransactionBoundary;
     
+    public boolean isPaid = false;
+    
     public PaymentModule(RoomService parent, boolean modal, AccountTransactions serviceToPay){
         super(parent, modal);
         payServiceDialog = parent;
@@ -329,7 +331,7 @@ public class PaymentModule extends javax.swing.JDialog {
                 folioTransactionBoundary.insert(folioTransaction);
                 //----------------------------------           
             }
-        
+            isPaid = true;
         } else if(parentQuickRent != null){ // si fue llamado desde un mainForm
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
@@ -394,7 +396,8 @@ public class PaymentModule extends javax.swing.JDialog {
                 return;
             }
             //limpiar quickRent y actualizar grid en MainForm
-            parentQuickRent.totalPaid = true;            
+            parentQuickRent.totalPaid = true;
+            isPaid = true;
         } else if(payServiceDialog != null){ //fue llamado para pago de 1 servicio
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
@@ -457,7 +460,10 @@ public class PaymentModule extends javax.swing.JDialog {
                 importeTotal = importeRestante;
                 jlTotal.setText("$ " + importeTotal.toString());
                 return;
-            }            
+            }   
+            isPaid = true;
+        } else {
+            isPaid = false;
         }
         this.dispose();
     }//GEN-LAST:event_jbPagoActionPerformed

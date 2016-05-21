@@ -54,10 +54,12 @@ public class QuickRentDialog extends javax.swing.JDialog {
     
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
+    private MainFrm parentFrm = null;
     
     public QuickRentDialog(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
         initComponents();
+        parentFrm = parent;
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
         
@@ -508,6 +510,8 @@ public class QuickRentDialog extends javax.swing.JDialog {
                 
                 if(totalPaid){
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
+                    RoomsBoundary roomsBoundary = new RoomsBoundary();
+                    parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
                     this.dispose();
                 }
                 

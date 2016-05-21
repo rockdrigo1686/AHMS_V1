@@ -391,10 +391,12 @@ public class RoomService extends javax.swing.JDialog {
             paymentModule.setLocationRelativeTo(this);
             paymentModule.setVisible(true);
 
-            serviceToPay.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-            accountTransactionsBoundary.update(serviceToPay);
-            GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_SUCCESS);
-            loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
+            if(paymentModule.isPaid){
+                serviceToPay.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                accountTransactionsBoundary.update(serviceToPay);
+                GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_SUCCESS);
+                loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
+            }            
         } catch (Exception e) {
             e.printStackTrace();
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_ERROR);
