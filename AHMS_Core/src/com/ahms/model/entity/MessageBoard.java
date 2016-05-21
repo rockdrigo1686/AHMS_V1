@@ -22,8 +22,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -47,12 +45,10 @@ public class MessageBoard implements Serializable {
     @Column(name = "msg_id", nullable = false)
     private Integer msgId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+
     @Column(name = "msg_message", nullable = false, length = 255)
     private String msgMessage;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "msg_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date msgDate;
