@@ -25,6 +25,7 @@ import com.ahms.ui.modules.security.UsersFrm;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -167,6 +170,15 @@ public class MainFrm extends javax.swing.JFrame {
             menAdmin.setEnabled(false);
             menConf.setEnabled(false);
         }
+        
+         Action action = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                configGrid(roomsBounday.searchAll(new Rooms()));
+            }
+        };
+
+        txtRoomNumber.addActionListener(action);
     }
 
     public void clearQuickRentInstance() {
@@ -491,15 +503,6 @@ public class MainFrm extends javax.swing.JFrame {
         jcbTipoCuarto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel4.setText("Cuarto:");
-
-        txtRoomNumber.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtRoomNumberKeyTyped(evt);
-            }
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtRoomNumberKeyPressed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -906,20 +909,6 @@ public class MainFrm extends javax.swing.JFrame {
         accSearch.setVisible(true);
     }//GEN-LAST:event_btnCheckinDlgActionPerformed
 
-    private void txtRoomNumberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRoomNumberKeyTyped
-        try {
-            Integer number = Integer.parseInt(String.valueOf(evt.getKeyChar()));
-            if(txtRoomNumber.getText().trim().length()  == 3 ){
-                evt.consume();
-            }
-        } catch (Exception e) {
-            evt.consume();
-        }  
-    }//GEN-LAST:event_txtRoomNumberKeyTyped
-
-    private void txtRoomNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRoomNumberKeyPressed
-              
-    }//GEN-LAST:event_txtRoomNumberKeyPressed
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         CancelacionesRp rep = new CancelacionesRp(this, true);
