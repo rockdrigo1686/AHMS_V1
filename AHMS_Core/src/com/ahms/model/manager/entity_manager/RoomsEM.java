@@ -42,6 +42,27 @@ public class RoomsEM extends AHMSEntityManager {
             }
         }
     }
+    
+    public Rooms findByRmsNumber(Rooms room) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Rooms> query = em.createNamedQuery("Rooms.findByRmsNumber", Rooms.class);
+            query.setParameter("rmsNumber", room.getRmsNumber());
+            return query.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
 
     public List<Rooms> findByFloor(Rooms rooms) {
         try {
