@@ -9,7 +9,9 @@ import com.ahms.boundary.security.UsersBoundary;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
@@ -176,14 +178,16 @@ public class CancelacionesRp extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String fileXML = "/home/rsoto/Documents/AHMS/files/XML_CORTE.xml";
-        String fileXLS = "/home/rsoto/Documents/AHMS/files/XSL_CORTE_CAJA.xsl";
-        String fileOut = "/home/rsoto/Documents/AHMS/files/XSL_CORTE_CAJA.pdf";
+        String fileXML = "/home/jorge/AHMS_FILES/XML_CORTE.xml";
+        String fileXLS = "/home/jorge/AHMS_FILES/XSL_CORTE_CAJA.xsl";
+        String fileOut = "/home/jorge/AHMS_FILES/XSL_CORTE_CAJA.pdf";
         //String fileOutWin = "C:/AHMS/Reportes/PDF/XSL_CORTE_CAJA.pdf";
         //String fileXMLWin = "C:/AHMS/Reportes/Fuente/XML_CORTE.xml";
         //String fileXLSWin = "C:/AHMS/reportes/Plantillas/XSL_CORTE_CAJA.xsl";
         try {
             FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
+            File myFile = new File(fileOut);
+            Desktop.getDesktop().open(myFile);
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
         }
