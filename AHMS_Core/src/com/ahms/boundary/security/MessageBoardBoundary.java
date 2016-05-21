@@ -24,6 +24,7 @@ public class MessageBoardBoundary implements AHMSBoundary<MessageBoard>{
 
     @Override
     public List<MessageBoard> searchAll(MessageBoard obj) {
+        messageBoardEM = new MessageBoardEM();
         return messageBoardEM.searchAll(obj);
     }
 
@@ -34,16 +35,19 @@ public class MessageBoardBoundary implements AHMSBoundary<MessageBoard>{
 
     @Override
     public int insert(MessageBoard obj) {
+        messageBoardEM = new MessageBoardEM();
         return messageBoardEM.insert(obj);
     }
 
     @Override
     public int update(MessageBoard obj) {
+        messageBoardEM = new MessageBoardEM();
        return messageBoardEM.update(obj);
     }
 
     @Override
     public int delete(MessageBoard obj) {
+        messageBoardEM = new MessageBoardEM();
        return messageBoardEM.delete(obj);
     }
     

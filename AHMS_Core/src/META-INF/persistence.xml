@@ -25,9 +25,12 @@
     <class>com.ahms.model.entity.MoneyMovement</class>
     <class>com.ahms.model.entity.RoomTypes</class>
     <class>com.ahms.model.entity.MultiValue</class>
+    <class>com.ahms.model.entity.ChangeHistory</class>
+    <class>com.ahms.model.entity.PreferenceDetail</class>
+    <class>com.ahms.model.entity.MessageBoard</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_ahms"/>
-      <property name="javax.persistence.jdbc.password" value="#5070Rock"/>
+      <property name="javax.persistence.jdbc.password" value="1234"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
     </properties>

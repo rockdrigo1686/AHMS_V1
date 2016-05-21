@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"msg_id"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MessageBoard.findAll", query = "SELECT m FROM MessageBoard m WHERE m.msgDate >= CURRENT_DATE "),
+    @NamedQuery(name = "MessageBoard.findAll", query = "SELECT m FROM MessageBoard m WHERE m.msgDate >= CURRENT_DATE ORDER BY m.msgDate "),
     @NamedQuery(name = "MessageBoard.findByMsgId", query = "SELECT m FROM MessageBoard m WHERE m.msgId = :msgId"),
     @NamedQuery(name = "MessageBoard.findByMsgMessage", query = "SELECT m FROM MessageBoard m WHERE m.msgMessage = :msgMessage"),
     @NamedQuery(name = "MessageBoard.findByMsgDate", query = "SELECT m FROM MessageBoard m WHERE m.msgDate = :msgDate")})
