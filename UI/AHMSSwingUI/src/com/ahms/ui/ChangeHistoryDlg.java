@@ -16,6 +16,7 @@ import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -230,7 +231,8 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         Rooms paramRoom = new Rooms();
         paramRoom.setRmsBeds(tipoSeleccionado);
         RoomsBoundary roomsBoundary = new RoomsBoundary();
-        Rooms roomAvailable= roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin());
+        List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(),1);
+        Rooms roomAvailable= list == null? null : list.get(0);
                 changeHistory.setChaRmA(roomAvailable);
                 lblRoomA.setText(lblRoomA.getText()+ " "+roomAvailable.getRmsNumber());
                 jbGuardar.setEnabled(true);
