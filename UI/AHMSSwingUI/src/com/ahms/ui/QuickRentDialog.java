@@ -13,6 +13,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.RoomTypes;
+import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -21,6 +22,7 @@ import java.awt.Font;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.SpinnerNumberModel;
@@ -440,48 +442,69 @@ public class QuickRentDialog extends javax.swing.JDialog {
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
         if(mainCustomer != null && mainCustomer.getCusId() != null){
             try {
-                //aperturando la cuenta
                 JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
                 JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
                 Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
                 Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-                Account quickRentAccount = new Account();
-                quickRentAccount.setActDteMod(Calendar.getInstance().getTime());
-                quickRentAccount.setActUsrMod(currentShift.getUsrId());
-                //quickRentAccount.setActUsrMod(new Users(1));
-                quickRentAccount.setActFecIni(calEntrada.getTime());
-                quickRentAccount.setActFecFin(calSalida.getTime());
-                quickRentAccount.setActIva(quickrentIvaPercent);
-                quickRentAccount.setActIvaAmt(quickRentIva);
-                quickRentAccount.setActSubtotal(quickRentSubTotal);
-                quickRentAccount.setActTotal(quickRentTotal);
-                quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
-                quickRentAccount.setAccountTransactionsCollection(null);
-                quickRentAccount.setCusId(mainCustomer);
-                accountBoundary.insert(quickRentAccount);
+                int numPersonas = (int) jspNumeroPersonas.getValue();
+                
+                Account actFind = new Account();
+                actFind.setCusId(mainCustomer);
+                List<Account> lstAccounts = accountBoundary.findByCusId(actFind);
+                Account quickRentAccount = null;
+                if(lstAccounts != null & lstAccounts.size() > 0){
+                    quickRentAccount = lstAccounts.get(0);
+                }
+                if(quickRentAccount != null && quickRentAccount.getActId() != null){
+                    // YA TIENE CUENTA ACTIVA, SOLO ACTUALIZAR
+                    quickRentAccount.setActNumPeople(quickRentAccount.getActNumPeople() + numPersonas);
+                    quickRentAccount.setActDteMod(new Date());
+                    //quickRentAccount.setActUsrMod(currentShift.getUsrId());
+                    quickRentAccount.setActUsrMod(new Users(1));
+                    accountBoundary.update(quickRentAccount);
+                } else {
+                    // NO TIENE CUENTA ACTIVA, APERTURAR
+                    quickRentAccount = new Account();
+                    quickRentAccount.setActDteMod(Calendar.getInstance().getTime());
+                    //quickRentAccount.setActUsrMod(currentShift.getUsrId());
+                    quickRentAccount.setActUsrMod(new Users(1));
+                    quickRentAccount.setActFecIni(calEntrada.getTime());
+                    quickRentAccount.setActFecFin(calSalida.getTime());
+                    quickRentAccount.setActIva(quickrentIvaPercent);
+                    quickRentAccount.setActIvaAmt(quickRentIva);
+                    quickRentAccount.setActSubtotal(quickRentSubTotal);
+                    quickRentAccount.setActTotal(quickRentTotal);
+                    quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
+                    quickRentAccount.setAccountTransactionsCollection(null);
+                    quickRentAccount.setCusId(mainCustomer);
+                    quickRentAccount.setActNumPeople((int)jspNumeroPersonas.getValue());
+                    accountBoundary.insert(quickRentAccount);
+                }                
 
-                //Insertando account transaction
-                AccountTransactions rentTran = new AccountTransactions();
-                rentTran.setAtrDteMod(Calendar.getInstance().getTime());
-                rentTran.setAtrNotes("Renta de Cuarto " + quickRentRoomAssigned.getRmsNumber());
-                rentTran.setAtrQuantity(1);
-                rentTran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-                rentTran.setAtrUsrMod(currentShift.getUsrId());
-                //rentTran.setAtrUsrMod(new Users(1));
-                rentTran.setCouId(currentShift);
-                rentTran.setRmsId(quickRentRoomAssigned);
-                rentTran.setSrvId(null);
-                rentTran.setActId(quickRentAccount);
-                accountTransactionsBoundary.insert(rentTran);
+                for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+                    //Insertando account transaction
+                    AccountTransactions rentTran = new AccountTransactions();
+                    rentTran.setAtrDteMod(Calendar.getInstance().getTime());
+                    rentTran.setAtrNotes("Renta de Cuarto " + room.getRmsNumber());
+                    rentTran.setAtrQuantity(1);
+                    rentTran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                    //rentTran.setAtrUsrMod(currentShift.getUsrId());
+                    rentTran.setAtrUsrMod(new Users(1));
+                    rentTran.setCouId(currentShift);
+                    rentTran.setRmsId(room);
+                    rentTran.setSrvId(null);
+                    rentTran.setActId(quickRentAccount);
+                    accountTransactionsBoundary.insert(rentTran);
+                    
+                    //actualizando el Room
+                    room.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
+                    roomsBounday.update(room);                    
+                }                
 
                 //LLamando a paymentModule
                 PaymentModule paymentModule = new PaymentModule(this, true, quickRentTotal, quickRentAccount);
                 paymentModule.setLocationRelativeTo(this);
                 paymentModule.setVisible(true);
-                
-                //actualizando el Room
-                quickRentRoomAssigned.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
-                roomsBounday.update(quickRentRoomAssigned);
                 
                 if(totalPaid){
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
@@ -548,7 +571,7 @@ public class QuickRentDialog extends javax.swing.JDialog {
             MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
             quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
 
-            long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida) + 1;
+            long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida);
             //verificar si el Customer tiene tasa preferencial ------------------------------------
             PreferenceDetail preferenceDetail = new PreferenceDetail();
             preferenceDetail.setCusId(mainCustomer);
