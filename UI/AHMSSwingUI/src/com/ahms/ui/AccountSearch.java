@@ -199,6 +199,64 @@ public class AccountSearch extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        if (AC.equalsIgnoreCase(action)) {
+            lauchCheckout();
+        } else {
+            lauchQuickRent();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (AC.equalsIgnoreCase(action)) {
+            Account row = null;
+            Rooms room = null;
+            List<Account> accountList = (List<Account>) this.resultList;
+            if (accountList == null) {
+                GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
+            } else {
+                try {
+                    if (accountList.size() == 1) {
+                        row = accountList.get(0);
+                    } else {
+                        row = accountList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
+                }
+
+                if (!roomList.isEmpty() && roomList.size() > 1) {
+                    SelectRoom select = new SelectRoom(this, true, roomList);
+                    select.setVisible(true);
+                    room = select.getSelectedRoom();
+                } else {
+                    room = roomList.get(0);
+                }
+                if (room != null) {
+                    ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
+                    chDlg.setVisible(true);
+                }
+            }
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private List<Account> searchAccounts(Customers customer) {
+        Account account = new Account();
+        this.accountB = new AccountBoundary();
+        account.setCusId(customer);
+        return accountB.findByCusId(account);
+    }
+
+    private List<Reservation> searchReservation(Customers customer) {
+        //TODO crear buscar res by customer 
+        Reservation res = new Reservation();
+        res.setCusId(customer);
+        this.resB = new ReservationBoundary();
+        return this.resB.searchByCusId(res);
+    }
+
+    private void lauchCheckout() {
         Account row = null;
         List<Account> accountList = (List<Account>) resultList;
         if (accountList == null) {
@@ -218,58 +276,33 @@ public class AccountSearch extends javax.swing.JDialog {
                 checkOutForm.setVisible(rootPaneCheckingEnabled);
             }
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        Account row = null;
-        Rooms room = null;
-        List<Account> accountList = (List<Account>) this.resultList;
-        if (accountList == null) {
+    private void lauchQuickRent() {
+        Reservation res = null;
+        List<Reservation> resList = (List<Reservation>) resultList;
+        if (resList == null) {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
             try {
-                if (accountList.size() == 1) {
-                    row = accountList.get(0);
+                if (resList.size() == 1) {
+                    res = resList.get(0);
                 } else {
-                    row = accountList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+                    res = resList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
                 }
-            } catch (IndexOutOfBoundsException e) {
+            } catch (Exception e) {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
             }
-
-            if (!roomList.isEmpty() && roomList.size() > 1) {
-                SelectRoom select = new SelectRoom(this, true, roomList);
-                select.setVisible(true);
-                room = select.getSelectedRoom();
-            } else {
-                room = roomList.get(0);
-            }
-            if (room != null) {
-                ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
-                chDlg.setVisible(true);
+            if (res != null) {
+                QuickRentDialog dlg = new QuickRentDialog(topFrame, rootPaneCheckingEnabled, customer, null);
+                dlg.setVisible(true);
             }
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private List<Account> searchAccounts(Customers customer) {
-        Account account = new Account();
-        this.accountB = new AccountBoundary();
-        account.setCusId(customer);
-        return accountB.findByCusId(account);
-    }
-
-    private List<Reservation> searchReservation(Customers customer) {
-        //TODO crear buscar res by customer 
-        Reservation res = new Reservation();
-        res.setCusId(customer);
-        this.resB = new ReservationBoundary();
-        return this.resB.searchByCusId(res);
     }
 
     //</editor-fold>
     private void fillTable(JTable resultTable) {
-        String cDesc = AC.equalsIgnoreCase(action)?"Total":"Cuarto";
+        String cDesc = AC.equalsIgnoreCase(action) ? "Total" : "Cuarto";
         String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", cDesc, "Estatus"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         tableModel = new DefaultTableModel(col, 0) {
@@ -294,7 +327,7 @@ public class AccountSearch extends javax.swing.JDialog {
             // The 0 argument is number rows.
             accountList.stream().forEach((next) -> {
                 tableModel.addRow(new Object[]{next.getResId(), sd.format(next.getResFecIni()), sd.format(next.getResFecFin()), next.getRmsId().getRmsNumber(), next.getResStatus()});
-                
+
             });
         }
 
