@@ -5,10 +5,12 @@
  */
 package com.ahms.ui;
 
+import com.ahms.boundary.security.AccountTransactionsBoundary;
 import com.ahms.boundary.security.ChangeHistoryBoundary;
 import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
@@ -31,6 +33,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private MainFrm mainFrm;
     private AccountSearch parent;
     private boolean flag = true;
+    private AccountTransactions accT = null;
 
     /**
      * Creates new form Change
@@ -41,6 +44,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         changeHistory.setChaUsr(user);
         changeHistory.setActId(account);
         changeHistory.setChaRmB(room);
+        getAccountTransaction(account, room);
         this.parent = parent;
         this.mainFrm = parent.getParent();
         lblCustomer.setText(account.getCusId().getFullName());
@@ -176,22 +180,31 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         boolean response = cp.getAutorization();
         Users autUser = cp.getAutUser();
         if (response && (txtDesc.getText() != null && !"".equals(txtDesc.getText()))) {
+            Date dteMod = new Date();
             ChangeHistoryBoundary chb = new ChangeHistoryBoundary();
             RoomsBoundary rmb = new RoomsBoundary();
             MultiValueBoundary mvBoundary = new MultiValueBoundary();
-            changeHistory.setChaUsrAut(autUser);
-            changeHistory.setChaUsrAutCode(autUser.getUsrCode());
-            changeHistory.setChaUsrCode(mainFrm.getMainUser().getUsrCode());
-            changeHistory.setChaUsr(mainFrm.getMainUser());
+            AccountTransactionsBoundary actBound = new AccountTransactionsBoundary();
+            this.changeHistory.setChaUsrAut(autUser);
+            this.changeHistory.setChaUsrAutCode(autUser.getUsrCode());
+            this.changeHistory.setChaUsrCode(mainFrm.getMainUser().getUsrCode());
+            this.changeHistory.setChaUsr(mainFrm.getMainUser());
             
             changeHistory.getChaRmA().setRmsStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
             changeHistory.getChaRmB().setRmsStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
             changeHistory.setChaDescc(txtDesc.getText());
-            changeHistory.setChaDate(new Date());
+            changeHistory.setChaDate(dteMod);
+            
+            this.accT.setAtrDteMod(dteMod);
+            this.accT.setAtrUsrMod(autUser);
+            this.accT.setRmsId(changeHistory.getChaRmA());
+            
             chb.insert(changeHistory);
             rmb.update(changeHistory.getChaRmA());
             rmb.update(changeHistory.getChaRmB());
+            actBound.update(accT);
 
+            
             GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
             this.dispose();
         }
@@ -231,5 +244,14 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private javax.swing.JTextArea txtDesc;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private void getAccountTransaction(Account account, Rooms room) {
+        for (AccountTransactions accT1 : account.getAccountTransactionsCollection()) {
+            if (accT1.getRmsId().getRmsId().equals(room.getRmsId()) && accT1.getSrvId() == null) {
+                this.accT = accT1;
+                break;
+            }
+        }
+    }
 
 }

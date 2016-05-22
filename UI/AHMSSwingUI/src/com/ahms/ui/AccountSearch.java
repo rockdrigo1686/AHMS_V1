@@ -43,7 +43,6 @@ public class AccountSearch extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.topFrame = parent;
-        this.roomList = new ArrayList<>();
         this.action = action;
     }
 
@@ -319,6 +318,7 @@ public class AccountSearch extends javax.swing.JDialog {
             // The 0 argument is number rows.
             accountList.stream().forEach((next) -> {
                 tableModel.addRow(new Object[]{next.getActId(), sd.format(next.getActFecIni()), sd.format(next.getActFecFin()), next.getActTotal(), next.getActStatus()});
+                roomList= new ArrayList<>();
                 for (AccountTransactions at : next.getAccountTransactionsCollection()) {
                     if (at.getSrvId() == null) {
                         roomList.add(at.getRmsId());
