@@ -27,18 +27,21 @@ import javax.swing.JOptionPane;
  */
 public class ChangeHistoryDlg extends javax.swing.JDialog {
 
-    private MainFrm parent;
+    private MainFrm mainFrm;
+    private AccountSearch parent;
     private boolean flag = true;
+
     /**
      * Creates new form Change
      */
-    public ChangeHistoryDlg(javax.swing.JDialog parent, boolean modal, Account account, Rooms room, Users user) {
+    public ChangeHistoryDlg(AccountSearch parent, boolean modal, Account account, Rooms room, Users user) {
         super(parent, modal);
         initComponents();
         changeHistory.setChaUsr(user);
         changeHistory.setActId(account);
         changeHistory.setChaRmB(room);
-
+        this.parent = parent;
+        this.mainFrm = parent.getParent();
         lblCustomer.setText(account.getCusId().getFullName());
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
         lblDate.setText(sf.format(new Date()));
@@ -47,7 +50,8 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
 
         searchRoom();
     }
-    public boolean getFlag(){
+
+    public boolean getFlag() {
         return this.flag;
     }
 
@@ -166,7 +170,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
-        CancelationPrompt cp = new CancelationPrompt(parent, true);
+        CancelationPrompt cp = new CancelationPrompt(mainFrm, true);
         cp.setVisible(true);
         boolean response = cp.getAutorization();
         Users autUser = cp.getAutUser();
@@ -175,8 +179,8 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             RoomsBoundary rmb = new RoomsBoundary();
             changeHistory.setChaUsrAut(autUser);
             changeHistory.setChaUsrAutCode(autUser.getUsrCode());
-            changeHistory.setChaUsrCode(parent.getMainUser().getUsrCode());
-            changeHistory.setChaUsr(parent.getMainUser());
+            changeHistory.setChaUsrCode(mainFrm.getMainUser().getUsrCode());
+            changeHistory.setChaUsr(mainFrm.getMainUser());
             changeHistory.getChaRmA().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY));
             changeHistory.getChaRmB().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
             changeHistory.setChaDescc(txtDesc.getText());
@@ -189,49 +193,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jbGuardarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChangeHistoryDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChangeHistoryDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChangeHistoryDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChangeHistoryDlg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ChangeHistoryDlg dialog = new ChangeHistoryDlg(new JDialog(), true, new Account(1), new Rooms(1), new Users(1));
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
+   
     private void searchRoom() {
         RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
         Rooms paramRoom = new Rooms();
@@ -240,7 +202,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(), 1);
         if (list == null || list.size() == 0) {
             GeneralFunctions.sendMessage(this, "No se encontraron cuartos disponibles.");
-            this.flag =false;
+            this.flag = false;
         } else {
             Rooms roomAvailable = list.get(0);
             changeHistory.setChaRmA(roomAvailable);
