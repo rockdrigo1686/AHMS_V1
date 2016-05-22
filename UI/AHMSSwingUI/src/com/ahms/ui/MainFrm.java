@@ -24,6 +24,7 @@ import com.ahms.reports.OcupacionRp;
 import com.ahms.reports.ServiciosRp;
 import com.ahms.ui.modules.security.ProfilesFrm;
 import com.ahms.ui.modules.security.UsersFrm;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.awt.Component;
@@ -343,7 +344,7 @@ public class MainFrm extends javax.swing.JFrame {
         try {
             room = roomsBounday.findByRmsId(new Rooms(rmsId));
         } catch (Exception e) {
-            e.printStackTrace();
+            GeneralFunctions.appendTrace(e.getStackTrace());
         }
         return room;
     }
