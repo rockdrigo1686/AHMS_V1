@@ -344,6 +344,10 @@ public class AccountSearch extends javax.swing.JDialog {
         resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
+    
+    public MainFrm getParent(){
+        return this.topFrame;
+    }
 
     /**
      * @param args the command line arguments
