@@ -12,6 +12,7 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.text.SimpleDateFormat;
@@ -26,10 +27,8 @@ import javax.swing.JOptionPane;
  */
 public class ChangeHistoryDlg extends javax.swing.JDialog {
 
-    
     private MainFrm parent;
-    
-    
+
     /**
      * Creates new form Change
      */
@@ -39,13 +38,13 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         changeHistory.setChaUsr(user);
         changeHistory.setActId(account);
         changeHistory.setChaRmB(room);
-        
+
         lblCustomer.setText(account.getCusId().getFullName());
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
         lblDate.setText(sf.format(new Date()));
-        lblRoom.setText( lblRoom.getText()+ " " + room.getRmsNumber() +": " + room.getRmsDesc());
+        lblRoom.setText(lblRoom.getText() + " " + room.getRmsNumber() + ": " + room.getRmsDesc());
         jbGuardar.setEnabled(false);
-        
+
         searchRoom();
     }
 
@@ -164,12 +163,12 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
- CancelationPrompt cp = new CancelationPrompt(parent, true);
+        CancelationPrompt cp = new CancelationPrompt(parent, true);
         cp.setVisible(true);
-        boolean response  =cp.getAutorization();
+        boolean response = cp.getAutorization();
         Users autUser = cp.getAutUser();
-        if (response && (txtDesc.getText()!=null && !"".equals(txtDesc.getText()))) {
-            ChangeHistoryBoundary  chb = new ChangeHistoryBoundary();
+        if (response && (txtDesc.getText() != null && !"".equals(txtDesc.getText()))) {
+            ChangeHistoryBoundary chb = new ChangeHistoryBoundary();
             RoomsBoundary rmb = new RoomsBoundary();
             changeHistory.setChaUsrAut(autUser);
             changeHistory.getChaRmA().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY));
@@ -226,18 +225,24 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             }
         });
     }
+
     private void searchRoom() {
-                RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
+        RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
         Rooms paramRoom = new Rooms();
         paramRoom.setRmsBeds(tipoSeleccionado);
         RoomsBoundary roomsBoundary = new RoomsBoundary();
-        List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(),1);
-        Rooms roomAvailable= list == null? null : list.get(0);
-                changeHistory.setChaRmA(roomAvailable);
-                lblRoomA.setText(lblRoomA.getText()+ " "+roomAvailable.getRmsNumber());
-                jbGuardar.setEnabled(true);
-                                //generar totales de renta
-                
+        List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(), 1);
+        if (list == null || list.size() == 0) {
+            GeneralFunctions.sendMessage(this, "No se encontraron cuartos disponibles.");
+            this.dispose();
+        } else {
+            Rooms roomAvailable = list == null ? null : list.get(0);
+            changeHistory.setChaRmA(roomAvailable);
+            lblRoomA.setText(lblRoomA.getText() + " " + roomAvailable.getRmsNumber());
+            jbGuardar.setEnabled(true);
+            //generar totales de renta
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -255,5 +260,4 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    
 }
