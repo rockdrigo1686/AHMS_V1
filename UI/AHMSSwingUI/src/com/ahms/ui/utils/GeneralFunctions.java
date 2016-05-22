@@ -8,7 +8,9 @@ package com.ahms.ui.utils;
 import java.awt.Component;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -39,6 +41,18 @@ public class GeneralFunctions {
         } catch (Exception e) {
             e.printStackTrace();
             formatted = amount.toString();
+        }
+        return formatted;
+    }
+    
+    public static String formatDate(Date date){
+        String formatted = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            formatted = sdf.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            formatted = date.toString();
         }
         return formatted;
     }

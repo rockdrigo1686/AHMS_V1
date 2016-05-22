@@ -5,21 +5,39 @@
  */
 package com.ahms.reports;
 
+import com.ahms.boundary.security.AccountTransactionsBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.UsersBoundary;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
+import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.util.MMKeys;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
+import java.io.StringReader;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
 
 /**
  *
@@ -30,9 +48,14 @@ public class CancelacionesRp extends javax.swing.JDialog {
     /**
      * Creates new form CancelacionesRp
      */
+    private AccountTransactionsBoundary accountTransactionsBoundary = null;
+    private MultiValueBoundary multiValueBoundary = null;
     public CancelacionesRp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        accountTransactionsBoundary = new AccountTransactionsBoundary();
+        multiValueBoundary = new MultiValueBoundary();
+        
         configDatePickers();
         UsersBoundary userBoundary = new UsersBoundary();
         List<Users> list  = userBoundary.searchAll(new Users());
@@ -185,6 +208,15 @@ public class CancelacionesRp extends javax.swing.JDialog {
         //String fileXMLWin = "C:/AHMS/Reportes/Fuente/XML_CORTE.xml";
         //String fileXLSWin = "C:/AHMS/reportes/Plantillas/XSL_CORTE_CAJA.xsl";
         try {
+            AccountTransactions accountTransactions = new AccountTransactions();
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            accountTransactions.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
+            accountTransactions.setAtrUsrMod((Users) cbUsers.getSelectedItem());
+            List<AccountTransactions> lstAccountTransactions = accountTransactionsBoundary.findAllByStatus(accountTransactions, calEntrada.getTime(), calSalida.getTime());
+            createXml(lstAccountTransactions, (Users) cbUsers.getSelectedItem());
             FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
             File myFile = new File(fileOut);
             Desktop.getDesktop().open(myFile);
@@ -193,6 +225,37 @@ public class CancelacionesRp extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void createXml(List<AccountTransactions> lstAtr, Users user){
+        try  
+        {
+            //creating xml string
+            String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+            xmlString += "<root>";
+            xmlString += "<header usrCode=\""+ user.getUsrCode() +"\" usrFullName=\"" + user.getFullName() + "\" rptDate=\"" + GeneralFunctions.formatDate(new Date()) + "\"></header>";
+            xmlString += "<cancelations> ";
+            for(AccountTransactions atr : lstAtr){
+                xmlString += "<cancelation actId=\"" + atr.getActId().getActId().toString() + "\" cusId=\"" + atr.getActId().getCusId().getFullName() + "\" atrDesc=\"" + atr.getSrvId().getSrvDesc() + "\" ></cancelation>";
+            }
+            xmlString += "</cancelations> ";
+            xmlString += "</root> ";
+            
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
+            DocumentBuilder builder = factory.newDocumentBuilder();  
+            Document document = builder.parse(new InputSource(new StringReader(xmlString)));
+            
+            // Write the parsed document to an xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(document);
+
+            StreamResult result =  new StreamResult(new File("/home/jorge/AHMS_FILES/XML_CANCELATION.xml"));
+            transformer.transform(source, result);
+            
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        } 
+    }
+    
     /**
      * @param args the command line arguments
      */
