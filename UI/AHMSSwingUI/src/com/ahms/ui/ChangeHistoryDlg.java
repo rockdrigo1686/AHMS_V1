@@ -6,6 +6,7 @@
 package com.ahms.ui;
 
 import com.ahms.boundary.security.ChangeHistoryBoundary;
+import com.ahms.boundary.security.MultiValueBoundary;
 import com.ahms.boundary.security.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.MultiValue;
@@ -177,19 +178,22 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         if (response && (txtDesc.getText() != null && !"".equals(txtDesc.getText()))) {
             ChangeHistoryBoundary chb = new ChangeHistoryBoundary();
             RoomsBoundary rmb = new RoomsBoundary();
+            MultiValueBoundary mvBoundary = new MultiValueBoundary();
             changeHistory.setChaUsrAut(autUser);
             changeHistory.setChaUsrAutCode(autUser.getUsrCode());
             changeHistory.setChaUsrCode(mainFrm.getMainUser().getUsrCode());
             changeHistory.setChaUsr(mainFrm.getMainUser());
-            changeHistory.getChaRmA().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY));
-            changeHistory.getChaRmB().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
+            
+            changeHistory.getChaRmA().setRmsStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
+            changeHistory.getChaRmB().setRmsStatus(mvBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
             changeHistory.setChaDescc(txtDesc.getText());
             changeHistory.setChaDate(new Date());
             chb.insert(changeHistory);
-            rmb.insert(changeHistory.getChaRmA());
-            rmb.insert(changeHistory.getChaRmB());
+            rmb.update(changeHistory.getChaRmA());
+            rmb.update(changeHistory.getChaRmB());
 
-            JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
+            GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
+            this.dispose();
         }
     }//GEN-LAST:event_jbGuardarActionPerformed
 
