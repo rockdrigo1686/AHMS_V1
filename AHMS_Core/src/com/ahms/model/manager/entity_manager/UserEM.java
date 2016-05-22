@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -50,10 +51,18 @@ public class UserEM extends AHMSEntityManager<Users> {
             if (em == null) {
                 createEm();
             }
-            TypedQuery<Users> query = em.createNamedQuery("Users.findByPassword", Users.class);
-            query.setParameter("usrPwd", password);
-            query.setParameter("usrStatus", new MultiValue(MMKeys.General.STA_ACTIVO_KEY));
-            return query.getSingleResult();
+           StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" SELECT a.* FROM users a ");
+            sbQuery.append(" JOIN profiles p on p.pro_id = a.pro_id ");
+            sbQuery.append(" WHERE u.usu_status = ?1 and u.usu_pwd = ?2 and (p.pro_code = ?3 OR p.pro_code = ?4)");
+           int i =1;
+            Query query = em.createNativeQuery(sbQuery.toString(), Users.class);
+            query.setParameter(i++, MMKeys.General.STA_ACTIVO_KEY);
+            query.setParameter(i++, password);
+            query.setParameter(i++, MMKeys.Profiles.ADMI);
+            query.setParameter(i++, MMKeys.Profiles.MNGR);
+           
+            return (Users) query.getSingleResult();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
                 return null;

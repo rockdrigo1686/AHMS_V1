@@ -173,7 +173,7 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
             }
             StringBuilder sbQuery = new StringBuilder();
             sbQuery.append(" SELECT t.* FROM account_tramsactions a ");
-            sbQuery.append(" WHERE a.atrStatus = :atrStatus AND a.atrDteMod BETWEEN :fecIni AND :fecFin ");
+            sbQuery.append(" WHERE a.atr_status = :atrStatus AND a.atr_dte_mod BETWEEN :fecIni AND :fecFin ");
             if (accountTransactions != null && accountTransactions.getAtrUsrMod() != null) {
                 sbQuery.append(" AND a.atrUsrMod = :atrUser ");
             }
@@ -205,7 +205,7 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
             }
             StringBuilder sbQuery = new StringBuilder();
              sbQuery.append(" SELECT t.* FROM account_tramsactions a ");
-            sbQuery.append(" WHERE a.srv_id IS NULL AND a.atrStatus = :atrStatus AND a.atrDteMod BETWEEN :fecIni AND :fecFin ");
+            sbQuery.append(" WHERE a.srv_id IS NULL AND a.atr_status = :atrStatus AND a.atr_dte_mod BETWEEN :fecIni AND :fecFin ");
             Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
             query.setParameter("atrStatus", accountTransactions.getAtrStatus());
             query.setParameter("fecIni", fecIni);
