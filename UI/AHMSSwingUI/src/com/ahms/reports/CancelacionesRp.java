@@ -215,7 +215,7 @@ public class CancelacionesRp extends javax.swing.JDialog {
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
             accountTransactions.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
             accountTransactions.setAtrUsrMod((Users) cbUsers.getSelectedItem());
-            List<AccountTransactions> lstAccountTransactions = accountTransactionsBoundary.findAllByStatus(accountTransactions, calEntrada.getTime(), calSalida.getTime());
+            List<AccountTransactions> lstAccountTransactions = accountTransactionsBoundary.findCancelations(accountTransactions, calEntrada.getTime(), calSalida.getTime());
             createXml(lstAccountTransactions, (Users) cbUsers.getSelectedItem());
             FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
             File myFile = new File(fileOut);
