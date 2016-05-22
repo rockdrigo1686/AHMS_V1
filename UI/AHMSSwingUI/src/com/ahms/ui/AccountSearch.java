@@ -187,7 +187,7 @@ public class AccountSearch extends javax.swing.JDialog {
             resultList = searchReservation(customer);
         }
 
-        fillTable(resultTable);
+        fillTable();
 
     }//GEN-LAST:event_jbBuscarClienteActionPerformed
 
@@ -305,7 +305,7 @@ public class AccountSearch extends javax.swing.JDialog {
     }
 
     //</editor-fold>
-    private void fillTable(JTable resultTable) {
+    public void fillTable() {
         String cDesc = AC.equalsIgnoreCase(action) ? "Total" : "Cuarto";
         String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", cDesc, "Estatus"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
