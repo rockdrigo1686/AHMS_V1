@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 public class ChangeHistoryDlg extends javax.swing.JDialog {
 
     private MainFrm parent;
-
+    private boolean flag = true;
     /**
      * Creates new form Change
      */
@@ -46,6 +46,9 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         jbGuardar.setEnabled(false);
 
         searchRoom();
+    }
+    public boolean getFlag(){
+        return this.flag;
     }
 
     /**
@@ -234,9 +237,9 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(), 1);
         if (list == null || list.size() == 0) {
             GeneralFunctions.sendMessage(this, "No se encontraron cuartos disponibles.");
-            this.dispose();
+            this.flag =false;
         } else {
-            Rooms roomAvailable = list == null ? null : list.get(0);
+            Rooms roomAvailable = list.get(0);
             changeHistory.setChaRmA(roomAvailable);
             lblRoomA.setText(lblRoomA.getText() + " " + roomAvailable.getRmsNumber());
             jbGuardar.setEnabled(true);

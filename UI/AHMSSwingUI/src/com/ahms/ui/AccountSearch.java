@@ -234,7 +234,11 @@ public class AccountSearch extends javax.swing.JDialog {
                 }
                 if (room != null) {
                     ChangeHistoryDlg chDlg = new ChangeHistoryDlg(this, true, row, room, topFrame.getMainUser());
-                    chDlg.setVisible(true);
+                    if (chDlg.getFlag()) {
+                        chDlg.setVisible(true);
+                    }else{
+                        chDlg.dispose();
+                    }
                 }
             }
         }
