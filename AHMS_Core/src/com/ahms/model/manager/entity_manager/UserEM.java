@@ -54,7 +54,7 @@ public class UserEM extends AHMSEntityManager<Users> {
            StringBuilder sbQuery = new StringBuilder();
             sbQuery.append(" SELECT a.* FROM users a ");
             sbQuery.append(" JOIN profiles p on p.pro_id = a.pro_id ");
-            sbQuery.append(" WHERE u.usu_status = ?1 and u.usu_pwd = ?2 and (p.pro_code = ?3 OR p.pro_code = ?4)");
+            sbQuery.append(" WHERE u.usr_status = ?1 and u.usr_pwd = ?2 and (p.pro_code = ?3 OR p.pro_code = ?4)");
            int i =1;
             Query query = em.createNativeQuery(sbQuery.toString(), Users.class);
             query.setParameter(i++, MMKeys.General.STA_ACTIVO_KEY);
