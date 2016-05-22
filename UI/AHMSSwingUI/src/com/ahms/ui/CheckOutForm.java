@@ -155,20 +155,14 @@ public class CheckOutForm extends javax.swing.JDialog {
                 {
                     final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                     if(mapInactiveRows.containsKey(row)){
-                        c.setBackground(Color.ORANGE);                        
-                    } else {
                         c.setBackground(Color.WHITE);
+                    } else {
+                        c.setBackground(new Color(249, 87, 87));
                     }
                     return c;
                 }
             });
             
-            /*for (int i=0; i<resultList.size();i++) {
-                if(!resultList.get(i).getAtrStatus().getMvaKey().equals("PEND")){
-                    
-                }
-            }*/
-
         } catch (Exception e) {
             throw e;
         }
