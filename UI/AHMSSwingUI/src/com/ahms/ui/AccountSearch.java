@@ -16,7 +16,6 @@ import com.ahms.ui.utils.GeneralFunctions;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -212,7 +211,7 @@ public class AccountSearch extends javax.swing.JDialog {
             Account row = null;
             Rooms room = null;
             List<Account> accountList = (List<Account>) this.resultList;
-            if (accountList == null) {
+            if (accountList == null || accountList.size() == 0) {
                 GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
             } else {
                 try {
