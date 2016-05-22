@@ -7,6 +7,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Guests;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.AccountTransactionsEM;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,5 +70,9 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
     
     public Integer updateGuests(List<Guests> guestsList, AccountTransactions obj) {
         return accountTransactionsEM.updateGuests(guestsList,obj);
+    }
+    
+    public List<AccountTransactions> findAllByStatus(AccountTransactions accountTransactions, Date fecIni, Date fecFin){
+        return accountTransactionsEM.findAllByStatus(accountTransactions, fecIni, fecFin);
     }
 }

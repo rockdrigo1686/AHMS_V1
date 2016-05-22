@@ -14,6 +14,7 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import com.ahms.util.MMKeys;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -162,6 +163,30 @@ public class AccountTransactionsEM extends AHMSEntityManager {
                 return null;
             } else {
                 throw e;
+            }
+        }
+    }
+    
+    public List<AccountTransactions> findAllByStatus(AccountTransactions accountTransactions, Date fecIni, Date fecFin) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findAllByStatus", AccountTransactions.class);
+            query.setParameter("atrStatus", accountTransactions.getAtrStatus());
+            query.setParameter("fecIni", fecIni);
+            query.setParameter("fecFin", fecFin);
+            query.setParameter("atrUser", accountTransactions.getAtrUsrMod());
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
             }
         }
     }
