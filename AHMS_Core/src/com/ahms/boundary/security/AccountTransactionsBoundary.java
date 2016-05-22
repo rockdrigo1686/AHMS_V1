@@ -72,7 +72,11 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
         return accountTransactionsEM.updateGuests(guestsList,obj);
     }
     
-    public List<AccountTransactions> findAllByStatus(AccountTransactions accountTransactions, Date fecIni, Date fecFin){
-        return accountTransactionsEM.findAllByStatus(accountTransactions, fecIni, fecFin);
+    public List<AccountTransactions> findCancelations(AccountTransactions accountTransactions, Date fecIni, Date fecFin){
+        return accountTransactionsEM.findCancelations(accountTransactions, fecIni, fecFin);
+    }
+    
+    public List<AccountTransactions> findRented(AccountTransactions accountTransactions, Date fecIni, Date fecFin){
+        return accountTransactionsEM.findRented(accountTransactions, fecIni, fecFin);
     }
 }

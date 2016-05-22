@@ -6,12 +6,13 @@
 package com.ahms.model.manager.entity_manager;
 
 import com.ahms.model.entity.ChangeHistory;
-import com.ahms.model.entity.Services;
 import com.ahms.model.manager.AHMSEntityManager;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -66,6 +67,37 @@ public class ChangeHistoryEM extends AHMSEntityManager<ChangeHistory> {
         } finally {
             if (this.em != null) {
                 this.closeEm();
+            }
+        }
+    }
+    
+    public List<ChangeHistory> findMovements(ChangeHistory changeH, Date fecIni, Date fecFin) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" SELECT t.* FROM change_history a ");
+            sbQuery.append(" WHERE a.chaDate BETWEEN :fecIni AND :fecFin ");
+            if (changeH != null && changeH.getChaUsrAut()!= null) {
+                sbQuery.append(" AND a.chaUsrAut = :atrUser ");
+            }
+            Query query = em.createNativeQuery(sbQuery.toString(), ChangeHistory.class);
+            query.setParameter("fecIni", fecIni);
+            query.setParameter("fecFin", fecFin);
+            if (changeH != null && changeH.getChaUsrAut() != null) {
+                query.setParameter("atrUser", changeH.getChaUsrAut());
+            }
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
             }
         }
     }

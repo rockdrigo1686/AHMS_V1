@@ -24,7 +24,7 @@ import javax.persistence.TypedQuery;
  *
  * @author jorge
  */
-public class AccountTransactionsEM extends AHMSEntityManager {
+public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions> {
 
     public AccountTransactions findByRmsId(AccountTransactions accountTransactions) {
         try {
@@ -68,7 +68,7 @@ public class AccountTransactionsEM extends AHMSEntityManager {
         }
 
     }
-    
+
     public List<AccountTransactions> findAllByRmsId(Rooms room, Account account) {
         try {
             if (em == null || !em.isOpen()) {
@@ -93,7 +93,7 @@ public class AccountTransactionsEM extends AHMSEntityManager {
         }
 
     }
-        
+
     public List<AccountTransactions> findByCusId(Customers customer) {
         try {
             if (em == null || !em.isOpen()) {
@@ -120,7 +120,6 @@ public class AccountTransactionsEM extends AHMSEntityManager {
             }
         }
     }
-    
 
     public Integer updateGuests(List<Guests> mmList, AccountTransactions accountTransactions) {
         try {
@@ -166,17 +165,52 @@ public class AccountTransactionsEM extends AHMSEntityManager {
             }
         }
     }
-    
-    public List<AccountTransactions> findAllByStatus(AccountTransactions accountTransactions, Date fecIni, Date fecFin) {
+
+    public List<AccountTransactions> findCancelations(AccountTransactions accountTransactions, Date fecIni, Date fecFin) {
         try {
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-            TypedQuery<AccountTransactions> query = em.createNamedQuery("AccountTransactions.findAllByStatus", AccountTransactions.class);
+            StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" SELECT t.* FROM account_tramsactions a ");
+            sbQuery.append(" WHERE a.atrStatus = :atrStatus AND a.atrDteMod BETWEEN :fecIni AND :fecFin ");
+            if (accountTransactions != null && accountTransactions.getAtrUsrMod() != null) {
+                sbQuery.append(" AND a.atrUsrMod = :atrUser ");
+            }
+            Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
             query.setParameter("atrStatus", accountTransactions.getAtrStatus());
             query.setParameter("fecIni", fecIni);
             query.setParameter("fecFin", fecFin);
-            query.setParameter("atrUser", accountTransactions.getAtrUsrMod());
+            if (accountTransactions != null && accountTransactions.getAtrUsrMod() != null) {
+                query.setParameter("atrUser", accountTransactions.getAtrUsrMod());
+            }
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
+
+    public List<AccountTransactions> findRented(AccountTransactions accountTransactions, Date fecIni, Date fecFin) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+             sbQuery.append(" SELECT t.* FROM account_tramsactions a ");
+            sbQuery.append(" WHERE a.srv_id IS NULL AND a.atrStatus = :atrStatus AND a.atrDteMod BETWEEN :fecIni AND :fecFin ");
+            Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
+            query.setParameter("atrStatus", accountTransactions.getAtrStatus());
+            query.setParameter("fecIni", fecIni);
+            query.setParameter("fecFin", fecFin);
+
             return query.getResultList();
         } catch (Exception e) {
             if (e instanceof NoResultException) {
