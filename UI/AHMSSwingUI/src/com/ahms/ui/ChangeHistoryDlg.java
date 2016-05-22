@@ -174,6 +174,9 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
             ChangeHistoryBoundary chb = new ChangeHistoryBoundary();
             RoomsBoundary rmb = new RoomsBoundary();
             changeHistory.setChaUsrAut(autUser);
+            changeHistory.setChaUsrAutCode(autUser.getUsrCode());
+            changeHistory.setChaUsrCode(parent.getMainUser().getUsrCode());
+            changeHistory.setChaUsr(parent.getMainUser());
             changeHistory.getChaRmA().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY));
             changeHistory.getChaRmB().setRmsStatus(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
             changeHistory.setChaDescc(txtDesc.getText());
