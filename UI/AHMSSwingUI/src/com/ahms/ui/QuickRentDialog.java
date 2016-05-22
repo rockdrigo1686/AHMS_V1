@@ -546,6 +546,9 @@ public class QuickRentDialog extends javax.swing.JDialog {
                     jlNumber.setText(jlNumber.getText() + "  " +  roomAvailableByType.getRmsNumber());
                 }                
                 jbtnLoadCustomer.setEnabled(true);
+                if(roomAvailableByTypeLst.size() < numRooms){
+                   GeneralFunctions.sendMessage(this, "De los " + numRooms + " que se especificaron, solo " + roomAvailableByTypeLst.size() + " estan disponibles.");
+                }
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
                 jbtnLoadCustomer.setEnabled(false);
