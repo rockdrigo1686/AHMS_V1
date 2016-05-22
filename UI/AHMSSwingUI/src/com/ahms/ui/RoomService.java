@@ -368,7 +368,7 @@ public class RoomService extends javax.swing.JDialog {
             accountTransactionsBoundary.insert(newService);
             loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
-            e.printStackTrace();
+            GeneralFunctions.appendTrace(e.getStackTrace());
             GeneralFunctions.sendMessage(this, UIConstants.NEW_SERVICE_ERROR);
         }
     }//GEN-LAST:event_jbAddServiceActionPerformed
@@ -380,7 +380,7 @@ public class RoomService extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_SUCCESS);
             loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
         } catch (Exception e) {
-            e.printStackTrace();
+            GeneralFunctions.appendTrace(e.getStackTrace());
             GeneralFunctions.sendMessage(this, UIConstants.CANCEL_SERVICE_ERROR);
         }
     }
@@ -398,7 +398,7 @@ public class RoomService extends javax.swing.JDialog {
                 loadGrid(accountTransactionsBoundary.findAllByRmsId(room,account));
             }            
         } catch (Exception e) {
-            e.printStackTrace();
+            GeneralFunctions.appendTrace(e.getStackTrace());
             GeneralFunctions.sendMessage(this, UIConstants.PAY_SERVICE_ERROR);
         }
     }

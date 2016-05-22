@@ -340,7 +340,7 @@ public class QuickResDialog extends javax.swing.JDialog {
         } catch (Exception e) {
             GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage());
             //clearQuickRentInstance();
-            e.printStackTrace();
+            GeneralFunctions.appendTrace(e.getStackTrace());
         }
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
 

@@ -252,7 +252,7 @@ public class CancelacionesRp extends javax.swing.JDialog {
             transformer.transform(source, result);
             
         } catch (Exception e) {  
-            e.printStackTrace();  
+            GeneralFunctions.appendTrace(e.getStackTrace());  
         } 
     }
     
