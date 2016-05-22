@@ -12,7 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public class AccountEM extends AHMSEntityManager{    
+public class AccountEM extends AHMSEntityManager<Account>{    
     public Account find(Account account) {
         try {
             if (em == null || !em.isOpen()) {
