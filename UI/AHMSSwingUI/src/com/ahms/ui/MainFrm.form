@@ -48,10 +48,10 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="menuMov">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack3/Transfer Document.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/Transfer Document.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Movimientos"/>
           </Properties>
@@ -62,7 +62,7 @@
                   <KeyStroke key="Shift+Ctrl+M"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack3/Donate.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/32x32/Donate.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Movimiento de Efectivo"/>
               </Properties>
@@ -73,28 +73,17 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack3/Transfer.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/32x32/Transfer.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Movimientos de cuartos"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack3/Appointment Urgent.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Reservaciones"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu2">
+        <Menu class="javax.swing.JMenu" name="menuTurno">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack3/History.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/History.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Turnos"/>
           </Properties>
@@ -105,7 +94,7 @@
                   <KeyStroke key="Shift+Ctrl+I"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack3/Add Appointment.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/32x32/Add Appointment.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Iniciar Turno"/>
               </Properties>
@@ -119,7 +108,7 @@
                   <KeyStroke key="Shift+Ctrl+C"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack3/Remove Appointment.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/32x32/Remove Appointment.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Cerrar Turno"/>
               </Properties>
@@ -132,7 +121,7 @@
         <Menu class="javax.swing.JMenu" name="menAdmin">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack3/Desktop.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/Desktop.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Administracion"/>
           </Properties>
@@ -140,7 +129,7 @@
             <Menu class="javax.swing.JMenu" name="jMenu4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack2/chart_bar.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/16x16/chart_bar.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Reportes"/>
               </Properties>
@@ -148,7 +137,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem13">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pdf.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Serivicios"/>
                   </Properties>
@@ -159,7 +148,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem14">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pdf.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Ocupacion"/>
                   </Properties>
@@ -170,7 +159,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem15">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pdf.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Corte de Caja"/>
                   </Properties>
@@ -181,7 +170,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pdf.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Cancelaciones"/>
                   </Properties>
@@ -194,7 +183,7 @@
             <Menu class="javax.swing.JMenu" name="jMenu6">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack2/group.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/16x16/group.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Usuarios y Perfiles"/>
               </Properties>
@@ -205,7 +194,7 @@
                       <KeyStroke key="Alt+P"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/vcard.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/folder_stuffed.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Perfiles"/>
                   </Properties>
@@ -219,7 +208,7 @@
                       <KeyStroke key="Alt+U"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/user.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/user.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Usuarios"/>
                   </Properties>
@@ -234,7 +223,7 @@
         <Menu class="javax.swing.JMenu" name="menConf">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack3/Run.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/Run.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Configuracion"/>
           </Properties>
@@ -242,7 +231,7 @@
             <Menu class="javax.swing.JMenu" name="jMenu7">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack2/house.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/16x16/house.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Pisos y Cuartos"/>
               </Properties>
@@ -250,7 +239,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Pisos"/>
                   </Properties>
@@ -258,7 +247,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem7">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Precios"/>
                   </Properties>
@@ -266,7 +255,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem8">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Tipos de Cuartos"/>
                   </Properties>
@@ -274,7 +263,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem9">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Cuartos"/>
                   </Properties>
@@ -284,7 +273,7 @@
             <Menu class="javax.swing.JMenu" name="jMenu8">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack2/package.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/16x16/package.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Servicios"/>
               </Properties>
@@ -292,7 +281,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem10">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Tipos de Servicios"/>
                   </Properties>
@@ -300,7 +289,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem11">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/com/ahms/ui/resources/pack2/application_form.png"/>
+                      <Image iconType="3" name="/com/ahms/ui/images/16x16/application_form.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Servicios"/>
                   </Properties>
@@ -310,7 +299,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem12">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/com/ahms/ui/resources/pack2/money.png"/>
+                  <Image iconType="3" name="/com/ahms/ui/images/16x16/money.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Tipos de Pago"/>
               </Properties>
@@ -345,9 +334,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jPanel2" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
-              <Component id="jToolBar1" max="32767" attributes="0"/>
+              <Component id="tbAcction" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jToolBar2" min="-2" pref="364" max="-2" attributes="0"/>
+              <Component id="tbNote" min="-2" pref="364" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -355,8 +344,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="jToolBar1" min="-2" pref="38" max="-2" attributes="0"/>
-                  <Component id="jToolBar2" max="-2" attributes="0"/>
+                  <Component id="tbAcction" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="tbNote" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
               <Component id="jPanel2" max="32767" attributes="0"/>
@@ -370,7 +359,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jPanel7" max="32767" attributes="0"/>
+              <Component id="controlPane" max="32767" attributes="0"/>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane1" pref="784" max="32767" attributes="0"/>
@@ -383,7 +372,7 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
+                  <Component id="controlPane" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jScrollPane1" pref="392" max="32767" attributes="0"/>
@@ -395,7 +384,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel7">
+        <Container class="javax.swing.JPanel" name="controlPane">
 
           <Layout>
             <DimensionLayout dim="0">
@@ -545,14 +534,14 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JToolBar" name="jToolBar1">
+    <Container class="javax.swing.JToolBar" name="tbAcction">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnRentDlg">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/building.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/key-card.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Renta de cuartos"/>
           </Properties>
@@ -563,7 +552,7 @@
         <Component class="javax.swing.JButton" name="btnResDlg">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/calendar.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/calendar.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Reservaciones"/>
           </Properties>
@@ -576,7 +565,7 @@
         <Component class="javax.swing.JButton" name="btnCheckinDlg">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/test.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/test.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Check in"/>
           </Properties>
@@ -587,7 +576,7 @@
         <Component class="javax.swing.JButton" name="btnSearchAcc">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/search.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/1445772562_search.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Busqueda de Cuentas"/>
           </Properties>
@@ -597,14 +586,14 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JToolBar" name="jToolBar2">
+    <Container class="javax.swing.JToolBar" name="tbNote">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pencil.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/pencil.png"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -617,7 +606,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/repeat.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/24x24/repeat.png"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>

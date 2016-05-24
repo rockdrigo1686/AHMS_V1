@@ -1,6 +1,6 @@
 package com.ahms.ui.utils;
 
-import com.ahms.boundary.security.ErrorTraceBoundary;
+import com.ahms.boundary.entity_boundary.ErrorTraceBoundary;
 import com.ahms.model.entity.ErrorTrace;
 import java.awt.Component;
 import java.math.BigDecimal;

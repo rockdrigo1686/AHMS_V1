@@ -1,15 +1,23 @@
 package com.ahms.ui;
 
-import com.ahms.boundary.security.AccountBoundary;
-import com.ahms.boundary.security.AccountTransactionsBoundary;
-import com.ahms.boundary.security.CustomersBoundary;
-import com.ahms.boundary.security.FloorsBoundary;
-import com.ahms.boundary.security.MessageBoardBoundary;
-import com.ahms.boundary.security.MultiValueBoundary;
-import com.ahms.boundary.security.PreferenceDetailBoundary;
-import com.ahms.boundary.security.ReservationBoundary;
-import com.ahms.boundary.security.RoomTypesBoundary;
-import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.ui.tools.QuickResDlg;
+import com.ahms.ui.tools.QuickRentDlg;
+import com.ahms.ui.tools.ShiftStartDlg;
+import com.ahms.ui.tools.RoomServiceSelectionDlg;
+import com.ahms.ui.tools.AccountSearchDlg;
+import com.ahms.ui.tools.ShiftEndDlg;
+import com.ahms.ui.tools.AddMessageDlg;
+import com.ahms.ui.configuracion.MoneyMovementFrm;
+import com.ahms.boundary.entity_boundary.AccountBoundary;
+import com.ahms.boundary.entity_boundary.AccountTransactionsBoundary;
+import com.ahms.boundary.entity_boundary.CustomersBoundary;
+import com.ahms.boundary.entity_boundary.FloorsBoundary;
+import com.ahms.boundary.entity_boundary.MessageBoardBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
+import com.ahms.boundary.entity_boundary.ReservationBoundary;
+import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
+import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
@@ -18,12 +26,12 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
-import com.ahms.reports.CancelacionesRp;
-import com.ahms.reports.CorteCajaRp;
-import com.ahms.reports.OcupacionRp;
-import com.ahms.reports.ServiciosRp;
-import com.ahms.ui.modules.security.ProfilesFrm;
-import com.ahms.ui.modules.security.UsersFrm;
+import com.ahms.ui.administracion.reportes.CancelacionesRp;
+import com.ahms.ui.administracion.reportes.CorteCajaRp;
+import com.ahms.ui.administracion.reportes.OcupacionRp;
+import com.ahms.ui.administracion.reportes.ServiciosRp;
+import com.ahms.ui.administracion.seguridad.ProfilesFrm;
+import com.ahms.ui.administracion.seguridad.UsersFrm;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
@@ -81,10 +89,6 @@ public class MainFrm extends javax.swing.JFrame {
     private Rooms quickResRoomAssigned = null;
 
     MainFrm() {
-    }
-
-    private void fillData() {
-
     }
 
     public Customers getMainCustomer() {
@@ -185,21 +189,43 @@ public class MainFrm extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String roomNumber = txtRoomNumber.getText().trim();
-                if(roomNumber != null && roomNumber.length() > 0){
+                if (roomNumber != null && roomNumber.length() > 0) {
                     com.ahms.model.entity.Rooms roomFind = new com.ahms.model.entity.Rooms();
                     roomFind.setRmsNumber(roomNumber);
                     roomFind = roomsBounday.findByRmsNumber(roomFind);
-                    if(roomFind.getRmsId() != null){
+                    if (roomFind.getRmsId() != null) {
                         ArrayList<com.ahms.model.entity.Rooms> lst = new ArrayList<>();
                         lst.add(roomFind);
                         configGrid(lst);
-                    }                    
+                    }
                 }
-                
+
             }
         };
 
         txtRoomNumber.addActionListener(action);
+
+        if (this.currentShift == null) {
+            changeFormState(false);
+        } else {
+            changeFormState(true);
+        }
+
+    }
+
+    public void changeFormState(boolean flag) {
+        menuMov.setEnabled(flag);
+        jtDashboard.setEnabled(flag);
+
+        for (Component obj : tbAcction.getComponents()) {
+            obj.setEnabled(flag);
+        }
+        for (Component obj : tbNote.getComponents()) {
+            obj.setEnabled(flag);
+        }
+        for (Component obj : controlPane.getComponents()) {
+            obj.setEnabled(flag);
+        }
 
     }
 
@@ -285,16 +311,16 @@ public class MainFrm extends javax.swing.JFrame {
             Vector vctRow = new Vector();
             switch (room.getRmsStatus().getMvaKey()) {
                 case MMKeys.Rooms.STA_DISPONIBLE_KEY:
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/green_ball.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/green_ball.png")));
                     break;
                 case MMKeys.Rooms.STA_OCUPADO_KEY:
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/red_ball.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/red_ball.png")));
                     break;
                 case MMKeys.Rooms.STA_RESERVADO_KEY:
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/blue_ball.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/blue_ball.png")));
                     break;
                 case MMKeys.Rooms.STA_MTO_KEY:
-                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/grey_ball.png")));
+                    vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/grey_ball.png")));
                     break;
             }
             vctRow.add(room.getRmsNumber());
@@ -364,7 +390,7 @@ public class MainFrm extends javax.swing.JFrame {
         jTable3 = new javax.swing.JTable();
         jSeparator5 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        controlPane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jcbPisos = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
@@ -377,21 +403,20 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         messageBoard = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
+        tbAcction = new javax.swing.JToolBar();
         btnRentDlg = new javax.swing.JButton();
         btnResDlg = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         btnCheckinDlg = new javax.swing.JButton();
         btnSearchAcc = new javax.swing.JButton();
-        jToolBar2 = new javax.swing.JToolBar();
+        tbNote = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        menuMov = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuTurno = new javax.swing.JMenu();
         btnIniciarTurno = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         menAdmin = new javax.swing.JMenu();
@@ -456,11 +481,11 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel4.setText("Cuarto:");
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
+        javax.swing.GroupLayout controlPaneLayout = new javax.swing.GroupLayout(controlPane);
+        controlPane.setLayout(controlPaneLayout);
+        controlPaneLayout.setHorizontalGroup(
+            controlPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
@@ -479,11 +504,11 @@ public class MainFrm extends javax.swing.JFrame {
                 .addComponent(txtRoomNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+        controlPaneLayout.setVerticalGroup(
+            controlPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlPaneLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(controlPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jcbPisos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -530,7 +555,7 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(controlPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
@@ -541,7 +566,7 @@ public class MainFrm extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(controlPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
@@ -549,44 +574,44 @@ public class MainFrm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        btnRentDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/building.png"))); // NOI18N
+        btnRentDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/key-card.png"))); // NOI18N
         btnRentDlg.setToolTipText("Renta de cuartos");
         btnRentDlg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRentDlgActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnRentDlg);
+        tbAcction.add(btnRentDlg);
 
-        btnResDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/calendar.png"))); // NOI18N
+        btnResDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/calendar.png"))); // NOI18N
         btnResDlg.setToolTipText("Reservaciones");
         btnResDlg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResDlgActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnResDlg);
-        jToolBar1.add(jSeparator4);
+        tbAcction.add(btnResDlg);
+        tbAcction.add(jSeparator4);
 
-        btnCheckinDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/test.png"))); // NOI18N
+        btnCheckinDlg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/test.png"))); // NOI18N
         btnCheckinDlg.setToolTipText("Check in");
         btnCheckinDlg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCheckinDlgActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnCheckinDlg);
+        tbAcction.add(btnCheckinDlg);
 
-        btnSearchAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/search.png"))); // NOI18N
+        btnSearchAcc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/1445772562_search.png"))); // NOI18N
         btnSearchAcc.setToolTipText("Busqueda de Cuentas");
         btnSearchAcc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchAccActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnSearchAcc);
+        tbAcction.add(btnSearchAcc);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pencil.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/pencil.png"))); // NOI18N
         jButton1.setFocusable(false);
         jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -595,9 +620,9 @@ public class MainFrm extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        jToolBar2.add(jButton1);
+        tbNote.add(jButton1);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/repeat.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/repeat.png"))); // NOI18N
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -606,68 +631,59 @@ public class MainFrm extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        jToolBar2.add(jButton2);
+        tbNote.add(jButton2);
 
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer Document.png"))); // NOI18N
-        jMenu1.setText("Movimientos");
+        menuMov.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Transfer Document.png"))); // NOI18N
+        menuMov.setText("Movimientos");
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Donate.png"))); // NOI18N
         jMenuItem3.setText("Movimiento de Efectivo");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        menuMov.add(jMenuItem3);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Transfer.png"))); // NOI18N
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Transfer.png"))); // NOI18N
         jMenuItem1.setText("Movimientos de cuartos");
-        jMenu1.add(jMenuItem1);
+        menuMov.add(jMenuItem1);
 
-        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Appointment Urgent.png"))); // NOI18N
-        jMenuItem16.setText("Reservaciones");
-        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem16ActionPerformed(evt);
-            }
-        });
-        jMenu1.add(jMenuItem16);
+        jMenuBar1.add(menuMov);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/History.png"))); // NOI18N
-        jMenu2.setText("Turnos");
+        menuTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/History.png"))); // NOI18N
+        menuTurno.setText("Turnos");
 
         btnIniciarTurno.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        btnIniciarTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Add Appointment.png"))); // NOI18N
+        btnIniciarTurno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Add Appointment.png"))); // NOI18N
         btnIniciarTurno.setText("Iniciar Turno");
         btnIniciarTurno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarTurnoActionPerformed(evt);
             }
         });
-        jMenu2.add(btnIniciarTurno);
+        menuTurno.add(btnIniciarTurno);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Remove Appointment.png"))); // NOI18N
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Remove Appointment.png"))); // NOI18N
         jMenuItem2.setText("Cerrar Turno");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        menuTurno.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(menuTurno);
 
-        menAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Desktop.png"))); // NOI18N
+        menAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Desktop.png"))); // NOI18N
         menAdmin.setText("Administracion");
 
-        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/chart_bar.png"))); // NOI18N
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/chart_bar.png"))); // NOI18N
         jMenu4.setText("Reportes");
 
-        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem13.setText("Serivicios");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -676,7 +692,7 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem13);
 
-        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
+        jMenuItem14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem14.setText("Ocupacion");
         jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -685,7 +701,7 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem14);
 
-        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
+        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem15.setText("Corte de Caja");
         jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -694,7 +710,7 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem15);
 
-        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pdf.png"))); // NOI18N
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem4.setText("Cancelaciones");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -705,11 +721,11 @@ public class MainFrm extends javax.swing.JFrame {
 
         menAdmin.add(jMenu4);
 
-        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/group.png"))); // NOI18N
+        jMenu6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/group.png"))); // NOI18N
         jMenu6.setText("Usuarios y Perfiles");
 
         miProfiles.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
-        miProfiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/vcard.png"))); // NOI18N
+        miProfiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/folder_stuffed.png"))); // NOI18N
         miProfiles.setText("Perfiles");
         miProfiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -719,7 +735,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu6.add(miProfiles);
 
         miUsers.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
-        miUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/user.png"))); // NOI18N
+        miUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/user.png"))); // NOI18N
         miUsers.setText("Usuarios");
         miUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -732,44 +748,44 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuBar1.add(menAdmin);
 
-        menConf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Run.png"))); // NOI18N
+        menConf.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Run.png"))); // NOI18N
         menConf.setText("Configuracion");
 
-        jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/house.png"))); // NOI18N
+        jMenu7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/house.png"))); // NOI18N
         jMenu7.setText("Pisos y Cuartos");
 
-        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem6.setText("Pisos");
         jMenu7.add(jMenuItem6);
 
-        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem7.setText("Precios");
         jMenu7.add(jMenuItem7);
 
-        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem8.setText("Tipos de Cuartos");
         jMenu7.add(jMenuItem8);
 
-        jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem9.setText("Cuartos");
         jMenu7.add(jMenuItem9);
 
         menConf.add(jMenu7);
 
-        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/package.png"))); // NOI18N
+        jMenu8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/package.png"))); // NOI18N
         jMenu8.setText("Servicios");
 
-        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem10.setText("Tipos de Servicios");
         jMenu8.add(jMenuItem10);
 
-        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/application_form.png"))); // NOI18N
+        jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem11.setText("Servicios");
         jMenu8.add(jMenuItem11);
 
         menConf.add(jMenu8);
 
-        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/money.png"))); // NOI18N
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/money.png"))); // NOI18N
         jMenuItem12.setText("Tipos de Pago");
         menConf.add(jMenuItem12);
 
@@ -783,16 +799,16 @@ public class MainFrm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tbAcction, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tbNote, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tbAcction, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tbNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -803,7 +819,7 @@ public class MainFrm extends javax.swing.JFrame {
     private void btnIniciarTurnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarTurnoActionPerformed
         // TODO add your handling code here:
         if (currentShift == null) {
-            ShiftFrm shiftFrm = new ShiftFrm(this, true, mainUser);
+            ShiftStartDlg shiftFrm = new ShiftStartDlg(this, true, mainUser);
             shiftFrm.setVisible(true);
         }
 
@@ -812,7 +828,7 @@ public class MainFrm extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         if (currentShift != null) {
-            ShiftEndFrm se = new ShiftEndFrm(this, true, mainUser, currentShift);
+            ShiftEndDlg se = new ShiftEndDlg(this, true, mainUser, currentShift);
             se.setVisible(true);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -820,9 +836,9 @@ public class MainFrm extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         if (currentShift != null) {
-            MoneyMovementFRM mmFrm;
+            MoneyMovementFrm mmFrm;
             try {
-                mmFrm = new MoneyMovementFRM(this, true, currentShift, mainUser);
+                mmFrm = new MoneyMovementFrm(this, true, currentShift, mainUser);
                 mmFrm.setVisible(true);
             } catch (Exception ex) {
                 Logger.getLogger(MainFrm.class.getName()).log(Level.SEVERE, null, ex);
@@ -840,10 +856,6 @@ public class MainFrm extends javax.swing.JFrame {
         profileFrm.setVisible(true);
     }//GEN-LAST:event_miProfilesActionPerformed
 
-    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem16ActionPerformed
-
     private void miUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miUsersActionPerformed
         // TODO add your handling code here:
         UsersFrm userFrm = new UsersFrm();
@@ -852,25 +864,25 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void btnRentDlgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRentDlgActionPerformed
         // TODO add your handling code here:
-        QuickRentDialog qRentDilg = new QuickRentDialog(this, true, mainCustomer, currentShift);
+        QuickRentDlg qRentDilg = new QuickRentDlg(this, true, mainCustomer, currentShift);
         qRentDilg.setVisible(true);
     }//GEN-LAST:event_btnRentDlgActionPerformed
 
     private void btnResDlgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResDlgActionPerformed
         // TODO add your handling code here:
-        QuickResDialog qResDlg = new QuickResDialog(this, true, mainCustomer, currentShift);
+        QuickResDlg qResDlg = new QuickResDlg(this, true, mainCustomer, currentShift);
         qResDlg.setVisible(true);
     }//GEN-LAST:event_btnResDlgActionPerformed
 
     private void btnSearchAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchAccActionPerformed
         // TODO add your handling code here:
-        AccountSearch accSearch = new AccountSearch(this, true, "AC");
+        AccountSearchDlg accSearch = new AccountSearchDlg(this, true, "AC");
         accSearch.setVisible(true);
     }//GEN-LAST:event_btnSearchAccActionPerformed
 
     private void btnCheckinDlgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckinDlgActionPerformed
         // TODO add your handling code here:
-        AccountSearch accSearch = new AccountSearch(this, true, "RS");
+        AccountSearchDlg accSearch = new AccountSearchDlg(this, true, "RS");
         accSearch.setVisible(true);
     }//GEN-LAST:event_btnCheckinDlgActionPerformed
 
@@ -906,7 +918,7 @@ public class MainFrm extends javax.swing.JFrame {
             if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
                 //llamar a agregar servicios
                 Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
-                RoomService roomService = new RoomService(null, true, roomObj, currentShift);
+                RoomServiceSelectionDlg roomService = new RoomServiceSelectionDlg(null, true, roomObj, currentShift);
                 roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
                 roomService.setVisible(true);
             }
@@ -921,7 +933,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        AddMessage add = new AddMessage(this, true, mainUser);
+        AddMessageDlg add = new AddMessageDlg(this, true, mainUser);
         add.setVisible(true);
         fillMessageBoard();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -954,8 +966,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         });
 
-        
-        int lines = 18*7;
+        int lines = 18 * 7;
         messageBoard.setRowHeight(lines);
         messageBoard.setModel(tableModel);
         messageBoard.getColumn("ID").setMinWidth(0);
@@ -974,14 +985,13 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JButton btnRentDlg;
     private javax.swing.JButton btnResDlg;
     private javax.swing.JButton btnSearchAcc;
+    private javax.swing.JPanel controlPane;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
@@ -994,7 +1004,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
-    private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -1003,7 +1012,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1012,17 +1020,19 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JComboBox jcbDisponibilidad;
     private javax.swing.JComboBox jcbPisos;
     private javax.swing.JComboBox jcbTipoCuarto;
     private javax.swing.JTable jtDashboard;
     private javax.swing.JMenu menAdmin;
     private javax.swing.JMenu menConf;
+    private javax.swing.JMenu menuMov;
+    private javax.swing.JMenu menuTurno;
     private javax.swing.JTable messageBoard;
     private javax.swing.JMenuItem miProfiles;
     private javax.swing.JMenuItem miUsers;
+    private javax.swing.JToolBar tbAcction;
+    private javax.swing.JToolBar tbNote;
     private javax.swing.JTextField txtRoomNumber;
     // End of variables declaration//GEN-END:variables
 

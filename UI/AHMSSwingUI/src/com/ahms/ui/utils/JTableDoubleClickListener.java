@@ -5,7 +5,7 @@
  */
 package com.ahms.ui.utils;
 
-import com.ahms.ui.modules.security.ProfilesFrm;
+import com.ahms.ui.administracion.seguridad.ProfilesFrm;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
