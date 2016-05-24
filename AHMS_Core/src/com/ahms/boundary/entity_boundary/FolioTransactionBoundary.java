@@ -3,61 +3,55 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ahms.boundary.security;
+package com.ahms.boundary.entity_boundary;
 
 import com.ahms.boundary.AHMSBoundary;
-import com.ahms.model.entity.MultiValue;
-import com.ahms.model.manager.entity_manager.MultiValueEM;
+import com.ahms.model.entity.FolioTransaction;
+import com.ahms.model.manager.entity_manager.FolioTransactionEM;
 import java.util.List;
 
 /**
  *
- * @author jorge
+ * @author rsoto
  */
-public class MultiValueBoundary implements AHMSBoundary<MultiValue>{
-    
-    private MultiValueEM multiValueEM = null;
-    
-    public MultiValueBoundary() {
-        multiValueEM = new MultiValueEM();
-    }
+public class FolioTransactionBoundary implements AHMSBoundary<FolioTransaction> {
+
+    FolioTransactionEM folioTransactionEM = null;
 
     @Override
-    public List<MultiValue> search(MultiValue obj) {
+    public List<FolioTransaction> search(FolioTransaction obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<MultiValue> searchAll(MultiValue obj) {
+    public List<FolioTransaction> searchAll(FolioTransaction obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public MultiValue find(MultiValue obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public MultiValue findByKey(MultiValue obj) {
-        return multiValueEM.findByKey(obj);
-    }
-    
-    public List<MultiValue> findByType(MultiValue obj) {
-        return multiValueEM.findByType(obj);
-    }
-
-    @Override
-    public int insert(MultiValue obj) {
+    public FolioTransaction find(FolioTransaction obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int update(MultiValue obj) {
+    public int insert(FolioTransaction obj) {
+        folioTransactionEM = new FolioTransactionEM();
+        return folioTransactionEM.insert(obj);
+    }
+
+    @Override
+    public int update(FolioTransaction obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int delete(MultiValue obj) {
+    public int delete(FolioTransaction obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
+    public List<FolioTransaction> searchByCouId(FolioTransaction obj) {
+        folioTransactionEM = new FolioTransactionEM();
+        return folioTransactionEM.searchByCouId(obj);
+    }
+
 }

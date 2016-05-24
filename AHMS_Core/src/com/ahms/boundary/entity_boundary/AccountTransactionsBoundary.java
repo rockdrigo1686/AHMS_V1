@@ -1,4 +1,4 @@
-package com.ahms.boundary.security;
+package com.ahms.boundary.entity_boundary;
 
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Account;

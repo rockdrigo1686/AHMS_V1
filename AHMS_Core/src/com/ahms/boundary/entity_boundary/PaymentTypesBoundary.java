@@ -3,53 +3,52 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ahms.boundary.security;
+package com.ahms.boundary.entity_boundary;
 
 import com.ahms.boundary.AHMSBoundary;
-import com.ahms.model.entity.FolioTransaction;
-import com.ahms.model.manager.entity_manager.FolioTransactionEM;
-import com.ahms.model.manager.entity_manager.ProfileEM;
+import com.ahms.model.entity.PaymentTypes;
+import com.ahms.model.manager.entity_manager.PaymenTypesEM;
 import java.util.List;
 
 /**
  *
  * @author jorge
  */
-public class FolioTransactionBoundary implements AHMSBoundary<FolioTransaction>{
-
-    private FolioTransactionEM folioTransactionEM = null;
-
-    public FolioTransactionBoundary() {
-        folioTransactionEM = new FolioTransactionEM();
-    }
+public class PaymentTypesBoundary implements AHMSBoundary<PaymentTypes>{
     
+    private PaymenTypesEM paymentTypesEM = null;
+    
+    public PaymentTypesBoundary() {
+        paymentTypesEM = new PaymenTypesEM();
+    }
+
     @Override
-    public List<FolioTransaction> search(FolioTransaction obj) {
+    public List<PaymentTypes> search(PaymentTypes obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<FolioTransaction> searchAll(FolioTransaction obj) {
+    public List<PaymentTypes> searchAll(PaymentTypes obj) {
+        return paymentTypesEM.findAll(obj);        
+    }
+
+    @Override
+    public PaymentTypes find(PaymentTypes obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public FolioTransaction find(FolioTransaction obj) {
+    public int insert(PaymentTypes obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int insert(FolioTransaction obj) {
-        return folioTransactionEM.insert(obj);
-    }
-
-    @Override
-    public int update(FolioTransaction obj) {
+    public int update(PaymentTypes obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int delete(FolioTransaction obj) {
+    public int delete(PaymentTypes obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

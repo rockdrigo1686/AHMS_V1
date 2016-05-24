@@ -3,52 +3,60 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ahms.boundary.security;
+package com.ahms.boundary.entity_boundary;
 
 import com.ahms.boundary.AHMSBoundary;
-import com.ahms.model.entity.PaymentTypes;
-import com.ahms.model.manager.entity_manager.PaymenTypesEM;
+import com.ahms.model.entity.MultiValue;
+import com.ahms.model.manager.entity_manager.MultiValueEM;
 import java.util.List;
 
 /**
  *
  * @author jorge
  */
-public class PaymentTypesBoundary implements AHMSBoundary<PaymentTypes>{
+public class MultiValueBoundary implements AHMSBoundary<MultiValue>{
     
-    private PaymenTypesEM paymentTypesEM = null;
+    private MultiValueEM multiValueEM = null;
     
-    public PaymentTypesBoundary() {
-        paymentTypesEM = new PaymenTypesEM();
+    public MultiValueBoundary() {
+        multiValueEM = new MultiValueEM();
     }
 
     @Override
-    public List<PaymentTypes> search(PaymentTypes obj) {
+    public List<MultiValue> search(MultiValue obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<PaymentTypes> searchAll(PaymentTypes obj) {
-        return paymentTypesEM.findAll(obj);        
-    }
-
-    @Override
-    public PaymentTypes find(PaymentTypes obj) {
+    public List<MultiValue> searchAll(MultiValue obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int insert(PaymentTypes obj) {
+    public MultiValue find(MultiValue obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public MultiValue findByKey(MultiValue obj) {
+        return multiValueEM.findByKey(obj);
+    }
+    
+    public List<MultiValue> findByType(MultiValue obj) {
+        return multiValueEM.findByType(obj);
+    }
+
+    @Override
+    public int insert(MultiValue obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int update(PaymentTypes obj) {
+    public int update(MultiValue obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public int delete(PaymentTypes obj) {
+    public int delete(MultiValue obj) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

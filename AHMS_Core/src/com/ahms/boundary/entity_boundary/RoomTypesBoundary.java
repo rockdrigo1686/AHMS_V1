@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ahms.boundary.security;
+package com.ahms.boundary.entity_boundary;
 
 import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.RoomTypes;

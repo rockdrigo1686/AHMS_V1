@@ -5,9 +5,9 @@
  */
 package com.ahms.util;
 
-import com.ahms.boundary.security.MultiValueBoundary;
-import com.ahms.boundary.security.ReservationBoundary;
-import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.ReservationBoundary;
+import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.Rooms;

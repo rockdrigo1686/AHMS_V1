@@ -5,7 +5,7 @@
  */
 package com.ahms.model.manager.entity_manager;
 
-import com.ahms.boundary.security.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
