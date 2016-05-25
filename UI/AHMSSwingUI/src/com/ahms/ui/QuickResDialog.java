@@ -1,14 +1,15 @@
 package com.ahms.ui;
 
-import com.ahms.boundary.security.MultiValueBoundary;
-import com.ahms.boundary.security.ReservationBoundary;
-import com.ahms.boundary.security.RoomTypesBoundary;
-import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.ReservationBoundary;
+import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
+import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
+import com.ahms.ui.configuracion.CustomerRegFrm;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -345,7 +346,7 @@ public class QuickResDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
 
     private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
-        CustomerReg loadCustomer = new CustomerReg(this, true, mainCustomer);
+        CustomerRegFrm loadCustomer = new CustomerRegFrm(this, true, mainCustomer);
         loadCustomer.setVisible(true);
         mainCustomer = loadCustomer.localCustomer;
         if(mainCustomer != null && mainCustomer.getCusId() != null){

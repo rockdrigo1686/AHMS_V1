@@ -1,9 +1,9 @@
 package com.ahms.ui;
 
-import com.ahms.boundary.security.FloorsBoundary;
-import com.ahms.boundary.security.PreferenceDetailBoundary;
-import com.ahms.boundary.security.RoomTypesBoundary;
-import com.ahms.boundary.security.RoomsBoundary;
+import com.ahms.boundary.entity_boundary.FloorsBoundary;
+import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
+import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
+import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.PreferenceDetail;

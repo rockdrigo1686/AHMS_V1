@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <header rptDate="21/05/2016" dteIni="21/05/2016 21:30" dteEnd="22/05/2016 10:00"></header>
+  <rent>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="20/03/2016 15:00" rmsNumber="2"  rmtType="Doble"    cusNum="2" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 9:00"  rmsNumber="3"  rmtType="Doble"    cusNum="3" actFecFin="24/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+   <room actFecIni="21/03/2016 17:00" rmsNumber="10" rmtType="Sensillo" cusNum="1" actFecFin="29/03/2016 14:00"></room>
+   <room actFecIni="22/03/2016 15:00" rmsNumber="2"  rmtType="Sensillo" cusNum="1" actFecFin="23/03/2016 14:00"></room>
+  </rent>
+</root>

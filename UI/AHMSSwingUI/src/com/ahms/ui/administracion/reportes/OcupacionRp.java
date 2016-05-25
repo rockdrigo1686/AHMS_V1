@@ -6,9 +6,15 @@
 package com.ahms.ui.administracion.reportes;
 
 import com.ahms.ui.utils.DateLabelFormatter;
+import com.ahms.ui.utils.FOPEngine;
+import com.ahms.ui.utils.GeneralFunctions;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -54,7 +60,7 @@ public class OcupacionRp extends javax.swing.JDialog {
         jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
         jpFecEntContainerResLayout.setHorizontalGroup(
             jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 247, Short.MAX_VALUE)
         );
         jpFecEntContainerResLayout.setVerticalGroup(
             jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,6 +83,11 @@ public class OcupacionRp extends javax.swing.JDialog {
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/48x48/pie_chart.png"))); // NOI18N
         jButton1.setText("Generar reporte");
         jButton1.setPreferredSize(new java.awt.Dimension(152, 50));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,14 +101,15 @@ public class OcupacionRp extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(107, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(12, 12, 12))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,6 +129,27 @@ public class OcupacionRp extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String fileXML = "/home/jorge/AHMS_FILES/XML_OCUPACION.xml";
+        String fileXLS = "/home/jorge/AHMS_FILES/XSL_OCUPACION.xsl";
+        String fileOut = "/home/jorge/AHMS_FILES/RPT_OCUPACION.pdf";
+        
+        try {
+            /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
+            FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
+            File myFile = new File(fileOut);
+            Desktop.getDesktop().open(myFile);
+            GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+        } catch (Exception ex) {
+            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

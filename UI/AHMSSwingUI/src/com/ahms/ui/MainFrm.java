@@ -245,7 +245,9 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
         this.jcbTipoCuarto.removeAllItems();
-        this.jcbTipoCuarto.addItem(new RoomTypes());
+        RoomTypes blank = new RoomTypes();
+        blank.setRtyDescription("Todas");
+        this.jcbTipoCuarto.addItem(blank);
         for (RoomTypes roomType : lstRoomTypes) {
             this.jcbTipoCuarto.addItem(roomType);
         }
@@ -262,7 +264,9 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void configFloors(List<Floors> lstFloors) {
         this.jcbPisos.removeAllItems();
-        this.jcbPisos.addItem(new Floors());
+        Floors blank = new Floors();
+        blank.setFlrCode("Todas");
+        this.jcbPisos.addItem(blank);
         for (Floors floor : lstFloors) {
             this.jcbPisos.addItem(floor);
         }
@@ -279,7 +283,9 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void configDisponibilidad(List<MultiValue> lstMultiValueDisp) {
         this.jcbDisponibilidad.removeAllItems();
-        this.jcbDisponibilidad.addItem(new MultiValue());
+        MultiValue blank = new MultiValue();
+        blank.setMvaDescription("Todas");
+        this.jcbDisponibilidad.addItem(blank);
         for (MultiValue multi : lstMultiValueDisp) {
             this.jcbDisponibilidad.addItem(multi);
         }
