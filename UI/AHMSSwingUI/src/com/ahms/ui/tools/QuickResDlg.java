@@ -125,8 +125,11 @@ public class QuickResDlg extends javax.swing.JDialog {
         jbtnLoadCustomer = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jspNumRooms = new javax.swing.JSpinner();
+        jToolBar2 = new javax.swing.JToolBar();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jlCusName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlCusName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -205,6 +208,16 @@ public class QuickResDlg extends javax.swing.JDialog {
 
         jspNumRooms.setModel(new javax.swing.SpinnerNumberModel(1, 1, 6, 1));
 
+        jToolBar2.setBackground(java.awt.Color.white);
+        jToolBar2.setFloatable(false);
+        jToolBar2.setPreferredSize(new java.awt.Dimension(30, 38));
+
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar2.add(jButton5);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,11 +258,13 @@ public class QuickResDlg extends javax.swing.JDialog {
                                     .addComponent(jbQuickResSearch))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlCusName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jlRFC)
@@ -359,11 +374,13 @@ public class QuickResDlg extends javax.swing.JDialog {
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JButton jbQuickResReserve;
     private javax.swing.JButton jbQuickResSearch;
     private javax.swing.JButton jbtnLoadCustomer;

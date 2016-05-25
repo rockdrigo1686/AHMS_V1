@@ -155,8 +155,8 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jToolBar3 = new javax.swing.JToolBar();
         btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
-        btnEditar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         jmiPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/money.png"))); // NOI18N
         jmiPagar.setText("Pagar");
@@ -177,6 +177,7 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jpopOptions.add(jmiCancelar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBackground(java.awt.Color.white);
 
@@ -287,7 +288,17 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jToolBar3.add(btnEliminar);
         jToolBar3.add(jSeparator5);
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/delete.png"))); // NOI18N
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Donate.png"))); // NOI18N
+        btnGuardar.setFocusable(false);
+        btnGuardar.setName("btnGuardar"); // NOI18N
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        jToolBar3.add(btnGuardar);
+
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Remove.png"))); // NOI18N
         btnEditar.setToolTipText("Cancelar / Eliminar");
         btnEditar.setFocusable(false);
         btnEditar.setName("btnEditar"); // NOI18N
@@ -297,16 +308,6 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
             }
         });
         jToolBar3.add(btnEditar);
-
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/coins.png"))); // NOI18N
-        btnGuardar.setFocusable(false);
-        btnGuardar.setName("btnGuardar"); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jToolBar3.add(btnGuardar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

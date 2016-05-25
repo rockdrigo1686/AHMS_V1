@@ -68,6 +68,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         lblCus.setFont(new java.awt.Font("Droid Sans", 1, 14)); // NOI18N
         lblCus.setText("Cliente:");
@@ -102,7 +103,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jToolBar1.add(jbSalir1);
         jToolBar1.add(jSeparator1);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/doc_convert.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Transfer Document.png"))); // NOI18N
         jButton1.setToolTipText("Cambiar cuarto");
         jButton1.setFocusable(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -112,9 +113,10 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         });
         jToolBar1.add(jButton1);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/coins.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Donate.png"))); // NOI18N
         jButton2.setToolTipText("Pagar Cuenta");
         jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -122,7 +124,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         });
         jToolBar1.add(jButton2);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/search.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/1445772562_search.png"))); // NOI18N
         jButton3.setToolTipText("Buscar Cliente");
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

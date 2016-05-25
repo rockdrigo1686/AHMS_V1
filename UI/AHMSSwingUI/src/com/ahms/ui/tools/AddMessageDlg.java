@@ -55,6 +55,7 @@ public class AddMessageDlg extends javax.swing.JDialog {
         jbGuardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
 
         taMessage.setColumns(20);
         taMessage.setRows(5);
@@ -75,7 +76,7 @@ public class AddMessageDlg extends javax.swing.JDialog {
 
         jToolBar1.setRollover(true);
 
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/cross.png"))); // NOI18N
+        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
         jbSalir.setFocusable(false);
         jbSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,7 +85,7 @@ public class AddMessageDlg extends javax.swing.JDialog {
         });
         jToolBar1.add(jbSalir);
 
-        jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/disk.png"))); // NOI18N
+        jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
         jbGuardar.setToolTipText("Guardar");
         jbGuardar.setFocusable(false);
         jbGuardar.addActionListener(new java.awt.event.ActionListener() {
