@@ -8,10 +8,17 @@ package com.ahms.ui.administracion.reportes;
 import com.ahms.boundary.entity_boundary.UsersBoundary;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.DateLabelFormatter;
+import com.ahms.ui.utils.FOPEngine;
+import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.ui.utils.UIConstants;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -85,6 +92,11 @@ public class CorteCajaRp extends javax.swing.JDialog {
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/48x48/pie_chart.png"))); // NOI18N
         jButton1.setText("Generar reporte");
         jButton1.setPreferredSize(new java.awt.Dimension(152, 50));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Usuario:");
 
@@ -97,15 +109,19 @@ public class CorteCajaRp extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(16, 16, 16)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -130,6 +146,23 @@ public class CorteCajaRp extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String fileOut = "/home/jorge/AHMS_FILES/RPT_CORTE_CAJA.pdf";
+        try {
+            /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
+            FOPEngine.convertToPDF(UIConstants.REPORTE_CORTE_CAJA_XSL_LINUX,UIConstants.REPORTE_CORTE_CAJA_XML_LINUX, fileOut);
+            File myFile = new File(fileOut);
+            Desktop.getDesktop().open(myFile);
+            GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+        } catch (Exception ex) {
+            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

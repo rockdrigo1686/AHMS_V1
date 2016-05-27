@@ -64,7 +64,32 @@ public class UIConstants {
      public static final String CONFIRM_CLEAN_RECORDS = "¿Estás Seguro que deseas limpiar el(los) registro(s) seleccionado(s)?";
      public static final String CONFIRM_REGISTER_CUSTOMER = "No se encontraron registros con esas condiciones ¿Deseas registrar un cliente nuevo?";
      public static final String ERROR_SELECTION_STATUS = "Únicamente se pueden seleccionar Clientes activos, es necesario activar el cliente antes de realizar alguna operación.";
-    public static final String ERROR_REQUIRED_MESSAGE = "Existen campos requeridos vacios, favor de verificar.";
+     public static final String ERROR_REQUIRED_MESSAGE = "Existen campos requeridos vacios, favor de verificar.";
      
+     //PATHS TEMPLATES REPORTES
+     public static final String REPORTE_OCUPACION_XSL_WIN = "c:/ahms/templates/XSL_OCUPACION.xsl";
+     public static final String REPORTE_SERVICIOS_XSL_WIN = "c:/ahms/templates/XSL_SERVICIOS.xsl";
+     public static final String REPORTE_CANCELACIONES_XSL_WIN = "c:/ahms/templates/XSL_CANCELACION.xsl";
+     public static final String REPORTE_CORTE_CAJA_XSL_WIN = "c:/ahms/templates/XSL_CORTE_CAJA.xsl";
+     
+     public static final String REPORTE_OCUPACION_XSL_LINUX = "/home/jorge/AHMS_FILES/XSL_OCUPACION.xsl";
+     public static final String REPORTE_SERVICIOS_XSL_LINUX = "/home/jorge/AHMS_FILES/XSL_SERVICIOS.xsl";
+     public static final String REPORTE_CANCELACIONES_XSL_LINUX = "/home/jorge/AHMS_FILES/XSL_CANCELACION.xsl";
+     public static final String REPORTE_CORTE_CAJA_XSL_LINUX = "/home/jorge/AHMS_FILES/XSL_CORTE_CAJA.xsl";
+     
+     //PATHS SOURCES REPORTES
+     public static final String REPORTE_OCUPACION_XML_WIN = "c:/ahms/sources/XSL_OCUPACION.xml";
+     public static final String REPORTE_SERVICIOS_XML_WIN = "c:/ahms/sources/XSL_SERVICIOS.xml";
+     public static final String REPORTE_CANCELACIONES_XML_WIN = "c:/ahms/sources/XSL_CANCELACION.xml";
+     public static final String REPORTE_CORTE_CAJA_XML_WIN = "c:/ahms/sources/XSL_CORTE_CAJA.xml";
+     
+     public static final String REPORTE_OCUPACION_XML_LINUX = "/home/jorge/AHMS_FILES/XML_OCUPACION.xml";
+     public static final String REPORTE_SERVICIOS_XML_LINUX = "/home/jorge/AHMS_FILES/XML_SERVICIOS.xml";
+     public static final String REPORTE_CANCELACIONES_XML_LINUX = "/home/jorge/AHMS_FILES/XML_CANCELACION.xml";
+     public static final String REPORTE_CORTE_CAJA_XML_LINUX = "/home/jorge/AHMS_FILES/XML_CORTE_CAJA.xml";
+     
+     //PATH PDF OUT
+     public static final String REPORTE_OUT_FILE = "c:/ahms/output/";
+    
     
 }

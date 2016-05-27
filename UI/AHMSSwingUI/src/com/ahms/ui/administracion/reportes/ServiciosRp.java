@@ -6,9 +6,16 @@
 package com.ahms.ui.administracion.reportes;
 
 import com.ahms.ui.utils.DateLabelFormatter;
+import com.ahms.ui.utils.FOPEngine;
+import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.ui.utils.UIConstants;
+import java.awt.Desktop;
 import java.awt.Font;
+import java.io.File;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -123,15 +130,20 @@ public class ServiciosRp extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel15)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -154,7 +166,20 @@ public class ServiciosRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String fileOut = "/home/jorge/AHMS_FILES/RPT_SERVICIOS.pdf";
+        try {
+            /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
+            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
+            FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX,UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
+            File myFile = new File(fileOut);
+            Desktop.getDesktop().open(myFile);
+            GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+        } catch (Exception ex) {
+            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

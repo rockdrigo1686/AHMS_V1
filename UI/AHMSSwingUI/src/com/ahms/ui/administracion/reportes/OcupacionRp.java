@@ -8,6 +8,7 @@ package com.ahms.ui.administracion.reportes;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.ui.utils.UIConstants;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
@@ -131,17 +132,13 @@ public class OcupacionRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String fileXML = "/home/jorge/AHMS_FILES/XML_OCUPACION.xml";
-        String fileXLS = "/home/jorge/AHMS_FILES/XSL_OCUPACION.xsl";
         String fileOut = "/home/jorge/AHMS_FILES/RPT_OCUPACION.pdf";
-        
         try {
             /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
             Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
-            FOPEngine.convertToPDF(fileXLS,fileXML, fileOut);
+            FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX,UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
             File myFile = new File(fileOut);
             Desktop.getDesktop().open(myFile);
             GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
