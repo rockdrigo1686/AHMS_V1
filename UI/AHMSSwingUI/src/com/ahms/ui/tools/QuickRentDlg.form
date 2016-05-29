@@ -166,7 +166,7 @@
         <Component class="javax.swing.JButton" name="jbQRSearchRoom">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack2/find.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/16x16/search.png"/>
             </Property>
           </Properties>
           <Events>
