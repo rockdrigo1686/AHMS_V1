@@ -90,6 +90,9 @@ public class UIConstants {
      
      //PATH PDF OUT
      public static final String REPORTE_OUT_FILE = "c:/ahms/reports/";
-    
+     
+     //LOGO
+    public static final String LOGO_W = "c:/ahms/reports/src/LOGO.jpg";
+    public static final String LOGO = "./reports/src/LOGO.jpg";
     
 }
