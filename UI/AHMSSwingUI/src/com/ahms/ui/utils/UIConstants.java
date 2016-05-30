@@ -89,7 +89,7 @@ public class UIConstants {
      public static final String REPORTE_CORTE_CAJA_XML_LINUX = "./reports/src/XML_CORTE_CAJA.xml";
      
      //PATH PDF OUT
-     public static final String REPORTE_OUT_FILE = "c:/ahms/output/";
+     public static final String REPORTE_OUT_FILE = "c:/ahms/reports/";
     
     
 }
