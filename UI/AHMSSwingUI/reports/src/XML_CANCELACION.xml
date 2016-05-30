@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>	
+	<header  fecIni="01/05/2016" fecFin="30/05/2016" fecRpt="30/05/2016"/>
+	<User usrAut="Ponchiguiri el Poncho">
+		<Cancelation fec="07/05/2016" serv="Cena">
+		<Cancelation fec="08/05/2016" serv="Comida">
+		<Cancelation fec="10/05/2016" serv="Comida">
+	</User>
+	<User usrAut="El Rock todo poderoso">
+		<Cancelation fec="07/05/2016" serv="Cena">
+		<Cancelation fec="08/05/2016" serv="Comida">
+		<Cancelation fec="10/05/2016" serv="Comida">
+	</User>
+	<User usrAut="Otro emp">
+		<Cancelation fec="07/05/2016" serv="Cena">
+	</User>
+</root>

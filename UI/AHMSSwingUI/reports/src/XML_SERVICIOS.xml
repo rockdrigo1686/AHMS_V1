@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<header fecIni="01/05/2016" fecFin="30/05/2016"	fecRpt="30/05/2016"></header>
+	<PymentType typPago="Efectivo" total="15000">
+		<ServiceType typServ="Transporte">
+			<Service serv="Renta auto" qty="1" amnt="500"/>
+			<Service serv="Renta auto" qty="1" amnt="500"/>
+			<Service serv="Traslado" qty="1" amnt="100"/>
+		</ServiceType>
+		<ServiceType typServ="Alimentos">
+			<Service serv="Desayuno" qty="2" amnt="150"/>
+			<Service serv="Desayuno" qty="1" amnt="75"/>
+			<Service serv="Cena" qty="4" amnt="200"/>
+		</ServiceType>
+		<ServiceType typServ="Lavanderia">
+			<Service serv="Lavado y Planchado" qty="5" amnt="50"/>
+		</ServiceType>
+	</PymentType>
+	<PymentType typPago="Tarjetas" total="30000">
+		<ServiceType typServ="Transporte">
+			<Service serv="Renta auto" qty="1" amnt="500"/>
+		</ServiceType>
+		<ServiceType typServ="Alimentos">
+			<Service serv="Desayuno" qty="2" amnt="150"/>
+			<Service serv="Desayuno" qty="1" amnt="75"/>
+			<Service serv="Cena" qty="4" amnt="200"/>
+		</ServiceType>
+	</PymentType>
+</root>

@@ -13,6 +13,7 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,7 +133,9 @@ public class OcupacionRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String fileOut = "/home/jorge/AHMS_FILES/RPT_OCUPACION.pdf";
+//        String fileOut = "/home/jorge/AHMS_FILES/RPT_OCUPACION.pdf";
+        Date date = new Date();
+        String fileOut = "./reports/RPT_OCUPACION_"+date.toString()+".pdf";
         try {
             /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);

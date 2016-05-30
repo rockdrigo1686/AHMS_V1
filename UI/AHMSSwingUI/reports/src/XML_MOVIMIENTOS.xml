@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<header  fecIni="01/05/2016" fecFin="30/05/2016" fecRpt="30/05/2016">
+ 	</header>
+ 	<Usuario usuReq="Ponchiguiri el Poncho">
+ 		<RoomMov fecMov="02/05/2016" cusName="Nombre del cliente" rmsNumAnt="2" movDesc="Motivo del cambio" rmsNumNew="5" usuAut="EL Rock"/>  
+ 		<RoomMov fecMov="05/05/2016" cusName="Nombre del cliente" rmsNumAnt="7" movDesc="Motivo del cambio" rmsNumNew="6" usuAut="EL Rock"/>  
+ 		<RoomMov fecMov="15/05/2016" cusName="Nombre del cliente" rmsNumAnt="8" movDesc="Motivo del cambio" rmsNumNew="9" usuAut="EL Rock"/>  
+ 		<RoomMov fecMov="20/05/2016" cusName="Nombre del cliente" rmsNumAnt="10" movDesc="Motivo del cambio" rmsNumNew="5" usuAut="EL Rock"/>  
+ 	</Usuario>
+ 	<Usuario usuReq="Otro Usuario">
+ 		<RoomMov fecMov="02/05/2016" cusName="Nombre del cliente" rmsNumAnt="2" movDesc="Motivo del cambio" rmsNumNew="5" usuAut="EL Rock"/>  
+ 		<RoomMov fecMov="05/05/2016" cusName="Nombre del cliente" rmsNumAnt="7" movDesc="Motivo del cambio" rmsNumNew="6" usuAut="EL Rock"/>  
+ 	</Usuario>
+</root>
