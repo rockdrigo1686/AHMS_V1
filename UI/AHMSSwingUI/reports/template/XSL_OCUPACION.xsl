@@ -23,7 +23,7 @@
 		<xsl:param name="MedidasH"/>
 		<xsl:param name="MedidasV"/>
 		<xsl:param name="TopRHC"/>
-		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+		<fo:root>
 			<fo:layout-master-set>
 				<!--FIRST PAGE-->
 			    <fo:simple-page-master master-name="firstpage" page-height="27.94cm" page-width="21.59cm">
@@ -51,11 +51,11 @@
 					</fo:repeatable-page-master-alternatives>
 				</fo:page-sequence-master>					
 			</fo:layout-master-set>
-			<xsl:apply-templates select="/root"/>
+			<xsl:apply-templates select="/ocupacionRep"/>
 		</fo:root>
 	</xsl:template>
 
-	<xsl:template match="/root">		
+	<xsl:template match="/ocupacionRep">		
 		<fo:page-sequence master-reference="default-sequence">
 
 			<xsl:variable name="topNotas">4.25cm</xsl:variable>
@@ -70,10 +70,10 @@
 
 			<!-- VARIABLES DE LA CABECERA DEL REPORTE -->
 
-			<xsl:variable name="usrCode"     select="/root/header/@usrCode"></xsl:variable>
-			<xsl:variable name="usrFullName" select="/root/header/@usrFullName"></xsl:variable>
-			<xsl:variable name="shtIni"      select="/root/header/@shtIni"></xsl:variable>
-			<xsl:variable name="shtEnd"      select="/root/header/@shtEnd"></xsl:variable>
+			<xsl:variable name="usrCode"     select="/ocupacionRep/header/@usrCode"></xsl:variable>
+			<xsl:variable name="usrFullName" select="/ocupacionRep/header/@usrFullName"></xsl:variable>
+			<xsl:variable name="shtIni"      select="/ocupacionRep/header/@shtIni"></xsl:variable>
+			<xsl:variable name="shtEnd"      select="/ocupacionRep/header/@shtEnd"></xsl:variable>
 
 			
 			<xsl:variable name="heightBodyRHC">12.7cm</xsl:variable>
@@ -104,7 +104,7 @@
 								<fo:table-cell number-columns-spanned="2" text-align="right" font-weight="bold" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="8pt">REPORTE DE OCUPACION</fo:block></fo:table-cell>
 							</fo:table-row>
 							<fo:table-row height="0.3cm">
-								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/root/header/@fecRpt"/></fo:block></fo:table-cell>
+								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/ocupacionRep/header/@fecRpt"/></fo:block></fo:table-cell>
 							</fo:table-row>													
 						</fo:table-body>
 					</fo:table>
@@ -156,9 +156,9 @@
 									<fo:table-cell  background-color="Gainsboro"  text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center" font-weight="bold">Fecha Fin</fo:block></fo:table-cell>									
 								</fo:table-row>
 								<fo:table-row  height="0.3cm">
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@rptDate"/></fo:block></fo:table-cell>
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@dteIni"/></fo:block></fo:table-cell>
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@dteEnd"/></fo:block></fo:table-cell>									
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/ocupacionRep/header/@rptDate"/></fo:block></fo:table-cell>
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/ocupacionRep/header/@dteIni"/></fo:block></fo:table-cell>
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/ocupacionRep/header/@dteEnd"/></fo:block></fo:table-cell>									
 								</fo:table-row>
 							</fo:table-body>
 						</fo:table>
@@ -220,32 +220,32 @@
 					<fo:table-column column-width="2cm"/>
 					<fo:table-column column-width="4cm"/>
 						<fo:table-body>
-							<xsl:for-each select="/root/rent/room">
+							<xsl:for-each select="/ocupacionRep/rent/room">
 								<fo:table-row height="0.5cm">
 									<xsl:variable name="pos_local" select="position()"/>
 									<fo:table-cell text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-											<xsl:value-of select="/root/rent/room[$pos_local]/@actFecIni"/>
+											<xsl:value-of select="/ocupacionRep/rent/room[$pos_local]/@actFecIni"/>
 										</fo:block>													
 									</fo:table-cell>
 									<fo:table-cell text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid" border-top="solid"  font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											<xsl:value-of select="/root/rent/room[$pos_local]/@rmsNumber"/>
+											<xsl:value-of select="/ocupacionRep/rent/room[$pos_local]/@rmsNumber"/>
 										</fo:block>													
 									</fo:table-cell>
 									<fo:table-cell text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid" border-top="solid"  font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											<xsl:value-of select="/root/rent/room[$pos_local]/@rmtType"/>
+											<xsl:value-of select="/ocupacionRep/rent/room[$pos_local]/@rmtType"/>
 										</fo:block>													
 									</fo:table-cell>
 									<fo:table-cell text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid" border-top="solid"  font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											<xsl:value-of select="/root/rent/room[$pos_local]/@cusNum"/>
+											<xsl:value-of select="/ocupacionRep/rent/room[$pos_local]/@cusNum"/>
 										</fo:block>													
 									</fo:table-cell>
 									<fo:table-cell text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid" border-top="solid"  font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											<xsl:value-of select="/root/rent/room[$pos_local]/@actFecFin"/>
+											<xsl:value-of select="/ocupacionRep/rent/room[$pos_local]/@actFecFin"/>
 										</fo:block>													
 									</fo:table-cell>
 								</fo:table-row>

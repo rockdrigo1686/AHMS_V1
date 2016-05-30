@@ -23,7 +23,7 @@
 		<xsl:param name="MedidasH"/>
 		<xsl:param name="MedidasV"/>
 		<xsl:param name="TopRHC"/>
-		<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+		<fo:root>
 			<fo:layout-master-set>
 				<!--FIRST PAGE-->
 			    <fo:simple-page-master master-name="firstpage" page-height="27.94cm" page-width="21.59cm">
@@ -51,11 +51,11 @@
 					</fo:repeatable-page-master-alternatives>
 				</fo:page-sequence-master>					
 			</fo:layout-master-set>
-			<xsl:apply-templates select="/root"/>
+			<xsl:apply-templates select="/servicioRep"/>
 		</fo:root>
 	</xsl:template>
 
-	<xsl:template match="/root">		
+	<xsl:template match="/servicioRep">		
 		<fo:page-sequence master-reference="default-sequence">
 
 			<xsl:variable name="topNotas">4.25cm</xsl:variable>
@@ -70,11 +70,11 @@
 
 			<!-- VARIABLES DE LA CABECERA DEL REPORTE -->
 
-			<xsl:variable name="usrCode"     select="/root/header/@usrCode"></xsl:variable>
-			<xsl:variable name="usrFullName" select="/root/header/@usrFullName"></xsl:variable>
-			<xsl:variable name="shtIni"      select="/root/header/@shtIni"></xsl:variable>
-			<xsl:variable name="shtEnd"      select="/root/header/@shtEnd"></xsl:variable>
-
+			<xsl:variable name="usrCode"     select="/servicioRep/header/@usrCode"></xsl:variable>
+			<xsl:variable name="usrFullName" select="/servicioRep/header/@usrFullName"></xsl:variable>
+			<xsl:variable name="shtIni"      select="/servicioRep/header/@shtIni"></xsl:variable>
+			<xsl:variable name="shtEnd"      select="/servicioRep/header/@shtEnd"></xsl:variable>
+			<xsl:variable name="imgUrl"      select="/servicioRep/header/@logo"></xsl:variable>
 			
 			<xsl:variable name="heightBodyRHC">12.7cm</xsl:variable>
 			<xsl:variable name="topBodyRHC">4.3cm</xsl:variable>
@@ -86,14 +86,8 @@
 				
 				<!-- LOGO DE LA EMPRESA -->
 				<fo:block-container left="1cm" top="1cm" position="absolute">
-					<fo:block><fo:external-graphic src="url('file:C:/Users/1067297/Desktop/OUTPUT2/logo.gif')"  content-height="scale-to-fit" height="2cm"  content-width="2.5cm" scaling="non-uniform"/></fo:block>	
+					<fo:block><fo:external-graphic src="url({$imgUrl})"  content-height="scale-to-fit" height="2cm"  content-width="2.5cm" scaling="non-uniform"/></fo:block>	
 				</fo:block-container>
-				
-				<!--<fo:block-container left="1cm" width="1cm" height="1cm" top="0.7cm" position="absolute">
-					<fo:block>
-						<fo:external-graphic src="url('file:C:/Users/1067297/Desktop/OUTPUT2/logo.jpg')" top="1cm" left="1cm" width="1cm" height="1cm"/>						
-					</fo:block>
-				</fo:block-container> -->
 				
 				<fo:block-container left="15cm"  width="4cm" height="2cm" top="1.2cm" position="absolute" font-size="8pt" color="#000000">
 					<fo:table table-layout="fixed" width="3cm" height="2cm">
@@ -104,7 +98,7 @@
 								<fo:table-cell number-columns-spanned="2" text-align="right" font-weight="bold" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="8pt">REPORTE DE SERVICIOS</fo:block></fo:table-cell>
 							</fo:table-row>
 							<fo:table-row height="0.3cm">
-								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/root/header/@fecRpt"/></fo:block></fo:table-cell>
+								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/servicioRep/header/@fecRpt"/></fo:block></fo:table-cell>
 							</fo:table-row>													
 						</fo:table-body>
 					</fo:table>
@@ -118,22 +112,22 @@
 								<fo:table-body>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">HOTELUCHO CAGUENGUE</fo:block>
+											<fo:block  text-align="left" font-size="6pt">HOTEL POSADA DEL SOL INN</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">FIERRO PARIENTE !!!! </fo:block>
+											<fo:block  text-align="left" font-size="6pt">BLVD. REVOLUCION NO. 3501 OTE.</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">R.F.C.&#160;CACA666666CACA</fo:block>
+											<fo:block  text-align="left" font-size="6pt">TORREON COAHUILA</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">SI NO SABE TRAPEAR NO ME SIRVE</fo:block>
+											<fo:block  text-align="left" font-size="6pt">&#160;</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 								</fo:table-body>
@@ -154,8 +148,8 @@
 									<fo:table-cell  background-color="Gainsboro"  text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center" font-weight="bold">Fecha Fin</fo:block></fo:table-cell>									
 								</fo:table-row>
 								<fo:table-row  height="0.3cm">
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@fecIni"/></fo:block></fo:table-cell>
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@fecFin"/></fo:block></fo:table-cell>									
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/servicioRep/header/@fecIni"/></fo:block></fo:table-cell>
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/servicioRep/header/@fecFin"/></fo:block></fo:table-cell>									
 								</fo:table-row>
 							</fo:table-body>
 						</fo:table>
@@ -211,61 +205,52 @@
 					<fo:table-column column-width="6cm"/>
 					<fo:table-column column-width="4cm"/>
 						<fo:table-body>
-							<xsl:for-each select="/root/PymentType">
+							<xsl:for-each select="/servicioRep/pymentType">
 								<xsl:variable name="pos_local_pmntType" select="position()"/>
 								<fo:table-row height="0.5cm">									
-									<fo:table-cell number-columns-spanned="4" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-										<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-											&#160;&#160;&#160;<xsl:value-of select="/root/PymentType[$pos_local_pmntType]/@typPago"/>
-										</fo:block>													
-									</fo:table-cell>									
-								</fo:table-row>
-									<xsl:for-each select="/root/PymentType[$pos_local_pmntType]/ServiceType">
-										<xsl:variable name="pos_local_svcType" select="position()"/>
-										<fo:table-row height="0.5cm">										
-										<fo:table-cell number-columns-spanned="4" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-											<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-												&#160;&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="/root/PymentType[$pos_local_pmntType]/ServiceType[$pos_local_svcType]/@typServ"/>
-											</fo:block>													
-										</fo:table-cell>									
-									</fo:table-row>
-									<xsl:for-each select="/root/PymentType[$pos_local_pmntType]/ServiceType[$pos_local_svcType]/Service">
-										<xsl:variable name="pos_local_svc" select="position()"/>
-										<fo:table-row height="0.5cm">
-											
-											<fo:table-cell number-columns-spanned="2" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-												<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-													&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="/root/PymentType[$pos_local_pmntType]/ServiceType[$pos_local_svcType]/Service[$pos_local_svc]/@serv"/>
-												</fo:block>													
-											</fo:table-cell>
-											<fo:table-cell number-columns-spanned="1" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-												<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-													<xsl:value-of select="/root/PymentType[$pos_local_pmntType]/ServiceType[$pos_local_svcType]/Service[$pos_local_svc]/@qty"/>&#160;&#160;&#160;
-												</fo:block>													
-											</fo:table-cell>
-											<fo:table-cell number-columns-spanned="1" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-												<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-													<xsl:value-of select="/root/PymentType[$pos_local_pmntType]/ServiceType[$pos_local_svcType]/Service[$pos_local_svc]/@amnt"/>&#160;&#160;&#160;
-												</fo:block>													
-											</fo:table-cell>									
-										</fo:table-row>										
-									</xsl:for-each>
-								</xsl:for-each>
-
-								<fo:table-row height="0.5cm">
 									<fo:table-cell number-columns-spanned="3" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											&#160;&#160;&#160;TOTAL
+										<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
+											&#160;&#160;&#160;<xsl:value-of select="/servicioRep/pymentType[$pos_local_pmntType]/@typPago"/>
 										</fo:block>													
 									</fo:table-cell>
-									<fo:table-cell number-columns-spanned="1" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
-										<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-											$ <xsl:value-of select="/root/PymentType[$pos_local_pmntType]/@total"/> &#160;&#160;&#160;
+									<fo:table-cell background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+										<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
+											<xsl:value-of select="/servicioRep/pymentType[$pos_local_pmntType]/@total"/>&#160;&#160;&#160;
 										</fo:block>													
 									</fo:table-cell>									
 								</fo:table-row>
-
-							</xsl:for-each>						
+							</xsl:for-each>
+							<xsl:for-each select="/servicioRep/serviceType">
+								<xsl:variable name="pos_local_svcType" select="position()"/>
+								<fo:table-row height="0.5cm">										
+								<fo:table-cell number-columns-spanned="4" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+									<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
+										&#160;&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/@typServ"/>
+									</fo:block>													
+								</fo:table-cell>									
+								</fo:table-row>
+								<xsl:for-each select="/servicioRep/serviceType[$pos_local_svcType]/service">
+									<xsl:variable name="pos_local_svc" select="position()"/>
+									<fo:table-row height="0.5cm">
+										
+										<fo:table-cell number-columns-spanned="2" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+											<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
+												&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@serv"/>
+											</fo:block>													
+										</fo:table-cell>
+										<fo:table-cell number-columns-spanned="1" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+											<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
+												<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@qty"/>&#160;&#160;&#160;
+											</fo:block>													
+										</fo:table-cell>
+										<fo:table-cell number-columns-spanned="1" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+											<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
+												<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@amnt"/>&#160;&#160;&#160;
+											</fo:block>													
+										</fo:table-cell>									
+									</fo:table-row>										
+								</xsl:for-each>
+							</xsl:for-each>		
 						</fo:table-body>
 					</fo:table>
 				</fo:block>					
