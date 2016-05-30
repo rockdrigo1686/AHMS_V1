@@ -7,11 +7,11 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class TipoServicio {
 	private String typServ;
-	private List<Servicio> servList;
+	private List<Servicio> Service;
 	public TipoServicio(String typServ, List<Servicio> servList) {
 		super();
 		this.typServ = typServ;
-		this.servList = servList;
+		this.Service = servList;
 	}
 	public String getTypServ() {
 		return typServ;
@@ -20,12 +20,12 @@ public class TipoServicio {
 	public void setTypServ(String typServ) {
 		this.typServ = typServ;
 	}
-	public List<Servicio> getServList() {
-		return servList;
+	public List<Servicio> getService() {
+		return Service;
 	}
 	@XmlElement
-	public void setServList(List<Servicio> servList) {
-		this.servList = servList;
+	public void setService(List<Servicio> servList) {
+		this.Service = servList;
 	}
 	
 	

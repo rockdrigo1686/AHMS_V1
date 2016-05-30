@@ -11,14 +11,14 @@ import com.ahms.ui.administracion.reportes.entity.ReqUser;
 
 @XmlRootElement
 public class RmsMovRep {
-	private List<ReqUser> usrList;
+	private List<ReqUser> Usuario;
 	private Header header;
 	public List<ReqUser> getUsrList() {
-		return usrList;
+		return Usuario;
 	}
 	@XmlElement
 	public void setUsrList(List<ReqUser> usrList) {
-		this.usrList = usrList;
+		this.Usuario = usrList;
 	}
 	public Header getHeader() {
 		return header;

@@ -5,14 +5,34 @@
  */
 package com.ahms.ui.administracion.reportes;
 
+import com.ahms.boundary.entity_boundary.AccountBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.model.entity.Account;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.FolioTransaction;
+import com.ahms.model.entity.MultiValue;
+import com.ahms.ui.administracion.reportes.entity.Header;
+import com.ahms.ui.administracion.reportes.entity.servicios.Servicio;
+import com.ahms.ui.administracion.reportes.entity.servicios.ServicioRep;
+import com.ahms.ui.administracion.reportes.entity.servicios.TipoPago;
+import com.ahms.ui.administracion.reportes.entity.servicios.TipoServicio;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.ui.utils.XmlMarshaler;
+import com.ahms.util.MMKeys;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +54,7 @@ public class ServiciosRp extends javax.swing.JDialog {
         initComponents();
         configDatePickers();
     }
-    
-    
+
     private void configDatePickers() {
         Calendar calToday = Calendar.getInstance();
         Calendar calTomorrow = Calendar.getInstance();
@@ -166,21 +185,83 @@ public class ServiciosRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String fileOut = "/home/jorge/AHMS_FILES/RPT_SERVICIOS.pdf";
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
+        String fileOut = "./reports/RPT_SERVICIOS_" + df.format(date) + ".pdf";
         try {
-            /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
-            FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX,UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
-            File myFile = new File(fileOut);
-            Desktop.getDesktop().open(myFile);
-            GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_SERVICIOS_XML_LINUX);
+            AccountBoundary acb = new AccountBoundary();
+            MultiValueBoundary mvb = new MultiValueBoundary();
+            Account acct = new Account();
+            acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+            List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
+            ServicioRep rep = mapEntity(list);
+            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()),df.format(date)));
+            int response = marshaler.parseObject(rep);
+            if (response > 0) {
+                FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XML_LINUX, UIConstants.REPORTE_SERVICIOS_XSL_LINUX, fileOut);
+                File myFile = new File(fileOut);
+                Desktop.getDesktop().open(myFile);
+                GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
+            } else {
+                GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
             GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private ServicioRep mapEntity(List<Account> list) {
+        ServicioRep rep = new ServicioRep();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        List<TipoPago> tpl = new ArrayList<TipoPago>();
+        List<TipoServicio> tsl = new ArrayList<TipoServicio>();
+        Map<String, TipoPago> tpMap = new HashMap<String, TipoPago>();
+        Map<String, List<Servicio>> tsMap = new HashMap<String, List<Servicio>>();
+        for (Account at : list) {
+            for (FolioTransaction ft : at.getFolioTransactionCollection()) {
+                TipoPago tpago = tpMap.get(ft.getPayId().getPayCode());
+                if (tpago == null) {
+                    tpMap.put(ft.getPayId().getPayCode(), new TipoPago(ft.getPayId().getPayDesc(), ft.getFtrAmount()));
+                } else {
+                    tpago.setTotal(tpago.getTotal().add(ft.getFtrAmount()));
+                }
+            }
+            for (AccountTransactions act : at.getAccountTransactionsCollection()) {
+                if (act.getSrvId() != null) {
+                    BigDecimal ammt = act.getSrvId().getSrvPrice().multiply(new BigDecimal(act.getAtrQuantity()));
+                    if (MMKeys.AccountsTransactions.STA_PAGADO_KEY.equalsIgnoreCase(act.getAtrStatus().getMvaKey())) {
+                        List<Servicio> sl = tsMap.get(act.getSrvId().getSvtId().getSvtDesc());
+                        if (sl == null) {
+                            sl = new ArrayList<Servicio>();
+                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
+                            tsMap.put(act.getSrvId().getSvtId().getSvtDesc(), sl);
+                        } else {
+                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (TipoPago entry : tpMap.values()) {
+            tpl.add(entry);
+        }
+        for (String key : tsMap.keySet()) {
+            tsl.add(new TipoServicio(key, tsMap.get(key)));
+        }
+        rep.setPymentType(tpl);
+        rep.setServiceType(tsl);
+
+        return rep;
+    }
 
     /**
      * @param args the command line arguments
@@ -231,4 +312,5 @@ public class ServiciosRp extends javax.swing.JDialog {
     private javax.swing.JPanel jpFecEntContainerRes;
     private javax.swing.JPanel jpFecSalContainerRes;
     // End of variables declaration//GEN-END:variables
+
 }

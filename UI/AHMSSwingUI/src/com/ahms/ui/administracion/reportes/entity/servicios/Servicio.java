@@ -5,8 +5,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Servicio {
 	private String serv;
 	private Integer qty;
-	private Double amnt;
-	public Servicio(String serv, Integer qty, Double amnt) {
+	private String amnt;
+	public Servicio(String serv, Integer qty, String amnt) {
 		super();
 		this.serv = serv;
 		this.qty = qty;
@@ -26,11 +26,11 @@ public class Servicio {
 	public void setQty(Integer qty) {
 		this.qty = qty;
 	}
-	public Double getAmnt() {
+	public String getAmnt() {
 		return amnt;
 	}
 	@XmlAttribute
-	public void setAmnt(Double amnt) {
+	public void setAmnt(String amnt) {
 		this.amnt = amnt;
 	}
 	

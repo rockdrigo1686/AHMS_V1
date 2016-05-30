@@ -9,22 +9,36 @@ import com.ahms.ui.administracion.reportes.entity.Header;
 
 @XmlRootElement
 public class ServicioRep {
-	private Header header;
-	private List<TipoPago> payList;
-	public Header getHeader() {
-		return header;
-	}
-	@XmlElement
-	public void setHeader(Header header) {
-		this.header = header;
-	}
-	public List<TipoPago> getPayList() {
-		return payList;
-	}
-	@XmlElement
-	public void setPayList(List<TipoPago> payList) {
-		this.payList = payList;
-	}
-	
-	
+
+    private Header header;
+    private List<TipoPago> PymentType;
+    private List<TipoServicio> ServiceType;
+
+    public Header getHeader() {
+        return header;
+    }
+
+    @XmlElement
+    public void setHeader(Header header) {
+        this.header = header;
+    }
+
+    public List<TipoPago> getPymentType() {
+        return PymentType;
+    }
+
+    @XmlElement
+    public void setPymentType(List<TipoPago> payList) {
+        this.PymentType = payList;
+    }
+
+    public List<TipoServicio> getServiceType() {
+        return ServiceType;
+    }
+
+    @XmlElement
+    public void setServiceType(List<TipoServicio> tserList) {
+        this.ServiceType = tserList;
+    }
+
 }

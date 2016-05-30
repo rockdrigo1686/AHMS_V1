@@ -9,10 +9,12 @@ public class Header {
     private String dteFin;
     private String user;
     private String logo = UIConstants.LOGO;
+    private String fec;
 
-    public Header(String dteIni, String dteFin) {
+    public Header(String dteIni, String dteFin, String fec) {
         this.dteIni = dteIni;
         this.dteFin = dteFin;
+        this.fec = fec;
     }
 
     public String getDteIni() {
@@ -45,9 +47,18 @@ public class Header {
     public String getLogo() {
         return logo;
     }
-
+    @XmlAttribute
     public void setLogo(String logo) {
         this.logo = logo;
     }
 
+    public String getFecRpt() {
+        return fec;
+    }
+    @XmlAttribute
+    public void setFecRpt(String fec) {
+        this.fec = fec;
+    }
+
+    
 }

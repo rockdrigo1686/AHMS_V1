@@ -3,19 +3,19 @@ package com.ahms.ui.administracion.reportes.entity.cancelaciones;
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class Cancelacion {
-	private String fecha;
+	private String fec;
 	private String serv;
 	public Cancelacion(String fecha, String serv) {
 		super();
-		this.fecha = fecha;
+		this.fec = fecha;
 		this.serv = serv;
 	}
 	public String getFecha() {
-		return fecha;
+		return fec;
 	}
 	@XmlAttribute
 	public void setFecha(String fecha) {
-		this.fecha = fecha;
+		this.fec = fecha;
 	}
 	public String getServ() {
 		return serv;

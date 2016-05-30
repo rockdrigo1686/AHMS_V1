@@ -12,7 +12,7 @@ import com.ahms.ui.administracion.reportes.entity.ReqUser;
 @XmlRootElement
 public class CancelacionRep {
 	private Header header;
-	private List<ReqUser> userList;
+	private List<ReqUser> User;
 	
 	public Header getHeader() {
 		return header;
@@ -22,11 +22,11 @@ public class CancelacionRep {
 		this.header = header;
 	}
 	public List<ReqUser> getUser() {
-		return userList;
+		return User;
 	}
 	@XmlElement
 	public void setUser(List<ReqUser> userList) {
-		this.userList = userList;
+		this.User = userList;
 	}
 	
 	

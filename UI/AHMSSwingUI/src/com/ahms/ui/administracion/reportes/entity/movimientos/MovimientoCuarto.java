@@ -1,14 +1,13 @@
 package com.ahms.ui.administracion.reportes.entity.movimientos;
 
-import java.sql.Date;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
 public class MovimientoCuarto {
 
-	private String fecha;
+	private String fecMov;
 	private String cusName;
-	private String rmsNumOrg;
+	private String rmsNumAnt;
 	private String rmsNumNew;
 	private String movDesc;
 	private String usuAut;
@@ -16,21 +15,21 @@ public class MovimientoCuarto {
 	public MovimientoCuarto(String fecha, String cusName, String rmsNumOrg,
 			String rmsNumNew, String movDesc, String usuAut) {
 		super();
-		this.fecha = fecha;
+		this.fecMov = fecha;
 		this.cusName = cusName;
-		this.rmsNumOrg = rmsNumOrg;
+		this.rmsNumAnt = rmsNumOrg;
 		this.rmsNumNew = rmsNumNew;
 		this.movDesc = movDesc;
 		this.usuAut = usuAut;
 	}
 
 	public String getFecha() {
-		return fecha;
+		return fecMov;
 	}
 	
 	@XmlAttribute
 	public void setFecha(String fecha) {
-		this.fecha = fecha;
+		this.fecMov = fecha;
 	}
 	public String getCusName() {
 		return cusName;
@@ -40,11 +39,11 @@ public class MovimientoCuarto {
 		this.cusName = cusName;
 	}
 	public String getRmsNumOrg() {
-		return rmsNumOrg;
+		return rmsNumAnt;
 	}
 	@XmlAttribute
 	public void setRmsNumOrg(String rmsNumOrg) {
-		this.rmsNumOrg = rmsNumOrg;
+		this.rmsNumAnt = rmsNumOrg;
 	}
 	public String getRmsNumNew() {
 		return rmsNumNew;

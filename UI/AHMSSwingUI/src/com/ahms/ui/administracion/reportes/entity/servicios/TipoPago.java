@@ -1,16 +1,15 @@
 package com.ahms.ui.administracion.reportes.entity.servicios;
 
-import java.util.List;
 
+import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 
 public class TipoPago {
 	private String typPago;
-	private Double total;
+	private BigDecimal total;
 	
-	private List<TipoServicio> tserList;
-	public TipoPago(String typPago,  Double total){
+	
+;	public TipoPago(String typPago,  BigDecimal total){
 		super();
 		this.typPago = typPago;
 		this.total = total;
@@ -23,20 +22,14 @@ public class TipoPago {
 		this.typPago = typPago;
 	}
 		
-	public Double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 	@XmlAttribute
-	public void setTotal(Double total) {
+	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
-	public List<TipoServicio> getTserList() {
-		return tserList;
-	}
-	@XmlElement
-	public void setTserList(List<TipoServicio> tserList) {
-		this.tserList = tserList;
-	}
+	
 	
 	
 }

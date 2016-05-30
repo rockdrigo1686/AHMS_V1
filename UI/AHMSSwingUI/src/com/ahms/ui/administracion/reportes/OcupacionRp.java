@@ -5,16 +5,28 @@
  */
 package com.ahms.ui.administracion.reportes;
 
+import com.ahms.boundary.entity_boundary.AccountTransactionsBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.MultiValue;
+import com.ahms.ui.administracion.reportes.entity.Header;
+import com.ahms.ui.administracion.reportes.entity.ocupacion.OcupacionRep;
+import com.ahms.ui.administracion.reportes.entity.ocupacion.Rent;
+import com.ahms.ui.administracion.reportes.entity.ocupacion.Room;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.ui.utils.XmlMarshaler;
+import com.ahms.util.MMKeys;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +46,7 @@ public class OcupacionRp extends javax.swing.JDialog {
     public OcupacionRp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-          configDatePickers();
+        configDatePickers();
     }
 
     /**
@@ -137,21 +149,52 @@ public class OcupacionRp extends javax.swing.JDialog {
 //        String fileOut = "/home/jorge/AHMS_FILES/RPT_OCUPACION.pdf";
         Date date = new Date();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
-        String fileOut = "./reports/RPT_OCUPACION_"+df.format(date)+".pdf";
+        String fileOut = "./reports/RPT_OCUPACION_" + df.format(date) + ".pdf";
         try {
-            /*JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
+            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
-            FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX,UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
-            File myFile = new File(fileOut);
-            Desktop.getDesktop().open(myFile);
-            GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_OCUPACION_XML_LINUX);
+            AccountTransactionsBoundary acb = new AccountTransactionsBoundary();
+            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+            MultiValueBoundary mvb = new MultiValueBoundary();
+            AccountTransactions acct = new AccountTransactions();
+            acct.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+            List<AccountTransactions> list = acb.findRented(acct, calEntrada.getTime(), calSalida.getTime());
+            OcupacionRep rep = mapEntity(list);
+            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
+            int response = marshaler.parseObject(rep);
+            if (response > 0) {
+                FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
+                File myFile = new File(fileOut);
+                Desktop.getDesktop().open(myFile);
+                GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+            } else {
+                GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");
+            }
+
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
             GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private OcupacionRep mapEntity(List<AccountTransactions> list) {
+        OcupacionRep rep = new OcupacionRep();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        Rent rent = new Rent();
+        List<Room> roomL = new ArrayList<Room>();
+        for (AccountTransactions at : list) {
+            String numPeople = String.valueOf(at.getActId().getActNumPeople());
+            String fecIni = df.format(at.getActId().getActFecIni());
+            String fecFin = df.format(at.getActId().getActFecFin());
+            roomL.add(new Room(at.getRmsId().getRmsNumber(), at.getRmsId().getRmsBeds().getRtyDescription(), numPeople, fecIni, fecFin));
+        }
+        rent.setRoom(roomL);
+        rep.setRent(rent);
+        return rep;
+    }
 
     /**
      * @param args the command line arguments
@@ -238,4 +281,5 @@ public class OcupacionRp extends javax.swing.JDialog {
         datePickerSalidaRes.getJFormattedTextField().setValue(calTomorrow);
         this.jpFecSalContainerRes.add(datePickerSalidaRes);
     }
+
 }
