@@ -79,4 +79,5 @@ public class AccountTransactionsBoundary implements AHMSBoundary<AccountTransact
     public List<AccountTransactions> findRented(AccountTransactions accountTransactions, Date fecIni, Date fecFin){
         return accountTransactionsEM.findRented(accountTransactions, fecIni, fecFin);
     }
+   
 }

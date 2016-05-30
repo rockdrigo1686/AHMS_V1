@@ -6,7 +6,8 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -107,5 +108,32 @@ public class AccountEM extends AHMSEntityManager<Account>{
             }
         }
     }
-    
+    public List<Account> findServices(Account account, Date fecIni, Date fecFin) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            sbQuery.append(" Select DISTINCT t.* from account t join account_transactions a on a.act_id = t.act_id");
+            sbQuery.append(" WHERE a.srv_id IS NOT NULL AND a.atr_status = ?1 AND a.atr_dte_mod BETWEEN ?2 AND ?3 ");
+            Query query = em.createNativeQuery(sbQuery.toString(), Account.class);
+            query.setParameter(1, account.getActStatus().getMvaKey());
+          
+            query.setParameter(2, df.format(fecIni));
+            query.setParameter(3, df.format(fecFin));
+
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
 }

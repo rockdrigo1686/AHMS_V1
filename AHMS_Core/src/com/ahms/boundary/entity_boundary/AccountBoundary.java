@@ -5,6 +5,7 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.entity_manager.AccountEM;
+import java.util.Date;
 import java.util.List;
 
 public class AccountBoundary  implements AHMSBoundary<Account>{
@@ -58,6 +59,8 @@ public class AccountBoundary  implements AHMSBoundary<Account>{
         return accountEM.getActiveAccountByRoom(room);
     }
 
-    
+    public List<Account> findServices(Account account, Date fecIni, Date fecFin){
+        return accountEM.findServices(account, fecIni, fecFin);
+    }
     
 }

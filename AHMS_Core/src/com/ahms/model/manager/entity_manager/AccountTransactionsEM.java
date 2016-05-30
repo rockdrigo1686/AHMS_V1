@@ -14,6 +14,7 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.manager.AHMSEntityManager;
 import com.ahms.util.MMKeys;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.NoResultException;
@@ -204,12 +205,13 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
                 createEm();
             }
             StringBuilder sbQuery = new StringBuilder();
-             sbQuery.append(" SELECT t.* FROM account_tramsactions a ");
-            sbQuery.append(" WHERE a.srv_id IS NULL AND a.atr_status = :atrStatus AND a.atr_dte_mod BETWEEN :fecIni AND :fecFin ");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            sbQuery.append(" SELECT a.* FROM account_transactions a ");
+            sbQuery.append(" WHERE a.srv_id IS NULL AND a.atr_status = ?1 AND a.atr_dte_mod BETWEEN ?2 AND ?3 ");
             Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
-            query.setParameter("atrStatus", accountTransactions.getAtrStatus());
-            query.setParameter("fecIni", fecIni);
-            query.setParameter("fecFin", fecFin);
+            query.setParameter(1, accountTransactions.getAtrStatus().getMvaKey());
+            query.setParameter(2, df.format(fecIni));
+            query.setParameter(3, df.format(fecFin));
 
             return query.getResultList();
         } catch (Exception e) {
@@ -224,4 +226,5 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
             }
         }
     }
+    
 }
