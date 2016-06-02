@@ -74,7 +74,7 @@
 			<xsl:variable name="usrFullName" select="/ocupacionRep/header/@usrFullName"></xsl:variable>
 			<xsl:variable name="shtIni"      select="/ocupacionRep/header/@shtIni"></xsl:variable>
 			<xsl:variable name="shtEnd"      select="/ocupacionRep/header/@shtEnd"></xsl:variable>
-
+			<xsl:variable name="imgUrl"      select="/servicioRep/header/@logo"></xsl:variable>
 			
 			<xsl:variable name="heightBodyRHC">12.7cm</xsl:variable>
 			<xsl:variable name="topBodyRHC">4.3cm</xsl:variable>
@@ -85,9 +85,9 @@
 				
 				
 				<!-- LOGO DE LA EMPRESA -->
-				<!--<fo:block-container left="1cm" top="1cm" position="absolute">
-					<fo:block><fo:external-graphic src="url('file:C:/Users/1067297/Desktop/OUTPUT2/logo.gif')"  content-height="scale-to-fit" height="2cm"  content-width="2.5cm" scaling="non-uniform"/></fo:block>	
-				</fo:block-container>-->
+				<fo:block-container left="1cm" top="1cm" position="absolute">
+					<fo:block><fo:external-graphic src="url({$imgUrl})"  content-height="scale-to-fit" height="2cm"  content-width="2.5cm" scaling="non-uniform"/></fo:block>	
+				</fo:block-container>
 				
 				<!--<fo:block-container left="1cm" width="1cm" height="1cm" top="0.7cm" position="absolute">
 					<fo:block>
@@ -118,22 +118,22 @@
 								<fo:table-body>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">HOTELUCHO CAGUENGUE</fo:block>
+											<fo:block  text-align="left" font-size="6pt">HOTEL POSADA DEL SOL INN</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">FIERRO PARIENTE !!!! </fo:block>
+											<fo:block  text-align="left" font-size="6pt">BLVD. REVOLUCION NO. 3501 OTE. </fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">R.F.C.&#160;CACA666666CACA</fo:block>
+											<fo:block  text-align="left" font-size="6pt">TORREON COAHUILA</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 									<fo:table-row height="0.3cm">
 										<fo:table-cell  text-align="left" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center">
-											<fo:block  text-align="left" font-size="6pt">SI NO SABE TRAPEAR NO ME SIRVE</fo:block>
+											<fo:block  text-align="left" font-size="6pt">&#160;</fo:block>
 										</fo:table-cell>
 									</fo:table-row>
 								</fo:table-body>

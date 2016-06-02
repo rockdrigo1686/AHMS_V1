@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-	<header usrCode="41" usrFullName="Poncho" rptDate="21/05/2016" shtIni="21/05/2016 21:30" shtEnd="22/05/2016 10:00"  fecRpt="30/05/2016"></header>
+	<header usrCode="41" usrFullName="Poncho" rptDate="21/05/2016" shtIni="21/05/2016 21:30" shtEnd="22/05/2016 10:00"  fecRpt="30/05/2016" logo="./reports/src/LOGO.jpg"></header>
 	<shift saldoIni ="300" saldoFin="4000">
 		<efectivo monto="1000">
 			<concepto desc="renta" monto="400"></concepto>

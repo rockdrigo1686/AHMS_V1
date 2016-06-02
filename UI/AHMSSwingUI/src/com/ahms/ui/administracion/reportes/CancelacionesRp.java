@@ -20,6 +20,7 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -206,7 +207,9 @@ public class CancelacionesRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String fileOut = "/home/jorge/AHMS_FILES/XSL_CANCELACION.pdf";
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
+        String fileOut = "./reports/RPT_CANCELACION_" + df.format(date) + ".pdf";
         try {
             /*AccountTransactions accountTransactions = new AccountTransactions();
             JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
