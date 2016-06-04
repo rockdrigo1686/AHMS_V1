@@ -163,7 +163,7 @@ public class OcupacionRp extends javax.swing.JDialog {
             acct.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
             List<AccountTransactions> list = acb.findRented(acct, calEntrada.getTime(), calSalida.getTime());
             OcupacionRep rep = mapEntity(list);
-            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
+            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
             int response = marshaler.parseObject(rep);
             if (response > 0) {
                 FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);

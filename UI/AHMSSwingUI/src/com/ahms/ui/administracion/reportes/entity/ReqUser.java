@@ -14,7 +14,7 @@ public class ReqUser {
     private String usuReq;
     private String usuAut;
     private List<MovimientoCuarto> RoomMov;
-    private List<Cancelacion> Cancelation;
+    private List<Cancelacion> cancelation;
 
     public ReqUser(String user) {
         this.usuReq = user;
@@ -38,13 +38,13 @@ public class ReqUser {
         this.RoomMov = movList;
     }
 
-    public List<Cancelacion> getCanList() {
-        return Cancelation;
+    public List<Cancelacion> getCancelation() {
+        return cancelation;
     }
 
     @XmlElement
-    public void setCanList(List<Cancelacion> canList) {
-        this.Cancelation = canList;
+    public void setCancelation(List<Cancelacion> canList) {
+        this.cancelation = canList;
     }
 
     public String getUsuAut() {
