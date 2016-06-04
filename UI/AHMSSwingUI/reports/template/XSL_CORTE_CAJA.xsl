@@ -16,7 +16,7 @@
 			<xsl:with-param name="TopRHC"><xsl:value-of select="$topBodyRHC"/></xsl:with-param>
 		</xsl:call-template>					
 	</xsl:template>
-
+ 
 	<xsl:template name="raiz">
 		<xsl:param name="margenBody"/>
 		<xsl:param name="lonEI"/>

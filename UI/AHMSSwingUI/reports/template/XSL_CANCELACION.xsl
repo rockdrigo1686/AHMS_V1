@@ -103,7 +103,7 @@
 						</fo:table-body>
 					</fo:table>
 				</fo:block-container>	
-
+ 
 				<!-- DATOS DE LA EMPRESA-->
 				<fo:block-container left="5cm" width="12cm" height="2cm" top="1cm" position="absolute">
 					<fo:block>
