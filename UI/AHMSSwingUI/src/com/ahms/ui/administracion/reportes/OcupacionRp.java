@@ -13,26 +13,20 @@ import com.ahms.ui.administracion.reportes.entity.Header;
 import com.ahms.ui.administracion.reportes.entity.ocupacion.OcupacionRep;
 import com.ahms.ui.administracion.reportes.entity.ocupacion.Rent;
 import com.ahms.ui.administracion.reportes.entity.ocupacion.Room;
-import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.ui.utils.XmlMarshaler;
 import com.ahms.util.MMKeys;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -46,7 +40,6 @@ public class OcupacionRp extends javax.swing.JDialog {
     public OcupacionRp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        configDatePickers();
     }
 
     /**
@@ -59,10 +52,10 @@ public class OcupacionRp extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel14 = new javax.swing.JLabel();
-        jpFecEntContainerRes = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        jpFecSalContainerRes = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        fecIni = new datechooser.beans.DateChooserCombo();
+        fecFin = new datechooser.beans.DateChooserCombo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reporte de Ocupación");
@@ -71,38 +64,21 @@ public class OcupacionRp extends javax.swing.JDialog {
 
         jLabel14.setText("Fecha de inicio:");
 
-        javax.swing.GroupLayout jpFecEntContainerResLayout = new javax.swing.GroupLayout(jpFecEntContainerRes);
-        jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
-        jpFecEntContainerResLayout.setHorizontalGroup(
-            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 247, Short.MAX_VALUE)
-        );
-        jpFecEntContainerResLayout.setVerticalGroup(
-            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
-
         jLabel15.setText("Fecha Final:");
 
-        javax.swing.GroupLayout jpFecSalContainerResLayout = new javax.swing.GroupLayout(jpFecSalContainerRes);
-        jpFecSalContainerRes.setLayout(jpFecSalContainerResLayout);
-        jpFecSalContainerResLayout.setHorizontalGroup(
-            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jpFecSalContainerResLayout.setVerticalGroup(
-            jpFecSalContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 33, Short.MAX_VALUE)
-        );
-
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/48x48/pie_chart.png"))); // NOI18N
-        jButton1.setText("Generar reporte");
+        jButton1.setText("Generar ");
         jButton1.setPreferredSize(new java.awt.Dimension(152, 50));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        fecIni.setCalendarPreferredSize(new java.awt.Dimension(250, 200));
+        fecIni.setLocale(new java.util.Locale("es", "MX", ""));
+
+        fecFin.setLocale(new java.util.Locale("es", "MX", ""));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,33 +87,29 @@ public class OcupacionRp extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(12, 12, 12))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(82, 82, 82)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel15)
+                    .addComponent(jLabel14))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fecFin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fecIni, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpFecSalContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(fecIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fecFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -151,10 +123,8 @@ public class OcupacionRp extends javax.swing.JDialog {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
         String fileOut = "./reports/RPT_OCUPACION_" + df.format(date) + ".pdf";
         try {
-            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
-            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
-            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            Calendar calEntrada = (Calendar) fecIni.getCurrent();
+            Calendar calSalida = (Calendar) fecFin.getCurrent();
             XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_OCUPACION_XML_LINUX);
             AccountTransactionsBoundary acb = new AccountTransactionsBoundary();
             SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
@@ -162,24 +132,28 @@ public class OcupacionRp extends javax.swing.JDialog {
             AccountTransactions acct = new AccountTransactions();
             acct.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
             List<AccountTransactions> list = acb.findRented(acct, calEntrada.getTime(), calSalida.getTime());
-            OcupacionRep rep = mapEntity(list);
-            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
-            int response = marshaler.parseObject(rep);
-            if (response > 0) {
-                FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
-                File myFile = new File(fileOut);
-                Desktop.getDesktop().open(myFile);
-                GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+            if (list != null && list.size() > 0) {
+                OcupacionRep rep = mapEntity(list);
+                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
+                int response = marshaler.parseObject(rep);
+                if (response > 0) {
+                    FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
+                    File myFile = new File(fileOut);
+                    Desktop.getDesktop().open(myFile);
+                    GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+                } else {
+                    GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");
+                }
             } else {
-                GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");
+                GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
             }
-
+            
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
             GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     private OcupacionRep mapEntity(List<AccountTransactions> list) {
         OcupacionRep rep = new OcupacionRep();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
@@ -239,47 +213,11 @@ public class OcupacionRp extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private datechooser.beans.DateChooserCombo fecFin;
+    private datechooser.beans.DateChooserCombo fecIni;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JPanel jpFecEntContainerRes;
-    private javax.swing.JPanel jpFecSalContainerRes;
     // End of variables declaration//GEN-END:variables
-
-    private void configDatePickers() {
-        Calendar calToday = Calendar.getInstance();
-        Calendar calTomorrow = Calendar.getInstance();
-        calTomorrow.add(Calendar.DATE, 1);
-
-        UtilDateModel modelEntradaRes = new UtilDateModel();
-        Properties pEntradaRes = new Properties();
-        pEntradaRes.put("text.today", calToday.get(Calendar.DATE));
-        pEntradaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
-        pEntradaRes.put("text.year", calToday.get(Calendar.YEAR));
-        JDatePanelImpl datePanelEntradaRes = new JDatePanelImpl(modelEntradaRes, pEntradaRes);
-        JDatePickerImpl datePickerEntradaRes = new JDatePickerImpl(datePanelEntradaRes, new DateLabelFormatter());
-        datePickerEntradaRes.setFont(new Font("Arial", Font.PLAIN, 8));
-        datePickerEntradaRes.setLocation(0, 0);
-        datePickerEntradaRes.setSize(223, 50);
-        datePickerEntradaRes.setVisible(true);
-        datePickerEntradaRes.setEnabled(true);
-        datePickerEntradaRes.getJFormattedTextField().setValue(calToday);
-        this.jpFecEntContainerRes.add(datePickerEntradaRes);
-
-        UtilDateModel modelSalidaRes = new UtilDateModel();
-        Properties psalidaRes = new Properties();
-        psalidaRes.put("text.today", calToday.get(Calendar.DATE));
-        psalidaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
-        psalidaRes.put("text.year", calToday.get(Calendar.YEAR));
-        JDatePanelImpl datePanelSalidaRes = new JDatePanelImpl(modelSalidaRes, psalidaRes);
-        JDatePickerImpl datePickerSalidaRes = new JDatePickerImpl(datePanelSalidaRes, new DateLabelFormatter());
-        datePickerSalidaRes.setFont(new Font("Arial", Font.PLAIN, 8));
-        datePickerSalidaRes.setLocation(0, 0);
-        datePickerSalidaRes.setSize(223, 50);
-        datePickerSalidaRes.setVisible(true);
-        datePickerSalidaRes.setEnabled(true);
-        datePickerSalidaRes.getJFormattedTextField().setValue(calTomorrow);
-        this.jpFecSalContainerRes.add(datePickerSalidaRes);
-    }
 
 }

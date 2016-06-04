@@ -45,8 +45,8 @@ public class ServiciosRp extends javax.swing.JDialog {
      */
     public ServiciosRp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();        
-    }    
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +71,7 @@ public class ServiciosRp extends javax.swing.JDialog {
         jLabel15.setText("Fecha Final:");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/48x48/pie_chart.png"))); // NOI18N
-        jButton1.setText("Generar reporte");
+        jButton1.setText("Generar ");
         jButton1.setPreferredSize(new java.awt.Dimension(152, 50));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -81,38 +81,38 @@ public class ServiciosRp extends javax.swing.JDialog {
 
         dateChooserFecEnt.setCurrentView(new datechooser.view.appearance.AppearancesList("Swing",
             new datechooser.view.appearance.ViewAppearance("custom",
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
-                    new java.awt.Color(76, 76, 76),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(77, 77, 77),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
-                    new java.awt.Color(76, 76, 76),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(77, 77, 77),
                     new java.awt.Color(0, 0, 255),
                     true,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(0, 0, 255),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.ButtonPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
                     new java.awt.Color(128, 128, 128),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
-                    new java.awt.Color(76, 76, 76),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(77, 77, 77),
                     new java.awt.Color(0, 0, 255),
                     false,
                     true,
                     new datechooser.view.appearance.swing.LabelPainter()),
-                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 15),
-                    new java.awt.Color(76, 76, 76),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Droid Sans", java.awt.Font.PLAIN, 12),
+                    new java.awt.Color(77, 77, 77),
                     new java.awt.Color(255, 0, 0),
                     false,
                     false,
@@ -120,7 +120,6 @@ public class ServiciosRp extends javax.swing.JDialog {
                 (datechooser.view.BackRenderer)null,
                 false,
                 true)));
-    dateChooserFecEnt.setFieldFont(new java.awt.Font("Ubuntu", java.awt.Font.PLAIN, 14));
     dateChooserFecEnt.setLocale(new java.util.Locale("es", "MX", ""));
     dateChooserFecEnt.setShowOneMonth(true);
 
@@ -133,22 +132,20 @@ public class ServiciosRp extends javax.swing.JDialog {
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
             .addContainerGap()
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dateChooserFecEnt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(dateChooserFecFin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(dateChooserFecEnt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(dateChooserFecFin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     layout.setVerticalGroup(
         layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(layout.createSequentialGroup()
-            .addGap(26, 26, 26)
+            .addContainerGap()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(dateChooserFecEnt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -178,16 +175,19 @@ public class ServiciosRp extends javax.swing.JDialog {
             Account acct = new Account();
             acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
             List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
-            ServicioRep rep = mapEntity(list);
-            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()),df.format(date)));
-            int response = marshaler.parseObject(rep);
-            if (response > 0) {
-                FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
-                File myFile = new File(fileOut);
-                Desktop.getDesktop().open(myFile);
-                GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
-            } else {
-                GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
+            if (list != null && list.size() > 0) {
+                ServicioRep rep = mapEntity(list);
+                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
+                int response = marshaler.parseObject(rep);
+                if (response > 0) {
+                    FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
+                    File myFile = new File(fileOut);
+                    Desktop.getDesktop().open(myFile);
+                    GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
+                } else {
+                    GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
+                }
+
             }
 
         } catch (Exception ex) {
