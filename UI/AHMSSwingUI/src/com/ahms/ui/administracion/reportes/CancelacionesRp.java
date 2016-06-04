@@ -11,34 +11,34 @@ import com.ahms.boundary.entity_boundary.UsersBoundary;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.administracion.reportes.entity.Header;
+import com.ahms.ui.administracion.reportes.entity.ReqUser;
+import com.ahms.ui.administracion.reportes.entity.cancelaciones.Cancelacion;
+import com.ahms.ui.administracion.reportes.entity.cancelaciones.CancelacionRep;
 import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.ui.utils.XmlMarshaler;
 import com.ahms.util.MMKeys;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
-import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-
 
 /**
  *
@@ -51,20 +51,21 @@ public class CancelacionesRp extends javax.swing.JDialog {
      */
     private AccountTransactionsBoundary accountTransactionsBoundary = null;
     private MultiValueBoundary multiValueBoundary = null;
+
     public CancelacionesRp(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         multiValueBoundary = new MultiValueBoundary();
-        
+
         configDatePickers();
         UsersBoundary userBoundary = new UsersBoundary();
-        List<Users> list  = userBoundary.searchAll(new Users());
+        List<Users> list = userBoundary.searchAll(new Users());
         for (Users list1 : list) {
             cbUsers.addItem(list1);
         }
     }
-    
+
     private void configDatePickers() {
         Calendar calToday = Calendar.getInstance();
         Calendar calTomorrow = Calendar.getInstance();
@@ -206,52 +207,75 @@ public class CancelacionesRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String fileOut = "/home/jorge/AHMS_FILES/XSL_CANCELACION.pdf";
+//        String fileOut = "/home/jorge/AHMS_FILES/XSL_CANCELACION.pdf";
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
+        Date date = new Date();
+        String fileOut = "./reports/RPT_OCUPACION_" + df.format(date) + ".pdf";
         try {
-            /*AccountTransactions accountTransactions = new AccountTransactions();
+            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+            AccountTransactions accountTransactions = new AccountTransactions();
             JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
             JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainerRes.getComponent(0);
             Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();*/
-            FOPEngine.convertToPDF(UIConstants.REPORTE_CANCELACIONES_XSL_LINUX,UIConstants.REPORTE_CANCELACIONES_XML_LINUX, fileOut);
-            File myFile = new File(fileOut);
-            Desktop.getDesktop().open(myFile);
+            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_CANCELACIONES_XML_LINUX);
+            AccountTransactionsBoundary atb = new AccountTransactionsBoundary();
+            MultiValueBoundary mvb = new MultiValueBoundary();
+            accountTransactions.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
+            if (cbUsers.getSelectedIndex() != 0) {
+                accountTransactions.setAtrUsrMod((Users) cbUsers.getSelectedItem());
+            }
+            List<AccountTransactions> cancelations = atb.findCancelations(accountTransactions, calEntrada.getTime(), calSalida.getTime());
+            CancelacionRep rep = mapEntity(cancelations);
+            rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
+            int response = marshaler.parseObject(rep);
+            if (response > 0) {
+                FOPEngine.convertToPDF(UIConstants.REPORTE_CANCELACIONES_XSL_LINUX, UIConstants.REPORTE_CANCELACIONES_XML_LINUX, fileOut);
+                File myFile = new File(fileOut);
+                Desktop.getDesktop().open(myFile);
+            }
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void createXml(List<AccountTransactions> lstAtr, Users user){
-        try  
-        {
-            //creating xml string
-            String xmlString = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-            xmlString += "<root>";
-            xmlString += "<header usrCode=\""+ user.getUsrCode() +"\" usrFullName=\"" + user.getFullName() + "\" rptDate=\"" + GeneralFunctions.formatDate(new Date()) + "\"></header>";
-            xmlString += "<cancelations> ";
-            for(AccountTransactions atr : lstAtr){
-                xmlString += "<cancelation actId=\"" + atr.getActId().getActId().toString() + "\" cusId=\"" + atr.getActId().getCusId().getFullName() + "\" atrDesc=\"" + atr.getSrvId().getSrvDesc() + "\" ></cancelation>";
+    private CancelacionRep mapEntity(List<AccountTransactions> cancelations) {
+        CancelacionRep rep = null;
+        Map<String, ReqUser> userMap = new HashMap<String, ReqUser>();
+        List<Cancelacion> canList = null;
+        Cancelacion cancelacion = null;
+        ReqUser user = null;
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            for (AccountTransactions cancelation : cancelations) {
+                user = userMap.get(cancelation.getAtrUsrMod().getUsrCode());
+                if (user == null) {
+                    user = new ReqUser(cancelation.getAtrUsrMod().getUsrCode());
+                    canList = new ArrayList<Cancelacion>();
+                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
+                    canList.add(cancelacion);
+                    user.setCancelation(canList);
+                    userMap.put(cancelation.getAtrUsrMod().getUsrCode(), user);
+                } else {
+                    canList = user.getCancelation();
+                    if (canList == null) {
+                        canList = new ArrayList<Cancelacion>();
+                    }
+                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
+                    canList.add(cancelacion);
+                }
             }
-            xmlString += "</cancelations> ";
-            xmlString += "</root> ";
-            
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
-            DocumentBuilder builder = factory.newDocumentBuilder();  
-            Document document = builder.parse(new InputSource(new StringReader(xmlString)));
-            
-            // Write the parsed document to an xml file
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(document);
-
-            StreamResult result =  new StreamResult(new File("/home/jorge/AHMS_FILES/XML_CANCELATION.xml"));
-            transformer.transform(source, result);
-            
-        } catch (Exception e) {  
-            GeneralFunctions.appendTrace(e.getStackTrace());  
-        } 
+            rep = new CancelacionRep();
+            List<ReqUser> userList = new ArrayList<ReqUser>(userMap.values());
+            rep.setUser(userList);
+        } catch (Exception e) {
+            e.printStackTrace();
+//            System.out.println("error: " + e.getMessage());
+            GeneralFunctions.appendTrace(e.getStackTrace());
+        }
+        return rep;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -303,4 +327,5 @@ public class CancelacionesRp extends javax.swing.JDialog {
     private javax.swing.JPanel jpFecEntContainerRes;
     private javax.swing.JPanel jpFecSalContainerRes;
     // End of variables declaration//GEN-END:variables
+
 }
