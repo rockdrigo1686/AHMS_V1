@@ -74,7 +74,7 @@
 			<xsl:variable name="usrFullName" select="/ocupacionRep/header/@usrFullName"></xsl:variable>
 			<xsl:variable name="shtIni"      select="/ocupacionRep/header/@shtIni"></xsl:variable>
 			<xsl:variable name="shtEnd"      select="/ocupacionRep/header/@shtEnd"></xsl:variable>
-			<xsl:variable name="imgUrl"      select="/servicioRep/header/@logo"></xsl:variable>
+			<xsl:variable name="imgUrl"      select="/ocupacionRep/header/@logo"></xsl:variable>
 			
 			<xsl:variable name="heightBodyRHC">12.7cm</xsl:variable>
 			<xsl:variable name="topBodyRHC">4.3cm</xsl:variable>

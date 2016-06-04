@@ -243,9 +243,9 @@
 												<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@qty"/>&#160;&#160;&#160;
 											</fo:block>													
 										</fo:table-cell>
-										<fo:table-cell number-columns-spanned="1" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
+										<fo:table-cell number-columns-spanned="1" text-align="right" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
 											<fo:block font-size="6pt" text-align="right" font-weight="bold" start-indent="2pt">
-												<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@amnt"/>&#160;&#160;&#160;
+												$&#160;<xsl:value-of select="/servicioRep/serviceType[$pos_local_svcType]/service[$pos_local_svc]/@amnt"/>&#160;&#160;&#160;
 											</fo:block>													
 										</fo:table-cell>									
 									</fo:table-row>										

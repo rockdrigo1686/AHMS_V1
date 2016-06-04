@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ocupacionRep>
-    <header dteFin="02/06/2016" dteIni="01/05/2016" fecRpt="01-06-2016_09:35" logo="./reports/src/LOGO.jpg"/>
+    <header dteFin="04/06/2016" dteIni="01/03/2016" fecRpt="03-06-2016_08:46" logo="./reports/src/LOGO.jpg"/>
     <rent>
         <room actFecFin="22/05/2016 12:00" actFecIni="21/05/2016 12:00" cusNum="14" rmsNumber="2" rmtType="Doble"/>
         <room actFecFin="22/05/2016 12:00" actFecIni="21/05/2016 12:00" cusNum="14" rmsNumber="6" rmtType="Doble"/>

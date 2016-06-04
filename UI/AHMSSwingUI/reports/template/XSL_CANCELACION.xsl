@@ -70,11 +70,11 @@
 
 			<!-- VARIABLES DE LA CABECERA DEL REPORTE -->
 
-			<xsl:variable name="usrCode"     select="/root/header/@usrCode"></xsl:variable>
-			<xsl:variable name="usrFullName" select="/root/header/@usrFullName"></xsl:variable>
-			<xsl:variable name="shtIni"      select="/root/header/@shtIni"></xsl:variable>
-			<xsl:variable name="shtEnd"      select="/root/header/@shtEnd"></xsl:variable>
-			<xsl:variable name="imgUrl"      select="/root/header/@logo"></xsl:variable>
+			<xsl:variable name="usrCode"     select="/cancelacionRep/header/@usrCode"></xsl:variable>
+			<xsl:variable name="usrFullName" select="/cancelacionRep/header/@usrFullName"></xsl:variable>
+			<xsl:variable name="shtIni"      select="/cancelacionRep/header/@shtIni"></xsl:variable>
+			<xsl:variable name="shtEnd"      select="/cancelacionRep/header/@shtEnd"></xsl:variable>
+			<xsl:variable name="imgUrl"      select="/cancelacionRep/header/@logo"></xsl:variable>
 			
 			<xsl:variable name="heightBodyRHC">12.7cm</xsl:variable>
 			<xsl:variable name="topBodyRHC">4.3cm</xsl:variable>
@@ -98,7 +98,7 @@
 								<fo:table-cell number-columns-spanned="2" text-align="right" font-weight="bold" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="8pt">REPORTE DE CANCELACIONES</fo:block></fo:table-cell>
 							</fo:table-row>
 							<fo:table-row height="0.3cm">
-								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/root/header/@fecRpt"/></fo:block></fo:table-cell>
+								<fo:table-cell text-align="right" number-columns-spanned="2" font-weight="normal" padding-top="2pt" border-width="0.02cm" display-align="center"><fo:block text-align="right" font-size="6pt"><xsl:value-of select="/cancelacionRep/header/@fecRpt"/></fo:block></fo:table-cell>
 							</fo:table-row>													
 						</fo:table-body>
 					</fo:table>
@@ -148,8 +148,8 @@
 									<fo:table-cell  background-color="Gainsboro"  text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center" font-weight="bold">Fecha Fin</fo:block></fo:table-cell>									
 								</fo:table-row>
 								<fo:table-row  height="0.3cm">
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@fecIni"/></fo:block></fo:table-cell>
-									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/root/header/@fecFin"/></fo:block></fo:table-cell>									
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/cancelacionRep/header/@fecIni"/></fo:block></fo:table-cell>
+									<fo:table-cell   text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-top="solid" border-bottom="solid" font-weight="normal" padding-top="2pt" display-align="center"><fo:block font-size="6pt" text-align="center"><xsl:value-of select="/cancelacionRep/header/@fecFin"/></fo:block></fo:table-cell>									
 								</fo:table-row>
 							</fo:table-body>
 						</fo:table>
@@ -204,27 +204,27 @@
 					<fo:table-column column-width="6cm"/>
 					<fo:table-column column-width="4cm"/>
 						<fo:table-body>
-							<xsl:for-each select="/root/User">
+							<xsl:for-each select="/cancelacionRep/user">
 								<xsl:variable name="pos_local_user" select="position()"/>
 								<fo:table-row height="0.5cm">									
 									<fo:table-cell number-columns-spanned="4" background-color="Gainsboro" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
 										<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-											&#160;&#160;&#160;<xsl:value-of select="/root/User[$pos_local_user]/@usrAut"/>
+											&#160;&#160;&#160;<xsl:value-of select="/cancelacionRep/user[$pos_local_user]/@usrAut"/>
 										</fo:block>													
 									</fo:table-cell>									
 								</fo:table-row>
-								<xsl:for-each select="/root/User[$pos_local_user]/Cancelation">
+								<xsl:for-each select="/cancelacionRep/user[$pos_local_user]/cancelation">
 									<xsl:variable name="pos_local_canc" select="position()"/>
 									<fo:table-row height="0.5cm">
 											
 											<fo:table-cell number-columns-spanned="2" text-align="center" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
 												<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-												<xsl:value-of select="/root/User[$pos_local_user]/Cancelation[$pos_local_canc]/@fec"/>
+												<xsl:value-of select="/cancelacionRep/user[$pos_local_user]/cancelation[$pos_local_canc]/@fec"/>
 												</fo:block>													
 											</fo:table-cell>
 											<fo:table-cell number-columns-spanned="2" text-align="left" border-width="0.02cm" border-left="solid" border-right="solid" border-bottom="solid"  border-top="solid" font-weight="normal" padding-top="2pt" display-align="center">
 												<fo:block font-size="6pt" text-align="left" font-weight="bold" start-indent="2pt">
-												&#160;&#160;&#160;<xsl:value-of select="/root/User[$pos_local_user]/Cancelation[$pos_local_canc]/@serv"/>
+												&#160;&#160;&#160;<xsl:value-of select="/cancelacionRep/user[$pos_local_user]/cancelation[$pos_local_canc]/@serv"/>
 												</fo:block>													
 											</fo:table-cell>
 										</fo:table-row>	
