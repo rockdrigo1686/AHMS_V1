@@ -26,7 +26,6 @@ import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -250,7 +249,7 @@ public class CancelacionesRp extends javax.swing.JDialog {
             for (AccountTransactions cancelation : cancelations) {
                 user = userMap.get(cancelation.getAtrUsrMod().getUsrCode());
                 if (user == null) {
-                    user = new ReqUser(cancelation.getAtrUsrMod().getUsrCode());
+                    user = new ReqUser(cancelation.getAtrUsrMod().getUsrCode() +" | " +cancelation.getAtrUsrMod().getFullName() );
                     canList = new ArrayList<Cancelacion>();
                     cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
                     canList.add(cancelacion);
