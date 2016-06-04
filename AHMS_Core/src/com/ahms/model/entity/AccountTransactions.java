@@ -8,6 +8,7 @@ package com.ahms.model.entity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -46,6 +47,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AccountTransactions.deleteByActId", query = "Delete FROM Guests g WHERE g.atrId in "
                                                                   + " ( SELECT a FROM AccountTransactions a WHERE a.actId = :actId and a.srvId is null ) ")})
 public class AccountTransactions implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "atrId", fetch = FetchType.EAGER)
+    private List<FolioTransaction> folioTransactionList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -207,6 +210,15 @@ public class AccountTransactions implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.boundary.AccountTransactions[ atrId=" + atrId + " ]";
+    }
+
+    @XmlTransient
+    public List<FolioTransaction> getFolioTransactionList() {
+        return folioTransactionList;
+    }
+
+    public void setFolioTransactionList(List<FolioTransaction> folioTransactionList) {
+        this.folioTransactionList = folioTransactionList;
     }
     
 }

@@ -40,6 +40,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "FolioTransaction.findByFtrDteMod", query = "SELECT f FROM FolioTransaction f WHERE f.ftrDteMod = :ftrDteMod"),
     @NamedQuery(name = "FolioTransaction.findByCouId", query= "SELECT f FROM FolioTransaction f WHERE f.couId = :couId")})
 public class FolioTransaction implements Serializable {
+    @JoinColumn(name = "ATR_ID", referencedColumnName = "ATR_ID", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private AccountTransactions atrId;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -180,6 +183,14 @@ public class FolioTransaction implements Serializable {
     @Override
     public String toString() {
         return "com.ahms.boundary.FolioTransaction[ ftrId=" + ftrId + " ]";
+    }
+
+    public AccountTransactions getAtrId() {
+        return atrId;
+    }
+
+    public void setAtrId(AccountTransactions atrId) {
+        this.atrId = atrId;
     }
 
 }
