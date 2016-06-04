@@ -172,15 +172,15 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
             if (em == null || !em.isOpen()) {
                 createEm();
             }
-             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             StringBuilder sbQuery = new StringBuilder();
-            sbQuery.append(" SELECT a.* FROM account_tramsactions a ");
+            sbQuery.append(" SELECT a.* FROM account_transactions a ");
             sbQuery.append(" WHERE a.atr_status = ?1 AND a.atr_dte_mod BETWEEN ?2 AND ?3 ");
             if (accountTransactions != null && accountTransactions.getAtrUsrMod() != null) {
                 sbQuery.append(" AND a.atrUsrMod = ?4 ");
             }
             Query query = em.createNativeQuery(sbQuery.toString(), AccountTransactions.class);
-             query.setParameter(1, accountTransactions.getAtrStatus().getMvaKey());
+            query.setParameter(1, accountTransactions.getAtrStatus().getMvaKey());
             query.setParameter(2, df.format(fecIni));
             query.setParameter(3, df.format(fecFin));
             if (accountTransactions != null && accountTransactions.getAtrUsrMod() != null) {
@@ -227,5 +227,5 @@ public class AccountTransactionsEM extends AHMSEntityManager<AccountTransactions
             }
         }
     }
-    
+
 }
