@@ -1,4 +1,3 @@
-
 package com.ahms.ui.tools;
 
 import com.ahms.ui.configuracion.CustomerRegFrm;
