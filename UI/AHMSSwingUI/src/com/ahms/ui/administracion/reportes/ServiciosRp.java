@@ -204,7 +204,7 @@ public class ServiciosRp extends javax.swing.JDialog {
             rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()),df.format(date)));
             int response = marshaler.parseObject(rep);
             if (response > 0) {
-                FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XML_LINUX, UIConstants.REPORTE_SERVICIOS_XSL_LINUX, fileOut);
+                FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
                 File myFile = new File(fileOut);
                 Desktop.getDesktop().open(myFile);
                 GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
