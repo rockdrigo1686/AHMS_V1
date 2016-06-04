@@ -51,11 +51,11 @@
 					</fo:repeatable-page-master-alternatives>
 				</fo:page-sequence-master>					
 			</fo:layout-master-set>
-			<xsl:apply-templates select="/root"/>
+			<xsl:apply-templates select="/cancelacionRep"/>
 		</fo:root>
 	</xsl:template>
 
-	<xsl:template match="/root">		
+	<xsl:template match="/cancelacionRep">		
 		<fo:page-sequence master-reference="default-sequence">
 
 			<xsl:variable name="topNotas">4.25cm</xsl:variable>
