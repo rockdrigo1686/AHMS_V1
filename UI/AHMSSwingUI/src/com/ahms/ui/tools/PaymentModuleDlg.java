@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui.tools;
 
 import com.ahms.boundary.entity_boundary.CashOutBoundary;
@@ -21,10 +16,6 @@ import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author jorge
- */
 public class PaymentModuleDlg extends javax.swing.JDialog {
 
     private BigDecimal importeTotal = BigDecimal.ZERO;
@@ -41,7 +32,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
     private String cardNumber = "";
     private String folio = "";
     private FolioTransactionBoundary folioTransactionBoundary;
-    
+    private AccountTransactions transactionToPay;
     public boolean isPaid = false;
     
     public PaymentModuleDlg(RoomServiceSelectionDlg parent, boolean modal, AccountTransactions serviceToPay){
@@ -59,6 +50,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
         folioTransactionBoundary = new FolioTransactionBoundary();
         
         account = serviceToPay.getActId();
+        transactionToPay = serviceToPay;
         //Obteniendo TUERNO        
         currentShift = cashOutBoundary.getCurrentShift();
         jtCardNumber.addKeyListener(new KeyListener(){
