@@ -27,9 +27,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -43,7 +40,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private BigDecimal quickRentIva = BigDecimal.ZERO;
     private BigDecimal quickRentTotal = BigDecimal.ZERO;
     private BigDecimal quickrentIvaPercent = BigDecimal.ZERO;
-    
+
     private Customers mainCustomer;
     private RoomsBoundary roomsBounday = null;
     private AccountBoundary accountBoundary = null;
@@ -52,20 +49,20 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private RoomTypesBoundary roomTypesBoundary;
     private CashOut currentShift = null;
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
-    
+
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
     private MainFrm parentFrm = null;
-    
+
     public QuickRentDlg(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
         initComponents();
         parentFrm = parent;
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
-        
+
         jbtnLoadCustomer.setEnabled(false);
-        
+
         roomsBounday = new RoomsBoundary();
         accountBoundary = new AccountBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
@@ -73,12 +70,11 @@ public class QuickRentDlg extends javax.swing.JDialog {
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
 
-        configDatePickers();
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
-        configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));        
+        configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
     }
-    
+
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
         jcbQuickRentTipo.removeAllItems();
         RoomTypes newRt = new RoomTypes();
@@ -87,43 +83,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
         for (RoomTypes roomType : lstRoomTypes) {
             jcbQuickRentTipo.addItem(roomType);
         }
-    }
-    
-    private void configDatePickers() {
-
-        Calendar calToday = Calendar.getInstance();
-        Calendar calTomorrow = Calendar.getInstance();
-        calTomorrow.add(Calendar.DATE, 1);
-
-        UtilDateModel modelEntrada = new UtilDateModel();
-        Properties pEntrada = new Properties();
-        pEntrada.put("text.today", calToday.get(Calendar.DATE));
-        pEntrada.put("text.month", calToday.get(Calendar.MONTH + 1));
-        pEntrada.put("text.year", calToday.get(Calendar.YEAR));
-        JDatePanelImpl datePanelEntrada = new JDatePanelImpl(modelEntrada, pEntrada);
-        JDatePickerImpl datePickerEntrada = new JDatePickerImpl(datePanelEntrada, new DateLabelFormatter());
-        datePickerEntrada.setFont(new Font("Arial", Font.PLAIN, 8));
-        datePickerEntrada.setLocation(0, 0);
-        datePickerEntrada.setSize(223, 50);
-        datePickerEntrada.setVisible(true);
-        datePickerEntrada.setEnabled(true);
-        datePickerEntrada.getJFormattedTextField().setValue(calToday);
-        this.jpFecEntContainer.add(datePickerEntrada);
-        
-        UtilDateModel modelSalida = new UtilDateModel();
-        Properties pSalida = new Properties();
-        pSalida.put("text.today", calTomorrow.get(Calendar.DATE));
-        pSalida.put("text.month", calTomorrow.get(Calendar.MONTH + 1));
-        pSalida.put("text.year", calTomorrow.get(Calendar.YEAR));
-        JDatePanelImpl datePanelSalida = new JDatePanelImpl(modelSalida, pSalida);
-        JDatePickerImpl datePickerSalida = new JDatePickerImpl(datePanelSalida, new DateLabelFormatter());
-        datePanelSalida.setFont(new Font("Arial", Font.PLAIN, 8));
-        datePickerSalida.setLocation(0, 0);
-        datePickerSalida.setSize(223, 50);
-        datePickerSalida.setVisible(true);
-        datePickerSalida.setEnabled(true);
-        datePickerSalida.getJFormattedTextField().setValue(calTomorrow);
-        this.jpFecSalContainer.add(datePickerSalida);
     }
 
     @SuppressWarnings("unchecked")
@@ -139,10 +98,10 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jbQRSearchRoom = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
         jLabel1 = new javax.swing.JLabel();
-        jpFecEntContainer = new javax.swing.JPanel();
+        dateCsIni = new datechooser.beans.DateChooserCombo();
         jSplitPane2 = new javax.swing.JSplitPane();
         jLabel2 = new javax.swing.JLabel();
-        jpFecSalContainer = new javax.swing.JPanel();
+        dateCsFin = new datechooser.beans.DateChooserCombo();
         jLabel3 = new javax.swing.JLabel();
         jspNumeroCuartos = new javax.swing.JSpinner();
         jSeparator1 = new javax.swing.JSeparator();
@@ -191,44 +150,14 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
         jLabel1.setText("Entrada:    ");
         jSplitPane1.setLeftComponent(jLabel1);
-
-        jpFecEntContainer.setMaximumSize(new java.awt.Dimension(223, 50));
-        jpFecEntContainer.setPreferredSize(new java.awt.Dimension(223, 50));
-
-        javax.swing.GroupLayout jpFecEntContainerLayout = new javax.swing.GroupLayout(jpFecEntContainer);
-        jpFecEntContainer.setLayout(jpFecEntContainerLayout);
-        jpFecEntContainerLayout.setHorizontalGroup(
-            jpFecEntContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 221, Short.MAX_VALUE)
-        );
-        jpFecEntContainerLayout.setVerticalGroup(
-            jpFecEntContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 33, Short.MAX_VALUE)
-        );
-
-        jSplitPane1.setRightComponent(jpFecEntContainer);
+        jSplitPane1.setRightComponent(dateCsIni);
 
         jSplitPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jSplitPane2.setDividerSize(0);
 
         jLabel2.setText("Salida:       ");
         jSplitPane2.setLeftComponent(jLabel2);
-
-        jpFecSalContainer.setMaximumSize(new java.awt.Dimension(223, 50));
-        jpFecSalContainer.setPreferredSize(new java.awt.Dimension(223, 50));
-
-        javax.swing.GroupLayout jpFecSalContainerLayout = new javax.swing.GroupLayout(jpFecSalContainer);
-        jpFecSalContainer.setLayout(jpFecSalContainerLayout);
-        jpFecSalContainerLayout.setHorizontalGroup(
-            jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 234, Short.MAX_VALUE)
-        );
-        jpFecSalContainerLayout.setVerticalGroup(
-            jpFecSalContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 33, Short.MAX_VALUE)
-        );
-
-        jSplitPane2.setRightComponent(jpFecSalContainer);
+        jSplitPane2.setRightComponent(dateCsFin);
 
         jLabel3.setText("Número de Cuartos:");
 
@@ -412,7 +341,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     .addGap(190, 190, 190)))
         );
 
-        label1.setAlignment(java.awt.Label.CENTER);
+        label1.setAlignment(1);
         label1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         label1.setText("RENTAS");
 
@@ -465,22 +394,20 @@ public class QuickRentDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbQRPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRPagarActionPerformed
-        if(mainCustomer != null && mainCustomer.getCusId() != null){
+        if (mainCustomer != null && mainCustomer.getCusId() != null) {
             try {
-                JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
-                JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
-                Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-                Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+                Calendar calEntrada = dateCsIni.getCurrent();
+                Calendar calSalida = dateCsFin.getCurrent();
                 int numPersonas = (int) jspNumeroPersonas.getValue();
-                
+
                 Account actFind = new Account();
                 actFind.setCusId(mainCustomer);
                 List<Account> lstAccounts = accountBoundary.findByCusId(actFind);
                 Account quickRentAccount = null;
-                if(lstAccounts != null & lstAccounts.size() > 0){
+                if (lstAccounts != null & lstAccounts.size() > 0) {
                     quickRentAccount = lstAccounts.get(0);
                 }
-                if(quickRentAccount != null && quickRentAccount.getActId() != null){
+                if (quickRentAccount != null && quickRentAccount.getActId() != null) {
                     // YA TIENE CUENTA ACTIVA, SOLO ACTUALIZAR
                     quickRentAccount.setActNumPeople(quickRentAccount.getActNumPeople() + numPersonas);
                     quickRentAccount.setActDteMod(new Date());
@@ -502,11 +429,11 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     quickRentAccount.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_ABIERTO_KEY)));
                     quickRentAccount.setAccountTransactionsCollection(null);
                     quickRentAccount.setCusId(mainCustomer);
-                    quickRentAccount.setActNumPeople((int)jspNumeroPersonas.getValue());
+                    quickRentAccount.setActNumPeople((int) jspNumeroPersonas.getValue());
                     accountBoundary.insert(quickRentAccount);
-                }                
+                }
 
-                for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+                for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
                     //Insertando account transaction
                     AccountTransactions rentTran = new AccountTransactions();
                     rentTran.setAtrDteMod(Calendar.getInstance().getTime());
@@ -520,28 +447,28 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     rentTran.setSrvId(null);
                     rentTran.setActId(quickRentAccount);
                     accountTransactionsBoundary.insert(rentTran);
-                    
+
                     //actualizando el Room
                     room.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
-                    roomsBounday.update(room);                    
-                }                
+                    roomsBounday.update(room);
+                }
 
                 //LLamando a paymentModule
                 PaymentModuleDlg paymentModule = new PaymentModuleDlg(this, true, quickRentTotal, quickRentAccount);
                 paymentModule.setLocationRelativeTo(this);
                 paymentModule.setVisible(true);
-                
-                if(totalPaid){
+
+                if (totalPaid) {
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
                     RoomsBoundary roomsBoundary = new RoomsBoundary();
                     parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
                     this.dispose();
                 }
-                
+
             } catch (Exception e) {
                 GeneralFunctions.sendMessage(this, "Ocurrio un error. Por favor contacte con servicio técnico. \n Error: " + e.getMessage());
-            }            
-        }        
+            }
+        }
     }//GEN-LAST:event_jbQRPagarActionPerformed
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
@@ -549,22 +476,21 @@ public class QuickRentDlg extends javax.swing.JDialog {
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
-            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
-            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
-            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
-            
+
+            Calendar calEntrada = dateCsIni.getCurrent();
+            Calendar calSalida = dateCsFin.getCurrent();
+
             int numRooms = (int) jspNumeroCuartos.getValue();
-            roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(),numRooms);
+            roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(), numRooms);
             if (roomAvailableByTypeLst != null && roomAvailableByTypeLst.size() > 0) {
                 jlNumber.setText("Cuarto(s) disponible(s):");
-                for(com.ahms.model.entity.Rooms roomAvailableByType : roomAvailableByTypeLst){
+                for (com.ahms.model.entity.Rooms roomAvailableByType : roomAvailableByTypeLst) {
                     //quickRentRoomAssigned = roomAvailableByType;
-                    jlNumber.setText(jlNumber.getText() + "  " +  roomAvailableByType.getRmsNumber());
-                }                
+                    jlNumber.setText(jlNumber.getText() + "  " + roomAvailableByType.getRmsNumber());
+                }
                 jbtnLoadCustomer.setEnabled(true);
-                if(roomAvailableByTypeLst.size() < numRooms){
-                   GeneralFunctions.sendMessage(this, "De los " + numRooms + " que se especificaron, solo " + roomAvailableByTypeLst.size() + " estan disponibles.");
+                if (roomAvailableByTypeLst.size() < numRooms) {
+                    GeneralFunctions.sendMessage(this, "De los " + numRooms + " que se especificaron, solo " + roomAvailableByTypeLst.size() + " estan disponibles.");
                 }
             } else {
                 GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
@@ -581,8 +507,8 @@ public class QuickRentDlg extends javax.swing.JDialog {
         CustomerRegFrm loadCustomer = new CustomerRegFrm(this, true, mainCustomer);
         loadCustomer.setVisible(true);
         mainCustomer = loadCustomer.localCustomer;
-        
-        if(mainCustomer != null && mainCustomer.getCusId() != null){
+
+        if (mainCustomer != null && mainCustomer.getCusId() != null) {
             //------------------------------------------------        
             lblCustName.setText(mainCustomer.getFullName());
             lblRfc.setText(mainCustomer.getCusRfc());
@@ -590,10 +516,8 @@ public class QuickRentDlg extends javax.swing.JDialog {
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
-            JDatePickerImpl fEntrada = (JDatePickerImpl) this.jpFecEntContainer.getComponent(0);
-            JDatePickerImpl fSalida = (JDatePickerImpl) this.jpFecSalContainer.getComponent(0);
-            Calendar calEntrada = (Calendar) fEntrada.getJFormattedTextField().getValue();
-            Calendar calSalida = (Calendar) fSalida.getJFormattedTextField().getValue();
+            Calendar calEntrada = dateCsIni.getCurrent();
+            Calendar calSalida = dateCsFin.getCurrent();
 
             jbQRPagar.setEnabled(true);
             //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
@@ -612,19 +536,19 @@ public class QuickRentDlg extends javax.swing.JDialog {
             quickRentIva = BigDecimal.ZERO;
             quickRentTotal = BigDecimal.ZERO;
             BigDecimal price = BigDecimal.ZERO;
-            for(com.ahms.model.entity.Rooms room : roomAvailableByTypeLst){
+            for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
                 price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : room.getRteId().getRtePrice();
                 quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
-                quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));                
+                quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
             }
             quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
-            
+
             lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
             jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
             jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
             jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
         }
-         
+
     }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -638,13 +562,15 @@ public class QuickRentDlg extends javax.swing.JDialog {
         quickRentIva = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         quickrentIvaPercent = BigDecimal.ZERO;
-       //jlNumber.setVisible(false);
+        //jlNumber.setVisible(false);
         jbQRPagar.setEnabled(false);
 
     }
-     
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private datechooser.beans.DateChooserCombo dateCsFin;
+    private datechooser.beans.DateChooserCombo dateCsIni;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -669,8 +595,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jlQRIVA;
     private javax.swing.JLabel jlQRSubTotal;
     private javax.swing.JLabel jlQRTotal;
-    private javax.swing.JPanel jpFecEntContainer;
-    private javax.swing.JPanel jpFecSalContainer;
     private javax.swing.JSpinner jspNumeroCuartos;
     private javax.swing.JSpinner jspNumeroPersonas;
     private java.awt.Label label1;

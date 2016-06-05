@@ -13,9 +13,6 @@ import com.ahms.ui.utils.GeneralFunctions;
 import java.awt.Font;
 import java.util.Calendar;
 import java.util.Properties;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -31,7 +28,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
     public AddMessageDlg(java.awt.Frame parent, boolean modal, Users mainUser) {
         super(parent, modal);
         initComponents();
-        configDatePickers();
         this.mainUser  = mainUser;
         taMessage.setLineWrap(true);
         taMessage.setWrapStyleWord(true);
@@ -48,11 +44,11 @@ public class AddMessageDlg extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         taMessage = new javax.swing.JTextArea();
-        jpFecEntContainerRes = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         jbSalir = new javax.swing.JButton();
         jbGuardar = new javax.swing.JButton();
+        dateChs = new datechooser.beans.DateChooserCombo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -60,17 +56,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
         taMessage.setColumns(20);
         taMessage.setRows(5);
         jScrollPane1.setViewportView(taMessage);
-
-        javax.swing.GroupLayout jpFecEntContainerResLayout = new javax.swing.GroupLayout(jpFecEntContainerRes);
-        jpFecEntContainerRes.setLayout(jpFecEntContainerResLayout);
-        jpFecEntContainerResLayout.setHorizontalGroup(
-            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 242, Short.MAX_VALUE)
-        );
-        jpFecEntContainerResLayout.setVerticalGroup(
-            jpFecEntContainerResLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
 
         jLabel1.setText("Fecha:");
 
@@ -95,6 +80,8 @@ public class AddMessageDlg extends javax.swing.JDialog {
         });
         jToolBar1.add(jbGuardar);
 
+        dateChs.setLocale(new java.util.Locale("es", "MX", ""));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,27 +89,26 @@ public class AddMessageDlg extends javax.swing.JDialog {
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(dateChs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jpFecEntContainerRes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel1)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dateChs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,8 +126,7 @@ public class AddMessageDlg extends javax.swing.JDialog {
             try {
                 MessageBoard messageBoard = new MessageBoard();
                 MessageBoardBoundary messageBoardBoundary = new MessageBoardBoundary();
-                JDatePickerImpl jdpi = (JDatePickerImpl) this.jpFecEntContainerRes.getComponent(0);
-                Calendar cal = (Calendar) jdpi.getJFormattedTextField().getValue();
+                Calendar cal = dateChs.getCurrent();
                 messageBoard.setMsgUser(this.mainUser);
                 messageBoard.setMsgDate(cal.getTime());
                 messageBoard.setMsgMessage(taMessage.getText());
@@ -153,26 +138,7 @@ public class AddMessageDlg extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_jbGuardarActionPerformed
-    private void configDatePickers() {
-        Calendar calToday = Calendar.getInstance();
-        Calendar calTomorrow = Calendar.getInstance();
-        calTomorrow.add(Calendar.DATE, 1);
-
-        UtilDateModel modelEntradaRes = new UtilDateModel();
-        Properties pEntradaRes = new Properties();
-        pEntradaRes.put("text.today", calToday.get(Calendar.DATE));
-        pEntradaRes.put("text.month", calToday.get(Calendar.MONTH + 1));
-        pEntradaRes.put("text.year", calToday.get(Calendar.YEAR));
-        JDatePanelImpl datePanelEntradaRes = new JDatePanelImpl(modelEntradaRes, pEntradaRes);
-        JDatePickerImpl datePickerEntradaRes = new JDatePickerImpl(datePanelEntradaRes, new DateLabelFormatter());
-        datePickerEntradaRes.setFont(new Font("Arial", Font.PLAIN, 8));
-        datePickerEntradaRes.setLocation(0, 0);
-        datePickerEntradaRes.setSize(223, 50);
-        datePickerEntradaRes.setVisible(true);
-        datePickerEntradaRes.setEnabled(true);
-        datePickerEntradaRes.getJFormattedTextField().setValue(calToday);
-        this.jpFecEntContainerRes.add(datePickerEntradaRes);
-    }
+    
 
     /**
      * @param args the command line arguments
@@ -218,12 +184,12 @@ public class AddMessageDlg extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private datechooser.beans.DateChooserCombo dateChs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbGuardar;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JPanel jpFecEntContainerRes;
     private javax.swing.JTextArea taMessage;
     // End of variables declaration//GEN-END:variables
 }

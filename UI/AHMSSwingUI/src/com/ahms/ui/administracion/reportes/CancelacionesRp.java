@@ -15,14 +15,12 @@ import com.ahms.ui.administracion.reportes.entity.Header;
 import com.ahms.ui.administracion.reportes.entity.ReqUser;
 import com.ahms.ui.administracion.reportes.entity.cancelaciones.Cancelacion;
 import com.ahms.ui.administracion.reportes.entity.cancelaciones.CancelacionRep;
-import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.ui.utils.XmlMarshaler;
 import com.ahms.util.MMKeys;
 import java.awt.Desktop;
-import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,13 +29,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
