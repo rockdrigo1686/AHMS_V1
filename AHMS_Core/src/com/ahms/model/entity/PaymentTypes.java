@@ -82,6 +82,10 @@ public class PaymentTypes implements Serializable {
         this.payDteMod = payDteMod;
     }
 
+    public PaymentTypes(String payCode) {
+       this.payCode = payCode;
+    }
+
     public Integer getPayId() {
         return payId;
     }

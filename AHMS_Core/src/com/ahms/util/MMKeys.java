@@ -11,6 +11,7 @@ package com.ahms.util;
  */
 public class MMKeys {
 
+
     public static class Rooms {
 
         public final static String GP_KEY = "RMS";
@@ -77,4 +78,13 @@ public class MMKeys {
         public final static String MNGR = "MNGR";
         public final static String EMP = "EMP";
     }
+    
+    public static class Payments {
+        public final static String MIX = "MIX";
+        public final static String EFE = "EFE";
+        public final static String TC = "TC";
+        public final static String TD = "TD";
+        public final static String TRN = "TRN";
+    }
+    
 }

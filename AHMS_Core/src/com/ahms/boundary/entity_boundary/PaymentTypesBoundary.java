@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.manager.entity_manager.PaymenTypesEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +26,12 @@ public class PaymentTypesBoundary implements AHMSBoundary<PaymentTypes>{
 
     @Override
     public List<PaymentTypes> search(PaymentTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return paymentTypesEM.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(PaymentTypesBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
