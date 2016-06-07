@@ -63,7 +63,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         lblCus.setFont(new java.awt.Font("Droid Sans", 1, 14)); // NOI18N
         lblCus.setText("Cliente:");

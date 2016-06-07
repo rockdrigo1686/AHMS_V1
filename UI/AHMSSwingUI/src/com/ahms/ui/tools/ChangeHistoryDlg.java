@@ -83,7 +83,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         jbGuardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         lblCustomer.setText("jLabel1");
 

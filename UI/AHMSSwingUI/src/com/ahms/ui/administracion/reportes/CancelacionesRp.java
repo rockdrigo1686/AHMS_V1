@@ -77,6 +77,7 @@ public class CancelacionesRp extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Reporte de Cancelaciones");
+        setResizable(false);
 
         jLabel14.setText("Fecha de inicio:");
 

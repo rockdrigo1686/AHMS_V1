@@ -123,7 +123,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
         setResizable(false);
 
         jLabel10.setText("Personas:");
@@ -341,7 +340,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     .addGap(190, 190, 190)))
         );
 
-        label1.setAlignment(1);
+        label1.setAlignment(java.awt.Label.CENTER);
         label1.setFont(new java.awt.Font("Ubuntu", 1, 18)); // NOI18N
         label1.setText("RENTAS");
 

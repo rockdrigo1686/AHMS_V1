@@ -87,7 +87,7 @@ public class QuickResDlg extends javax.swing.JDialog {
         dateCsFin = new datechooser.beans.DateChooserCombo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
+        setResizable(false);
 
         jlCusName.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlCusName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

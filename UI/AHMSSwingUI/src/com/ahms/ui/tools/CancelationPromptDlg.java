@@ -7,8 +7,13 @@ package com.ahms.ui.tools;
 
 import com.ahms.boundary.SecurityBoundary;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.SecurityUtils;
 import java.awt.Color;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -45,8 +50,6 @@ public class CancelationPromptDlg extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jPanel1.setBackground(java.awt.Color.white);
 
         jLabel1.setText("Clave de Autorizacion");
 
@@ -139,15 +142,20 @@ public class CancelationPromptDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        SecurityBoundary secBoundary = new SecurityBoundary();
-        this.autUser = secBoundary.findByPassword(new String(txtPassword.getPassword()));
-        this.autorized =  this.autUser!= null;
-        if (!this.autorized) {
-            lblError.setText(UIConstants.ERROR_AUT_CODE);
-            lblError.setForeground(Color.red);
-        }else{
-            this.dispose();
+        try {
+            // TODO add your handling code here:
+            SecurityBoundary secBoundary = new SecurityBoundary();
+            this.autUser = secBoundary.findByPassword(SecurityUtils.getMD5(new String(txtPassword.getPassword())));
+            this.autorized =  this.autUser!= null;
+            if (!this.autorized) {
+                lblError.setText(UIConstants.ERROR_AUT_CODE);
+                lblError.setForeground(Color.red);
+            }else{
+                this.dispose();
+            }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(CancelationPromptDlg.class.getName()).log(Level.SEVERE, null, ex);
+            GeneralFunctions.appendTrace(ex.getStackTrace());
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
