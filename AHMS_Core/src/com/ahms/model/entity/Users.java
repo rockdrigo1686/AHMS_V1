@@ -5,6 +5,7 @@
  */
 package com.ahms.model.entity;
 
+import com.ahms.util.SecurityUtils;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -43,6 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByPassword", query = "SELECT u FROM Users u WHERE u.usrStatus = :usrStatus and u.usrPwd = :usrPwd"),
     @NamedQuery(name = "Users.login", query = "SELECT u FROM Users u WHERE u.usrPwd = :usrPwd and u.usrCode = :usrCode and u.usrStatus = :usrStatus")})
 public class Users implements Serializable {
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "msgUser", fetch = FetchType.EAGER)
     private List<MessageBoard> messageBoardList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "chaUsrAut")
@@ -77,7 +79,7 @@ public class Users implements Serializable {
     private String usrPwd;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rmsUsrMod", fetch = FetchType.LAZY)
     private Collection<Rooms> roomsCollection;
-   
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rteUsrMod", fetch = FetchType.LAZY)
     private Collection<Rates> ratesCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "payUsrMod", fetch = FetchType.LAZY)
@@ -87,7 +89,7 @@ public class Users implements Serializable {
     @JoinColumn(name = "USR_STATUS", referencedColumnName = "MVA_KEY", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private MultiValue usrStatus;
-    
+
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Profiles proId;
@@ -175,7 +177,11 @@ public class Users implements Serializable {
     }
 
     public void setUsrPwd(String usrPwd) {
-        this.usrPwd = usrPwd;
+        try {
+            this.usrPwd = SecurityUtils.getMD5(usrPwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @XmlTransient
@@ -186,8 +192,6 @@ public class Users implements Serializable {
     public void setRoomsCollection(Collection<Rooms> roomsCollection) {
         this.roomsCollection = roomsCollection;
     }
-
-  
 
     @XmlTransient
     public Collection<Rates> getRatesCollection() {
