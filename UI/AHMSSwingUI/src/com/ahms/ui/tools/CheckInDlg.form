@@ -79,11 +79,6 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel2">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
-        </Property>
-      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -179,11 +174,6 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
-        </Property>
-      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -248,11 +238,6 @@
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel3">
-      <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" id="white" palette="1" red="ff" type="palette"/>
-        </Property>
-      </Properties>
 
       <Layout>
         <DimensionLayout dim="0">

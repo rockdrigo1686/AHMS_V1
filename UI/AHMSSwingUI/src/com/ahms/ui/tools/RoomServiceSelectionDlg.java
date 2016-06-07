@@ -177,9 +177,7 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jpopOptions.add(jmiCancelar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
-
-        jPanel1.setBackground(java.awt.Color.white);
+        setResizable(false);
 
         jLabel1.setText("Tipo de Servicio");
 

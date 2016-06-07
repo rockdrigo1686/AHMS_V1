@@ -41,7 +41,6 @@ public class FolioCaptureDlg extends javax.swing.JDialog {
         jLabel2.setText("jLabel2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jToolBar1.setFloatable(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -57,8 +56,6 @@ public class FolioCaptureDlg extends javax.swing.JDialog {
         jbSalir.setFocusable(false);
         jbSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jToolBar1.add(jbSalir);
-
-        jPanel2.setBackground(java.awt.Color.white);
 
         jLabel1.setFont(new java.awt.Font("Droid Sans", 1, 12)); // NOI18N
         jLabel1.setText("Cliente");

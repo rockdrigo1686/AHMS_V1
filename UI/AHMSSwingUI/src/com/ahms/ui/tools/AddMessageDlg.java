@@ -51,7 +51,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
         dateChs = new datechooser.beans.DateChooserCombo();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         taMessage.setColumns(20);
         taMessage.setRows(5);

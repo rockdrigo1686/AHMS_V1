@@ -10,10 +10,14 @@ import com.ahms.boundary.entity_boundary.CashOutBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.SecurityUtils;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyListener;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
@@ -188,7 +192,12 @@ public class LoginFrm extends javax.swing.JFrame {
         CashOut currentShift = null;
         String user = usrTxt.getText();
         String password = new String(pwdTxt.getPassword());
-        Users mainUser = secBound.login(user, password);
+        Users mainUser = null;
+        try {
+            mainUser = secBound.login(user, SecurityUtils.getMD5(password));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(LoginFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (mainUser != null) {
 
             currentShift = cashOutBoundary.getCurrentShift();

@@ -76,8 +76,6 @@ public class CheckInDlg extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
 
-        jPanel2.setBackground(java.awt.Color.white);
-
         jLabel1.setText("Nombre");
 
         jLabel2.setText("Ap. Paterno");
@@ -142,8 +140,6 @@ public class CheckInDlg extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.setBackground(java.awt.Color.white);
-
         jLabel11.setText("Tipo de Pago:");
 
         jcbTipoPago.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Efectivo", "T. Crédito", "T. Débito" }));
@@ -178,8 +174,6 @@ public class CheckInDlg extends javax.swing.JDialog {
                     .addComponent(jtSubtotal4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
-
-        jPanel3.setBackground(java.awt.Color.white);
 
         jLabel12.setText("Tipo de Pago:");
 

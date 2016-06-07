@@ -58,7 +58,7 @@ public class ShiftStartDlg extends javax.swing.JDialog {
         lblClave = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
+        setResizable(false);
 
         jToolBar1.setBackground(java.awt.Color.white);
         jToolBar1.setFloatable(false);
@@ -74,8 +74,6 @@ public class ShiftStartDlg extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(jButton4);
-
-        jPanel1.setBackground(java.awt.Color.white);
 
         jLabel1.setText("Fondo:");
 

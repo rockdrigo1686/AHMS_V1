@@ -86,9 +86,7 @@ public class ShiftEndDlg extends javax.swing.JDialog {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
-
-        jPanel1.setBackground(java.awt.Color.white);
+        setResizable(false);
 
         lblNombre.setFont(new java.awt.Font("Droid Sans", 1, 14)); // NOI18N
         lblNombre.setText("nombre");
