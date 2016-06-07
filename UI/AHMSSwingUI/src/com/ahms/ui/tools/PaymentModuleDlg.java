@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -274,7 +275,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
     private void jbPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPagoActionPerformed
         PaymentTypes selectedPayment = (PaymentTypes) jcbTipoPago.getSelectedItem();
 
-        if (parentDialog != null) { // si fue llamado desde el checkout
+        if (parentDialog != null) { // si fue llamado desde el checkout            
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             //validaciones
             int importeValida = importePagado.compareTo(importeTotal);
@@ -291,8 +292,12 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 //activar boton de cerrar cuenta
                 parentDialog.activeAccountClose();
 
+                //Actualizar el mapa del parent
+                parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                
                 //TRANSACCIONES CORRESPONDIENTES
-                FolioTransaction folioTransaction = null;
+                /*FolioTransaction folioTransaction = null;
                 if (selectedPayment.getPayId() == 1) { // EFECTIVO
                     folioTransaction = new FolioTransaction();
                     folioTransaction.setActId(account);
@@ -313,7 +318,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction.setFtrDteMod(new Date());
                     folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
                 }
-                folioTransactionBoundary.insert(folioTransaction);
+                folioTransactionBoundary.insert(folioTransaction);*/
                 //----------------------------------
             } else { //si el importe pagado es menor o igual al importe total actualizar montos en checkout
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
@@ -322,11 +327,16 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 parentDialog.totalPending = parentDialog.totalOriginal.subtract(parentDialog.totalPagado).setScale(2, RoundingMode.UP);
                 parentDialog.regenerateTotals();
 
+                //Actualizar Mapa del Parent
+                parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                
                 //TRANSACCIONES CORRESPONDIENTES ---
-                FolioTransaction folioTransaction = null;
+                /*FolioTransaction folioTransaction = null;
                 if (selectedPayment.getPayId() == 1) { // EFECTIVO
                     folioTransaction = new FolioTransaction();
                     folioTransaction.setActId(account);
+                    //folioTransaction.setAtrId(attr);
                     folioTransaction.setCouId(currentShift);
                     folioTransaction.setPayId(selectedPayment);
                     folioTransaction.setFtrAmount(importePagado);
@@ -336,6 +346,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction = new FolioTransaction();
                     folioTransaction.setActId(account);
                     folioTransaction.setCouId(currentShift);
+                    //folioTransaction.setAtrId(attr);
                     folioTransaction.setPayId(selectedPayment);
                     folioTransaction.setFtrAmount(importePagado);
                     //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
@@ -344,11 +355,12 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction.setFtrDteMod(new Date());
                     folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
                 }
-                folioTransactionBoundary.insert(folioTransaction);
+                folioTransactionBoundary.insert(folioTransaction);*/
                 //----------------------------------           
             }
-            isPaid = true;
-        } else if (parentQuickRent != null) { // si fue llamado desde un mainForm
+            isPaid = true;            
+        } 
+        else if (parentQuickRent != null) { // si fue llamado desde un mainForm
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
             if (importeValida >= 0) // importe pagado > importe total, hay que dar feria
@@ -444,7 +456,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction.setCouId(currentShift);
                     folioTransaction.setPayId(selectedPayment);
                     folioTransaction.setFtrAmount(importeTotal);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
+                    //folioTransaction.setFtrCardñNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
                     folioTransaction.setFtrCardNumber(jtCardNumber.getText());
                     folioTransaction.setFtrFolio(folio);
                     folioTransaction.setFtrDteMod(new Date());

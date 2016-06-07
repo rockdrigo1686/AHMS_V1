@@ -2,18 +2,27 @@ package com.ahms.ui.tools;
 
 import com.ahms.boundary.entity_boundary.AccountBoundary;
 import com.ahms.boundary.entity_boundary.AccountTransactionsBoundary;
+import com.ahms.boundary.entity_boundary.CashOutBoundary;
+import com.ahms.boundary.entity_boundary.FolioTransactionBoundary;
 import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.PaymentTypesBoundary;
 import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
+import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.entity.Rooms;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.util.MMKeys;
 import java.awt.Color;
 import java.awt.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +53,17 @@ public class CheckOutDlg extends javax.swing.JDialog {
     private MultiValueBoundary multiValueBoundary= null;;
     private JDialog parentFrame = null;;
     private Map<Integer,Integer> mapInactiveRows = null;
+    
+    public HashMap<String, PaymentTypes> mapPayTypes = null;
+    public StringBuilder sbCardNumbers = null;
+    
+    private CashOut currentShift;
+    private CashOutBoundary cashOutBoundary;
 
     public CheckOutDlg(JDialog parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
+        mapPayTypes = new HashMap<String, PaymentTypes>();
         mapInactiveRows = new HashMap<Integer,Integer>();
         parentFrame =  parent;
         accountBoundary = new AccountBoundary();
@@ -59,7 +75,10 @@ public class CheckOutDlg extends javax.swing.JDialog {
         this.account = account;
         customerGlobal = account.getCusId();
         jlNombre.setText(customerGlobal.getFullName()+ " - " + customerGlobal.getCusRfc());
-
+        
+        cashOutBoundary = new CashOutBoundary();
+        currentShift = cashOutBoundary.getCurrentShift();
+        sbCardNumbers = new StringBuilder("");
         generateGridSimple(customerGlobal);
     }
 
@@ -239,7 +258,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jscpDetalle.setViewportView(jtCheckoutDetalle);
 
         jToolBar1.setFloatable(false);
-        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jToolBar1.setPreferredSize(new java.awt.Dimension(30, 38));
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
@@ -259,7 +278,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
 
         jLabel10.setText("IVA(16%):");
 
-        jbPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack3/Donate.png"))); // NOI18N
+        jbPay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Donate.png"))); // NOI18N
         jbPay.setText("Pagar");
         jbPay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,7 +312,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlPendiente.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlPendiente.setText("pagado");
 
-        jbCloseAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/resources/pack2/accept.png"))); // NOI18N
+        jbCloseAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1464156151_Ok.png"))); // NOI18N
         jbCloseAccount.setText("Cerrar Cuenta");
         jbCloseAccount.setEnabled(false);
         jbCloseAccount.addActionListener(new java.awt.event.ActionListener() {
@@ -404,8 +423,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPayActionPerformed
-        //abrir PaymentModule
-       
+        //abrir PaymentModule       
         PaymentModuleDlg paymentModule = new PaymentModuleDlg(this, true, totalPending, account);
         paymentModule.setLocationRelativeTo(this);
         paymentModule.setVisible(true);
@@ -416,27 +434,66 @@ public class CheckOutDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbCloseAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCloseAccountActionPerformed
-        //Poner Disponible el Cuarto
-        Integer roomNumber = 0;
-        for (Account account : customerGlobal.getAccountCollection()) {
-            for (AccountTransactions tran : account.getAccountTransactionsCollection()) {
-                if (roomNumber == 0 || !roomNumber.equals(Integer.parseInt(tran.getRmsId().getRmsNumber()))) {
-                    roomNumber = Integer.parseInt(tran.getRmsId().getRmsNumber());
-                    tran.getRmsId().setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
-                    roomsBoundary.update(tran.getRmsId());
+        
+        try {
+            PaymentTypes payment = null;
+            if(mapPayTypes.size() > 1){
+                PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
+                List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
+                payment = payList.get(0);
+            } else {
+                for(PaymentTypes payType : mapPayTypes.values()){
+                    payment = payType;
                 }
-                tran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-                accountTransactionsBoundary.update(tran);
             }
+
+            String cardNumbers = sbCardNumbers.toString();
+            cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length()-1) : "";
+
+            FolioTransactionBoundary folioBoundary = new FolioTransactionBoundary();
+            for(AccountTransactions actTran : account.getAccountTransactionsCollection()){
+                if(actTran.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)){
+                    FolioTransaction iFolio = new FolioTransaction();
+                    iFolio.setActId(account);
+                    iFolio.setAtrId(actTran);
+                    iFolio.setCouId(currentShift);
+                    iFolio.setFtrAmount(actTran.getSrvId().getSrvPrice());
+                    iFolio.setFtrDteMod(new Date());
+                    iFolio.setFtrUsrMod(currentShift.getUsrId());
+                    iFolio.setPayId(payment);
+                    iFolio.setFtrCardNumber(cardNumbers);
+                    folioBoundary.insert(iFolio);
+                }
+            }
+
+            //Poner Disponible el Cuarto
+            Integer roomNumber = 0;
+            for (Account account : customerGlobal.getAccountCollection()) {
+                for (AccountTransactions tran : account.getAccountTransactionsCollection()) {
+                    if (roomNumber == 0 || !roomNumber.equals(Integer.parseInt(tran.getRmsId().getRmsNumber()))) {
+                        roomNumber = Integer.parseInt(tran.getRmsId().getRmsNumber());
+                        tran.getRmsId().setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
+                        roomsBoundary.update(tran.getRmsId());
+                    }
+                    tran.setAtrStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                    accountTransactionsBoundary.update(tran);
+                }
+            }
+            //Actualizar montos de la cuenta y cerrarla
+            account.setActIva(new BigDecimal(0.16));
+            account.setActIvaAmt(totalIVA);
+            account.setActSubtotal(total);
+            account.setActTotal(totalAccount);
+            account.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
+            accountBoundary.update(account);
+            
+            GeneralFunctions.sendMessage(this, "Cuenta cerrada satisfactoriamente.");
+            
+        } catch (Exception e) {
+            GeneralFunctions.appendTrace(e.getStackTrace());
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al cerrar la cuenta. Por favor contacte a servicio técnico. \nError:" + e.getMessage());
         }
-        //Actualizar montos de la cuenta y cerrarla
-        account.setActIva(new BigDecimal(0.16));
-        account.setActIvaAmt(totalIVA);
-        account.setActSubtotal(total);
-        account.setActTotal(totalAccount);
-        account.setActStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Acounts.STA_CERRADO_KEY)));
-        accountBoundary.update(account);
-        //Cerrar dialog y actualizar el dashboard
+        //Cerrar dialog
         this.dispose();
     }//GEN-LAST:event_jbCloseAccountActionPerformed
 

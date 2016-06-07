@@ -140,7 +140,7 @@
       <Properties>
         <Property name="floatable" type="boolean" value="false"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
+          <Color id="Cursor Por defecto"/>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[30, 38]"/>
@@ -263,7 +263,7 @@
         <Component class="javax.swing.JButton" name="jbPay">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack3/Donate.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/Donate.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pagar"/>
           </Properties>
@@ -334,7 +334,7 @@
         <Component class="javax.swing.JButton" name="jbCloseAccount">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/resources/pack2/accept.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/1464156151_Ok.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cerrar Cuenta"/>
             <Property name="enabled" type="boolean" value="false"/>
