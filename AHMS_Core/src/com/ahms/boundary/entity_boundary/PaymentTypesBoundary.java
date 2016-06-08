@@ -38,6 +38,10 @@ public class PaymentTypesBoundary implements AHMSBoundary<PaymentTypes>{
     public List<PaymentTypes> searchAll(PaymentTypes obj) {
         return paymentTypesEM.findAll(obj);        
     }
+    
+    public List<PaymentTypes> findByPayStatus(PaymentTypes obj) {
+        return paymentTypesEM.findByPayStatus(obj);        
+    }
 
     @Override
     public PaymentTypes find(PaymentTypes obj) {

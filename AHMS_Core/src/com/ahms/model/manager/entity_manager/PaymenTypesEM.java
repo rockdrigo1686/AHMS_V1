@@ -35,4 +35,25 @@ public class PaymenTypesEM extends AHMSEntityManager{
             }
         }
     }
+    
+    public List<PaymentTypes> findByPayStatus(PaymentTypes payment) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<PaymentTypes> query = em.createNamedQuery("PaymentTypes.findByPayStatus", PaymentTypes.class);
+            query.setParameter("payStatus", payment.getPayStatus());
+            return query.getResultList();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally { 
+            if (em != null) {
+                closeEm();
+            }
+        }
+    }
 }

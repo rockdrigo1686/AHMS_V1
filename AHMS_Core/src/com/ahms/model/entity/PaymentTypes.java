@@ -41,7 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PaymentTypes.findByPayId", query = "SELECT p FROM PaymentTypes p WHERE p.payId = :payId"),
     @NamedQuery(name = "PaymentTypes.findByPayCode", query = "SELECT p FROM PaymentTypes p WHERE p.payCode = :payCode"),
     @NamedQuery(name = "PaymentTypes.findByPayDesc", query = "SELECT p FROM PaymentTypes p WHERE p.payDesc = :payDesc"),
-    @NamedQuery(name = "PaymentTypes.findByPayDteMod", query = "SELECT p FROM PaymentTypes p WHERE p.payDteMod = :payDteMod")})
+    @NamedQuery(name = "PaymentTypes.findByPayDteMod", query = "SELECT p FROM PaymentTypes p WHERE p.payDteMod = :payDteMod"),
+    @NamedQuery(name = "PaymentTypes.findByPayStatus", query = "SELECT p FROM PaymentTypes p WHERE p.payStatus = :payStatus")})
 public class PaymentTypes implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
