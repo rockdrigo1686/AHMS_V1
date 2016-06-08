@@ -3,7 +3,9 @@ package com.ahms.ui.tools;
 import com.ahms.ui.configuracion.CustomerRegFrm;
 import com.ahms.boundary.entity_boundary.AccountBoundary;
 import com.ahms.boundary.entity_boundary.AccountTransactionsBoundary;
+import com.ahms.boundary.entity_boundary.FolioTransactionBoundary;
 import com.ahms.boundary.entity_boundary.MultiValueBoundary;
+import com.ahms.boundary.entity_boundary.PaymentTypesBoundary;
 import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
 import com.ahms.boundary.entity_boundary.RoomsBoundary;
@@ -11,7 +13,9 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Users;
@@ -25,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -49,6 +54,10 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private RoomTypesBoundary roomTypesBoundary;
     private CashOut currentShift = null;
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
+    
+    public HashMap<String, PaymentTypes> mapPayTypes = null;
+    public StringBuilder sbCardNumbers = null;
+    PreferenceDetail preference = null;
 
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
@@ -69,6 +78,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
+        
+        mapPayTypes = new HashMap<String, PaymentTypes>();
+        sbCardNumbers = new StringBuilder("");
 
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
@@ -431,7 +443,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     quickRentAccount.setActNumPeople((int) jspNumeroPersonas.getValue());
                     accountBoundary.insert(quickRentAccount);
                 }
-
+                //Arreglo que guarda la relacion entre el room y la renta, [indice][0 - room - 1 - atr]
+                Object[][] roomsAtrs = new Object[roomAvailableByTypeLst.size()][2];
+                int indexRoom = 0;
                 for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
                     //Insertando account transaction
                     AccountTransactions rentTran = new AccountTransactions();
@@ -450,6 +464,10 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     //actualizando el Room
                     room.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
                     roomsBounday.update(room);
+                    
+                    roomsAtrs[indexRoom][0] = room;
+                    roomsAtrs[indexRoom][1] = rentTran;
+                    indexRoom++;
                 }
 
                 //LLamando a paymentModule
@@ -458,6 +476,41 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 paymentModule.setVisible(true);
 
                 if (totalPaid) {
+                    //Cuando ya se haya pagado la totalidad del importe, hacer inserciones en folio Transaction
+                    FolioTransactionBoundary folioTransactionBoundary = new FolioTransactionBoundary();
+                    BigDecimal price = null;
+                    String cardNumbers = sbCardNumbers.toString();
+                    cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length()-1) : "";
+                    
+                    PaymentTypes payment = null;
+                    if(mapPayTypes.size() > 1){
+                        PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
+                        List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
+                        payment = payList.get(0);
+                    } else {
+                        for(PaymentTypes payType : mapPayTypes.values()){
+                            payment = payType;
+                        }
+                    }
+                    
+                    for(int i=0; i< roomsAtrs.length; i++){
+                        AccountTransactions iAtr = (AccountTransactions) roomsAtrs[i][1];
+                        com.ahms.model.entity.Rooms iRoom = (com.ahms.model.entity.Rooms) roomsAtrs[i][0];
+                        //Checar preference detail
+                        price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : iRoom.getRteId().getRtePrice();
+                        
+                        FolioTransaction iFolio = new FolioTransaction();
+                        iFolio.setActId(quickRentAccount);
+                        iFolio.setAtrId(iAtr);
+                        iFolio.setCouId(currentShift);
+                        iFolio.setFtrAmount(price);
+                        iFolio.setFtrCardNumber(cardNumbers);
+                        iFolio.setFtrDteMod(new Date());
+                        iFolio.setFtrUsrMod(currentShift.getUsrId());
+                        iFolio.setPayId(payment);
+                        folioTransactionBoundary.insert(iFolio);                        
+                    }
+                    
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
                     RoomsBoundary roomsBoundary = new RoomsBoundary();
                     parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
@@ -466,6 +519,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
             } catch (Exception e) {
                 GeneralFunctions.sendMessage(this, "Ocurrio un error. Por favor contacte con servicio técnico. \n Error: " + e.getMessage());
+                GeneralFunctions.appendTrace(e.getStackTrace());
             }
         }
     }//GEN-LAST:event_jbQRPagarActionPerformed
@@ -529,7 +583,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
             PreferenceDetail preferenceDetail = new PreferenceDetail();
             preferenceDetail.setCusId(mainCustomer);
             preferenceDetail.setRtyId((RoomTypes) jcbQuickRentTipo.getSelectedItem());
-            PreferenceDetail preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
+            preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
             // ------------------------------------------------------------------------------------
             quickRentSubTotal = BigDecimal.ZERO;
             quickRentIva = BigDecimal.ZERO;

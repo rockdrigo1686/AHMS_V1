@@ -8,6 +8,7 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.FolioTransaction;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.PaymentTypes;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.util.MMKeys;
@@ -148,7 +149,14 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
 
     private void cargarTiposPago() {
         jcbTipoPago.removeAllItems();
-        List<PaymentTypes> payments = paymentTypesBoundary.searchAll(new PaymentTypes());
+        PaymentTypes paymentType = new PaymentTypes();
+        MultiValueBoundary multiValueBoundary = new MultiValueBoundary();
+        paymentType.setPayStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
+        List<PaymentTypes> payments = paymentTypesBoundary.findByPayStatus(paymentType);
+        
+        PaymentTypes selType = new PaymentTypes();
+        selType.setPayDesc("Seleccionar...");
+        jcbTipoPago.addItem(selType);
         for (PaymentTypes payment : payments) {
             jcbTipoPago.addItem(payment);
         }
@@ -294,32 +302,8 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
 
                 //Actualizar el mapa del parent
                 parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
-                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
                 
-                //TRANSACCIONES CORRESPONDIENTES
-                /*FolioTransaction folioTransaction = null;
-                if (selectedPayment.getPayId() == 1) { // EFECTIVO
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importeTotal);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                } else { // TARJETAs
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importeTotal);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
-                    folioTransaction.setFtrCardNumber(jtCardNumber.getText());
-                    folioTransaction.setFtrFolio(folio);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                }
-                folioTransactionBoundary.insert(folioTransaction);*/
-                //----------------------------------
             } else { //si el importe pagado es menor o igual al importe total actualizar montos en checkout
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
                 //actualizar montos en el checkout
@@ -329,109 +313,39 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
 
                 //Actualizar Mapa del Parent
                 parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
-                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
-                
-                //TRANSACCIONES CORRESPONDIENTES ---
-                /*FolioTransaction folioTransaction = null;
-                if (selectedPayment.getPayId() == 1) { // EFECTIVO
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    //folioTransaction.setAtrId(attr);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importePagado);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                } else { // TARJETAs
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setCouId(currentShift);
-                    //folioTransaction.setAtrId(attr);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importePagado);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
-                    folioTransaction.setFtrCardNumber(jtCardNumber.getText());
-                    folioTransaction.setFtrFolio(folio);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                }
-                folioTransactionBoundary.insert(folioTransaction);*/
-                //----------------------------------           
+                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
             }
             isPaid = true;            
         } 
-        else if (parentQuickRent != null) { // si fue llamado desde un mainForm
+        else if (parentQuickRent != null) { // si fue llamado desde una renta
+            
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
             if (importeValida >= 0) // importe pagado > importe total, hay que dar feria
             {
                 importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.HALF_EVEN);
-                //TRANSACCIONES CORRESPONDIENTES
-                FolioTransaction folioTransaction = null;
-                if (selectedPayment.getPayId() == 1) { // EFECTIVO
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setAtrId(transactionToPay);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importeTotal);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                } else { // TARJETAs
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setAtrId(transactionToPay);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importeTotal);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
-                    folioTransaction.setFtrCardNumber(jtCardNumber.getText());
-                    folioTransaction.setFtrFolio(folio);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                }
-                folioTransactionBoundary.insert(folioTransaction);
-                GeneralFunctions.sendMessage(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());
-                //JOptionPane.showMessageDialog(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());
+                //Actualizar Mapa del Parent
+                parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                GeneralFunctions.sendMessage(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());                
             } else {  //es menor el importe pagado que el importe total, insertar en folio transaction y limpiar la forma
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
-                //TRANSACCIONES CORRESPONDIENTES
-                 List<PaymentTypes> payList = paymentTypesBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
-                selectedPayment = payList.get(0);
-                FolioTransaction folioTransaction = null;
-                if (selectedPayment.getPayId() == 1) { // EFECTIVO
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setAtrId(transactionToPay);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importePagado);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                } else { // TARJETAs
-                    folioTransaction = new FolioTransaction();
-                    folioTransaction.setActId(account);
-                    folioTransaction.setAtrId(transactionToPay);
-                    folioTransaction.setCouId(currentShift);
-                    folioTransaction.setPayId(selectedPayment);
-                    folioTransaction.setFtrAmount(importePagado);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
-                    folioTransaction.setFtrCardNumber(jtCardNumber.getText());
-                    folioTransaction.setFtrFolio(folio);
-                    folioTransaction.setFtrDteMod(new Date());
-                    folioTransaction.setFtrUsrMod(selectedPayment.getPayUsrMod());
-                }
-                folioTransactionBoundary.insert(folioTransaction);
+                
+                //Actualizar Mapa del Parent
+                parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
                 GeneralFunctions.sendMessage(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
-                //JOptionPane.showMessageDialog(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
                 //limpiar la forma sin hacer el dispose
                 importeTotal = importeRestante;
                 jlTotal.setText("$ " + importeTotal.toString());
+                jtCardNumber.setText("");
+                jcbTipoPago.setSelectedIndex(0);
                 return;
             }
             //limpiar quickRent y actualizar grid en MainForm
             parentQuickRent.totalPaid = true;
-            isPaid = true;
+            isPaid = true;            
+            
         } else if (payServiceDialog != null) { //fue llamado para pago de 1 servicio
             importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
             int importeValida = importePagado.compareTo(importeTotal);
@@ -464,7 +378,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 }
                 folioTransactionBoundary.insert(folioTransaction);
                 GeneralFunctions.sendMessage(this, "Servicio pagado exitosamente. Monto sobrante: $ " + importeSobrante.toString());
-                //JOptionPane.showMessageDialog(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());
+                
             } else {  //es menor el importe pagado que el importe total, insertar en folio transaction y limpiar la forma
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
                 //TRANSACCIONES CORRESPONDIENTES
@@ -495,10 +409,11 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 }
                 folioTransactionBoundary.insert(folioTransaction);
                 GeneralFunctions.sendMessage(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
-                //JOptionPane.showMessageDialog(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
                 //limpiar la forma sin hacer el dispose
                 importeTotal = importeRestante;
                 jlTotal.setText("$ " + importeTotal.toString());
+                jtCardNumber.setText("");
+                jcbTipoPago.setSelectedIndex(0);
                 return;
             }
             isPaid = true;
