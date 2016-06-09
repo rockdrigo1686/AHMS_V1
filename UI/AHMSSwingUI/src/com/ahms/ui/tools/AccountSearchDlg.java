@@ -214,7 +214,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         CustomerRegFrm customerReg;
         customerReg = new CustomerRegFrm(this, true, null);
         customerReg.setVisible(true);
@@ -274,11 +274,9 @@ public class AccountSearchDlg extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
         } else {
             try {
-                if (resList.size() == 1) {
-                    res = resList.get(0);
-                } else {
-                    res = resList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
-                }
+
+                res = resList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+
             } catch (Exception e) {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
             }
@@ -335,7 +333,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         return this.topFrame;
     }
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
