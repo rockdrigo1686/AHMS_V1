@@ -49,6 +49,7 @@ public class UIConstants {
     public static final String CANCEL_SERVICE_ERROR = "No se pudo cancelar el servicio. Intente nuevamente.";
     public static final String PAY_SERVICE_ERROR = "No se pudo pagar el servicio. Intente nuevamente.";
     public static final String ERROR_EMPTY_REPORT = "No se encontraron datos, para los parametros especificados.";
+    public static final String ERROR_INVALID_RANGE_DATES = "Rango de fechas inconsistente. Por favor rectifique.";
 
     //CashOut
     public static final String COU_AMOUNT_WARNING = "Advertencia: El monto inicial no puede estar vacio, favor de capturar.";
