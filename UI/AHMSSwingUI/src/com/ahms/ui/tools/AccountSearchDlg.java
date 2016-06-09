@@ -281,8 +281,8 @@ public class AccountSearchDlg extends javax.swing.JDialog {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
             }
             if (res != null) {
-//                QuickRentDlg dlg = new QuickRentDlg(topFrame, rootPaneCheckingEnabled, customer, res,topFrame.getCurrentShift());
-//                dlg.setVisible(true);
+                QuickRentDlg dlg = new QuickRentDlg(this,res, topFrame.getCurrentShift());
+                dlg.setVisible(true);
             }
         }
     }

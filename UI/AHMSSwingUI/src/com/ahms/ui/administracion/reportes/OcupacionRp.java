@@ -138,9 +138,10 @@ public class OcupacionRp extends javax.swing.JDialog {
                     rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
                     int response = marshaler.parseObject(rep);
                     if (response > 0) {
-                        FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
+                        FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL , UIConstants.REPORTE_OCUPACION_XML, fileOut);
                         File myFile = new File(fileOut);
                         Desktop.getDesktop().open(myFile);
+                        this.dispose();
                         GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
                     } else {
                         GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");

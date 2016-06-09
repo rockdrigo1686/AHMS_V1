@@ -67,10 +67,10 @@ public class UIConstants {
     public static final String ERROR_REQUIRED_MESSAGE = "Existen campos requeridos vacios, favor de verificar.";
 
     //PATHS TEMPLATES REPORTES
-    public static final String REPORTE_OCUPACION_XSL_WIN = "c:/ahms/reports/templates/XSL_OCUPACION.xsl";
-    public static final String REPORTE_SERVICIOS_XSL_WIN = "c:/ahms/reports/templates/XSL_SERVICIOS.xsl";
-    public static final String REPORTE_CANCELACIONES_XSL_WIN = "c:/ahms/reports/templates/XSL_CANCELACION.xsl";
-    public static final String REPORTE_CORTE_CAJA_XSL_WIN = "c:/ahms/reports/templates/XSL_CORTE_CAJA.xsl";
+    public static final String REPORTE_OCUPACION_XSL = "c:/ahms/reports/templates/XSL_OCUPACION.xsl";
+    public static final String REPORTE_SERVICIOS_XSL = "c:/ahms/reports/templates/XSL_SERVICIOS.xsl";
+    public static final String REPORTE_CANCELACIONES_XSL = "c:/ahms/reports/templates/XSL_CANCELACION.xsl";
+    public static final String REPORTE_CORTE_CAJA_XSL = "c:/ahms/reports/templates/XSL_CORTE_CAJA.xsl";
 
     public static final String REPORTE_OCUPACION_XSL_LINUX = "./reports/template/XSL_OCUPACION.xsl";
     public static final String REPORTE_SERVICIOS_XSL_LINUX = "./reports/template/XSL_SERVICIOS.xsl";
@@ -78,10 +78,10 @@ public class UIConstants {
     public static final String REPORTE_CORTE_CAJA_XSL_LINUX = "./reports/template/XSL_CORTE_CAJA.xsl";
 
     //PATHS SOURCES REPORTES
-    public static final String REPORTE_OCUPACION_XML_WIN = "c:/ahms/reports/src/XSL_OCUPACION.xml";
-    public static final String REPORTE_SERVICIOS_XML_WIN = "c:/ahms/reports/src/XSL_SERVICIOS.xml";
-    public static final String REPORTE_CANCELACIONES_XML_WIN = "c:/ahms/reports/src/XSL_CANCELACION.xml";
-    public static final String REPORTE_CORTE_CAJA_XML_WIN = "c:/ahms/reports/src/XSL_CORTE_CAJA.xml";
+    public static final String REPORTE_OCUPACION_XML = "c:/ahms/reports/src/XSL_OCUPACION.xml";
+    public static final String REPORTE_SERVICIOS_XML = "c:/ahms/reports/src/XSL_SERVICIOS.xml";
+    public static final String REPORTE_CANCELACIONES_XML = "c:/ahms/reports/src/XSL_CANCELACION.xml";
+    public static final String REPORTE_CORTE_CAJA_XML = "c:/ahms/reports/src/XSL_CORTE_CAJA.xml";
 
     public static final String REPORTE_OCUPACION_XML_LINUX = "./reports/src/XML_OCUPACION.xml";
     public static final String REPORTE_SERVICIOS_XML_LINUX = "./reports/src/XML_SERVICIOS.xml";
