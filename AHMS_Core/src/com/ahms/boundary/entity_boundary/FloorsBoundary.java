@@ -26,7 +26,12 @@ public class FloorsBoundary implements AHMSBoundary<Floors>{
 
     @Override
     public List<Floors> search(Floors obj) {
-        return floorEM.searchAll(obj);
+        try {
+            return floorEM.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(FloorsBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<Floors> searchByFloor(Floors obj) {

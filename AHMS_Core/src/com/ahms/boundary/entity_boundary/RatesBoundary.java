@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.Rates;
 import com.ahms.model.manager.entity_manager.RatesEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +26,12 @@ public class RatesBoundary implements AHMSBoundary<Rates>{
 
     @Override
     public List<Rates> search(Rates obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return ratesEm.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(RatesBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
