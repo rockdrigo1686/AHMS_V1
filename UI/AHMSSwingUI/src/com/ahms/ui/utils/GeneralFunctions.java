@@ -69,4 +69,8 @@ public class GeneralFunctions {
         }
         return sbTrace.toString();
     }
+    
+    public static boolean compareDates(Calendar calIni, Calendar calEnd){
+        return calIni.compareTo(calEnd) < 1 ? true : false ;
+    }
 }
