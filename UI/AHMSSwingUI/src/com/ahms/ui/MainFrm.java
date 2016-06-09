@@ -691,6 +691,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem13.setText("Serivicios");
+        jMenuItem13.setEnabled(false);
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem13ActionPerformed(evt);
@@ -709,6 +710,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem15.setText("Corte de Caja");
+        jMenuItem15.setEnabled(false);
         jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem15ActionPerformed(evt);
@@ -718,6 +720,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/pdf.png"))); // NOI18N
         jMenuItem4.setText("Cancelaciones");
+        jMenuItem4.setEnabled(false);
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);

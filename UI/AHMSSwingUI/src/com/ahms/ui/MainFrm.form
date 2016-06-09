@@ -140,6 +140,7 @@
                       <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Serivicios"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem13ActionPerformed"/>
@@ -162,6 +163,7 @@
                       <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Corte de Caja"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem15ActionPerformed"/>
@@ -173,6 +175,7 @@
                       <Image iconType="3" name="/com/ahms/ui/images/16x16/pdf.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Cancelaciones"/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
