@@ -169,26 +169,30 @@ public class ServiciosRp extends javax.swing.JDialog {
         try {
             Calendar calEntrada = dateChooserFecEnt.getCurrent();
             Calendar calSalida = dateChooserFecFin.getCurrent();
-            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
-            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_SERVICIOS_XML_LINUX);
-            AccountBoundary acb = new AccountBoundary();
-            MultiValueBoundary mvb = new MultiValueBoundary();
-            Account acct = new Account();
-            acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-            List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
-            if (list != null && list.size() > 0) {
-                ServicioRep rep = mapEntity(list);
-                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
-                int response = marshaler.parseObject(rep);
-                if (response > 0) {
-                    FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
-                    File myFile = new File(fileOut);
-                    Desktop.getDesktop().open(myFile);
-                    GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
-                } else {
-                    GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
-                }
+            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
+                SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_SERVICIOS_XML_LINUX);
+                AccountBoundary acb = new AccountBoundary();
+                MultiValueBoundary mvb = new MultiValueBoundary();
+                Account acct = new Account();
+                acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
+                if (list != null && list.size() > 0) {
+                    ServicioRep rep = mapEntity(list);
+                    rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
+                    int response = marshaler.parseObject(rep);
+                    if (response > 0) {
+                        FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
+                        File myFile = new File(fileOut);
+                        Desktop.getDesktop().open(myFile);
+                        GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
+                    } else {
+                        GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
+                    }
 
+                }
+            } else {
+                GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
             }
 
         } catch (Exception ex) {

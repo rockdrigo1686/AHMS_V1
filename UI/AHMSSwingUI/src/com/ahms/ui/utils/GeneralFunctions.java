@@ -15,8 +15,10 @@ import javax.swing.JOptionPane;
  * @author jorge
  */
 public class GeneralFunctions {
+
     private static final ErrorTraceBoundary errorTraceBoundary = new ErrorTraceBoundary();
-    public static long getDaysBetweenDates (Calendar date1, Calendar date2) {
+
+    public static long getDaysBetweenDates(Calendar date1, Calendar date2) {
         long days = 0;
         try {
             long diffTimeInMillis = date2.getTimeInMillis() - date1.getTimeInMillis();
@@ -26,12 +28,12 @@ public class GeneralFunctions {
         }
         return days;
     }
-    
+
     public static void sendMessage(Component parent, String message) {
         JOptionPane.showMessageDialog(parent, message);
     }
-    
-    public static String formatAmount(BigDecimal amount){
+
+    public static String formatAmount(BigDecimal amount) {
         String formatted;
         DecimalFormat df = new DecimalFormat("$ ##,##0.00");
         try {
@@ -42,8 +44,8 @@ public class GeneralFunctions {
         }
         return formatted;
     }
-    
-    public static String formatDate(Date date){
+
+    public static String formatDate(Date date) {
         String formatted;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -54,23 +56,27 @@ public class GeneralFunctions {
         }
         return formatted;
     }
-    
-    public static void appendTrace(StackTraceElement[] stackTraceArray){
+
+    public static void appendTrace(StackTraceElement[] stackTraceArray) {
         ErrorTrace newTrace = new ErrorTrace();
         newTrace.setErrTrace(getCompleteTrace(stackTraceArray));
         newTrace.setErrDate(new Date());
         errorTraceBoundary.insert(newTrace);
     }
-    
-    private static String getCompleteTrace(StackTraceElement[] stackTraceArray){
+
+    private static String getCompleteTrace(StackTraceElement[] stackTraceArray) {
         StringBuilder sbTrace = new StringBuilder();
-        for(StackTraceElement elem : stackTraceArray){
+        for (StackTraceElement elem : stackTraceArray) {
             sbTrace.append(elem.toString()).append("\n");
         }
         return sbTrace.toString();
     }
-    
-    public static boolean compareDates(Calendar calIni, Calendar calEnd){
-        return calIni.compareTo(calEnd) < 1 ? true : false ;
+
+    public static boolean compareDates(Calendar calIni, Calendar calEnd, Boolean dif) {
+        if (dif) {
+            return calIni.compareTo(calEnd) < 0;
+        } else {
+            return calIni.compareTo(calEnd) < 1;
+        }
     }
 }

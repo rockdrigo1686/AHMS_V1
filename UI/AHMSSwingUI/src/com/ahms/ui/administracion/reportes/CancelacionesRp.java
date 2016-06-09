@@ -158,10 +158,10 @@ public class CancelacionesRp extends javax.swing.JDialog {
         try {
             SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
             AccountTransactions accountTransactions = new AccountTransactions();
-
             Calendar calEntrada = dateIni.getCurrent();
             Calendar calSalida = dateFin.getCurrent();
-            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_CANCELACIONES_XML_LINUX);
+            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
+                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_CANCELACIONES_XML_LINUX);
             AccountTransactionsBoundary atb = new AccountTransactionsBoundary();
             MultiValueBoundary mvb = new MultiValueBoundary();
             accountTransactions.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
@@ -181,7 +181,10 @@ public class CancelacionesRp extends javax.swing.JDialog {
             }else{
                 GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
             }
-
+            }else{
+                GeneralFunctions.sendMessage(this,UIConstants.ERROR_INVALID_RANGE_DATES);
+            }
+            
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
         }

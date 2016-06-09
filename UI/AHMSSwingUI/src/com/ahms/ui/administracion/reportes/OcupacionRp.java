@@ -123,37 +123,41 @@ public class OcupacionRp extends javax.swing.JDialog {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
         String fileOut = "./reports/RPT_OCUPACION_" + df.format(date) + ".pdf";
         try {
-            Calendar calEntrada = (Calendar) fecIni.getCurrent();
-            Calendar calSalida = (Calendar) fecFin.getCurrent();
-            XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_OCUPACION_XML_LINUX);
-            AccountTransactionsBoundary acb = new AccountTransactionsBoundary();
-            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
-            MultiValueBoundary mvb = new MultiValueBoundary();
-            AccountTransactions acct = new AccountTransactions();
-            acct.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-            List<AccountTransactions> list = acb.findRented(acct, calEntrada.getTime(), calSalida.getTime());
-            if (list != null && list.size() > 0) {
-                OcupacionRep rep = mapEntity(list);
-                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
-                int response = marshaler.parseObject(rep);
-                if (response > 0) {
-                    FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
-                    File myFile = new File(fileOut);
-                    Desktop.getDesktop().open(myFile);
-                    GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+            Calendar calEntrada = fecIni.getCurrent();
+            Calendar calSalida = fecFin.getCurrent();
+            if (GeneralFunctions.compareDates(calEntrada,calSalida,false )) {
+                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_OCUPACION_XML_LINUX);
+                AccountTransactionsBoundary acb = new AccountTransactionsBoundary();
+                SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+                MultiValueBoundary mvb = new MultiValueBoundary();
+                AccountTransactions acct = new AccountTransactions();
+                acct.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+                List<AccountTransactions> list = acb.findRented(acct, calEntrada.getTime(), calSalida.getTime());
+                if (list != null && list.size() > 0) {
+                    OcupacionRep rep = mapEntity(list);
+                    rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
+                    int response = marshaler.parseObject(rep);
+                    if (response > 0) {
+                        FOPEngine.convertToPDF(UIConstants.REPORTE_OCUPACION_XSL_LINUX, UIConstants.REPORTE_OCUPACION_XML_LINUX, fileOut);
+                        File myFile = new File(fileOut);
+                        Desktop.getDesktop().open(myFile);
+                        GeneralFunctions.sendMessage(this, "Reporte de ocupacion generado correctamente.");
+                    } else {
+                        GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");
+                    }
                 } else {
-                    GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de ocupacion.");
+                    GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
                 }
             } else {
-                GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
+                GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
             }
-            
+
         } catch (Exception ex) {
             Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
             GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private OcupacionRep mapEntity(List<AccountTransactions> list) {
         OcupacionRep rep = new OcupacionRep();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
