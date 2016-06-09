@@ -409,6 +409,12 @@ public class QuickRentDlg extends javax.swing.JDialog {
             try {
                 Calendar calEntrada = dateCsIni.getCurrent();
                 Calendar calSalida = dateCsFin.getCurrent();
+                
+                if(!GeneralFunctions.compareDates(calEntrada, calSalida, true)){
+                    GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
+                    return;
+                }
+                
                 int numPersonas = (int) jspNumeroPersonas.getValue();
 
                 Account actFind = new Account();
@@ -526,12 +532,17 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
     private void jbQRSearchRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQRSearchRoomActionPerformed
         try {
+            Calendar calEntrada = dateCsIni.getCurrent();
+            Calendar calSalida = dateCsFin.getCurrent();
+
+            if(!GeneralFunctions.compareDates(calEntrada, calSalida, true)){
+                GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
+                return;
+            }
+            
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
-
-            Calendar calEntrada = dateCsIni.getCurrent();
-            Calendar calSalida = dateCsFin.getCurrent();
 
             int numRooms = (int) jspNumeroCuartos.getValue();
             roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(), numRooms);
@@ -546,7 +557,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     GeneralFunctions.sendMessage(this, "De los " + numRooms + " que se especificaron, solo " + roomAvailableByTypeLst.size() + " estan disponibles.");
                 }
             } else {
-                GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS);
+                GeneralFunctions.sendMessage(this, UIConstants.NO_AVAIL_ROOMS + " Favor de revisar las fechas y el tipo de cuarto.");
                 jbtnLoadCustomer.setEnabled(false);
             }
         } catch (Exception e) {
