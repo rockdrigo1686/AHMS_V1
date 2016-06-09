@@ -32,6 +32,12 @@ import com.ahms.ui.administracion.reportes.OcupacionRp;
 import com.ahms.ui.administracion.reportes.ServiciosRp;
 import com.ahms.ui.administracion.seguridad.ProfilesFrm;
 import com.ahms.ui.administracion.seguridad.UsersFrm;
+import com.ahms.ui.configuracion.FloorsFrm;
+import com.ahms.ui.configuracion.RatesFrm;
+import com.ahms.ui.configuracion.RoomsFrm;
+import com.ahms.ui.configuracion.RoomsTypesFrm;
+import com.ahms.ui.configuracion.ServiceTypeFrm;
+import com.ahms.ui.configuracion.ServicesFrm;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
@@ -443,7 +449,6 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu8 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
-        jMenuItem12 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -765,18 +770,38 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem6.setText("Pisos");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem6);
 
         jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem7.setText("Precios");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem7);
 
         jMenuItem8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem8.setText("Tipos de Cuartos");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem8);
 
         jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem9.setText("Cuartos");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem9);
 
         menConf.add(jMenu7);
@@ -786,17 +811,23 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem10.setText("Tipos de Servicios");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
         jMenu8.add(jMenuItem10);
 
         jMenuItem11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/application_form.png"))); // NOI18N
         jMenuItem11.setText("Servicios");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
         jMenu8.add(jMenuItem11);
 
         menConf.add(jMenu8);
-
-        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/money.png"))); // NOI18N
-        jMenuItem12.setText("Tipos de Pago");
-        menConf.add(jMenuItem12);
 
         jMenuBar1.add(menConf);
 
@@ -946,6 +977,36 @@ public class MainFrm extends javax.swing.JFrame {
         add.setVisible(true);
         fillMessageBoard();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        FloorsFrm floorsFrm = new FloorsFrm(this, true, mainUser);
+        floorsFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        RatesFrm ratesFrm = new RatesFrm(this, true, mainUser);
+        ratesFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+        RoomsTypesFrm roomsTypesFrm = new RoomsTypesFrm(this, true, mainUser);
+        roomsTypesFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        RoomsFrm roomsFrm = new RoomsFrm(this, true);
+        roomsFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        ServiceTypeFrm serviceTypeFrm = new ServiceTypeFrm();
+        serviceTypeFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
+        ServicesFrm servicesFrm = new ServicesFrm(this, true);
+        servicesFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
     private void fillMessageBoard() {
         String col[] = {"ID", "Mensaje", "Fecha", "Usuario"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
@@ -1009,7 +1070,6 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;

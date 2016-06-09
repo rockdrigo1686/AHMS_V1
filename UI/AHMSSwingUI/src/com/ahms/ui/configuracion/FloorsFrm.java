@@ -56,7 +56,7 @@ public class FloorsFrm extends javax.swing.JDialog {
         floorsBoundary = new FloorsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         MultiValue multiValue = new MultiValue();
-        multiValue.setMvaType(MMKeys.Rooms.GP_KEY);
+        multiValue.setMvaType(MMKeys.General.GP_KEY);
         loadStatus(multiValueBoundary.findByType(multiValue));
         resultList = searchAll();
         //Creamos mapa de componentes

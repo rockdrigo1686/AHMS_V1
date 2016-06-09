@@ -233,7 +233,7 @@ public class RatesFrm extends javax.swing.JDialog {
         jToolBar1.add(btnEliminar);
         jToolBar1.add(jSeparator5);
 
-        jLabel1.setText("Tarifa:");
+        jLabel1.setText("Descripción:");
 
         rteDesc.setName("rteDesc"); // NOI18N
 
