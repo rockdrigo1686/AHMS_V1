@@ -17,6 +17,7 @@ import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.entity.PreferenceDetail;
+import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
@@ -27,6 +28,7 @@ import com.ahms.util.MMKeys;
 import java.awt.Font;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,6 +64,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
     private MainFrm parentFrm = null;
+    private AccountSearchDlg dlgParent = null;
 
     public QuickRentDlg(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
@@ -85,6 +88,66 @@ public class QuickRentDlg extends javax.swing.JDialog {
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
+    }
+    
+    public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift){
+        super(parent, true);
+        initComponents();
+        this.dlgParent = parent;
+        this.mainCustomer = reservation.getCusId();
+        this.currentShift = shift;
+        
+        //asignar valores de la reservacion
+        Calendar calIni = Calendar.getInstance();
+        calIni.setTime(reservation.getResFecIni());
+        Calendar calFin = Calendar.getInstance();
+        calFin.setTime(reservation.getResFecFin());
+        
+        dateCsIni.setCurrent(calIni);
+        dateCsFin.setCurrent(calFin);
+        jcbQuickRentTipo.setSelectedItem(reservation.getRmsId().getRmsBeds());
+        lblCustName.setText(mainCustomer.getFullName());
+        lblRfc.setText(mainCustomer.getCusRfc());
+        //generar totales de renta
+        MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+        quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+
+        long days = GeneralFunctions.getDaysBetweenDates(calIni, calFin);
+        //verificar si el Customer tiene tasa preferencial ------------------------------------
+        PreferenceDetail preferenceDetail = new PreferenceDetail();
+        preferenceDetail.setCusId(mainCustomer);
+        preferenceDetail.setRtyId((RoomTypes) jcbQuickRentTipo.getSelectedItem());
+        preference = preferenceDetailBoundary.searchByCusId(preferenceDetail);
+        // ------------------------------------------------------------------------------------
+        quickRentSubTotal = BigDecimal.ZERO;
+        quickRentIva = BigDecimal.ZERO;
+        quickRentTotal = BigDecimal.ZERO;
+        BigDecimal price = BigDecimal.ZERO;
+        
+        price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : reservation.getRmsId().getRteId().getRtePrice();
+        quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
+        quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
+        
+        quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+
+        lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
+        jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
+        jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
+        jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
+        
+        roomAvailableByTypeLst = new ArrayList<com.ahms.model.entity.Rooms>();
+        roomAvailableByTypeLst.add(reservation.getRmsId());
+        
+        //deshabilitar todos los componentes
+        dateCsIni.setEnabled(false);
+        dateCsFin.setEnabled(false);
+        jspNumeroCuartos.setEnabled(false);
+        jspNumeroPersonas.setEnabled(true);
+        jcbQuickRentTipo.setEnabled(false);
+        jbQRSearchRoom.setEnabled(false);
+        jbtnLoadCustomer.setEnabled(false);
+        jbQRPagar.setEnabled(true);
+    
     }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
@@ -189,7 +252,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jcbQuickRentTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbQRSearchRoom))
+                        .addComponent(jbQRSearchRoom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
@@ -215,13 +278,13 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jspNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbQRSearchRoom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jbQRSearchRoom))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbQuickRentTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(11, 11, 11)
                 .addComponent(jlNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
