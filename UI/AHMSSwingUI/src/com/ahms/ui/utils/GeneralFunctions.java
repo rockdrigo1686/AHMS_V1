@@ -73,6 +73,14 @@ public class GeneralFunctions {
     }
 
     public static boolean compareDates(Calendar calIni, Calendar calEnd, Boolean dif) {
+        calIni.set(Calendar.HOUR_OF_DAY, 0);
+        calIni.set(Calendar.MINUTE, 0);
+        calIni.set(Calendar.SECOND, 0);
+        calIni.set(Calendar.MILLISECOND, 0);
+        calEnd.set(Calendar.HOUR_OF_DAY, 0);
+        calEnd.set(Calendar.MINUTE, 0);
+        calEnd.set(Calendar.SECOND, 0);
+        calEnd.set(Calendar.MILLISECOND, 0);       
         if (dif) {
             return calIni.compareTo(calEnd) < 0;
         } else {
