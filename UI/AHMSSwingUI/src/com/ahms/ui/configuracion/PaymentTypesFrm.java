@@ -56,7 +56,7 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
         paymentTypeBoundary = new PaymentTypesBoundary();
         MMBoundary = new MultiValueBoundary();
 
-        payStatus.addItem(new MultiValue("DEF", "Seleccionar..."));
+        payStatus.addItem(new MultiValue(null, "Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
             payStatus.addItem(obj);
         }
