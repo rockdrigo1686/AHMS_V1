@@ -3,11 +3,14 @@ package com.ahms.ui.utils;
 import com.ahms.boundary.entity_boundary.ErrorTraceBoundary;
 import com.ahms.model.entity.ErrorTrace;
 import java.awt.Component;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,6 +88,18 @@ public class GeneralFunctions {
             return calIni.compareTo(calEnd) < 0;
         } else {
             return calIni.compareTo(calEnd) < 1;
+        }
+    }
+    
+    public static void resetProperties(Object obj) {
+        
+        for (Field object : obj.getClass().getDeclaredFields()) {
+            try {
+                object.setAccessible(true);
+                object.set(obj, null);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GeneralFunctions.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
