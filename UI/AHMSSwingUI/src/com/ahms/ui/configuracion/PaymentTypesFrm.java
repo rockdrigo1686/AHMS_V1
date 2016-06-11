@@ -229,6 +229,12 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, paymentType, org.jdesktop.beansbinding.ELProperty.create("${payDesc}"), payDesc, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        payDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                payDescKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Descripcion:");
         jLabel5.setPreferredSize(new java.awt.Dimension(67, 15));
 
@@ -236,6 +242,12 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, paymentType, org.jdesktop.beansbinding.ELProperty.create("${payCode}"), payCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        payCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                payCodeKeyTyped(evt);
+            }
+        });
 
         jLabel4.setText("Clave:");
         jLabel4.setPreferredSize(new java.awt.Dimension(67, 15));
@@ -399,6 +411,20 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
         formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
         formManager.setDefaultFormStatus();
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void payCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_payCodeKeyTyped
+        // TODO add your handling code here:
+         if (payCode.getText().length()==5) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_payCodeKeyTyped
+
+    private void payDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_payDescKeyTyped
+        // TODO add your handling code here:
+         if (payDesc.getText().length()==150) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_payDescKeyTyped
 
     /**
      * @param args the command line arguments
