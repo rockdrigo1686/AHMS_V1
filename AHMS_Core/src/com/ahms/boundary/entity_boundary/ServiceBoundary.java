@@ -27,7 +27,12 @@ public class ServiceBoundary implements AHMSBoundary<Services>{
 
     @Override
     public List<Services> search(Services obj) {
-        return serviceEM.search(obj);
+        try {
+            return serviceEM.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(ServiceBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override

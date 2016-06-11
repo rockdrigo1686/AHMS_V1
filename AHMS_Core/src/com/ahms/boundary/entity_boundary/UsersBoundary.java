@@ -27,7 +27,12 @@ public class UsersBoundary implements AHMSBoundary<Users>{
     
     @Override
     public List<Users> search(Users obj) {
-        return userEM.search(obj);
+        try {
+            return userEM.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(UsersBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
