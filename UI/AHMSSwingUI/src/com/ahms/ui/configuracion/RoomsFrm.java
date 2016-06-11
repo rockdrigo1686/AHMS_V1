@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui.configuracion;
 
 import com.ahms.boundary.entity_boundary.FloorsBoundary;
@@ -10,36 +5,33 @@ import com.ahms.boundary.entity_boundary.MultiValueBoundary;
 import com.ahms.boundary.entity_boundary.RatesBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
 import com.ahms.boundary.entity_boundary.RoomsBoundary;
+import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rates;
 import com.ahms.model.entity.RoomTypes;
-import com.ahms.model.entity.Users;
+import com.ahms.model.entity.Rooms;
+import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author jorge
- */
 public class RoomsFrm extends javax.swing.JDialog {
 
-    /**
-     * Creates new form Rooms
-     */
     private RoomsBoundary roomsBoundary;
     private FloorsBoundary floorsBoundary;
     private MultiValueBoundary multiValueBoundary;
     private RatesBoundary ratesBoundary;
     private RoomTypesBoundary roomTypesBoundary;
+    private CashOut currentShift;
+    private MainFrm parentFrm;
+    private Integer roomsIdGlobal = null;
         
     public RoomsFrm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -49,33 +41,57 @@ public class RoomsFrm extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         ratesBoundary = new RatesBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
-        jspRoomMaxOcu.setModel(new SpinnerNumberModel(1, 1, 10, 1));
+        this.jspRoomMaxOcu.setModel(new SpinnerNumberModel(1, 1, 10, 1));        
         
-        loadRooms(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
+        loadRooms(roomsBoundary.searchAll(new Rooms()));
         loadFloors(floorsBoundary.searchAll(new Floors()));
         loadRates(ratesBoundary.searchAll(new Rates()));
         loadTypes(roomTypesBoundary.searchAll(new RoomTypes()));
         MultiValue mul = new MultiValue();
         mul.setMvaType(MMKeys.Rooms.GP_KEY);
         loadStatus(multiValueBoundary.findByType(mul));
+        
+        parentFrm = (MainFrm) parent;
+        currentShift = parentFrm.getCurrentShift();
     }
     
     private void loadFloors(List<Floors> lstFloors){
-        DefaultComboBoxModel modelFloors= new DefaultComboBoxModel(lstFloors.toArray(new Floors[lstFloors.size()]));
-        this.jcbPiso.setModel(modelFloors);
+        this.jcbPiso.removeAllItems();
+        Floors zeroFlr = new Floors();
+        zeroFlr.setFlrCode("Seleccionar ...");
+        this.jcbPiso.addItem(zeroFlr);
+        for(Floors flr : lstFloors){
+            this.jcbPiso.addItem(flr);
+        }        
     }
     
     private void loadTypes(List<RoomTypes> lstRoomTypes){
-        DefaultComboBoxModel modelTypes= new DefaultComboBoxModel(lstRoomTypes.toArray(new RoomTypes[lstRoomTypes.size()]));
-        this.jcbTypes.setModel(modelTypes);
+        this.jcbTypes.removeAllItems();
+        RoomTypes zeroRmt = new RoomTypes();
+        zeroRmt.setRtyDescription("Seleccionar ...");
+        this.jcbTypes.addItem(zeroRmt);
+        for(RoomTypes rmt : lstRoomTypes){
+            this.jcbTypes.addItem(rmt);
+        }
     }
     private void loadRates(List<Rates> lstRates){
-        DefaultComboBoxModel modelRates= new DefaultComboBoxModel(lstRates.toArray(new Rates[lstRates.size()]));
-        this.jcbRate.setModel(modelRates);
+        this.jcbRate.removeAllItems();
+        Rates zeroRte = new Rates();
+        zeroRte.setRteDesc("Seleccionar ...");
+        this.jcbRate.addItem(zeroRte);
+        for(Rates rate : lstRates){
+            this.jcbRate.addItem(rate);
+        }
     }
+    
     private void loadStatus(List<MultiValue> lstStatus){
-        DefaultComboBoxModel modelStatus= new DefaultComboBoxModel(lstStatus.toArray(new MultiValue[lstStatus.size()]));
-        this.jcbRoomStatus.setModel(modelStatus);
+        this.jcbRoomStatus.removeAllItems();
+        MultiValue zeroRte = new MultiValue();
+        zeroRte.setMvaDescription("Seleccionar ...");
+        this.jcbRoomStatus.addItem(zeroRte);
+        for(MultiValue st : lstStatus){
+            this.jcbRoomStatus.addItem(st);
+        }
     }
     
     private void loadRooms(List<com.ahms.model.entity.Rooms> rooms){
@@ -112,7 +128,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         };
         jtRooms.setModel(model);
         jtRooms.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        btnGuardar.setEnabled(false);
+        btnEliminar.setEnabled(false);
     }
 
     /**
@@ -146,6 +162,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         btnBuscar = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
+        btnEditar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
@@ -283,6 +300,18 @@ public class RoomsFrm extends javax.swing.JDialog {
         jToolBar1.add(btnNuevo);
         jToolBar1.add(jSeparator4);
 
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1445772617_file_edit.png"))); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.setFocusable(false);
+        btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnEditar.setName("btnEditar"); // NOI18N
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnEditar);
+
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1445772697_diskette.png"))); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.setFocusable(false);
@@ -381,9 +410,13 @@ public class RoomsFrm extends javax.swing.JDialog {
         int clicks = evt.getClickCount();
         int row = jtRooms.getSelectedRow();
         if(clicks == 2){ // doble click
-           rooms1 = (com.ahms.model.entity.Rooms) jtRooms.getValueAt(row, 0);
+           rooms1 = (Rooms) jtRooms.getValueAt(row, 0);
            renderForm();
-           btnGuardar.setEnabled(true);
+           btnGuardar.setEnabled(false);
+           btnBuscar.setEnabled(false);
+           btnNuevo.setEnabled(false);
+           btnEliminar.setEnabled(true);
+           lockInstance();
         } 
     }//GEN-LAST:event_jtRoomsMouseClicked
 
@@ -392,6 +425,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         jtxtRoomNuber.setEnabled(true);
         jcbPiso.setSelectedIndex(0);
         jlRoomsId.setText("");
+        roomsIdGlobal = null;
         jtxtRoomNuber.setText("");
         jtxtRoomDesc.setText("");
         jcbTypes.setSelectedIndex(0);
@@ -400,54 +434,93 @@ public class RoomsFrm extends javax.swing.JDialog {
         jcbRoomStatus.setSelectedIndex(0);
     }
     
+    private boolean validateInstance(){
+        try {
+            if(jcbPiso.getSelectedIndex() > 0           &&
+                !jtxtRoomNuber.getText().isEmpty()       &&
+                jcbPiso.getSelectedIndex() > 0           &&
+                roomsIdGlobal == null     &&
+                !jtxtRoomDesc.getText().trim().isEmpty()  &&
+                jcbTypes.getSelectedIndex() > 0          &&
+                jcbRate.getSelectedIndex() > 0 &&
+                jcbRoomStatus.getSelectedIndex() > 0){
+                 return true;
+            } 
+        } catch (Exception e) {
+            GeneralFunctions.appendTrace(e.getStackTrace());
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al insertar el registro. Por favor contacte a servicio técnico.\nError: " + e.getMessage());
+        }        
+        return false;        
+    }
+    
     
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         cleanInstance();
         btnGuardar.setEnabled(true);
+        btnBuscar.setEnabled(true);
+        btnNuevo.setEnabled(true);
+        btnGuardar.setEnabled(true);
+        unlockInstance();
+        this.jlRoomsId.setText("");
+        roomsIdGlobal = null;
+        loadRooms(roomsBoundary.searchAll(new Rooms()));
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        com.ahms.model.entity.Rooms newRoom = new com.ahms.model.entity.Rooms();
+        Rooms newRoom = new Rooms();
         newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
         newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
         newRoom.setRmsDesc(jtxtRoomDesc.getText());
         newRoom.setRmsDteMod(new java.util.Date());
-        newRoom.setRmsId(jlRoomsId.getText().length() > 0 ? Integer.parseInt(jlRoomsId.getText()) : null);
+        newRoom.setRmsId(roomsIdGlobal);
         newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
         newRoom.setRmsNumber(jtxtRoomNuber.getText());
         newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
         newRoom.setRteId((Rates) jcbRate.getSelectedItem());
-        newRoom.setRmsUsrMod(new Users(1));
+        newRoom.setRmsUsrMod(currentShift.getUsrId());
         
         loadRooms(roomsBoundary.search(newRoom));
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        cleanInstance();
-        btnGuardar.setEnabled(true);
-    }//GEN-LAST:event_btnNuevoActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        com.ahms.model.entity.Rooms newRoom = new com.ahms.model.entity.Rooms();
+        if(!validateInstance()){
+            GeneralFunctions.sendMessage(this, "No puede haber campos vacios. Por favor rectifique.");
+            return;
+        }
+        Rooms newRoom = new Rooms();
         newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
         newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
         newRoom.setRmsDesc(jtxtRoomDesc.getText());
         newRoom.setRmsDteMod(new java.util.Date());
-        newRoom.setRmsId(jlRoomsId.getText().length() > 0 ? Integer.parseInt(jlRoomsId.getText()) : null);
         newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
         newRoom.setRmsNumber(jtxtRoomNuber.getText());
         newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
         newRoom.setRteId((Rates) jcbRate.getSelectedItem());
-        newRoom.setRmsUsrMod(new Users(1));
+        newRoom.setRmsUsrMod(currentShift.getUsrId());
+        roomsBoundary.insert(newRoom);
+        GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
+        loadRooms(roomsBoundary.searchAll(new Rooms()));
+        cleanInstance();
         
-        if(newRoom.getRmsId() != null){ //update
-            roomsBoundary.update(newRoom);
-            GeneralFunctions.sendMessage(null, UIConstants.SUCCESS_UPDATE);            
-        } else { //insert
-            roomsBoundary.insert(newRoom);
-            GeneralFunctions.sendMessage(null, UIConstants.SUCCESS_SAVE);
-        }
-        loadRooms(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        Rooms newRoom = new Rooms();
+        newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
+        newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
+        newRoom.setRmsDesc(jtxtRoomDesc.getText());
+        newRoom.setRmsDteMod(new java.util.Date());
+        newRoom.setRmsId(roomsIdGlobal);
+        newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
+        newRoom.setRmsNumber(jtxtRoomNuber.getText());
+        newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
+        newRoom.setRteId((Rates) jcbRate.getSelectedItem());
+        newRoom.setRmsUsrMod(currentShift.getUsrId());
+        
+        roomsBoundary.update(newRoom);
+        GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_UPDATE);            
+        loadRooms(roomsBoundary.searchAll(new Rooms()));
         cleanInstance();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -455,9 +528,10 @@ public class RoomsFrm extends javax.swing.JDialog {
         int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             if(roomsBoundary.delete(rooms1) > 0){
-                GeneralFunctions.sendMessage(null, UIConstants.SUCCESS_DELETE);
-                cleanInstance();
-                loadRooms(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
+                GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_DELETE);
+                btnLimpiarActionPerformed(null);
+                //cleanInstance();
+                //loadRooms(roomsBoundary.searchAll(new Rooms()));
             }
         }        
     }//GEN-LAST:event_btnEliminarActionPerformed
@@ -468,12 +542,40 @@ public class RoomsFrm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jtxtRoomDescKeyTyped
 
+    private void lockInstance(){
+        jcbPiso.setEnabled(false);
+        jtxtRoomNuber.setEnabled(false);
+        jcbTypes.setEnabled(false);
+        jspRoomMaxOcu.setEnabled(false);
+        jcbRate.setEnabled(false);
+        jcbRoomStatus.setEnabled(false);
+        jtxtRoomDesc.setEnabled(false);
+    }
+    private void unlockInstance(){
+        jcbPiso.setEnabled(true);
+        jtxtRoomNuber.setEnabled(true);
+        jcbTypes.setEnabled(true);
+        jspRoomMaxOcu.setEnabled(true);
+        jcbRate.setEnabled(true);
+        jcbRoomStatus.setEnabled(true);
+        jtxtRoomDesc.setEnabled(true);
+    }
+    
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        btnBuscar.setEnabled(false);
+        btnEliminar.setEnabled(false);
+        btnNuevo.setEnabled(false);
+        btnGuardar.setEnabled(true);
+        unlockInstance();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
    private void renderForm(){
        if(rooms1 != null){
            jcbPiso.setEnabled(false);
            jtxtRoomNuber.setEnabled(false);
            jcbPiso.setSelectedItem(rooms1.getFlrId());
            jlRoomsId.setText(rooms1.getRmsId().toString());
+           roomsIdGlobal = rooms1.getRmsId();
            jtxtRoomNuber.setText(rooms1.getRmsNumber());
            jtxtRoomDesc.setText(rooms1.getRmsDesc());
            jcbTypes.setSelectedItem(rooms1.getRmsBeds());
@@ -528,6 +630,7 @@ public class RoomsFrm extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
