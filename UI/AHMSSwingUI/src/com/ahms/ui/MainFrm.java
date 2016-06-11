@@ -33,6 +33,7 @@ import com.ahms.ui.administracion.reportes.OcupacionRp;
 import com.ahms.ui.administracion.reportes.ServiciosRp;
 import com.ahms.ui.administracion.seguridad.ProfilesFrm;
 import com.ahms.ui.administracion.seguridad.UsersFrm;
+import com.ahms.ui.configuracion.CustomerFrm;
 import com.ahms.ui.configuracion.FloorsFrm;
 import com.ahms.ui.configuracion.PaymentTypesFrm;
 import com.ahms.ui.configuracion.RatesFrm;
@@ -454,6 +455,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -843,6 +845,15 @@ public class MainFrm extends javax.swing.JFrame {
         });
         menConf.add(jMenuItem5);
 
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/group.png"))); // NOI18N
+        jMenuItem12.setText("Clientes");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        menConf.add(jMenuItem12);
+
         jMenuBar1.add(menConf);
 
         setJMenuBar(jMenuBar1);
@@ -1054,6 +1065,12 @@ public class MainFrm extends javax.swing.JFrame {
         PaymentTypesFrm paymentTypesFrm = new PaymentTypesFrm(this, true);
         paymentTypesFrm.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+        CustomerFrm customer = new CustomerFrm(this, true, mainUser);
+        customer.setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
     private void fillMessageBoard() {
         String col[] = {"ID", "Mensaje", "Fecha", "Usuario"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
@@ -1117,6 +1134,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;

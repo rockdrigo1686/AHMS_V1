@@ -10,7 +10,9 @@ import com.ahms.boundary.entity_boundary.ServiceTypesBoundary;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.ServiceTypes;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Component;
@@ -23,6 +25,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,21 +42,21 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
     private Map<String, Component> formComponentMap = new HashMap<String, Component>();
     private Map<String, Component> buttonMap = new HashMap<String, Component>();
     private FormManager formManager = null;
+    private MainFrm topFrame;
 
     /**
      * Creates new form ServiceType
      */
     public ServiceTypeFrm() {
         initComponents();
-        setSize(980, 450);
         setLocationRelativeTo(null);
         setResizable(false);
-
+        topFrame = (MainFrm) SwingUtilities.getWindowAncestor(this);
         setTitle("Tipos de Servicios");
         serviceTypeBoundary = new ServiceTypesBoundary();
         MMBoundary = new MultiValueBoundary();
 
-        svtStatus.addItem(new MultiValue());
+        svtStatus.addItem(new MultiValue(null,"Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
             svtStatus.addItem(obj);
         }
@@ -75,7 +78,7 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
             }
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
-
+        svtId.setVisible(false);
     }
 
     /**
@@ -310,22 +313,31 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         formManager.setDefaultFormStatus();
-        /*try {
-         profile.resetProperties();
-         } catch (IllegalArgumentException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (IllegalAccessException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(serviceType);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private List<ServiceTypes> searchAll() {
         return serviceTypeBoundary.searchAll(new ServiceTypes());
     }
 
+    private boolean validateForm(){
+        if (serviceType.getSvtCode() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la Clave del tipo de servicio");
+            return false;
+        }
+        if (serviceType.getSvtDesc()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la Descripcion del tipo de servicio");
+            return false;
+        }
+        if (svtStatus.getSelectedIndex()==0) {
+            GeneralFunctions.sendMessage(this, "Favor de seleccionar un Estatus");
+            return false;
+        }
+        return true;
+    }
     //</editor-fold>
     private void fillTable(JTable resultTable) {
         String col[] = {"ID", "Clave", "Descripcion", "Estatus"};
@@ -361,16 +373,16 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        System.out.println("nuevo");
+        if(!validateForm()){
+            return;
+        }
         serviceType.setSvtDteMod(new Date());
 //        profile.setSvtUsrMod(topFrame.getMainUser().getUsrId());
         serviceType.setSvtUsrMod(new Users(1));
         if (serviceTypeBoundary.insert(serviceType) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -381,18 +393,18 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        System.out.println("guardar");
+        if(!validateForm()){
+            return;
+        }
         if (serviceType.getSvtId() != null) {
             serviceType.setSvtDteMod(new Date());
 //        profile.setSvtUsrMod(topFrame.getMainUser().getUsrId());
-            serviceType.setSvtUsrMod(new Users(1));
+            serviceType.setSvtUsrMod(topFrame.getMainUser());
             if (serviceTypeBoundary.update(serviceType) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -404,10 +416,7 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
