@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui.configuracion;
 
 import com.ahms.boundary.entity_boundary.MultiValueBoundary;
-import com.ahms.boundary.entity_boundary.ProfileBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
 import com.ahms.model.entity.MultiValue;
-import com.ahms.model.entity.Profiles;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
@@ -23,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -47,7 +40,7 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
     public RoomsTypesFrm(java.awt.Frame parent, boolean modal, Users logued) {
         super(parent, modal);
         initComponents();
-        userLogued = new Users(1);
+        userLogued = logued;
         setResizable(false);
         setTitle("Tipos de Cuartos");
         roomTypesBoundary = new RoomTypesBoundary();
@@ -75,8 +68,11 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
     }
     
     private void loadStatus(List<MultiValue> statusList){
-        DefaultComboBoxModel model= new DefaultComboBoxModel(statusList.toArray(new MultiValue[statusList.size()]));
-        this.rtyStatus.setModel(model);
+        rtyStatus.removeAllItems();
+        rtyStatus.addItem(new MultiValue(null, "Seleccionar ..."));
+        for(MultiValue ml:statusList){
+            rtyStatus.addItem(ml);
+        }        
     }
     
     private List<RoomTypes> searchAll() {
@@ -217,6 +213,12 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, roomTypes, org.jdesktop.beansbinding.ELProperty.create("${rtyDescription}"), rtyDescription, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        rtyDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                rtyDescriptionKeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Camas:");
 
         rtyBeds.setToolTipText("");
@@ -313,6 +315,10 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
+        resultTable.getColumn("Usuario Mod").setMinWidth(0);
+        resultTable.getColumn("Usuario Mod").setMaxWidth(0);
+        resultTable.getColumn("Fecha Mod").setMinWidth(0);
+        resultTable.getColumn("Fecha Mod").setMaxWidth(0);
         resultTable.setColumnSelectionAllowed(false);
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);
@@ -325,6 +331,7 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(roomTypes);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -340,32 +347,37 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         newRty.setRtyStatus(roomTypes.getRtyStatus());
         newRty.setRtyUsrMod(userLogued);
         newRty.setRtyDteMod(new Date());
-        
-        if (roomTypesBoundary.insert(newRty) == 1) {
-            JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
-        }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        if(GeneralFunctions.validateNumeric(rtyBeds.getText().trim())){
+            if (roomTypesBoundary.insert(newRty) == 1) {
+                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
+            }
+            resultList = searchAll();
+            fillTable(resultTable);
+            formManager.setDefaultFormStatus();
+        } else {
+            GeneralFunctions.sendMessage(this, "El campo de número de camas tiene valor no válido. Por favor rectifique.");
+        }        
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        // TODO add your handling code here:
-        System.out.println("editar");
         formManager.updateButtonMenuState(UIConstants.BTN_EDITAR);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        System.out.println("guardar");
+        
         if (roomTypes.getRtyId()!= null) {
-            if (roomTypesBoundary.update(roomTypes) == 1) {
-                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
-            }
+            if(GeneralFunctions.validateNumeric(rtyBeds.getText().trim())){
+                if (roomTypesBoundary.update(roomTypes) == 1) {
+                    JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
+                    resultList = searchAll();
+                    fillTable(resultTable);
+                    formManager.setDefaultFormStatus();
+                } else {
+                    GeneralFunctions.sendMessage(this, "El campo de número de camas tiene valor no válido. Por favor rectifique.");
+                }
+            }            
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -380,6 +392,12 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void rtyDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rtyDescriptionKeyTyped
+        if(rtyDescription.getText().trim().length() == 50){
+            evt.consume();
+        }
+    }//GEN-LAST:event_rtyDescriptionKeyTyped
 
     /**
      * @param args the command line arguments

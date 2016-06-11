@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ahms.ui.configuracion;
 
 import com.ahms.boundary.entity_boundary.FloorsBoundary;
@@ -50,7 +45,7 @@ public class FloorsFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        userLogued = new Users(1);
+        userLogued = logued;
         setResizable(false);
         setTitle("Tipos de Cuartos");
         floorsBoundary = new FloorsBoundary();
@@ -104,6 +99,10 @@ public class FloorsFrm extends javax.swing.JDialog {
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
+        resultTable.getColumn("Usuario Mod").setMinWidth(0);
+        resultTable.getColumn("Usuario Mod").setMaxWidth(0);
+        resultTable.getColumn("Fecha Mod").setMinWidth(0);
+        resultTable.getColumn("Fecha Mod").setMaxWidth(0);
         resultTable.setColumnSelectionAllowed(false);
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);

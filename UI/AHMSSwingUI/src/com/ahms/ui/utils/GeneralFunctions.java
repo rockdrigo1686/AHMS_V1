@@ -117,6 +117,18 @@ public class GeneralFunctions {
         return false;
     }
     
+    public static boolean validateNumeric(String expression){
+        try {
+            Pattern p = Pattern.compile("\\d+");
+            Matcher m = p.matcher(expression);
+            return m.matches();
+        } catch (Exception e) {
+            appendTrace(e.getStackTrace());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public static boolean validateAlpha(String expression){
         try {
             Pattern p = Pattern.compile("^[\\p{L} .'-]+$");

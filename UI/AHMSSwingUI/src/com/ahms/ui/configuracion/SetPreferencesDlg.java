@@ -1,18 +1,14 @@
 package com.ahms.ui.configuracion;
 
-import com.ahms.boundary.entity_boundary.FloorsBoundary;
 import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
-import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.Customers;
-import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -34,6 +30,7 @@ public class SetPreferencesDlg extends javax.swing.JDialog {
     public SetPreferencesDlg(java.awt.Frame parent, boolean modal, Customers customer) {
         super(parent, modal);
         initComponents();
+        setTitle("Configurar Preferenciales");
         mainCustomer = customer;
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
@@ -52,6 +49,7 @@ public class SetPreferencesDlg extends javax.swing.JDialog {
     public SetPreferencesDlg(java.awt.Dialog parent, boolean modal, Customers customer) {
         super(parent, modal);
         initComponents();
+        setTitle("Configurar Preferenciales");
         mainCustomer = customer;
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
@@ -285,17 +283,22 @@ public class SetPreferencesDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbtnUpdActionPerformed
 
     private void jbtnNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnNewActionPerformed
-        PreferenceDetail newPreferenceDetail = new PreferenceDetail();
-        newPreferenceDetail.setCusId(mainCustomer);
-        newPreferenceDetail.setPrefAmount(new BigDecimal(this.jtxtMonto.getText()));
-        newPreferenceDetail.setRtyId((RoomTypes) this.jcbCuartos.getSelectedItem());
-        if(preferenceDetailBoundary.insert(newPreferenceDetail) > 0){
-            GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
-            resultList = preferenceDetailBoundary.findPreferences(mainCustomer);
-            configTable();
+        if(GeneralFunctions.validateDecimals(jtxtMonto.getText())){
+            PreferenceDetail newPreferenceDetail = new PreferenceDetail();
+            newPreferenceDetail.setCusId(mainCustomer);
+            newPreferenceDetail.setPrefAmount(new BigDecimal(this.jtxtMonto.getText()));
+            newPreferenceDetail.setRtyId((RoomTypes) this.jcbCuartos.getSelectedItem());            
+            if(preferenceDetailBoundary.insert(newPreferenceDetail) > 0){
+                GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_SAVE);
+                resultList = preferenceDetailBoundary.findPreferences(mainCustomer);
+                configTable();
+            } else {
+                GeneralFunctions.sendMessage(this, UIConstants.ERROR_SAVE);
+            }
         } else {
-            GeneralFunctions.sendMessage(this, UIConstants.ERROR_SAVE);
+            GeneralFunctions.sendMessage(this, "El campo de monto contiene caracteres no validos. Por favor rectifique.");
         }
+        
     }//GEN-LAST:event_jbtnNewActionPerformed
 
     private void jbtnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDelActionPerformed
