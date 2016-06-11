@@ -189,6 +189,11 @@ public class UsersFrm extends javax.swing.JFrame {
                 usrNameActionPerformed(evt);
             }
         });
+        usrName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usrNameKeyTyped(evt);
+            }
+        });
 
         usrLast1.setMaximumSize(new java.awt.Dimension(70, 27));
         usrLast1.setMinimumSize(new java.awt.Dimension(70, 27));
@@ -197,6 +202,12 @@ public class UsersFrm extends javax.swing.JFrame {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, user, org.jdesktop.beansbinding.ELProperty.create("${usrLst1}"), usrLast1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        usrLast1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usrLast1KeyTyped(evt);
+            }
+        });
+
         usrLast2.setMaximumSize(new java.awt.Dimension(70, 27));
         usrLast2.setMinimumSize(new java.awt.Dimension(70, 27));
         usrLast2.setName("usrLst2"); // NOI18N
@@ -204,12 +215,24 @@ public class UsersFrm extends javax.swing.JFrame {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, user, org.jdesktop.beansbinding.ELProperty.create("${usrLst2}"), usrLast2, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        usrLast2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usrLast2KeyTyped(evt);
+            }
+        });
+
         usrPass.setMaximumSize(new java.awt.Dimension(70, 27));
         usrPass.setMinimumSize(new java.awt.Dimension(70, 27));
         usrPass.setName("usrPwd"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, user, org.jdesktop.beansbinding.ELProperty.create("${usrPwd}"), usrPass, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        usrPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usrPassKeyTyped(evt);
+            }
+        });
 
         usrId.setName("usrId"); // NOI18N
 
@@ -245,7 +268,7 @@ public class UsersFrm extends javax.swing.JFrame {
         });
         jToolBar1.add(btnLimpiar);
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1445772664_file.png"))); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1445772615_file_search.png"))); // NOI18N
         btnBuscar.setText("Buscar");
         btnBuscar.setFocusable(false);
         btnBuscar.setName("btnBuscar"); // NOI18N
@@ -402,7 +425,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-        System.out.println(user.getUsrCode());
+        // System.out.println(user.getUsrCode());
 
         formManager.setDefaultFormStatus();
         resultList = searchAll();
@@ -450,7 +473,7 @@ public class UsersFrm extends javax.swing.JFrame {
      */
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-//        System.out.println(user.getUsrStatus());
+//       // System.out.println(user.getUsrStatus());
         user.setProId(proId.getSelectedIndex() == 0 ? null : (Profiles) proId.getSelectedItem());
         resultList = userBoundary.search(user);
         fillTable(resultTable);
@@ -462,7 +485,7 @@ public class UsersFrm extends javax.swing.JFrame {
         if (!validateForm()) {
             return;
         }
-        System.out.println("nuevo");
+        // System.out.println("nuevo");
         if (userBoundary.insert(user) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
@@ -471,13 +494,13 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        System.out.println("editar");
+        // System.out.println("editar");
         formManager.updateButtonMenuState(UIConstants.BTN_EDITAR);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        System.out.println("guardar");
+        // System.out.println("guardar");
         if (!validateForm()) {
             return;
         }
@@ -491,7 +514,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        System.out.println("eliminar");
+        // System.out.println("eliminar");
         int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             if (userBoundary.delete(user) == 1) {
@@ -511,6 +534,34 @@ public class UsersFrm extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_usrCodeKeyTyped
+
+    private void usrPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrPassKeyTyped
+        // TODO add your handling code here:
+        if (usrPass.getPassword().length == 16) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usrPassKeyTyped
+
+    private void usrNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrNameKeyTyped
+        // TODO add your handling code here:
+        if (usrName.getText().length() == 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usrNameKeyTyped
+
+    private void usrLast1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrLast1KeyTyped
+        // TODO add your handling code here:}
+        if (usrLast1.getText().length() == 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usrLast1KeyTyped
+
+    private void usrLast2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrLast2KeyTyped
+        // TODO add your handling code here:
+        if (usrLast2.getText().length() == 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usrLast2KeyTyped
 
     /**
      * @param args the command line arguments
@@ -586,12 +637,12 @@ public class UsersFrm extends javax.swing.JFrame {
             GeneralFunctions.sendMessage(this, "Favor de teclear la Clave de Usuario");
             return false;
         }
-        if (GeneralFunctions.validateAlpha(usrName.getText())) {
-            if (user.getUsrName() == null) {
-                GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Usuario");
-                return false;
-            }
-        } else {
+
+        if (user.getUsrName() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Usuario");
+            return false;
+
+        } else if (!GeneralFunctions.validateAlpha(usrName.getText())) {
             GeneralFunctions.sendMessage(this, "El Nombre del usuario contiene caracteres no validos. Por favor rectifique");
             return false;
         }
@@ -599,20 +650,20 @@ public class UsersFrm extends javax.swing.JFrame {
         if (user.getUsrLst1() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el A.Paterno del usuario");
             return false;
-        } else if (GeneralFunctions.validateAlpha(usrLast1.getText())) {
+        } else if (!GeneralFunctions.validateAlpha(usrLast1.getText())) {
             GeneralFunctions.sendMessage(this, "El A.Paterno del usuario contiene caracteres no validos. Por favor rectifique");
             return false;
-        }else if (user.getUsrLst2() == null) {
+        } else if (user.getUsrLst2() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el A.Materno del usuario");
             return false;
-        }else if (GeneralFunctions.validateAlpha(usrLast2.getText())) {
+        } else if (!GeneralFunctions.validateAlpha(usrLast2.getText())) {
             GeneralFunctions.sendMessage(this, "El A.Materno del usuario contiene caracteres no validos. Por favor rectifique");
             return false;
         }
         if (user.getUsrPwd() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el Password del usuario");
             return false;
-        } else if (user.getUsrPwd().length() < 8) {
+        } else if (usrPass.getPassword().length < 8) {
             GeneralFunctions.sendMessage(this, "El Password debe contener minimo 8 caracteres");
             return false;
         }

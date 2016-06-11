@@ -217,7 +217,7 @@
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Clave:"/>
+        <Property name="text" type="java.lang.String" value="Tipo:"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[67, 15]"/>
         </Property>
@@ -232,6 +232,14 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="srvDesc" noResource="true"/>
       </Properties>
+      <BindingProperties>
+        <BindingProperty name="text" source="service" sourcePath="${srvDesc}" target="srvDesc" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+        </BindingProperty>
+      </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="srvDescKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -274,6 +282,14 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="srvCode" noResource="true"/>
       </Properties>
+      <BindingProperties>
+        <BindingProperty name="text" source="service" sourcePath="${srvCode}" target="srvCode" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+        </BindingProperty>
+      </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="srvCodeKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -292,6 +308,9 @@
           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="srvNameKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="svtId">
       <Properties>

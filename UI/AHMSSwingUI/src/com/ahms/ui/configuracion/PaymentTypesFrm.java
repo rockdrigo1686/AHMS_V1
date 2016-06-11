@@ -358,6 +358,14 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
+        if (paymentType.getPayCode()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la  Clave del Tipo de Pago");
+            return;
+        }
+        if (paymentType.getPayDesc()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la  Descripcion del Tipo de Pago");
+            return;
+        }
         if (payStatus.getSelectedIndex() == 0) {
             GeneralFunctions.sendMessage(this, "Favor de seleccionar un Estatus");
             return;
@@ -375,12 +383,20 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        System.out.println("editar");
+        // System.out..println("editar");
         formManager.updateButtonMenuState(UIConstants.BTN_EDITAR);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+         if (paymentType.getPayCode()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la  Clave del Tipo de Pago");
+            return;
+        }
+        if (paymentType.getPayDesc()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la  Descripcion del Tipo de Pago");
+            return;
+        }
         if (payStatus.getSelectedIndex() == 0) {
             GeneralFunctions.sendMessage(this, "Favor de seleccionar un Estatus");
             return;
@@ -400,7 +416,7 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        System.out.println("eliminar");
+        // System.out..println("eliminar");
         int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             if (paymentTypeBoundary.delete(paymentType) == 1) {

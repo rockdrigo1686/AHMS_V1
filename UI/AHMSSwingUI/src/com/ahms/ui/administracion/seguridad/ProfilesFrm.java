@@ -49,10 +49,10 @@ public class ProfilesFrm extends javax.swing.JFrame {
     /**
      * Creates new form ProfilesFrm
      */
-    public ProfilesFrm() {
+    public ProfilesFrm(MainFrm paren) {
 
         initComponents();
-        topFrame = (MainFrm) SwingUtilities.getWindowAncestor(this);
+        topFrame = paren;
         setLocationRelativeTo(null);
         setResizable(false);
         setTitle("Profiles");
@@ -398,11 +398,11 @@ public class ProfilesFrm extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        System.out.println("nuevo");
         if (profile.getProCode() == null) {
-            GeneralFunctions.sendMessage(this, "Favor de teclear el codigo del proyecto");
+            GeneralFunctions.sendMessage(this, "Favor de teclear el codigo del Perfil");
             return;
         }
         if (profile.getProName()==null) {
-            GeneralFunctions.sendMessage(this, "Favor de teclear el nombre del perfil");
+            GeneralFunctions.sendMessage(this, "Favor de teclear el nombre del Perfil");
             return;
         }
         if (proStatus.getSelectedIndex()==0) {
@@ -467,65 +467,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_proNameKeyTyped
 
 //</editor-fold>
-    /**/
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) throws ClassNotFoundException {
-        try {
-            /* Set the Nimbus look and feel */
-            //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-            /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-             * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-             */
-//        try {
-////            javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-////            javax.swing.UIManager.setLookAndFeel("com.alee.laf.WebLookAndFeel");
-////            javax.swing.UIManager.setLookAndFeel("com.pagosoft.plaf.PgsLookAndFeel");
-////            javax.swing.UIManager.setLookAndFeel("org.pushingpixels.substance.api.skin.SubstanceCremeLookAndFeel");
-////
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                System.out.println(info.getName());
-//                if ("Metal".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    MetalLookAndFeel.setCurrentTheme(new OceanTheme());
-//                    break;
-//                }
-//            }
-//            
-////            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-////                if ("Nimbus".equals(info.getName())) {
-////                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-////                    break;
-////                }
-////            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(ProfilesFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        //</editor-fold>
-        } catch (InstantiationException ex) {
-            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ProfilesFrm().setVisible(true);
-            }
-        });
-    }
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

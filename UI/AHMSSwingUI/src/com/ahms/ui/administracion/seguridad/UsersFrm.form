@@ -262,6 +262,7 @@
       </BindingProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usrNameActionPerformed"/>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usrNameKeyTyped"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="usrLast1">
@@ -279,6 +280,9 @@
           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usrLast1KeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="usrLast2">
       <Properties>
@@ -295,6 +299,9 @@
           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usrLast2KeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="usrPass">
       <Properties>
@@ -311,6 +318,9 @@
           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usrPassKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="usrId">
       <Properties>
@@ -370,7 +380,7 @@
         <Component class="javax.swing.JButton" name="btnBuscar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/ahms/ui/images/32x32/1445772664_file.png"/>
+              <Image iconType="3" name="/com/ahms/ui/images/32x32/1445772615_file_search.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Buscar"/>
             <Property name="focusable" type="boolean" value="false"/>

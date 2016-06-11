@@ -34,12 +34,12 @@ import javax.swing.table.DefaultTableModel;
  * @author rsoto
  */
 public class ServicesFrm extends javax.swing.JDialog {
-
+    
     private ServiceTypesBoundary serviceTypeBoundary;
     private ServiceBoundary serviceBoundary;
     private MultiValueBoundary MMBoundary = null;
     private List<Services> resultList = null;
-
+    
     private DefaultTableModel tableModel = null;
     private Map<String, Component> formComponentMap = new HashMap<String, Component>();
     private Map<String, Component> buttonMap = new HashMap<String, Component>();
@@ -51,35 +51,35 @@ public class ServicesFrm extends javax.swing.JDialog {
      */
     public ServicesFrm(MainFrm parent, boolean modal) {
         super(parent, modal);
-        this.parent =  parent;
+        this.parent = parent;
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-
+        
         setTitle("Servicios");
         serviceTypeBoundary = new ServiceTypesBoundary();
         serviceBoundary = new ServiceBoundary();
         MMBoundary = new MultiValueBoundary();
-
-        srvStatus.addItem(new MultiValue(null,"Seleccionar..."));
+        
+        srvStatus.addItem(new MultiValue(null, "Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
             srvStatus.addItem(obj);
         }
-
+        
         svtId.addItem(new ServiceTypes(null, null, "Seleccionar...", null));
         ServiceTypes st = new ServiceTypes();
         st.setSvtStatus(new MultiValue("AC"));
         for (ServiceTypes obj : serviceTypeBoundary.searchAll(st)) {
             svtId.addItem(obj);
         }
-
+        
         resultList = searchAll();
         //Creamos mapa de componentes
         formManager = new FormManager();
         formManager.createComponentMaps(this);
         formManager.setDefaultFormStatus();
         fillTable(resultTable);
-
+        
         resultTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -92,7 +92,7 @@ public class ServicesFrm extends javax.swing.JDialog {
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         srvId.setVisible(false);
     }
-
+    
     private boolean validateForm() {
         if (svtId.getSelectedIndex() == 0) {
             GeneralFunctions.sendMessage(this, "Favor de seleccionar un Tipo de Servicio");
@@ -121,7 +121,7 @@ public class ServicesFrm extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, "El Precio del servicio contiene caracteres no validos. Por favor rectifique");
             return false;
         }
-
+        
         return true;
     }
 
@@ -238,19 +238,28 @@ public class ServicesFrm extends javax.swing.JDialog {
         jToolBar1.add(btnEliminar);
         jToolBar1.add(jSeparator6);
 
-        jLabel1.setText("Clave:");
+        jLabel1.setText("Tipo:");
         jLabel1.setPreferredSize(new java.awt.Dimension(67, 15));
 
         jLabel2.setText("Descripcion:");
 
         srvDesc.setName("srvDesc"); // NOI18N
 
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, service, org.jdesktop.beansbinding.ELProperty.create("${srvDesc}"), srvDesc, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        srvDesc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                srvDescKeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Estatus:");
         jLabel3.setPreferredSize(new java.awt.Dimension(67, 15));
 
         srvStatus.setName("srvStatus"); // NOI18N
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, service, org.jdesktop.beansbinding.ELProperty.create("${srvStatus}"), srvStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, service, org.jdesktop.beansbinding.ELProperty.create("${srvStatus}"), srvStatus, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
 
         srvPrice.setToolTipText("");
@@ -264,6 +273,15 @@ public class ServicesFrm extends javax.swing.JDialog {
 
         srvCode.setName("srvCode"); // NOI18N
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, service, org.jdesktop.beansbinding.ELProperty.create("${srvCode}"), srvCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
+        srvCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                srvCodeKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Nombre:");
         jLabel5.setPreferredSize(new java.awt.Dimension(67, 15));
 
@@ -271,6 +289,12 @@ public class ServicesFrm extends javax.swing.JDialog {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, service, org.jdesktop.beansbinding.ELProperty.create("${srvName}"), srvName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        srvName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                srvNameKeyTyped(evt);
+            }
+        });
 
         svtId.setName("svtId"); // NOI18N
 
@@ -410,6 +434,7 @@ public class ServicesFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        service.setSvtId(svtId.getSelectedIndex() == 0 ? null : (ServiceTypes)svtId.getSelectedItem());
         resultList = serviceBoundary.search(service);
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_BUSCAR);
@@ -417,7 +442,10 @@ public class ServicesFrm extends javax.swing.JDialog {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        System.out.println("nuevo");
+        if (!validateForm()) {
+            return;
+        }
+        // System.out..println("nuevo");
         service.setSrvDteMod(new Date());
         //        profile.setSrvUsrMod(topFrame.getMainUser().getUsrId());
         service.setSrvUsrMod(parent.getMainUser());
@@ -429,13 +457,16 @@ public class ServicesFrm extends javax.swing.JDialog {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        System.out.println("editar");
+        // System.out..println("editar");
         formManager.updateButtonMenuState(UIConstants.BTN_EDITAR);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        System.out.println("guardar");
+        
+        if (!validateForm()) {
+            return;
+        }
         if (service.getSvtId() != null) {
             service.setSrvDteMod(new Date());
             //        profile.setSrvUsrMod(topFrame.getMainUser().getUsrId());
@@ -446,7 +477,7 @@ public class ServicesFrm extends javax.swing.JDialog {
         }
         btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
-
+    
     private List<Services> searchAll() {
         return serviceBoundary.searchAll(new Services());
     }
@@ -454,7 +485,7 @@ public class ServicesFrm extends javax.swing.JDialog {
     //</editor-fold>
     private void fillTable(JTable resultTable) {
         String col[] = {"ID", "Tipo", "Clave", "Descripcion", "Costo", "Estatus"};
-
+        
         tableModel = new DefaultTableModel(col, 0) {
             @Override
             public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -466,7 +497,7 @@ public class ServicesFrm extends javax.swing.JDialog {
         resultList.stream().forEach((next) -> {
             tableModel.addRow(new Object[]{next.getSrvId(), next.getSvtId(), next.getSrvCode(), next.getSrvDesc(), next.getSrvPrice(), next.getSrvStatus()});
         });
-
+        
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
@@ -474,11 +505,11 @@ public class ServicesFrm extends javax.swing.JDialog {
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);
         resultTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        
     }
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        System.out.println("eliminar");
+        // System.out..println("eliminar");
         int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             if (serviceBoundary.delete(service) == 1) {
@@ -487,6 +518,27 @@ public class ServicesFrm extends javax.swing.JDialog {
         }
         btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void srvCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_srvCodeKeyTyped
+        // TODO add your handling code here
+        if (srvCode.getText().length() == 5) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_srvCodeKeyTyped
+
+    private void srvNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_srvNameKeyTyped
+        // TODO add your handling code here:
+        if (srvName.getText().length() == 40) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_srvNameKeyTyped
+
+    private void srvDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_srvDescKeyTyped
+        // TODO add your handling code here:
+        if (srvDesc.getText().length() == 150) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_srvDescKeyTyped
 
     /**
      * @param args the command line arguments

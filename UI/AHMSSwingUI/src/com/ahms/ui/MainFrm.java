@@ -917,7 +917,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void miProfilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miProfilesActionPerformed
         // TODO add your handling code here:
-        ProfilesFrm profileFrm = new ProfilesFrm();
+        ProfilesFrm profileFrm = new ProfilesFrm(this);
         profileFrm.setVisible(true);
     }//GEN-LAST:event_miProfilesActionPerformed
 
