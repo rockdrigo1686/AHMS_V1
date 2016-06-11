@@ -153,7 +153,6 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtAccountTransactions = new javax.swing.JTable();
         jToolBar3 = new javax.swing.JToolBar();
-        btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
@@ -273,17 +272,6 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         jToolBar3.setMargin(new java.awt.Insets(0, 10, 0, 0));
         jToolBar3.setName("mainToolBar"); // NOI18N
         jToolBar3.setPreferredSize(new java.awt.Dimension(108, 38));
-
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        btnEliminar.setToolTipText("Salir");
-        btnEliminar.setFocusable(false);
-        btnEliminar.setName("btnEliminar"); // NOI18N
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-        jToolBar3.add(btnEliminar);
         jToolBar3.add(jSeparator5);
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Donate.png"))); // NOI18N
@@ -323,7 +311,7 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
@@ -454,10 +442,6 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -502,7 +486,6 @@ public class RoomServiceSelectionDlg extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JLabel idRMS;
     private javax.swing.JLabel jLabel1;

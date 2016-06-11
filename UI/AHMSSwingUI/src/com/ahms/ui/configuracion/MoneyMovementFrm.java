@@ -64,7 +64,6 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir1 = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -76,16 +75,6 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jToolBar1.setPreferredSize(new java.awt.Dimension(114, 38));
-
-        jbSalir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir1.setToolTipText("Salir");
-        jbSalir1.setFocusable(false);
-        jbSalir1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalir1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jbSalir1);
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
         jbSalir.setToolTipText("Guardar");
@@ -153,11 +142,6 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jbSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalir1ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jbSalir1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -281,7 +265,6 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JButton jbSalir1;
     private javax.swing.JTable tblMoneuMov;
     // End of variables declaration//GEN-END:variables
 

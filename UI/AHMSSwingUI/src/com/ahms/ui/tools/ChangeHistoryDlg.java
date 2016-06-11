@@ -79,7 +79,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         txtDesc = new javax.swing.JTextArea();
         lblRoomA = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir = new javax.swing.JButton();
         jbGuardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -103,15 +102,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         lblRoomA.setText("Nuevo Cuarto:");
 
         jToolBar1.setRollover(true);
-
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir.setFocusable(false);
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jbSalir);
 
         jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
         jbGuardar.setToolTipText("Guardar");
@@ -169,11 +159,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         CancelationPromptDlg cp = new CancelationPromptDlg(mainFrm, true);
@@ -238,7 +223,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbGuardar;
-    private javax.swing.JButton jbSalir;
     private javax.swing.JLabel lblCustomer;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblRoom;

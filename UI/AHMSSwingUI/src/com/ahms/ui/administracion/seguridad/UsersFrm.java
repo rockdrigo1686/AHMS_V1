@@ -48,7 +48,7 @@ public class UsersFrm extends javax.swing.JFrame {
      */
     public UsersFrm() {
         initComponents();
-        setSize(980, 450);
+      
         setLocationRelativeTo(null);
         setResizable(false);
         
@@ -86,6 +86,7 @@ public class UsersFrm extends javax.swing.JFrame {
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         usrId.setVisible(false);
+        
     }
 
     /**

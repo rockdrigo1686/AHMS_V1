@@ -23,6 +23,7 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MessageBoard;
 import com.ahms.model.entity.MultiValue;
+import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.entity.Rooms;
 import com.ahms.model.entity.Users;
@@ -49,6 +50,7 @@ import java.awt.event.ItemEvent;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -185,6 +187,7 @@ public class MainFrm extends javax.swing.JFrame {
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
 
         fillMessageBoard();
+        checkReservations();
 
         if (!MMKeys.Profiles.ADMI.equals(this.mainUser.getProId().getProCode())
                 && !MMKeys.Profiles.ACNT.equals(this.mainUser.getProId().getProCode())) {
@@ -980,8 +983,35 @@ public class MainFrm extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         fillMessageBoard();
+        checkReservations();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void checkReservations() {
+        ReservationBoundary reserB = new ReservationBoundary();
+        RoomsBoundary roomsB = new RoomsBoundary();
+        MultiValueBoundary mmB = new MultiValueBoundary();
+        System.out.println("print reservations");
+        List<Reservation> reservations;
+        Date date = new Date();
+        MultiValue genStatus = mmB.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY));
+        MultiValue genStatusIn = mmB.findByKey(new MultiValue(MMKeys.General.STA_INACTIVO_KEY));
+        reservations = reserB.checkReservations(date, genStatus);
+        Rooms room = null;
+        System.out.println("Reservaciones encontradas: " + reservations.size());
+        for (Reservation reservation : reservations) {
+            reservation.setResStatus(genStatusIn);
+            System.out.println("actualizando estatus de reservaciones");
+            reserB.update(reservation);
+            room = reservation.getRmsId();
+            List<Reservation> reservationList = reserB.findReservationByRoom(room, genStatus, date);
+            if (reservationList == null || reservationList.isEmpty()) {
+                room.setRmsStatus(mmB.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY)));
+                System.out.println("actualizando estatus de cuartos");
+                roomsB.update(room);
+            }
+
+        }
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         AddMessageDlg add = new AddMessageDlg(this, true, mainUser);

@@ -413,7 +413,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
         }
         profile.setProDteMod(new Date());
 //        profile.setProUsrMod(topFrame.getMainUser().getUsrId());
-        profile.setProUsrMod(new Users(1));
+        profile.setProUsrMod(topFrame.getMainUser());
         if (profileBoundary.insert(profile) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
@@ -433,7 +433,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
         if (profile.getProId() != null) {
             profile.setProDteMod(new Date());
 //            profile.setProUsrMod(topFrame.getMainUser().getUsrId());
-            profile.setProUsrMod(new Users(1));
+            profile.setProUsrMod(topFrame.getMainUser());
             
             if (profileBoundary.update(profile) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);

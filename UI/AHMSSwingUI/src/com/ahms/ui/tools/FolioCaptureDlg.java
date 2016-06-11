@@ -30,7 +30,6 @@ public class FolioCaptureDlg extends javax.swing.JDialog {
 
         jLabel2 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir1 = new javax.swing.JButton();
         jbSalir = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -45,11 +44,6 @@ public class FolioCaptureDlg extends javax.swing.JDialog {
         jToolBar1.setFloatable(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jToolBar1.setPreferredSize(new java.awt.Dimension(58, 38));
-
-        jbSalir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir1.setToolTipText("Salir");
-        jbSalir1.setFocusable(false);
-        jToolBar1.add(jbSalir1);
 
         jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
         jbSalir.setToolTipText("Guardar");
@@ -178,6 +172,5 @@ public class FolioCaptureDlg extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbSalir;
-    private javax.swing.JButton jbSalir1;
     // End of variables declaration//GEN-END:variables
 }

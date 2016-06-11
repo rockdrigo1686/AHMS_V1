@@ -56,7 +56,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTable = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -82,16 +81,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jToolBar1.setRollover(true);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jToolBar1.setPreferredSize(new java.awt.Dimension(126, 38));
-
-        jbSalir1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir1.setToolTipText("Salir");
-        jbSalir1.setFocusable(false);
-        jbSalir1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalir1ActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jbSalir1);
         jToolBar1.add(jSeparator1);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/Transfer Document.png"))); // NOI18N
@@ -159,11 +148,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
-    private void jbSalir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalir1ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jbSalir1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -341,7 +325,6 @@ public class AccountSearchDlg extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JButton jbSalir1;
     private javax.swing.JLabel lblCus;
     private javax.swing.JTable resultTable;
     // End of variables declaration//GEN-END:variables

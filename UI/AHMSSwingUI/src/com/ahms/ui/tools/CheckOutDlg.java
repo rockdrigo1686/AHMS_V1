@@ -200,8 +200,6 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlNombre = new javax.swing.JLabel();
         jscpDetalle = new javax.swing.JScrollPane();
         jtCheckoutDetalle = new javax.swing.JTable();
-        jToolBar1 = new javax.swing.JToolBar();
-        jbSalir = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -220,8 +218,6 @@ public class CheckOutDlg extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
-
-        jpCabecera.setBackground(java.awt.Color.white);
 
         jlNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -256,23 +252,6 @@ public class CheckOutDlg extends javax.swing.JDialog {
             }
         ));
         jscpDetalle.setViewportView(jtCheckoutDetalle);
-
-        jToolBar1.setFloatable(false);
-        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jToolBar1.setPreferredSize(new java.awt.Dimension(30, 38));
-
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir.setToolTipText("Salir");
-        jbSalir.setFocusable(false);
-        jbSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jbSalir);
-
-        jPanel1.setBackground(java.awt.Color.white);
 
         jLabel11.setText("Subtotal:");
 
@@ -404,13 +383,11 @@ public class CheckOutDlg extends javax.swing.JDialog {
                     .addComponent(jpCabecera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addComponent(jpCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jscpDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -428,10 +405,6 @@ public class CheckOutDlg extends javax.swing.JDialog {
         paymentModule.setLocationRelativeTo(this);
         paymentModule.setVisible(true);
     }//GEN-LAST:event_jbPayActionPerformed
-
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbCloseAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCloseAccountActionPerformed
         
@@ -547,10 +520,8 @@ public class CheckOutDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbCloseAccount;
     private javax.swing.JButton jbPay;
-    private javax.swing.JButton jbSalir;
     private javax.swing.JLabel jlCambio;
     private javax.swing.JLabel jlIVA;
     private javax.swing.JLabel jlMontoCambio;

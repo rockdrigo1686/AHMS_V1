@@ -46,7 +46,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
         taMessage = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir = new javax.swing.JButton();
         jbGuardar = new javax.swing.JButton();
         dateChs = new datechooser.beans.DateChooserCombo();
 
@@ -59,15 +58,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
         jLabel1.setText("Fecha:");
 
         jToolBar1.setRollover(true);
-
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/cross.png"))); // NOI18N
-        jbSalir.setFocusable(false);
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(jbSalir);
 
         jbGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
         jbGuardar.setToolTipText("Guardar");
@@ -112,11 +102,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
-    }//GEN-LAST:event_jbSalirActionPerformed
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         if (taMessage.getText() == null || "".equalsIgnoreCase(taMessage.getText())) {
@@ -188,7 +173,6 @@ public class AddMessageDlg extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbGuardar;
-    private javax.swing.JButton jbSalir;
     private javax.swing.JTextArea taMessage;
     // End of variables declaration//GEN-END:variables
 }
