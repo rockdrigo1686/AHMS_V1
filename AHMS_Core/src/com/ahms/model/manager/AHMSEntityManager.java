@@ -5,8 +5,10 @@
  */
 package com.ahms.model.manager;
 
+import com.ahms.model.entity.MultiValue;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +58,15 @@ public class AHMSEntityManager<T> {
                 for (Annotation a : f.getAnnotations()) {
                     if ("javax.persistence.Column".equals(a.annotationType().getName()) || "javax.persistence.JoinColumn".equals(a.annotationType().getName())) {
                         if (f.get(obj) != null) {
+                            if (f.get(obj) instanceof MultiValue) {
+                                MultiValue mv = (MultiValue) f.get(obj);
+                                if (mv.getMvaKey() == null) {
+                                  continue;
+                                }
+                            }
                             sQuery.append(" AND t.").append(f.getName()).append("= :").append(f.getName());
                             paramMap.put(f.getName(), f.get(obj));
+
                         }
 
                     }
