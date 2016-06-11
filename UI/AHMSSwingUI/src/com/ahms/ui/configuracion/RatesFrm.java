@@ -54,7 +54,7 @@ public class RatesFrm extends javax.swing.JDialog {
         
         userLogued = logued;
         setResizable(false);
-        setTitle("Tipos de Cuartos");
+        setTitle("Catálogo de Tarifas");
         ratesBoundary = new RatesBoundary();
         multiValueBoundary = new MultiValueBoundary();
         MultiValue multiValue = new MultiValue();
@@ -352,6 +352,22 @@ public class RatesFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        
+        if(rteDesc.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo de Descripción no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(jTextField2.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo de Precio no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(rteStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Estatus de la tarifa. Por favor rectifique.");
+            return;
+        }
+        
         Rates newRte = new Rates();
         newRte.setRteDesc(ratesBean.getRteDesc());
         newRte.setRtePrice(ratesBean.getRtePrice());
@@ -381,6 +397,22 @@ public class RatesFrm extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         if (ratesBean.getRteId()!= null) {
+            
+            if(rteDesc.getText().isEmpty()){
+                GeneralFunctions.sendMessage(this, "El campo de Descripción no puede estar vacio. Por favor rectifique.");
+                return;
+            }
+
+            if(jTextField2.getText().isEmpty()){
+                GeneralFunctions.sendMessage(this, "El campo de Precio no puede estar vacio. Por favor rectifique.");
+                return;
+            }
+
+            if(rteStatus.getSelectedIndex() == 0){
+                GeneralFunctions.sendMessage(this, "Debe seleccionar el Estatus de la tarifa. Por favor rectifique.");
+                return;
+            }            
+            
             if(GeneralFunctions.validateDecimals(jTextField2.getText().trim())){
                 if (ratesBoundary.update(ratesBean) == 1) {
                     JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);

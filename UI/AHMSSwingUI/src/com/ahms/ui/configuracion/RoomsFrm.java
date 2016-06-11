@@ -41,6 +41,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         ratesBoundary = new RatesBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
+        setTitle("Catálogo de Cuartos");
         
         loadRooms(roomsBoundary.searchAll(new Rooms()));
         loadFloors(floorsBoundary.searchAll(new Floors()));
@@ -485,10 +486,41 @@ public class RoomsFrm extends javax.swing.JDialog {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
 
-        if(!validateInstance()){
-            GeneralFunctions.sendMessage(this, "No puede haber campos vacios. Por favor rectifique.");
+        if(jcbPiso.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Piso. Por favor rectifique.");
             return;
         }
+        
+        if(jtxtRoomNuber.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Numero de Cuarto no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(jtxtRoomDesc.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Descripción no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(jcbTypes.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Número de Camas. Por favor rectifique.");
+            return;
+        }
+        
+        if(jspRoomMaxOcu.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Maxima Ocupación no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+         
+        if(jcbRate.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Tipo de Cuarto. Por favor rectifique.");
+            return;
+        }
+                
+        if(jcbRoomStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Estatus del cuarto. Por favor rectifique.");
+            return;
+        }
+                
         Rooms newRoom = new Rooms();
         newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
         newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
@@ -507,6 +539,42 @@ public class RoomsFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        
+        if(jcbPiso.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Piso. Por favor rectifique.");
+            return;
+        }
+        
+        if(jtxtRoomNuber.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Numero de Cuarto no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(jtxtRoomDesc.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Descripción no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(jcbTypes.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Número de Camas. Por favor rectifique.");
+            return;
+        }
+        
+        if(jspRoomMaxOcu.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Maxima Ocupación no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+         
+        if(jcbRate.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Tipo de Cuarto. Por favor rectifique.");
+            return;
+        }
+                
+        if(jcbRoomStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el Estatus del cuarto. Por favor rectifique.");
+            return;
+        }
+        
         Rooms newRoom = new Rooms();
         newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
         newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());

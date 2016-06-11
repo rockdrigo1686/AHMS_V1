@@ -6,6 +6,7 @@ import com.ahms.model.entity.Floors;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
@@ -47,7 +48,7 @@ public class FloorsFrm extends javax.swing.JDialog {
         
         userLogued = logued;
         setResizable(false);
-        setTitle("Tipos de Cuartos");
+        setTitle("Catálogo de Pisos");
         floorsBoundary = new FloorsBoundary();
         multiValueBoundary = new MultiValueBoundary();
         MultiValue multiValue = new MultiValue();
@@ -73,8 +74,11 @@ public class FloorsFrm extends javax.swing.JDialog {
     }
     
     private void loadStatus(List<MultiValue> statusList){
-        DefaultComboBoxModel model= new DefaultComboBoxModel(statusList.toArray(new MultiValue[statusList.size()]));
-        this.flrStatus.setModel(model);
+        flrStatus.removeAllItems();
+        flrStatus.addItem(new MultiValue(null, "Seleccionar ..."));
+        for(MultiValue mul:statusList){
+            flrStatus.addItem(mul);
+        }        
     }
     
     private List<Floors> searchAll() {
@@ -303,6 +307,7 @@ public class FloorsFrm extends javax.swing.JDialog {
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(floorsBean);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -312,6 +317,17 @@ public class FloorsFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        
+        if(this.flrCode.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo del Código no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(flrStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el estatus del piso. Por favor rectifique.");
+            return;
+        }
+        
         Floors newFlr = new Floors();
         newFlr.setFlrCode(floorsBean.getFlrCode());
         newFlr.setFlrStatus(floorsBean.getFlrStatus());
@@ -332,7 +348,17 @@ public class FloorsFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        
+        if(this.flrCode.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo del Código no puede estar vacio. Por favor rectifique.");
+            return;
+        }
+        
+        if(flrStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el estatus del piso. Por favor rectifique.");
+            return;
+        }
+        
         if (floorsBean.getFlrId()!= null) {
             if (floorsBoundary.update(floorsBean) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
