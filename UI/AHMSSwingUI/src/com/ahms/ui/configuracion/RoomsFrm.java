@@ -41,7 +41,6 @@ public class RoomsFrm extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         ratesBoundary = new RatesBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
-        this.jspRoomMaxOcu.setModel(new SpinnerNumberModel(1, 1, 10, 1));        
         
         loadRooms(roomsBoundary.searchAll(new Rooms()));
         loadFloors(floorsBoundary.searchAll(new Floors()));
@@ -150,7 +149,6 @@ public class RoomsFrm extends javax.swing.JDialog {
         jtxtRoomDesc = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jspRoomMaxOcu = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
         jcbRate = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -166,6 +164,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         btnGuardar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
+        jspRoomMaxOcu = new javax.swing.JTextField();
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rooms1, org.jdesktop.beansbinding.ELProperty.create("${flrId}"), rooms1, org.jdesktop.beansbinding.BeanProperty.create("flrId"));
         bindingGroup.addBinding(binding);
@@ -210,6 +209,12 @@ public class RoomsFrm extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rooms1, org.jdesktop.beansbinding.ELProperty.create("${rmsNumber}"), jtxtRoomNuber, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        jtxtRoomNuber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtxtRoomNuberKeyTyped(evt);
+            }
+        });
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rooms1, org.jdesktop.beansbinding.ELProperty.create("${rmsDesc}"), jtxtRoomDesc, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
@@ -222,9 +227,6 @@ public class RoomsFrm extends javax.swing.JDialog {
         jLabel3.setText("Camas:");
 
         jLabel4.setText("Max Ocu.:");
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rooms1, org.jdesktop.beansbinding.ELProperty.create("${rmsMaxOcu}"), jspRoomMaxOcu, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
 
         jLabel5.setText("Tipo de Cuarto:");
 
@@ -335,6 +337,9 @@ public class RoomsFrm extends javax.swing.JDialog {
         jToolBar1.add(btnEliminar);
         jToolBar1.add(jSeparator5);
 
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, rooms1, org.jdesktop.beansbinding.ELProperty.create("${rmsMaxOcu}"), jspRoomMaxOcu, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        bindingGroup.addBinding(binding);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -362,7 +367,7 @@ public class RoomsFrm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jspRoomMaxOcu, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jspRoomMaxOcu, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -392,10 +397,10 @@ public class RoomsFrm extends javax.swing.JDialog {
                     .addComponent(jLabel3)
                     .addComponent(jcbTypes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jspRoomMaxOcu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jcbRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcbRoomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbRoomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jspRoomMaxOcu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -429,7 +434,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         jtxtRoomNuber.setText("");
         jtxtRoomDesc.setText("");
         jcbTypes.setSelectedIndex(0);
-        jspRoomMaxOcu.setValue(1);        
+        jspRoomMaxOcu.setText("");        
         jcbRate.setSelectedIndex(0);
         jcbRoomStatus.setSelectedIndex(0);
     }
@@ -468,17 +473,13 @@ public class RoomsFrm extends javax.swing.JDialog {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         Rooms newRoom = new Rooms();
-        newRoom.setFlrId((Floors) jcbPiso.getSelectedItem());
-        newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
-        newRoom.setRmsDesc(jtxtRoomDesc.getText());
-        newRoom.setRmsDteMod(new java.util.Date());
-        newRoom.setRmsId(roomsIdGlobal);
-        newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
-        newRoom.setRmsNumber(jtxtRoomNuber.getText());
-        newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
-        newRoom.setRteId((Rates) jcbRate.getSelectedItem());
-        newRoom.setRmsUsrMod(currentShift.getUsrId());
-        
+        newRoom.setFlrId(jcbPiso.getSelectedIndex() > 0 ? (Floors) jcbPiso.getSelectedItem() : null);
+        newRoom.setRmsBeds(jcbTypes.getSelectedIndex() > 0 ? (RoomTypes) jcbTypes.getSelectedItem() : null);
+        newRoom.setRmsDesc(jtxtRoomDesc.getText().isEmpty() ? null : jtxtRoomDesc.getText());
+        newRoom.setRmsNumber(jtxtRoomNuber.getText().isEmpty() ? null : jtxtRoomNuber.getText());
+        newRoom.setRmsStatus(jcbRoomStatus.getSelectedIndex() > 0 ? (MultiValue) jcbRoomStatus.getSelectedItem() : null);
+        newRoom.setRteId(jcbRate.getSelectedIndex() > 0  ? (Rates) jcbRate.getSelectedItem() : null);
+        newRoom.setRmsMaxOcu(null);
         loadRooms(roomsBoundary.search(newRoom));
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -493,7 +494,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         newRoom.setRmsBeds((RoomTypes) jcbTypes.getSelectedItem());
         newRoom.setRmsDesc(jtxtRoomDesc.getText());
         newRoom.setRmsDteMod(new java.util.Date());
-        newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
+        newRoom.setRmsMaxOcu(jspRoomMaxOcu.getText().trim().isEmpty() ? 1 : Integer.parseInt(jspRoomMaxOcu.getText().trim()));
         newRoom.setRmsNumber(jtxtRoomNuber.getText());
         newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
         newRoom.setRteId((Rates) jcbRate.getSelectedItem());
@@ -512,7 +513,7 @@ public class RoomsFrm extends javax.swing.JDialog {
         newRoom.setRmsDesc(jtxtRoomDesc.getText());
         newRoom.setRmsDteMod(new java.util.Date());
         newRoom.setRmsId(roomsIdGlobal);
-        newRoom.setRmsMaxOcu((int) jspRoomMaxOcu.getValue());
+        newRoom.setRmsMaxOcu(jspRoomMaxOcu.getText().trim().isEmpty() ? 1 : Integer.parseInt(jspRoomMaxOcu.getText().trim()));
         newRoom.setRmsNumber(jtxtRoomNuber.getText());
         newRoom.setRmsStatus((MultiValue) jcbRoomStatus.getSelectedItem());
         newRoom.setRteId((Rates) jcbRate.getSelectedItem());
@@ -520,8 +521,9 @@ public class RoomsFrm extends javax.swing.JDialog {
         
         roomsBoundary.update(newRoom);
         GeneralFunctions.sendMessage(this, UIConstants.SUCCESS_UPDATE);            
-        loadRooms(roomsBoundary.searchAll(new Rooms()));
+        //loadRooms(roomsBoundary.searchAll(new Rooms()));
         cleanInstance();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -537,7 +539,7 @@ public class RoomsFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void jtxtRoomDescKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtRoomDescKeyTyped
-         if(jtxtRoomDesc.getText().length() >= 199){
+         if(jtxtRoomDesc.getText().length() == 199){
             evt.consume();
         }
     }//GEN-LAST:event_jtxtRoomDescKeyTyped
@@ -569,6 +571,12 @@ public class RoomsFrm extends javax.swing.JDialog {
         unlockInstance();
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void jtxtRoomNuberKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtxtRoomNuberKeyTyped
+        if(jtxtRoomNuber.getText().length() == 4){
+            evt.consume();
+        }
+    }//GEN-LAST:event_jtxtRoomNuberKeyTyped
+
    private void renderForm(){
        if(rooms1 != null){
            jcbPiso.setEnabled(false);
@@ -579,7 +587,7 @@ public class RoomsFrm extends javax.swing.JDialog {
            jtxtRoomNuber.setText(rooms1.getRmsNumber());
            jtxtRoomDesc.setText(rooms1.getRmsDesc());
            jcbTypes.setSelectedItem(rooms1.getRmsBeds());
-           jspRoomMaxOcu.setValue(rooms1.getRmsMaxOcu());
+           jspRoomMaxOcu.setText(rooms1.getRmsMaxOcu() != null ? rooms1.getRmsMaxOcu().toString() : "");
            jcbRate.setSelectedItem(rooms1.getRteId());
            jcbRoomStatus.setSelectedItem(rooms1.getRmsStatus());
        }
@@ -649,7 +657,7 @@ public class RoomsFrm extends javax.swing.JDialog {
     private javax.swing.JComboBox jcbRoomStatus;
     private javax.swing.JComboBox jcbTypes;
     private javax.swing.JLabel jlRoomsId;
-    private javax.swing.JSpinner jspRoomMaxOcu;
+    private javax.swing.JTextField jspRoomMaxOcu;
     private javax.swing.JTable jtRooms;
     private javax.swing.JTextField jtxtRoomDesc;
     private javax.swing.JTextField jtxtRoomNuber;

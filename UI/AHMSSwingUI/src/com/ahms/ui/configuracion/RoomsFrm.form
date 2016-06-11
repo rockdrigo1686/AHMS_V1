@@ -64,7 +64,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jspRoomMaxOcu" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="jspRoomMaxOcu" min="-2" pref="34" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -100,10 +100,10 @@
                   <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbTypes" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jspRoomMaxOcu" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbRate" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jcbRoomStatus" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jspRoomMaxOcu" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="229" max="-2" attributes="0"/>
@@ -153,6 +153,9 @@
           <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
         </BindingProperty>
       </BindingProperties>
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jtxtRoomNuberKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="jtxtRoomDesc">
       <BindingProperties>
@@ -173,11 +176,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Max Ocu.:"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JSpinner" name="jspRoomMaxOcu">
-      <BindingProperties>
-        <BindingProperty name="value" source="rooms1" sourcePath="${rmsMaxOcu}" target="jspRoomMaxOcu" targetPath="value" updateStrategy="0" immediately="false"/>
-      </BindingProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -350,5 +348,12 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JTextField" name="jspRoomMaxOcu">
+      <BindingProperties>
+        <BindingProperty name="text" source="rooms1" sourcePath="${rmsMaxOcu}" target="jspRoomMaxOcu" targetPath="text" updateStrategy="0" immediately="false">
+          <BindingParameter name="javax.swing.binding.ParameterKeys.TEXT_CHANGE_STRATEGY" value="javax.swing.binding.TextChangeStrategy.ON_TYPE"/>
+        </BindingProperty>
+      </BindingProperties>
+    </Component>
   </SubComponents>
 </Form>

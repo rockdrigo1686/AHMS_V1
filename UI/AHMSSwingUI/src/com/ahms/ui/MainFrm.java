@@ -341,7 +341,7 @@ public class MainFrm extends javax.swing.JFrame {
             vctRow.add(room.getRmsBeds().getRtyBeds());
             vctRow.add(room.getRmsMaxOcu());
             vctRow.add(room.getRmsDteMod());
-            vctRow.add(100);
+            vctRow.add(room.getRteId().getRtePrice());
             vctRow.add(room.getRmsStatus());
             vctRow.add(room.getRmsId());
             rows.add(vctRow);
