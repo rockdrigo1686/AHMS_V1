@@ -39,7 +39,12 @@ public class RoomsBoundary implements AHMSBoundary<Rooms>{
     
     @Override
     public List<Rooms> search(Rooms obj) {
-        return roomsEm.search(obj);
+         try {
+             return roomsEm.search(obj);
+         } catch (Exception ex) {
+             Logger.getLogger(RoomsBoundary.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         return null;
     }
 
     @Override
