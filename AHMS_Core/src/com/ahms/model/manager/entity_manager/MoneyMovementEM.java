@@ -42,7 +42,7 @@ public class MoneyMovementEM extends AHMSEntityManager<MoneyMovement> {
     public Integer deletByCouId(CashOut obj) {
 
         try {
-          
+         
             TypedQuery<MoneyMovement> query = em.createNamedQuery("MoneyMovement.deleteByCouId", MoneyMovement.class);
             query.setParameter("couId", obj);
             Integer rslt = query.executeUpdate();
@@ -56,13 +56,13 @@ public class MoneyMovementEM extends AHMSEntityManager<MoneyMovement> {
         } 
     }
 
-    public Integer update(List<MoneyMovement> mmList) {
+    public Integer update(List<MoneyMovement> mmList,CashOut cash) {
         try {
             if (em == null) {
                 createEm();
             }
             em.getTransaction().begin();
-            this.deletByCouId(mmList.get(0).getCouId());
+            this.deletByCouId(cash);
             mmList.stream().forEach((obj) -> {
                 em.persist(obj);
             });

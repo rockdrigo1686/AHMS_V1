@@ -54,14 +54,14 @@ public class MoneyMovementBoundary implements AHMSBoundary<MoneyMovement> {
          return moneyMovementEM.searchByCouId(obj);
      }
     
-     public Integer deleteByCouId(CashOut obj){
-          moneyMovementEM = new MoneyMovementEM();
-         return moneyMovementEM.deletByCouId(obj);
-     }
+//     public Integer deleteByCouId(CashOut obj){
+//          moneyMovementEM = new MoneyMovementEM();
+//         return moneyMovementEM.deletByCouId(obj);
+//     }
 
-    public Integer update(List<MoneyMovement> mmList) {
+    public Integer update(List<MoneyMovement> mmList,CashOut cash) {
         moneyMovementEM = new MoneyMovementEM();
-         return moneyMovementEM.update(mmList);
+         return moneyMovementEM.update(mmList,cash);
     }
 
     
