@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,7 +21,7 @@ import javax.swing.JOptionPane;
  */
 public class GeneralFunctions {
 
-    private static final ErrorTraceBoundary errorTraceBoundary = new ErrorTraceBoundary();
+    private static final ErrorTraceBoundary ERROR_TRACE_BOUNDARY = new ErrorTraceBoundary();
 
     public static long getDaysBetweenDates(Calendar date1, Calendar date2) {
         long days = 0;
@@ -64,7 +66,7 @@ public class GeneralFunctions {
         ErrorTrace newTrace = new ErrorTrace();
         newTrace.setErrTrace(getCompleteTrace(stackTraceArray));
         newTrace.setErrDate(new Date());
-        errorTraceBoundary.insert(newTrace);
+        ERROR_TRACE_BOUNDARY.insert(newTrace);
     }
 
     private static String getCompleteTrace(StackTraceElement[] stackTraceArray) {
@@ -101,5 +103,29 @@ public class GeneralFunctions {
                 Logger.getLogger(GeneralFunctions.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public static boolean validateDecimals(String expression){
+        try {
+            Pattern p = Pattern.compile("(\\d+).\\d{2}");
+            Matcher m = p.matcher(expression);
+            return m.matches();
+        } catch (Exception e) {
+            appendTrace(e.getStackTrace());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public static boolean validateAlpha(String expression){
+        try {
+            Pattern p = Pattern.compile("^[\\p{L} .'-]+$");
+            Matcher m = p.matcher(expression);
+            return m.matches();
+        } catch (Exception e) {
+            appendTrace(e.getStackTrace());
+            e.printStackTrace();
+        }
+        return false;
     }
 }
