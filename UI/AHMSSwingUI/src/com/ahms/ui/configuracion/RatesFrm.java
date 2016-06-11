@@ -11,12 +11,14 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Rates;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,7 @@ public class RatesFrm extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        userLogued = new Users(1);
+        userLogued = logued;
         setResizable(false);
         setTitle("Tipos de Cuartos");
         ratesBoundary = new RatesBoundary();
@@ -79,7 +81,7 @@ public class RatesFrm extends javax.swing.JDialog {
     
     private void loadStatus(List<MultiValue> statusList){
         this.rteStatus.removeAllItems();
-        this.rteStatus.addItem(new MultiValue());
+        this.rteStatus.addItem(new MultiValue(null, "Seleccionar ..."));
         for(MultiValue status : statusList){
             this.rteStatus.addItem(status);
         }
@@ -98,7 +100,7 @@ public class RatesFrm extends javax.swing.JDialog {
                 return false;
             }
         };
-
+        
         // The 0 argument is number rows.
         resultList.stream().forEach((next) -> {
             tableModel.addRow(new Object[]{next.getRteId(), next.getRteDesc(), next.getRtePrice(), next.getRteStatus(), next.getRteUsrMod(), next.getRteDteMod()});
@@ -107,6 +109,10 @@ public class RatesFrm extends javax.swing.JDialog {
         resultTable.setModel(tableModel);
         resultTable.getColumn("ID").setMinWidth(0);
         resultTable.getColumn("ID").setMaxWidth(0);
+        resultTable.getColumn("Usuario Mod").setMinWidth(0);
+        resultTable.getColumn("Usuario Mod").setMaxWidth(0);
+        resultTable.getColumn("Fecha Mod").setMinWidth(0);
+        resultTable.getColumn("Fecha Mod").setMaxWidth(0);
         resultTable.setColumnSelectionAllowed(false);
         resultTable.setCellSelectionEnabled(false);
         resultTable.setRowSelectionAllowed(true);
@@ -253,6 +259,12 @@ public class RatesFrm extends javax.swing.JDialog {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, ratesBean, org.jdesktop.beansbinding.ELProperty.create("${rtePrice}"), jTextField2, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField2KeyTyped(evt);
+            }
+        });
+
         jLabel3.setText("Estatus:");
 
         rteStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -330,6 +342,7 @@ public class RatesFrm extends javax.swing.JDialog {
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(ratesBean);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -346,12 +359,18 @@ public class RatesFrm extends javax.swing.JDialog {
         newRte.setRteUsrMod(userLogued);
         newRte.setRteDteMod(new Date());
 
-        if (ratesBoundary.insert(newRte) == 1) {
-            JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
+        if(GeneralFunctions.validateDecimals(jTextField2.getText().trim())){
+            if (ratesBoundary.insert(newRte) == 1) {
+                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
+            }
+            resultList = searchAll();
+            fillTable(resultTable);
+            formManager.setDefaultFormStatus();
+        } else {
+            GeneralFunctions.sendMessage(this, "El precio contiene caracteres no válidos. Por favor rectifique.");
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        
+        
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -362,13 +381,17 @@ public class RatesFrm extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         if (ratesBean.getRteId()!= null) {
-            if (ratesBoundary.update(ratesBean) == 1) {
-                JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
-            }
-        }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+            if(GeneralFunctions.validateDecimals(jTextField2.getText().trim())){
+                if (ratesBoundary.update(ratesBean) == 1) {
+                    JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
+                    resultList = searchAll();
+                    fillTable(resultTable);
+                    formManager.setDefaultFormStatus();
+                }
+            } else {
+                GeneralFunctions.sendMessage(this, "El precio contiene caracteres no válidos. Por favor rectifique.");
+            }            
+        }        
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -389,6 +412,10 @@ public class RatesFrm extends javax.swing.JDialog {
             evt.consume();
         }
     }//GEN-LAST:event_rteDescKeyTyped
+
+    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
+        
+    }//GEN-LAST:event_jTextField2KeyTyped
 
     /**
      * @param args the command line arguments
