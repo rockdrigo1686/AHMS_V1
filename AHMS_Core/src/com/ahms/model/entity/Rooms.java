@@ -69,7 +69,7 @@ public class Rooms implements Serializable {
     private Date rmsDteMod;
     @Basic(optional = false)
     @Column(name = "RMS_MAX_OCU", nullable = false)
-    private int rmsMaxOcu;
+    private Integer rmsMaxOcu;
     @Basic(optional = false)
     @Column(name = "RMS_DESC", nullable = false, length = 200)
     private String rmsDesc;
@@ -132,11 +132,11 @@ public class Rooms implements Serializable {
         this.rmsDteMod = rmsDteMod;
     }
 
-    public int getRmsMaxOcu() {
+    public Integer getRmsMaxOcu() {
         return rmsMaxOcu;
     }
 
-    public void setRmsMaxOcu(int rmsMaxOcu) {
+    public void setRmsMaxOcu(Integer rmsMaxOcu) {
         this.rmsMaxOcu = rmsMaxOcu;
     }
 
