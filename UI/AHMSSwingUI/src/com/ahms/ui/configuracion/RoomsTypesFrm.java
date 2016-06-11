@@ -68,10 +68,10 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
     }
     
     private void loadStatus(List<MultiValue> statusList){
-        rtyStatus.removeAllItems();
-        rtyStatus.addItem(new MultiValue(null, "Seleccionar ..."));
+        this.rtyStatus.removeAllItems();
+        this.rtyStatus.addItem(new MultiValue(null, "Seleccionar ..."));
         for(MultiValue ml:statusList){
-            rtyStatus.addItem(ml);
+            this.rtyStatus.addItem(ml);
         }        
     }
     
@@ -199,7 +199,7 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
         jToolBar1.add(btnEliminar);
         jToolBar1.add(jSeparator5);
 
-        jLabel1.setText("Tipo de Cuarto:");
+        jLabel1.setText("Descripción:");
         jLabel1.setName(""); // NOI18N
 
         rtyId.setEnabled(false);
@@ -219,7 +219,7 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setText("Camas:");
+        jLabel3.setText("No. de Camas:");
 
         rtyBeds.setToolTipText("");
         rtyBeds.setName("rtyBeds"); // NOI18N
@@ -270,7 +270,7 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rtyStatus, 0, 131, Short.MAX_VALUE)))
+                        .addComponent(rtyStatus, 0, 108, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -341,6 +341,19 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        if(rtyDescription.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Descripción no puede estar vacio. Por favor rectifique.");
+            return;
+        }        
+        if(rtyBeds.getText().isEmpty()){
+            GeneralFunctions.sendMessage(this, "El campo Número de Camas no puede estar vacio. Por favor rectifique.");
+            return;
+        }        
+        if(rtyStatus.getSelectedIndex() == 0){
+            GeneralFunctions.sendMessage(this, "Debe seleccionar el estatus del registro. Por favor rectifique.");
+            return;
+        }                
+                
         RoomTypes newRty = new RoomTypes();
         newRty.setRtyBeds(roomTypes.getRtyBeds());
         newRty.setRtyDescription(roomTypes.getRtyDescription());
@@ -366,6 +379,20 @@ public class RoomsTypesFrm extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         
         if (roomTypes.getRtyId()!= null) {
+            
+            if(rtyDescription.getText().isEmpty()){
+                GeneralFunctions.sendMessage(this, "El campo Descripción no puede estar vacio. Por favor rectifique.");
+                return;
+            }        
+            if(rtyBeds.getText().isEmpty()){
+                GeneralFunctions.sendMessage(this, "El campo Número de Camas no puede estar vacio. Por favor rectifique.");
+                return;
+            }        
+            if(rtyStatus.getSelectedIndex() == 0){
+                GeneralFunctions.sendMessage(this, "Debe seleccionar el estatus del registro. Por favor rectifique.");
+                return;
+            }
+            
             if(GeneralFunctions.validateNumeric(rtyBeds.getText().trim())){
                 if (roomTypesBoundary.update(roomTypes) == 1) {
                     JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
