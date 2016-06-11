@@ -14,6 +14,7 @@ import com.ahms.model.entity.Services;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Component;
@@ -48,25 +49,24 @@ public class ServicesFrm extends javax.swing.JDialog {
     /**
      * Creates new form ServicesFrm
      */
-    public ServicesFrm(java.awt.Frame parent, boolean modal) {
+    public ServicesFrm(MainFrm parent, boolean modal) {
         super(parent, modal);
-        this.parent = (MainFrm)parent;
+        this.parent =  parent;
         initComponents();
-        setSize(980, 450);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        setTitle("Tipos de Servicios");
+        setTitle("Servicios");
         serviceTypeBoundary = new ServiceTypesBoundary();
-        serviceBoundary =  new ServiceBoundary();
+        serviceBoundary = new ServiceBoundary();
         MMBoundary = new MultiValueBoundary();
 
-        srvStatus.addItem(new MultiValue());
+        srvStatus.addItem(new MultiValue(null,"Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
             srvStatus.addItem(obj);
         }
 
-        svtId.addItem(new ServiceTypes());
+        svtId.addItem(new ServiceTypes(null, null, "Seleccionar...", null));
         ServiceTypes st = new ServiceTypes();
         st.setSvtStatus(new MultiValue("AC"));
         for (ServiceTypes obj : serviceTypeBoundary.searchAll(st)) {
@@ -90,7 +90,39 @@ public class ServicesFrm extends javax.swing.JDialog {
             }
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        srvId.setVisible(false);
+    }
 
+    private boolean validateForm() {
+        if (svtId.getSelectedIndex() == 0) {
+            GeneralFunctions.sendMessage(this, "Favor de seleccionar un Tipo de Servicio");
+            return false;
+        }
+        if (service.getSrvCode() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la Clave del Servicio");
+            return false;
+        }
+        if (service.getSrvDesc() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la Descripcion del Servicio");
+            return false;
+        }
+        if (service.getSrvName() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Servicio");
+            return false;
+        }
+        if (srvStatus.getSelectedIndex() == 0) {
+            GeneralFunctions.sendMessage(this, "Favor de seleccionar un Estatus");
+            return false;
+        }
+        if (service.getSrvPrice() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el Precio del Servicio");
+            return false;
+        } else if (!GeneralFunctions.validateDecimals(srvPrice.getText())) {
+            GeneralFunctions.sendMessage(this, "El Precio del servicio contiene caracteres no validos. Por favor rectifique");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -289,15 +321,10 @@ public class ServicesFrm extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(34, 34, 34)
@@ -307,36 +334,34 @@ public class ServicesFrm extends javax.swing.JDialog {
                                 .addGap(7, 7, 7)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(svtId, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addComponent(svtId, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(srvCode, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(srvName, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(srvName, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(srvDesc))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(srvStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(srvPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(srvId))))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(srvId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(srvStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(23, 23, 23)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 894, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -378,16 +403,10 @@ public class ServicesFrm extends javax.swing.JDialog {
         // TODO add your handling code here:
 
         formManager.setDefaultFormStatus();
-        /*try {
-         profile.resetProperties();
-         } catch (IllegalArgumentException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (IllegalAccessException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(service);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -401,13 +420,11 @@ public class ServicesFrm extends javax.swing.JDialog {
         System.out.println("nuevo");
         service.setSrvDteMod(new Date());
         //        profile.setSrvUsrMod(topFrame.getMainUser().getUsrId());
-        service.setSrvUsrMod(new Users(1));
+        service.setSrvUsrMod(parent.getMainUser());
         if (serviceBoundary.insert(service) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -422,14 +439,12 @@ public class ServicesFrm extends javax.swing.JDialog {
         if (service.getSvtId() != null) {
             service.setSrvDteMod(new Date());
             //        profile.setSrvUsrMod(topFrame.getMainUser().getUsrId());
-            service.setSrvUsrMod(new Users(1));
+            service.setSrvUsrMod(parent.getMainUser());
             if (serviceBoundary.update(service) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private List<Services> searchAll() {
@@ -449,7 +464,7 @@ public class ServicesFrm extends javax.swing.JDialog {
 
         // The 0 argument is number rows.
         resultList.stream().forEach((next) -> {
-            tableModel.addRow(new Object[]{next.getSrvId(),next.getSvtId(), next.getSrvCode(),next.getSrvDesc(),next.getSrvPrice(), next.getSrvStatus()});
+            tableModel.addRow(new Object[]{next.getSrvId(), next.getSvtId(), next.getSrvCode(), next.getSrvDesc(), next.getSrvPrice(), next.getSrvStatus()});
         });
 
         resultTable.setModel(tableModel);
@@ -470,10 +485,7 @@ public class ServicesFrm extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
@@ -506,7 +518,7 @@ public class ServicesFrm extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ServicesFrm dialog = new ServicesFrm(new javax.swing.JFrame(), true);
+                ServicesFrm dialog = new ServicesFrm(new MainFrm(null, null), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

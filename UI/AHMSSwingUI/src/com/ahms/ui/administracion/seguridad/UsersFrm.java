@@ -48,25 +48,25 @@ public class UsersFrm extends javax.swing.JFrame {
      */
     public UsersFrm() {
         initComponents();
-      
+
         setLocationRelativeTo(null);
         setResizable(false);
-        
+
         setTitle("Users");
         userBoundary = new UsersBoundary();
         profileBoundary = new ProfileBoundary();
         MMBoundary = new MultiValueBoundary();
-        
-        usrStatus.addItem(new MultiValue(null,"Seleccionar..."));
+
+        usrStatus.addItem(new MultiValue(null, "Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
-             usrStatus.addItem(obj);
+            usrStatus.addItem(obj);
         }
-        
-        proId.addItem(new Profiles(null,null, "Seleccionar...",null,null));
+
+        proId.addItem(new Profiles(null, null, "Seleccionar...", null, null));
         Profiles profiles = new Profiles();
         profiles.setProStatus(new MultiValue("AC"));
-         for (Profiles obj : profileBoundary.searchAll(profiles)) {
-             proId.addItem(obj);
+        for (Profiles obj : profileBoundary.searchAll(profiles)) {
+            proId.addItem(obj);
         }
         resultList = searchAll();
         //Creamos mapa de componentes
@@ -86,7 +86,7 @@ public class UsersFrm extends javax.swing.JFrame {
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         usrId.setVisible(false);
-        
+
     }
 
     /**
@@ -451,7 +451,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
 //        System.out.println(user.getUsrStatus());
-        user.setProId(proId.getSelectedIndex()==0?null: (Profiles) proId.getSelectedItem());
+        user.setProId(proId.getSelectedIndex() == 0 ? null : (Profiles) proId.getSelectedItem());
         resultList = userBoundary.search(user);
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_BUSCAR);
@@ -459,7 +459,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        if(!validateForm()){
+        if (!validateForm()) {
             return;
         }
         System.out.println("nuevo");
@@ -478,7 +478,7 @@ public class UsersFrm extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         System.out.println("guardar");
-        if(!validateForm()){
+        if (!validateForm()) {
             return;
         }
         if (user.getProId() != null) {
@@ -507,7 +507,7 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void usrCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrCodeKeyTyped
         // TODO add your handling code here:
-        if (usrCode.getText().length()==6) {
+        if (usrCode.getText().length() == 6) {
             evt.consume();
         }
     }//GEN-LAST:event_usrCodeKeyTyped
@@ -522,7 +522,7 @@ public class UsersFrm extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(UsersFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -578,30 +578,41 @@ public class UsersFrm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private boolean validateForm() {
-        if (proId.getSelectedIndex()==0) {
+        if (proId.getSelectedIndex() == 0) {
             GeneralFunctions.sendMessage(this, "Favor de seleccionar un Perfil");
             return false;
         }
-        if (user.getUsrCode()==null) {
+        if (user.getUsrCode() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear la Clave de Usuario");
             return false;
         }
-        if (user.getUsrName()==null) {
-            GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Usuario");
+        if (GeneralFunctions.validateAlpha(usrName.getText())) {
+            if (user.getUsrName() == null) {
+                GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Usuario");
+                return false;
+            }
+        } else {
+            GeneralFunctions.sendMessage(this, "El Nombre del usuario contiene caracteres no validos. Por favor rectifique");
             return false;
         }
-        if (user.getUsrLst1()==null) {
+
+        if (user.getUsrLst1() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el A.Paterno del usuario");
             return false;
-        }
-        if (user.getUsrLst2()==null) {
+        } else if (GeneralFunctions.validateAlpha(usrLast1.getText())) {
+            GeneralFunctions.sendMessage(this, "El A.Paterno del usuario contiene caracteres no validos. Por favor rectifique");
+            return false;
+        }else if (user.getUsrLst2() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el A.Materno del usuario");
             return false;
+        }else if (GeneralFunctions.validateAlpha(usrLast2.getText())) {
+            GeneralFunctions.sendMessage(this, "El A.Materno del usuario contiene caracteres no validos. Por favor rectifique");
+            return false;
         }
-        if (user.getUsrPwd()==null) {
+        if (user.getUsrPwd() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear el Password del usuario");
             return false;
-        }else if(user.getUsrPwd().length()<8){
+        } else if (user.getUsrPwd().length() < 8) {
             GeneralFunctions.sendMessage(this, "El Password debe contener minimo 8 caracteres");
             return false;
         }
