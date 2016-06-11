@@ -56,7 +56,7 @@ public class RoomTypes implements Serializable {
     private String rtyDescription;
     @Basic(optional = false)
     @Column(name = "RTY_BEDS", nullable = false)
-    private int rtyBeds;
+    private Integer rtyBeds;
     @Basic(optional = false)
     @Column(name = "RTY_DTE_MOD", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -100,11 +100,11 @@ public class RoomTypes implements Serializable {
         this.rtyDescription = rtyDescription;
     }
 
-    public int getRtyBeds() {
+    public Integer getRtyBeds() {
         return rtyBeds;
     }
 
-    public void setRtyBeds(int rtyBeds) {
+    public void setRtyBeds(Integer rtyBeds) {
         this.rtyBeds = rtyBeds;
     }
 

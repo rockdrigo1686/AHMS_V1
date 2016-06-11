@@ -9,6 +9,8 @@ import com.ahms.boundary.AHMSBoundary;
 import com.ahms.model.entity.RoomTypes;
 import com.ahms.model.manager.entity_manager.RoomTypesEM;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,7 +30,12 @@ public class RoomTypesBoundary implements AHMSBoundary<RoomTypes>{
     
     @Override
     public List<RoomTypes> search(RoomTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return roomTypesEM.search(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(RoomTypesBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
