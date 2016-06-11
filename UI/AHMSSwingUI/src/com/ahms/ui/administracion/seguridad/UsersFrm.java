@@ -12,6 +12,7 @@ import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Profiles;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Component;
@@ -56,12 +57,12 @@ public class UsersFrm extends javax.swing.JFrame {
         profileBoundary = new ProfileBoundary();
         MMBoundary = new MultiValueBoundary();
         
-        usrStatus.addItem(new MultiValue());
+        usrStatus.addItem(new MultiValue(null,"Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
              usrStatus.addItem(obj);
         }
         
-        proId.addItem(new Profiles());
+        proId.addItem(new Profiles(null,null, "Seleccionar...",null,null));
         Profiles profiles = new Profiles();
         profiles.setProStatus(new MultiValue("AC"));
          for (Profiles obj : profileBoundary.searchAll(profiles)) {
@@ -84,6 +85,7 @@ public class UsersFrm extends javax.swing.JFrame {
             }
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        usrId.setVisible(false);
     }
 
     /**
@@ -167,6 +169,12 @@ public class UsersFrm extends javax.swing.JFrame {
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, user, org.jdesktop.beansbinding.ELProperty.create("${usrCode}"), usrCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        usrCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                usrCodeKeyTyped(evt);
+            }
+        });
 
         usrName.setMaximumSize(new java.awt.Dimension(70, 27));
         usrName.setMinimumSize(new java.awt.Dimension(70, 27));
@@ -396,16 +404,10 @@ public class UsersFrm extends javax.swing.JFrame {
         System.out.println(user.getUsrCode());
 
         formManager.setDefaultFormStatus();
-        /*try {
-         profile.resetProperties();
-         } catch (IllegalArgumentException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (IllegalAccessException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(user);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     //<editor-fold defaultstate="collapsed" desc=" operaciones de tarea ">
@@ -447,7 +449,8 @@ public class UsersFrm extends javax.swing.JFrame {
      */
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        System.out.println(user.getUsrStatus());
+//        System.out.println(user.getUsrStatus());
+        user.setProId(proId.getSelectedIndex()==0?null: (Profiles) proId.getSelectedItem());
         resultList = userBoundary.search(user);
         fillTable(resultTable);
         formManager.updateButtonMenuState(UIConstants.BTN_BUSCAR);
@@ -455,13 +458,14 @@ public class UsersFrm extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
+        if(!validateForm()){
+            return;
+        }
         System.out.println("nuevo");
         if (userBoundary.insert(user) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -473,14 +477,15 @@ public class UsersFrm extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         System.out.println("guardar");
+        if(!validateForm()){
+            return;
+        }
         if (user.getProId() != null) {
             if (userBoundary.update(user) == 1) {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -492,15 +497,19 @@ public class UsersFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
-          formManager.setDefaultFormStatus();
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void usrNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usrNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_usrNameActionPerformed
+
+    private void usrCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usrCodeKeyTyped
+        // TODO add your handling code here:
+        if (usrCode.getText().length()==6) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_usrCodeKeyTyped
 
     /**
      * @param args the command line arguments
@@ -566,4 +575,36 @@ public class UsersFrm extends javax.swing.JFrame {
     private javax.swing.JComboBox usrStatus;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private boolean validateForm() {
+        if (proId.getSelectedIndex()==0) {
+            GeneralFunctions.sendMessage(this, "Favor de seleccionar un Perfil");
+            return false;
+        }
+        if (user.getUsrCode()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear la Clave de Usuario");
+            return false;
+        }
+        if (user.getUsrName()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el Nombre del Usuario");
+            return false;
+        }
+        if (user.getUsrLst1()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el A.Paterno del usuario");
+            return false;
+        }
+        if (user.getUsrLst2()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el A.Materno del usuario");
+            return false;
+        }
+        if (user.getUsrPwd()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el Password del usuario");
+            return false;
+        }else if(user.getUsrPwd().length()<8){
+            GeneralFunctions.sendMessage(this, "El Password debe contener minimo 8 caracteres");
+            return false;
+        }
+
+        return true;
+    }
 }

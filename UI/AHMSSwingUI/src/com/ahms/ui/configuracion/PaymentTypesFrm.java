@@ -347,6 +347,7 @@ public class PaymentTypesFrm extends javax.swing.JDialog {
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed

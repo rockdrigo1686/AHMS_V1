@@ -13,6 +13,7 @@ import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.JTableDoubleClickListener;
 import com.ahms.ui.utils.FormManager;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
@@ -61,7 +62,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
         MMBoundary = new MultiValueBoundary();
         resultList = searchAll();
         //Creamos mapa de componentes
-        proStatus.addItem(new MultiValue());
+        proStatus.addItem(new MultiValue(null,"Seleccionar..."));
         for (MultiValue obj : MMBoundary.findByType(new MultiValue(null, null, "GRL", null, null, null))) {
             proStatus.addItem(obj);
         }
@@ -81,6 +82,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
             }
         });
         this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        proId.setVisible(false);
     }
 
     //<editor-fold defaultstate="collapsed" desc=" operaciones de tarea ">
@@ -174,12 +176,24 @@ public class ProfilesFrm extends javax.swing.JFrame {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proCode}"), proCode, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
 
+        proCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                proCodeKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Nombre:");
 
         proName.setName("proName"); // NOI18N
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, profile, org.jdesktop.beansbinding.ELProperty.create("${proName}"), proName, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
+
+        proName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                proNameKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Estatus:");
 
@@ -325,10 +339,10 @@ public class ProfilesFrm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
+                        .addComponent(proStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
                         .addComponent(proId, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 95, Short.MAX_VALUE))
+                        .addGap(0, 55, Short.MAX_VALUE))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator3)
                     .addComponent(jSeparator1))
@@ -369,16 +383,10 @@ public class ProfilesFrm extends javax.swing.JFrame {
         System.out.println(profile.getProCode());
 
         formManager.setDefaultFormStatus();
-        /*try {
-         profile.resetProperties();
-         } catch (IllegalArgumentException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (IllegalAccessException ex) {
-         Logger.getLogger(ProfilesFrm.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
         resultList = searchAll();
         fillTable(resultTable);
         formManager.setDefaultFormStatus();
+        GeneralFunctions.resetProperties(profile);
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -390,16 +398,27 @@ public class ProfilesFrm extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        System.out.println("nuevo");
+//        System.out.println("nuevo");
+        if (profile.getProCode() == null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el codigo del proyecto");
+            return;
+        }
+        if (profile.getProName()==null) {
+            GeneralFunctions.sendMessage(this, "Favor de teclear el nombre del perfil");
+            return;
+        }
+        if (proStatus.getSelectedIndex()==0) {
+            GeneralFunctions.sendMessage(this, "Favor de seleccionar un Estatus");
+            return;
+        }
         profile.setProDteMod(new Date());
 //        profile.setProUsrMod(topFrame.getMainUser().getUsrId());
         profile.setProUsrMod(new Users(1));
         if (profileBoundary.insert(profile) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+       
+        btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -420,9 +439,7 @@ public class ProfilesFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_UPDATE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.setDefaultFormStatus();
+          btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -434,11 +451,22 @@ public class ProfilesFrm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
             }
         }
-        resultList = searchAll();
-        fillTable(resultTable);
-        formManager.updateButtonMenuState(UIConstants.BTN_ELIMINAR);
-        formManager.setDefaultFormStatus();
+          btnLimpiarActionPerformed(null);
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void proCodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_proCodeKeyTyped
+        // TODO add your handling code here:
+        if (proCode.getText().length()==5) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_proCodeKeyTyped
+
+    private void proNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_proNameKeyTyped
+        // TODO add your handling code here:
+        if (proName.getText().length()==50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_proNameKeyTyped
 
 //</editor-fold>
     /**/
