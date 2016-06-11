@@ -15,7 +15,7 @@ import javax.persistence.TypedQuery;
  *
  * @author jorge
  */
-public class PaymenTypesEM extends AHMSEntityManager{
+public class PaymenTypesEM extends AHMSEntityManager<PaymentTypes>{
     public List<PaymentTypes> findAll(PaymentTypes payment) {
         try {
             if (em == null || !em.isOpen()) {

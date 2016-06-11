@@ -45,22 +45,27 @@ public class PaymentTypesBoundary implements AHMSBoundary<PaymentTypes>{
 
     @Override
     public PaymentTypes find(PaymentTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            return paymentTypesEM.find(obj);
+        } catch (Exception ex) {
+            Logger.getLogger(PaymentTypesBoundary.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
     public int insert(PaymentTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return paymentTypesEM.insert(obj);
     }
 
     @Override
     public int update(PaymentTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return paymentTypesEM.update(obj);
     }
 
     @Override
     public int delete(PaymentTypes obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return paymentTypesEM.delete(obj);
     }
     
 }

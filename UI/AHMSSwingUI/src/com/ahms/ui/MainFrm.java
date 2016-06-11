@@ -33,6 +33,7 @@ import com.ahms.ui.administracion.reportes.ServiciosRp;
 import com.ahms.ui.administracion.seguridad.ProfilesFrm;
 import com.ahms.ui.administracion.seguridad.UsersFrm;
 import com.ahms.ui.configuracion.FloorsFrm;
+import com.ahms.ui.configuracion.PaymentTypesFrm;
 import com.ahms.ui.configuracion.RatesFrm;
 import com.ahms.ui.configuracion.RoomsFrm;
 import com.ahms.ui.configuracion.RoomsTypesFrm;
@@ -449,6 +450,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenu8 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -829,6 +831,15 @@ public class MainFrm extends javax.swing.JFrame {
 
         menConf.add(jMenu8);
 
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/money.png"))); // NOI18N
+        jMenuItem5.setText("Tipos de Pagos");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        menConf.add(jMenuItem5);
+
         jMenuBar1.add(menConf);
 
         setJMenuBar(jMenuBar1);
@@ -1007,6 +1018,12 @@ public class MainFrm extends javax.swing.JFrame {
         ServicesFrm servicesFrm = new ServicesFrm(this, true);
         servicesFrm.setVisible(true);
     }//GEN-LAST:event_jMenuItem11ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        PaymentTypesFrm paymentTypesFrm = new PaymentTypesFrm(this, true);
+        paymentTypesFrm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
     private void fillMessageBoard() {
         String col[] = {"ID", "Mensaje", "Fecha", "Usuario"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
@@ -1076,6 +1093,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
