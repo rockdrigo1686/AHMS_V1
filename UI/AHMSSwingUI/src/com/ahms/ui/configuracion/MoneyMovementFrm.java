@@ -12,6 +12,7 @@ import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.UIConstants;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,12 +42,12 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
         this.parent = (MainFrm) parent;
         initComponents();
         String col[] = {"Descripcion", "Salida", "Entrada"};
+//        mmModel = new DefaultTableModel(col, 0);
         mmModel = new DefaultTableModel(col, 0) {
             private static final long serialVersionUID = 1L;
-
             @Override
             public Class getColumnClass(int column) {
-                return column > 0 ? Long.class : getValueAt(0, column).getClass();
+                return column > 0 ? BigDecimal.class : getValueAt(0, column).getClass();
             }
         };
         tblMoneuMov.setModel(mmModel);
@@ -64,7 +65,7 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        jbSalir = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -76,16 +77,16 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jToolBar1.setPreferredSize(new java.awt.Dimension(114, 38));
 
-        jbSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
-        jbSalir.setToolTipText("Guardar");
-        jbSalir.setFocusable(false);
-        jbSalir.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jbSalir.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/disk.png"))); // NOI18N
+        btnGuardar.setToolTipText("Guardar");
+        btnGuardar.setFocusable(false);
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSalirActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jToolBar1.add(jbSalir);
+        jToolBar1.add(btnGuardar);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/add.png"))); // NOI18N
         jButton1.setToolTipText("Agregar");
@@ -110,15 +111,20 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
 
         tblMoneuMov.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Descripcion", "Salidas", "Salidas"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblMoneuMov);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -148,7 +154,7 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
         JFormattedTextField amtField = new JFormattedTextField(
                 NumberFormat.getCurrencyInstance());
 
-        mmModel.addRow(new Object[]{});
+        mmModel.addRow(new Object[]{new String(), BigDecimal.ZERO,BigDecimal.ZERO});
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -159,7 +165,7 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalirActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         int option = JOptionPane.showOptionDialog(parent, UIConstants.CONFIRM_UPDATE, null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"SI", "NO"}, rootPane);
            if (null != tblMoneuMov.getCellEditor()) {
@@ -182,11 +188,11 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
                 mm.setMmoCasIn((BigDecimal) mmModel.getValueAt(i, 2));
                 mmList.add(mm);
             }
-            if (mmList.size() > 0) {
-                mmBound.update(mmList);
-            }
+            
+                mmBound.update(mmList,currentShift);
+            
         }
-    }//GEN-LAST:event_jbSalirActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void setTableModel() throws Exception {
 
@@ -260,11 +266,11 @@ public class MoneyMovementFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JButton jbSalir;
     private javax.swing.JTable tblMoneuMov;
     // End of variables declaration//GEN-END:variables
 
