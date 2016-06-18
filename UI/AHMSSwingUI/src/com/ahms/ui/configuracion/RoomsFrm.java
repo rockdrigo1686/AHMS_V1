@@ -225,11 +225,11 @@ public class RoomsFrm extends javax.swing.JDialog {
             }
         });
 
-        jLabel3.setText("Camas:");
+        jLabel3.setText("Tipo de Cuarto:");
 
         jLabel4.setText("Max Ocu.:");
 
-        jLabel5.setText("Tipo de Cuarto:");
+        jLabel5.setText("Precio:");
 
         jcbRate.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
