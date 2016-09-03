@@ -40,6 +40,27 @@ public class ServiceEM extends AHMSEntityManager<Services>{
         }
         
     }
+    public Services findByCode(String srvCode) {
+        try {
+            if (em == null || !em.isOpen()) {
+                createEm();
+            }
+            TypedQuery<Services> query = em.createNamedQuery("Services.findBySrvCode", Services.class);
+            query.setParameter("srvCode", srvCode);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+        
+    }
 
 //    @Override
 //    public List<Services> search(Services serv) {

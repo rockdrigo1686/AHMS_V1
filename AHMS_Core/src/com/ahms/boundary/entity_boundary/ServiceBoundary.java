@@ -43,6 +43,10 @@ public class ServiceBoundary implements AHMSBoundary<Services>{
     public List<Services> findAllByServiceType(ServiceTypes type) {
         return serviceEM.findAllByServiceType(type);
     }
+    
+    public Services findByCode(String srvCode) { 
+        return serviceEM.findByCode(srvCode);
+    }
 
     @Override
     public Services find(Services obj) {
