@@ -324,6 +324,10 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
     }
 
     private boolean validateForm(){
+        if (serviceType.getSvtCode().length()>6) {
+            GeneralFunctions.sendMessage(this, "Maximo numero de caracteres excedido: max = 6");
+            return false;
+        }
         if (serviceType.getSvtCode() == null) {
             GeneralFunctions.sendMessage(this, "Favor de teclear la Clave del tipo de servicio");
             return false;
@@ -378,7 +382,7 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
         }
         serviceType.setSvtDteMod(new Date());
 //        profile.setSvtUsrMod(topFrame.getMainUser().getUsrId());
-        serviceType.setSvtUsrMod(new Users(1));
+        serviceType.setSvtUsrMod(topFrame.getMainUser());
         if (serviceTypeBoundary.insert(serviceType) == 1) {
             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_SAVE);
         }

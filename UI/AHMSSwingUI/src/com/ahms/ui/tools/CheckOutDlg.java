@@ -14,14 +14,12 @@ import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.PaymentTypes;
-import com.ahms.model.entity.Rooms;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.util.MMKeys;
 import java.awt.Color;
 import java.awt.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +86,9 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlTotal.setText("$" + totalOriginal.toString());
         jlPagado.setText("$" + totalPagado.toString());
         jlPendiente.setText("$" + totalPending.toString());
+        if (totalPending.compareTo(BigDecimal.ZERO)<=0 ) {
+            activeAccountClose();
+        }
     }
 
     public void activeAccountClose() {
@@ -217,7 +218,6 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlMontoCambio = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jlNombre.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlNombre.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

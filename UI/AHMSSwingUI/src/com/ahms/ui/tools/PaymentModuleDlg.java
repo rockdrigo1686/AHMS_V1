@@ -182,7 +182,6 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
         jtCardNumber = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jlTotal.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         jlTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

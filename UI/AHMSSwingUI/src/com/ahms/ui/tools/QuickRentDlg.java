@@ -9,6 +9,7 @@ import com.ahms.boundary.entity_boundary.PaymentTypesBoundary;
 import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
 import com.ahms.boundary.entity_boundary.RoomsBoundary;
+import com.ahms.boundary.entity_boundary.ServiceBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.CashOut;
@@ -19,13 +20,12 @@ import com.ahms.model.entity.PaymentTypes;
 import com.ahms.model.entity.PreferenceDetail;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.RoomTypes;
+import com.ahms.model.entity.Services;
 import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
-import com.ahms.ui.utils.DateLabelFormatter;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
-import java.awt.Font;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -33,7 +33,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 /**
  *
@@ -56,7 +55,8 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private RoomTypesBoundary roomTypesBoundary;
     private CashOut currentShift = null;
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
-    
+    private ServiceBoundary servicesBoundary = null;
+
     public HashMap<String, PaymentTypes> mapPayTypes = null;
     public StringBuilder sbCardNumbers = null;
     PreferenceDetail preference = null;
@@ -65,6 +65,8 @@ public class QuickRentDlg extends javax.swing.JDialog {
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
     private MainFrm parentFrm = null;
     private AccountSearchDlg dlgParent = null;
+
+    private Services perExtra = null;
 
     public QuickRentDlg(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
@@ -81,28 +83,31 @@ public class QuickRentDlg extends javax.swing.JDialog {
         multiValueBoundary = new MultiValueBoundary();
         roomTypesBoundary = new RoomTypesBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
-        
+        servicesBoundary = new ServiceBoundary();
+
         mapPayTypes = new HashMap<String, PaymentTypes>();
         sbCardNumbers = new StringBuilder("");
 
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
         configTiposCuartos(roomTypesBoundary.findActiveTypes(roomTypesActive));
+        perExtra = servicesBoundary.findByCode("PEX");
+
     }
-    
-    public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift){
+
+    public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift) {
         super(parent, true);
         initComponents();
         this.dlgParent = parent;
         this.mainCustomer = reservation.getCusId();
         this.currentShift = shift;
-        
+
         //asignar valores de la reservacion
         Calendar calIni = Calendar.getInstance();
         calIni.setTime(reservation.getResFecIni());
         Calendar calFin = Calendar.getInstance();
         calFin.setTime(reservation.getResFecFin());
-        
+
         dateCsIni.setCurrent(calIni);
         dateCsFin.setCurrent(calFin);
         jcbQuickRentTipo.setSelectedItem(reservation.getRmsId().getRmsBeds());
@@ -123,21 +128,21 @@ public class QuickRentDlg extends javax.swing.JDialog {
         quickRentIva = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         BigDecimal price = BigDecimal.ZERO;
-        
+
         price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : reservation.getRmsId().getRteId().getRtePrice();
         quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
         quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
-        
+
         quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
         lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
         jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
         jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
         jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
-        
+
         roomAvailableByTypeLst = new ArrayList<com.ahms.model.entity.Rooms>();
         roomAvailableByTypeLst.add(reservation.getRmsId());
-        
+
         //deshabilitar todos los componentes
         dateCsIni.setEnabled(false);
         dateCsFin.setEnabled(false);
@@ -147,7 +152,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jbQRSearchRoom.setEnabled(false);
         jbtnLoadCustomer.setEnabled(false);
         jbQRPagar.setEnabled(true);
-    
+
     }
 
     private void configTiposCuartos(List<RoomTypes> lstRoomTypes) {
@@ -193,10 +198,11 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jbQRPagar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         lbPrecioCuarto = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        lblPerExt = new javax.swing.JLabel();
         label1 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setResizable(false);
 
         jLabel10.setText("Personas:");
 
@@ -344,6 +350,12 @@ public class QuickRentDlg extends javax.swing.JDialog {
         lbPrecioCuarto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbPrecioCuarto.setText("-");
 
+        jLabel9.setText("Personas Extra");
+
+        lblPerExt.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblPerExt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblPerExt.setText("-");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -357,20 +369,24 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbQRPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlQRTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlQRIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbPrecioCuarto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lbPrecioCuarto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jlQRTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlQRIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jlQRSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel9)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblPerExt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
@@ -387,6 +403,10 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(lbPrecioCuarto))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(lblPerExt))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlQRSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -402,8 +422,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jbtnLoadCustomer)
-                    .addComponent(jbQRPagar))
-                .addContainerGap())
+                    .addComponent(jbQRPagar)))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(7, 7, 7)
@@ -454,12 +473,12 @@ public class QuickRentDlg extends javax.swing.JDialog {
             try {
                 Calendar calEntrada = dateCsIni.getCurrent();
                 Calendar calSalida = dateCsFin.getCurrent();
-                
-                if(!GeneralFunctions.compareDates(calEntrada, calSalida, true)){
+
+                if (!GeneralFunctions.compareDates(calEntrada, calSalida, true)) {
                     GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
                     return;
                 }
-                
+
                 int numPersonas = (int) jspNumeroPersonas.getValue();
 
                 Account actFind = new Account();
@@ -515,7 +534,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     //actualizando el Room
                     room.setRmsStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_OCUPADO_KEY)));
                     roomsBounday.update(room);
-                    
+
                     roomsAtrs[indexRoom][0] = room;
                     roomsAtrs[indexRoom][1] = rentTran;
                     indexRoom++;
@@ -531,25 +550,25 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     FolioTransactionBoundary folioTransactionBoundary = new FolioTransactionBoundary();
                     BigDecimal price = null;
                     String cardNumbers = sbCardNumbers.toString();
-                    cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length()-1) : "";
-                    
+                    cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length() - 1) : "";
+
                     PaymentTypes payment = null;
-                    if(mapPayTypes.size() > 1){
+                    if (mapPayTypes.size() > 1) {
                         PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
                         List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
                         payment = payList.get(0);
                     } else {
-                        for(PaymentTypes payType : mapPayTypes.values()){
+                        for (PaymentTypes payType : mapPayTypes.values()) {
                             payment = payType;
                         }
                     }
-                    
-                    for(int i=0; i< roomsAtrs.length; i++){
+
+                    for (int i = 0; i < roomsAtrs.length; i++) {
                         AccountTransactions iAtr = (AccountTransactions) roomsAtrs[i][1];
                         com.ahms.model.entity.Rooms iRoom = (com.ahms.model.entity.Rooms) roomsAtrs[i][0];
                         //Checar preference detail
                         price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : iRoom.getRteId().getRtePrice();
-                        
+
                         FolioTransaction iFolio = new FolioTransaction();
                         iFolio.setActId(quickRentAccount);
                         iFolio.setAtrId(iAtr);
@@ -559,9 +578,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         iFolio.setFtrDteMod(new Date());
                         iFolio.setFtrUsrMod(currentShift.getUsrId());
                         iFolio.setPayId(payment);
-                        folioTransactionBoundary.insert(iFolio);                        
+                        folioTransactionBoundary.insert(iFolio);
                     }
-                    
+
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
                     RoomsBoundary roomsBoundary = new RoomsBoundary();
                     parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
@@ -580,11 +599,11 @@ public class QuickRentDlg extends javax.swing.JDialog {
             Calendar calEntrada = dateCsIni.getCurrent();
             Calendar calSalida = dateCsFin.getCurrent();
 
-            if(!GeneralFunctions.compareDates(calEntrada, calSalida, true)){
+            if (!GeneralFunctions.compareDates(calEntrada, calSalida, true)) {
                 GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
                 return;
             }
-            
+
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
@@ -645,17 +664,23 @@ public class QuickRentDlg extends javax.swing.JDialog {
             quickRentIva = BigDecimal.ZERO;
             quickRentTotal = BigDecimal.ZERO;
             BigDecimal price = BigDecimal.ZERO;
+            BigDecimal totalPerExt = BigDecimal.ZERO;
             for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
                 price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : room.getRteId().getRtePrice();
                 quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
+                Integer numPers = (Integer) jspNumeroPersonas.getValue() - 1;
+                totalPerExt = perExtra.getSrvPrice().multiply(new BigDecimal(numPers));
+                quickRentSubTotal.add(totalPerExt);
                 quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
             }
+
             quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
             lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
             jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
             jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
             jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
+            lblPerExt.setText(GeneralFunctions.formatAmount(totalPerExt));
         }
 
     }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
@@ -684,6 +709,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
@@ -702,6 +728,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private java.awt.Label label1;
     private javax.swing.JLabel lbPrecioCuarto;
     private javax.swing.JLabel lblCustName;
+    private javax.swing.JLabel lblPerExt;
     private javax.swing.JLabel lblRfc;
     // End of variables declaration//GEN-END:variables
 }
