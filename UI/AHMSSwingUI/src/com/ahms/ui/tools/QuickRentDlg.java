@@ -44,8 +44,10 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private com.ahms.model.entity.Rooms quickRentRoomAssigned = null;
     private BigDecimal quickRentSubTotal = BigDecimal.ZERO;
     private BigDecimal quickRentIva = BigDecimal.ZERO;
+    private BigDecimal quickRentIsh = BigDecimal.ZERO;
     private BigDecimal quickRentTotal = BigDecimal.ZERO;
     private BigDecimal quickrentIvaPercent = BigDecimal.ZERO;
+    private BigDecimal quickrentIshPercent = BigDecimal.ZERO;
 
     private Customers mainCustomer;
     private RoomsBoundary roomsBounday = null;
@@ -63,7 +65,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
-    private MainFrm parentFrm = null;
+    public MainFrm parentFrm = null;
     private AccountSearchDlg dlgParent = null;
 
     private Services perExtra = null;
@@ -74,7 +76,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
         parentFrm = parent;
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
-
         jbtnLoadCustomer.setEnabled(false);
 
         roomsBounday = new RoomsBoundary();
@@ -115,8 +116,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
         lblRfc.setText(mainCustomer.getCusRfc());
         //generar totales de renta
         MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+       // MultiValue mvIsh = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.ISH_KEY));
         quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-
+        //quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
         long days = GeneralFunctions.getDaysBetweenDates(calIni, calFin);
         //verificar si el Customer tiene tasa preferencial ------------------------------------
         PreferenceDetail preferenceDetail = new PreferenceDetail();
@@ -126,18 +128,20 @@ public class QuickRentDlg extends javax.swing.JDialog {
         // ------------------------------------------------------------------------------------
         quickRentSubTotal = BigDecimal.ZERO;
         quickRentIva = BigDecimal.ZERO;
+      //  quickRentIsh = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         BigDecimal price = BigDecimal.ZERO;
 
         price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : reservation.getRmsId().getRteId().getRtePrice();
         quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
         quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
-
+       // quickRentIsh = quickRentIsh.add(quickRentSubTotal.multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_EVEN));
         quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
         lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
         jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
         jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
+//        lblIsh.setText(GeneralFunctions.formatAmount(quickRentIsh));
         jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
 
         roomAvailableByTypeLst = new ArrayList<com.ahms.model.entity.Rooms>();
@@ -200,6 +204,8 @@ public class QuickRentDlg extends javax.swing.JDialog {
         lbPrecioCuarto = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         lblPerExt = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        lblIsh = new javax.swing.JLabel();
         label1 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -356,6 +362,12 @@ public class QuickRentDlg extends javax.swing.JDialog {
         lblPerExt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblPerExt.setText("-");
 
+        jLabel11.setText("ISH:");
+
+        lblIsh.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        lblIsh.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblIsh.setText("-");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -376,12 +388,14 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlQRTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlQRIVA, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jlQRSubTotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblIsh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -414,14 +428,17 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jlQRIVA))
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(lblIsh))
+                .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(7, 7, 7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jlQRTotal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                    .addComponent(jlQRTotal, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jbtnLoadCustomer)
                     .addComponent(jbQRPagar)))
@@ -634,7 +651,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
 
     private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
-        CustomerRegFrm loadCustomer = new CustomerRegFrm(this, true, mainCustomer);
+        CustomerRegFrm loadCustomer = new CustomerRegFrm(parentFrm, true, parentFrm,mainCustomer);
         loadCustomer.setVisible(true);
         mainCustomer = loadCustomer.localCustomer;
 
@@ -653,7 +670,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
             //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
             //generar totales de renta
             MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+            MultiValue mvIsh = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.ISH_KEY));
             quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+            quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
 
             long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida);
             //verificar si el Customer tiene tasa preferencial ------------------------------------
@@ -664,6 +683,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
             // ------------------------------------------------------------------------------------
             quickRentSubTotal = BigDecimal.ZERO;
             quickRentIva = BigDecimal.ZERO;
+            quickRentIsh = BigDecimal.ZERO;
             quickRentTotal = BigDecimal.ZERO;
             BigDecimal price = BigDecimal.ZERO;
             BigDecimal totalPerExt = BigDecimal.ZERO;
@@ -674,13 +694,15 @@ public class QuickRentDlg extends javax.swing.JDialog {
                 totalPerExt = perExtra.getSrvPrice().multiply(new BigDecimal(numPers));
                 quickRentSubTotal.add(totalPerExt);
                 quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
+                quickRentIsh = quickRentIsh.add(quickRentSubTotal.multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_EVEN));
             }
 
-            quickRentTotal = quickRentSubTotal.add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+            quickRentTotal = quickRentSubTotal.add(quickRentIsh).add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
 
             lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
             jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
             jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
+            lblIsh.setText(GeneralFunctions.formatAmount(quickRentIsh));
             jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
             lblPerExt.setText(GeneralFunctions.formatAmount(totalPerExt));
         }
@@ -697,13 +719,14 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jbQRPagar.setEnabled(false);
 
     }
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private datechooser.beans.DateChooserCombo dateCsFin;
     private datechooser.beans.DateChooserCombo dateCsIni;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -730,6 +753,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private java.awt.Label label1;
     private javax.swing.JLabel lbPrecioCuarto;
     private javax.swing.JLabel lblCustName;
+    private javax.swing.JLabel lblIsh;
     private javax.swing.JLabel lblPerExt;
     private javax.swing.JLabel lblRfc;
     // End of variables declaration//GEN-END:variables

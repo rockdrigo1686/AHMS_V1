@@ -5,14 +5,13 @@
  */
 package com.ahms.ui.configuracion;
 
-import com.ahms.boundary.SecurityBoundary;
 import com.ahms.boundary.entity_boundary.AccountBoundary;
 import com.ahms.boundary.entity_boundary.CustomersBoundary;
 import com.ahms.boundary.entity_boundary.MultiValueBoundary;
 import com.ahms.model.entity.Customers;
 import com.ahms.model.entity.MultiValue;
-import com.ahms.model.entity.Users;
 import com.ahms.ui.MainFrm;
+import com.ahms.ui.tools.QuickRentDlg;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.MMKeys;
 import java.awt.event.MouseAdapter;
@@ -57,9 +56,10 @@ public class CustomerRegFrm extends javax.swing.JDialog {
 
     public CustomerRegFrm(java.awt.Dialog parent, boolean modal, Customers customers) {
         super(parent, modal);
-        dialog = (java.awt.Dialog) parent;
+        dialog = parent;
         localCustomer = customers;
         customersBoundary = new CustomersBoundary();
+        
         initComponents();
         fillGrid(null);
     }
@@ -561,12 +561,13 @@ public class CustomerRegFrm extends javax.swing.JDialog {
                     .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel26)
-                        .addComponent(txtPlacas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtPlacas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel24)
+                        .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
@@ -606,7 +607,7 @@ public class CustomerRegFrm extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

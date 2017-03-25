@@ -47,11 +47,11 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
     /**
      * Creates new form ServiceType
      */
-    public ServiceTypeFrm() {
+    public ServiceTypeFrm(MainFrm parent) {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
-        topFrame = (MainFrm) SwingUtilities.getWindowAncestor(this);
+        topFrame =  parent;
         setTitle("Tipos de Servicios");
         serviceTypeBoundary = new ServiceTypesBoundary();
         MMBoundary = new MultiValueBoundary();
@@ -454,7 +454,7 @@ public class ServiceTypeFrm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ServiceTypeFrm().setVisible(true);
+                new ServiceTypeFrm(null).setVisible(true);
             }
         });
     }

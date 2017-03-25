@@ -1051,7 +1051,7 @@ public class MainFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        ServiceTypeFrm serviceTypeFrm = new ServiceTypeFrm();
+        ServiceTypeFrm serviceTypeFrm = new ServiceTypeFrm(this);
         serviceTypeFrm.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
