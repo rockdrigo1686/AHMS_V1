@@ -129,6 +129,8 @@ public class RoomsFrm extends javax.swing.JDialog {
         jtRooms.setModel(model);
         jtRooms.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         btnEliminar.setEnabled(false);
+        btnGuardar.setEnabled(false);
+        btnEditar.setEnabled(false);
     }
 
     /**
@@ -422,6 +424,7 @@ public class RoomsFrm extends javax.swing.JDialog {
            btnBuscar.setEnabled(false);
            btnNuevo.setEnabled(false);
            btnEliminar.setEnabled(true);
+           btnEditar.setEnabled(true);
            lockInstance();
         } 
     }//GEN-LAST:event_jtRoomsMouseClicked
@@ -462,10 +465,12 @@ public class RoomsFrm extends javax.swing.JDialog {
     
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         cleanInstance();
-        btnGuardar.setEnabled(true);
+        btnLimpiar.setEnabled(true);
         btnBuscar.setEnabled(true);
         btnNuevo.setEnabled(true);
-        btnGuardar.setEnabled(true);
+        btnGuardar.setEnabled(false);
+        btnEditar.setEnabled(false);
+        btnEliminar.setEnabled(false);
         unlockInstance();
         this.jlRoomsId.setText("");
         roomsIdGlobal = null;
@@ -636,6 +641,8 @@ public class RoomsFrm extends javax.swing.JDialog {
         btnEliminar.setEnabled(false);
         btnNuevo.setEnabled(false);
         btnGuardar.setEnabled(true);
+        btnLimpiar.setEnabled(true);
+        btnEditar.setEnabled(false);
         unlockInstance();
     }//GEN-LAST:event_btnEditarActionPerformed
 
