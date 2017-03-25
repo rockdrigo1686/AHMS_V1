@@ -69,6 +69,7 @@ public class MMKeys {
 
         public final static String GP_KEY = "MTH";
         public final static String IVA_KEY = "IVA";
+        public final static String ISH_KEY = "ISH";
     }
 
     public static class Profiles {
