@@ -598,7 +598,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         for(FolioTransaction fTran : fTranList){
                             payTypeAmount = fTran.getFtrAmount();
                             //dividir el monto total del tipo de pago / # cuartos rentados (AccountTransacions)
-                            folioAmount = payTypeAmount.divide(roomsPaid).setScale(2,RoundingMode.HALF_EVEN);
+                            folioAmount = payTypeAmount.divide(roomsPaid,2,RoundingMode.HALF_EVEN);
                             fTranFinal = null;
                             for(Object[] roomsAtr : roomsAtrs){
                                 AccountTransactions iAtr = (AccountTransactions) roomsAtr[1];
