@@ -569,24 +569,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
                 if (totalPaid) {
                     //Cuando ya se haya pagado la totalidad del importe, hacer inserciones en folio Transaction
-                    //FolioTransactionBoundary folioTransactionBoundary = new FolioTransactionBoundary();
-                    //BigDecimal price = null;
-                    //String cardNumbers = sbCardNumbers.toString();
-                    //cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length() - 1) : "";
-
-                    /*PaymentTypes payment = null;
-                    String payCode = "";
-                    if (mapPayTypes.size() > 1) {
-                        payCode = MMKeys.Payments.MIX;                        
-                    } else {
-                        for(String key : mapPayTypes.keySet()){
-                            payCode = key;
-                        }                        
-                    }
-                    PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
-                    List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(payCode));
-                    payment = payList.get(0);
-                    */
                     BigDecimal payTypeAmount;
                     BigDecimal folioAmount;
                     FolioTransaction fTranFinal;
@@ -598,7 +580,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         for(FolioTransaction fTran : fTranList){
                             payTypeAmount = fTran.getFtrAmount();
                             //dividir el monto total del tipo de pago / # cuartos rentados (AccountTransacions)
-                            folioAmount = payTypeAmount.divide(roomsPaid,2,RoundingMode.HALF_EVEN);
+                            folioAmount = payTypeAmount.divide(roomsPaid,2,RoundingMode.HALF_UP);
                             fTranFinal = null;
                             for(Object[] roomsAtr : roomsAtrs){
                                 AccountTransactions iAtr = (AccountTransactions) roomsAtr[1];
@@ -618,23 +600,6 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         }                        
                     }
                     
-                    /*for (Object[] roomsAtr : roomsAtrs) {
-                        AccountTransactions iAtr = (AccountTransactions) roomsAtr[1];
-                        com.ahms.model.entity.Rooms iRoom = (com.ahms.model.entity.Rooms) roomsAtr[0];
-                        //Checar preference detail
-                        //price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : iRoom.getRteId().getRtePrice();
-                        FolioTransaction iFolio = new FolioTransaction();
-                        iFolio.setActId(quickRentAccount);
-                        iFolio.setAtrId(iAtr);
-                        iFolio.setCouId(currentShift);
-                        iFolio.setFtrAmount(price);
-                        iFolio.setFtrCardNumber(cardNumbers);
-                        iFolio.setFtrDteMod(new Date());
-                        iFolio.setFtrUsrMod(currentShift.getUsrId());
-                        //iFolio.setPayId(payment);
-                        folioTransactionBoundary.insert(iFolio);
-                    }*/
-
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
                     RoomsBoundary roomsBoundary = new RoomsBoundary();
                     parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));

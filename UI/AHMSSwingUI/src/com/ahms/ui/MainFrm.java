@@ -340,7 +340,7 @@ public class MainFrm extends javax.swing.JFrame {
                     vctRow.add(new ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/grey_ball.png")));
                     break;
             }
-            vctRow.add(room.getRmsNumber());
+            vctRow.add(room);
             vctRow.add(room.getRmsDesc());
             vctRow.add(room.getRmsBeds().getRtyBeds());
             vctRow.add(room.getRmsMaxOcu());
@@ -382,16 +382,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     }
 
-    private Rooms getRoomFromDashboard(Integer rmsId) {
-        Rooms room = null;
-        try {
-            room = roomsBounday.findByRmsId(new Rooms(rmsId));
-        } catch (Exception e) {
-            GeneralFunctions.appendTrace(e.getStackTrace());
-        }
-        return room;
-    }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -982,7 +973,7 @@ public class MainFrm extends javax.swing.JFrame {
         if (clicks > 1) { // doble click
             if (estatus.getMvaKey().equals(MMKeys.Rooms.STA_OCUPADO_KEY)) {
                 //llamar a agregar servicios
-                Rooms roomObj = getRoomFromDashboard(Integer.parseInt(String.valueOf(jtDashboard.getValueAt(row, 8))));
+                Rooms roomObj = (Rooms) jtDashboard.getValueAt(row, 1);
                 RoomServiceSelectionDlg roomService = new RoomServiceSelectionDlg(null, true, roomObj, currentShift);
                 roomService.setLocationRelativeTo(evt.getComponent().getParent().getParent().getParent());
                 roomService.setVisible(true);

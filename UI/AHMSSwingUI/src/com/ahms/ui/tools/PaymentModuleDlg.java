@@ -300,24 +300,19 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
         } 
         else if (parentQuickRent != null) { // si fue llamado desde una renta
             
-            importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
+            importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.UP);
             int importeValida = importePagado.compareTo(importeTotal);
             if (importeValida >= 0) // importe pagado > importe total, hay que dar feria
             {
-                importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.HALF_EVEN);
+                importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.UP);
                 //Actualizar Mapa del Parent
-                //parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
                 parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
                 GeneralFunctions.sendMessage(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());
                 
                 FolioTransaction iFolio = new FolioTransaction();
-                //iFolio.setActId(quickRentAccount);
-                //iFolio.setAtrId(iAtr);
-                //iFolio.setCouId(currentShift);
                 iFolio.setFtrAmount(importePagado);
                 iFolio.setFtrCardNumber(jtCardNumber.getText());
                 iFolio.setFtrDteMod(new Date());
-                //iFolio.setFtrUsrMod(currentShift.getUsrId());
                 iFolio.setPayId(selectedPayment);
                 if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
                     parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
@@ -331,23 +326,17 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
                 
                 //Actualizar Mapa del Parent
-                //parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
                 parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
                 GeneralFunctions.sendMessage(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
                 //limpiar la forma sin hacer el dispose
                 importeTotal = importeRestante;
-                jlTotal.setText("$ " + importeTotal.toString());
-                jtCardNumber.setText("");
+                jlTotal.setText("$ " + importeTotal.toString());                
                 jcbTipoPago.setSelectedIndex(0);
                 
                 FolioTransaction iFolio = new FolioTransaction();
-                //iFolio.setActId(quickRentAccount);
-                //iFolio.setAtrId(iAtr);
-                //iFolio.setCouId(currentShift);
                 iFolio.setFtrAmount(importePagado);
                 iFolio.setFtrCardNumber(jtCardNumber.getText());
                 iFolio.setFtrDteMod(new Date());
-                //iFolio.setFtrUsrMod(currentShift.getUsrId());
                 iFolio.setPayId(selectedPayment);
                 if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
                     parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
@@ -355,7 +344,8 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     ArrayList<FolioTransaction> arrFolios = new ArrayList<>();
                     arrFolios.add(iFolio);
                     parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
-                }                
+                }
+                jtCardNumber.setText("");                
                 return;
             }
             //limpiar quickRent y actualizar grid en MainForm
@@ -364,11 +354,11 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
             
             
         } else if (payServiceDialog != null) { //fue llamado para pago de 1 servicio
-            importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.HALF_EVEN);
+            importePagado = new BigDecimal(jtImporteRecibido.getText()).setScale(2, RoundingMode.UP);
             int importeValida = importePagado.compareTo(importeTotal);
             if (importeValida >= 0) // importe pagado > importe total, hay que dar feria
             {
-                importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.HALF_EVEN);
+                importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.UP);
                 //TRANSACCIONES CORRESPONDIENTES
                 FolioTransaction folioTransaction = null;
                 if (selectedPayment.getPayId() == 1) { // EFECTIVO
@@ -387,7 +377,6 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction.setCouId(currentShift);
                     folioTransaction.setPayId(selectedPayment);
                     folioTransaction.setFtrAmount(importeTotal);
-                    //folioTransaction.setFtrCardñNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
                     folioTransaction.setFtrCardNumber(jtCardNumber.getText());
                     folioTransaction.setFtrFolio(folio);
                     folioTransaction.setFtrDteMod(new Date());
@@ -418,7 +407,6 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                     folioTransaction.setCouId(currentShift);
                     folioTransaction.setPayId(selectedPayment);
                     folioTransaction.setFtrAmount(importePagado);
-                    //folioTransaction.setFtrCardNumber("Cuenta: " + account.getActId() + " Tarjeta: " + jtCardNumber.getText());
                     folioTransaction.setFtrCardNumber(jtCardNumber.getText());
                     folioTransaction.setFtrFolio(folio);
                     folioTransaction.setFtrDteMod(new Date());
