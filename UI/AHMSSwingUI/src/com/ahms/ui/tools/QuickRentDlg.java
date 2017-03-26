@@ -633,6 +633,9 @@ public class QuickRentDlg extends javax.swing.JDialog {
             roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(), numRooms);
             if (roomAvailableByTypeLst != null && roomAvailableByTypeLst.size() > 0) {
                 jlNumber.setText("Cuarto(s) disponible(s):");
+                MultiRoomSelect roomSel = new MultiRoomSelect(this, true, roomAvailableByTypeLst);
+                roomSel.setVisible(true);
+                roomAvailableByTypeLst = roomSel.getSelectedRooms();                
                 for (com.ahms.model.entity.Rooms roomAvailableByType : roomAvailableByTypeLst) {
                     //quickRentRoomAssigned = roomAvailableByType;
                     jlNumber.setText(jlNumber.getText() + "  " + roomAvailableByType.getRmsNumber());

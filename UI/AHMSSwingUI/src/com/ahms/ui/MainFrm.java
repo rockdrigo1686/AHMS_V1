@@ -321,7 +321,7 @@ public class MainFrm extends javax.swing.JFrame {
         columnNames.add("Fecha Reservación");
         columnNames.add("Precio P/N");
         columnNames.add("Estado");
-        columnNames.add("");
+//        columnNames.add("");
 
         Vector<Vector> rows = new Vector<>();
         for (Rooms room : rooms) {
@@ -347,7 +347,7 @@ public class MainFrm extends javax.swing.JFrame {
             vctRow.add(room.getRmsDteMod());
             vctRow.add(room.getRteId().getRtePrice());
             vctRow.add(room.getRmsStatus());
-            vctRow.add(room.getRmsId());
+//            vctRow.add(room.getRmsId());
             rows.add(vctRow);
         }
 
@@ -378,7 +378,7 @@ public class MainFrm extends javax.swing.JFrame {
         jtDashboard.getColumnModel().getColumn(5).setMaxWidth(150);
         jtDashboard.getColumnModel().getColumn(6).setMaxWidth(100);
         jtDashboard.getColumnModel().getColumn(7).setMaxWidth(100);
-        jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
+//        jtDashboard.getColumnModel().getColumn(8).setMaxWidth(20);
 
     }
 

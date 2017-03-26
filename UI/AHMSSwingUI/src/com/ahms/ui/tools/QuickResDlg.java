@@ -268,8 +268,12 @@ public class QuickResDlg extends javax.swing.JDialog {
 
             int numRooms = (int) jspNumRooms.getValue();
             roomAvailableByTypeLst = roomsBounday.findAvailable(paramRoom, calEntrada.getTime(), calSalida.getTime(), numRooms);
+            
             if (roomAvailableByTypeLst != null && roomAvailableByTypeLst.size() > 0) {
-                jlCuartos.setText("Cuarto(s) disponible(s):");
+                jlCuartos.setText("Cuarto(s) seleccionado(s):");
+                MultiRoomSelect roomSel = new MultiRoomSelect(this, true, roomAvailableByTypeLst);
+                roomSel.setVisible(true);
+                roomAvailableByTypeLst = roomSel.getSelectedRooms();
                 for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
                     jlCuartos.setText(jlCuartos.getText() + "  " + room.getRmsNumber());
                 }
