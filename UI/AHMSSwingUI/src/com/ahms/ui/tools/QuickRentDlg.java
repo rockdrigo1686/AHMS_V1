@@ -59,7 +59,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
     private ServiceBoundary servicesBoundary = null;
 
-    public HashMap<String, PaymentTypes> mapPayTypes = null;
+    public HashMap<String, ArrayList<FolioTransaction>> mapPayTypes = null;
     public StringBuilder sbCardNumbers = null;
     PreferenceDetail preference = null;
 
@@ -86,7 +86,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
         preferenceDetailBoundary = new PreferenceDetailBoundary();
         servicesBoundary = new ServiceBoundary();
 
-        mapPayTypes = new HashMap<String, PaymentTypes>();
+        mapPayTypes = new HashMap<String, ArrayList<FolioTransaction>>();
         sbCardNumbers = new StringBuilder("");
 
         RoomTypes roomTypesActive = new RoomTypes();
@@ -571,23 +571,25 @@ public class QuickRentDlg extends javax.swing.JDialog {
                     String cardNumbers = sbCardNumbers.toString();
                     cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length() - 1) : "";
 
-                    PaymentTypes payment = null;
+                    /*PaymentTypes payment = null;
+                    String payCode = "";
                     if (mapPayTypes.size() > 1) {
-                        PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
-                        List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
-                        payment = payList.get(0);
+                        payCode = MMKeys.Payments.MIX;                        
                     } else {
-                        for (PaymentTypes payType : mapPayTypes.values()) {
-                            payment = payType;
-                        }
+                        for(String key : mapPayTypes.keySet()){
+                            payCode = key;
+                        }                        
                     }
+                    PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
+                    List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(payCode));
+                    payment = payList.get(0);
+                    */
 
-                    for (int i = 0; i < roomsAtrs.length; i++) {
-                        AccountTransactions iAtr = (AccountTransactions) roomsAtrs[i][1];
-                        com.ahms.model.entity.Rooms iRoom = (com.ahms.model.entity.Rooms) roomsAtrs[i][0];
+                    for (Object[] roomsAtr : roomsAtrs) {
+                        AccountTransactions iAtr = (AccountTransactions) roomsAtr[1];
+                        com.ahms.model.entity.Rooms iRoom = (com.ahms.model.entity.Rooms) roomsAtr[0];
                         //Checar preference detail
                         price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : iRoom.getRteId().getRtePrice();
-
                         FolioTransaction iFolio = new FolioTransaction();
                         iFolio.setActId(quickRentAccount);
                         iFolio.setAtrId(iAtr);
@@ -596,7 +598,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
                         iFolio.setFtrCardNumber(cardNumbers);
                         iFolio.setFtrDteMod(new Date());
                         iFolio.setFtrUsrMod(currentShift.getUsrId());
-                        iFolio.setPayId(payment);
+                        //iFolio.setPayId(payment);
                         folioTransactionBoundary.insert(iFolio);
                     }
 
