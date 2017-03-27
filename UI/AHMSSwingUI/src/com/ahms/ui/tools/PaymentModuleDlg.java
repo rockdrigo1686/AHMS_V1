@@ -281,9 +281,21 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 //activar boton de cerrar cuenta
                 parentDialog.activeAccountClose();
 
+                FolioTransaction iFolio = new FolioTransaction();
+                iFolio.setFtrAmount(importePagado);
+                iFolio.setFtrCardNumber(jtCardNumber.getText());
+                iFolio.setFtrDteMod(new Date());
+                iFolio.setPayId(selectedPayment);
+                if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
+                    parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
+                } else {
+                    ArrayList<FolioTransaction> arrFolios = new ArrayList<>();
+                    arrFolios.add(iFolio);
+                    parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
+                }                
                 //Actualizar el mapa del parent
-                parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
-                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
+                //parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                //parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
                 
             } else { //si el importe pagado es menor o igual al importe total actualizar montos en checkout
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
@@ -292,9 +304,21 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 parentDialog.totalPending = parentDialog.totalOriginal.subtract(parentDialog.totalPagado).setScale(2, RoundingMode.UP);
                 parentDialog.regenerateTotals();
 
+                FolioTransaction iFolio = new FolioTransaction();
+                iFolio.setFtrAmount(importePagado);
+                iFolio.setFtrCardNumber(jtCardNumber.getText());
+                iFolio.setFtrDteMod(new Date());
+                iFolio.setPayId(selectedPayment);
+                if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
+                    parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
+                } else {
+                    ArrayList<FolioTransaction> arrFolios = new ArrayList<>();
+                    arrFolios.add(iFolio);
+                    parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
+                }                
                 //Actualizar Mapa del Parent
-                parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
-                parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
+                //parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
+                //parentDialog.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");                
             }
             isPaid = true;            
         } 

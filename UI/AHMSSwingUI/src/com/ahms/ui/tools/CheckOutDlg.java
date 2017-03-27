@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,16 +53,18 @@ public class CheckOutDlg extends javax.swing.JDialog {
     private JDialog parentFrame = null;;
     private Map<Integer,Integer> mapInactiveRows = null;
     
-    public HashMap<String, PaymentTypes> mapPayTypes = null;
+    public HashMap<String, ArrayList<FolioTransaction>> mapPayTypes = null;
     public StringBuilder sbCardNumbers = null;
     
     private CashOut currentShift;
     private CashOutBoundary cashOutBoundary;
+    private FolioTransactionBoundary folioBoundary = new FolioTransactionBoundary();
+    private PaymentTypesBoundary paymentTypesBoundary = new PaymentTypesBoundary();
 
     public CheckOutDlg(JDialog parent, boolean modal, Account account) {
         super(parent, modal);
         initComponents();
-        mapPayTypes = new HashMap<String, PaymentTypes>();
+        mapPayTypes = new HashMap<String, ArrayList<FolioTransaction>>();
         mapInactiveRows = new HashMap<Integer,Integer>();
         parentFrame =  parent;
         accountBoundary = new AccountBoundary();
@@ -102,6 +105,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlMontoCambio.setText("$" + totalCambio.toString());
     }
 
+    private int serviciosPendientesDePagar = 0;
     private void generateGridSimple(Customers customer) {
         try {
 
@@ -118,6 +122,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
             Vector<Vector> rows = new Vector<>();
             List<AccountTransactions> resultList = accountTransactionsBoundary.findByCusId(customer);
             Integer contador = 0;
+            serviciosPendientesDePagar = 0;
             for (AccountTransactions a : resultList) {
                 Vector<Object> vctRow = new Vector<>();
                 vctRow.add(a.getRmsId().getRmsNumber());
@@ -127,6 +132,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
                 rows.add(vctRow);
 
                 if (a.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)) {
+                    serviciosPendientesDePagar ++;
                     //solo sumar al total los que estan pendientes por pagar
                     total = total.add(new BigDecimal((a.getAtrQuantity() * a.getSrvId().getSrvPrice().doubleValue())));
                 } else {
@@ -409,7 +415,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
     private void jbCloseAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCloseAccountActionPerformed
         
         try {
-            PaymentTypes payment = null;
+            /*PaymentTypes payment = null;
             if(mapPayTypes.size() > 1){
                 PaymentTypesBoundary payBoundary = new PaymentTypesBoundary();
                 List<PaymentTypes> payList = payBoundary.search(new PaymentTypes(MMKeys.Payments.MIX));
@@ -421,9 +427,42 @@ public class CheckOutDlg extends javax.swing.JDialog {
             }
 
             String cardNumbers = sbCardNumbers.toString();
-            cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length()-1) : "";
+            cardNumbers = cardNumbers.trim().length() > 0 ? cardNumbers.substring(0, cardNumbers.length()-1) : "";*/
 
-            FolioTransactionBoundary folioBoundary = new FolioTransactionBoundary();
+            //Cuando ya se haya pagado la totalidad del importe, hacer inserciones en folio Transaction
+            BigDecimal payTypeAmount;
+            BigDecimal folioAmount;
+            FolioTransaction fTranFinal;
+            BigDecimal pendientes = new BigDecimal(serviciosPendientesDePagar);
+            for(String paytype : mapPayTypes.keySet()){
+                //Obtener la lista de folio transaction que componen el tipo de pago
+                ArrayList<FolioTransaction> fTranList = mapPayTypes.get(paytype);
+                //iterar lista de tipos de pago
+                for(FolioTransaction fTran : fTranList){
+                    payTypeAmount = fTran.getFtrAmount();
+                    //dividir el monto total del tipo de pago / # cuartos rentados (AccountTransacions)
+                    folioAmount = payTypeAmount.divide(pendientes,2,RoundingMode.HALF_UP);
+                    fTranFinal = null;
+                    
+                    for(AccountTransactions actTran : account.getAccountTransactionsCollection()){
+                        if(actTran.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)){
+                            fTranFinal = new FolioTransaction();
+                            fTranFinal.setActId(account);
+                            fTranFinal.setAtrId(actTran);
+                            fTranFinal.setCouId(currentShift);
+                            fTranFinal.setFtrAmount(folioAmount);
+                            fTranFinal.setFtrCardNumber(fTran.getFtrCardNumber());
+                            fTranFinal.setFtrDteMod(new Date());
+                            fTranFinal.setFtrUsrMod(currentShift.getUsrId());
+                            List<PaymentTypes> payList = paymentTypesBoundary.search(new PaymentTypes(paytype));
+                            fTranFinal.setPayId(payList.get(0));
+                            folioBoundary.insert(fTranFinal);
+                        }
+                    }                                                
+                }                        
+            }
+            
+            /*FolioTransactionBoundary folioBoundary = new FolioTransactionBoundary();
             for(AccountTransactions actTran : account.getAccountTransactionsCollection()){
                 if(actTran.getAtrStatus().getMvaKey().equals(MMKeys.AccountsTransactions.STA_PENDIENTE_KEY)){
                     FolioTransaction iFolio = new FolioTransaction();
@@ -437,7 +476,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
                     iFolio.setFtrCardNumber(cardNumbers);
                     folioBoundary.insert(iFolio);
                 }
-            }
+            }*/
 
             //Poner Disponible el Cuarto
             Integer roomNumber = 0;
