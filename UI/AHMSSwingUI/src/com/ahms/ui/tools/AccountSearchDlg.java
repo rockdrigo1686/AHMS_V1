@@ -2,17 +2,23 @@ package com.ahms.ui.tools;
 
 import com.ahms.ui.configuracion.CustomerRegFrm;
 import com.ahms.boundary.entity_boundary.AccountBoundary;
+import com.ahms.boundary.entity_boundary.MultiValueBoundary;
 import com.ahms.boundary.entity_boundary.ReservationBoundary;
+import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.Customers;
+import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Reservation;
 import com.ahms.model.entity.Rooms;
 import com.ahms.ui.MainFrm;
 import com.ahms.ui.utils.GeneralFunctions;
+import com.ahms.ui.utils.UIConstants;
+import com.ahms.util.MMKeys;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -41,6 +47,10 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         initComponents();
         this.topFrame = parent;
         this.action = action;
+        btnCancelRs.setVisible(false);
+        if (RS.equalsIgnoreCase(action)) {
+            btnCancelRs.setVisible(true);
+        }
     }
 
     /**
@@ -59,6 +69,8 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnCancelRs = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -103,6 +115,20 @@ public class AccountSearchDlg extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(jButton2);
+        jToolBar1.add(jSeparator2);
+
+        btnCancelRs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/32x32/1464157321_mail-delete22.png"))); // NOI18N
+        btnCancelRs.setToolTipText("Cancelar Recervación");
+        btnCancelRs.setFocusable(false);
+        btnCancelRs.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancelRs.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCancelRs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelRsActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCancelRs);
+        btnCancelRs.getAccessibleContext().setAccessibleDescription("Cancelar Reservación");
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/24x24/1445772562_search.png"))); // NOI18N
         jButton3.setToolTipText("Buscar Cliente");
@@ -214,6 +240,43 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         fillTable();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void btnCancelRsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelRsActionPerformed
+        Reservation res = null;
+        List<Reservation> resList = (List<Reservation>) resultList;
+        if (resList == null) {
+            GeneralFunctions.sendMessage(this, "No hay cuentas disponibles para trabajar.");
+        } else {
+            try {
+
+                res = resList.get(resultTable.convertRowIndexToModel(resultTable.getSelectedRow()));
+
+            } catch (Exception e) {
+                GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
+            }
+            if (res != null) {
+                int dialogResult = JOptionPane.showConfirmDialog(this, UIConstants.CONFIRM_DELETE, UIConstants.TYPE_WARNING, JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    ReservationBoundary reservationBoundary = new ReservationBoundary();
+                    MultiValueBoundary multiValueBoundary = new MultiValueBoundary();
+                    MultiValue mvStatus = multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_INACTIVO_KEY));
+                    res.setResStatus(mvStatus);
+                    if (reservationBoundary.update(res) == 1) {                       
+                        RoomsBoundary roomsBoundary = new RoomsBoundary();
+                        mvStatus = multiValueBoundary.findByKey(new MultiValue(MMKeys.Rooms.STA_DISPONIBLE_KEY));
+                        Rooms room = res.getRmsId();
+                        room.setRmsStatus(mvStatus);
+                        if(roomsBoundary.update(room) == 1){
+                             JOptionPane.showMessageDialog(this, UIConstants.SUCCESS_DELETE);
+                        }else{
+                            JOptionPane.showMessageDialog(this, UIConstants.ERROR_GEN);
+                        }
+                    }
+                }
+            }
+        }
+
+    }//GEN-LAST:event_btnCancelRsActionPerformed
+
     private List<Account> searchAccounts(Customers customer) {
         Account account = new Account();
         this.accountB = new AccountBoundary();
@@ -265,7 +328,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
                 GeneralFunctions.sendMessage(this, "Favor de seleccionar una cuenta.");
             }
             if (res != null) {
-                QuickRentDlg dlg = new QuickRentDlg(this,res, topFrame.getCurrentShift());
+                QuickRentDlg dlg = new QuickRentDlg(this, res, topFrame.getCurrentShift());
                 dlg.setVisible(true);
             }
         }
@@ -319,11 +382,13 @@ public class AccountSearchDlg extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelRs;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lblCus;
     private javax.swing.JTable resultTable;

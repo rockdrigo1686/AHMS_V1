@@ -50,10 +50,6 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         lblCustomer.setText(account.getCusId().getFullName());
         SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
         lblDate.setText(sf.format(new Date()));
-        lblRoom.setText(lblRoom.getText() + " " + room.getRmsNumber() + ": " + room.getRmsDesc());
-        jbGuardar.setEnabled(false);
-
-        searchRoom();
     }
 
     public boolean getFlag() {
@@ -80,6 +76,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         lblRoomA = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         jbGuardar = new javax.swing.JButton();
+        jbQuickResSearch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,6 +110,13 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         });
         jToolBar1.add(jbGuardar);
 
+        jbQuickResSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/ahms/ui/images/16x16/search.png"))); // NOI18N
+        jbQuickResSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbQuickResSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,21 +135,26 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblRoomA, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(lblRoom))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(jLabel4))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblRoom)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jbQuickResSearch)))
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCustomer)
                     .addComponent(lblDate))
                 .addGap(18, 18, 18)
-                .addComponent(lblRoom)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRoom)
+                    .addComponent(jbQuickResSearch))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -198,24 +207,42 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jbGuardarActionPerformed
 
-    private void searchRoom() {
-        RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
-        Rooms paramRoom = new Rooms();
-        paramRoom.setRmsBeds(tipoSeleccionado);
-        RoomsBoundary roomsBoundary = new RoomsBoundary();
-        List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin(), 1);
-        if (list == null || list.size() == 0) {
-            GeneralFunctions.sendMessage(this, "No se encontraron cuartos disponibles.");
-            this.flag = false;
-        } else {
-            Rooms roomAvailable = list.get(0);
-            changeHistory.setChaRmA(roomAvailable);
-            lblRoomA.setText(lblRoomA.getText() + " " + roomAvailable.getRmsNumber());
-            jbGuardar.setEnabled(true);
-            //generar totales de renta
-        }
+    private void jbQuickResSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbQuickResSearchActionPerformed
+        try {
 
-    }
+            RoomTypes tipoSeleccionado = changeHistory.getChaRmB().getRmsBeds();
+            Rooms paramRoom = new Rooms();
+            paramRoom.setRmsBeds(tipoSeleccionado);
+            RoomsBoundary roomsBoundary = new RoomsBoundary();
+            List<Rooms> list = roomsBoundary.findAvailable(paramRoom, changeHistory.getActId().getActFecIni(), changeHistory.getActId().getActFecFin());
+            if (list == null || list.size() == 0) {
+                GeneralFunctions.sendMessage(this, "No se encontraron cuartos disponibles.");
+                this.flag = false;
+            } else {
+                MultiRoomSelect roomSel = new MultiRoomSelect(this, true, list);
+                roomSel.setVisible(true);
+                list = roomSel.getSelectedRooms();
+                if (rootPaneCheckingEnabled) {
+                    GeneralFunctions.sendMessage(this, "Solo se puede seleccionar un cuarto. Favor de corregir ");
+                } else {
+                    Rooms roomAvailable = list.get(0);
+                    changeHistory.setChaRmA(roomAvailable);
+                    lblRoomA.setText(lblRoomA.getText() + " " + roomAvailable.getRmsNumber());
+                    jbGuardar.setEnabled(true);
+                    //generar totales de renta
+                    lblRoom.setText(lblRoom.getText() + " " + roomAvailable.getRmsNumber() + ": " + roomAvailable.getRmsDesc());
+                    jbGuardar.setEnabled(false);
+                }
+
+            }
+
+        } catch (Exception e) {
+            GeneralFunctions.sendMessage(this, "Ocurrio un error al tratar de obtener el cuarto disponible. Por favor contacte al servicio de soporte tecnico.\n Error: " + e.getMessage());
+            //clearQuickRentInstance();
+            GeneralFunctions.appendTrace(e.getStackTrace());
+        }
+    }//GEN-LAST:event_jbQuickResSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.ahms.model.entity.ChangeHistory changeHistory;
@@ -223,6 +250,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton jbGuardar;
+    private javax.swing.JButton jbQuickResSearch;
     private javax.swing.JLabel lblCustomer;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblRoom;
@@ -234,7 +262,7 @@ public class ChangeHistoryDlg extends javax.swing.JDialog {
     private void getAccountTransaction(Account account, Rooms room) {
         this.accT = new ArrayList<AccountTransactions>();
         for (AccountTransactions accT1 : account.getAccountTransactionsCollection()) {
-            if (accT1.getRmsId().getRmsId()==room.getRmsId()) {
+            if (accT1.getRmsId().getRmsId() == room.getRmsId()) {
                 this.accT.add(accT1);
             }
         }

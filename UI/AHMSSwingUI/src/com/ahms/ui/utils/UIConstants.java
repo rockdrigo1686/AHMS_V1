@@ -40,6 +40,7 @@ public class UIConstants {
     public static final String PAY_SERVICE_SUCCESS = "Servico Pagado.";
 
     //Errores
+    public static final String ERROR_GEN = "Ocurrio un un error al realizar la tarea. Contacte al administrador.";
     public static final String ERROR_EMPY_AMOUNT = "Error: El monto inicial no puede estar vacio, favor de capturar.";
     public static final String ERROR_SHIFT_INI = "Error: Turno no iniciado.";
     public static final String ERROR_AUT_CODE = "Error: Clave de autorizacion incorrecta.";
