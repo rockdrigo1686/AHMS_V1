@@ -58,13 +58,13 @@ public class QuickRentDlg extends javax.swing.JDialog {
     private PreferenceDetailBoundary preferenceDetailBoundary = null;
     private ServiceBoundary servicesBoundary = null;
 
-    public HashMap<String, ArrayList<FolioTransaction>> mapPayTypes = null;
-    public StringBuilder sbCardNumbers = null;
+    public HashMap<String, ArrayList<FolioTransaction>> mapPayTypes = new HashMap<String, ArrayList<FolioTransaction>>();
+    //public StringBuilder sbCardNumbers = null;
     PreferenceDetail preference = null;
 
     public boolean totalPaid = false;
     public List<com.ahms.model.entity.Rooms> roomAvailableByTypeLst = null;
-    public MainFrm parentFrm = null;
+    public MainFrm mainForm = null;
     private AccountSearchDlg dlgParent = null;
 
     private Services perExtra = null;
@@ -75,7 +75,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     public QuickRentDlg(MainFrm parent, boolean modal, Customers mainCustomer, CashOut currentShift) {
         super(parent, modal);
         initComponents();
-        parentFrm = parent;
+        mainForm = parent;
         this.mainCustomer = mainCustomer;
         this.currentShift = currentShift;
         jbtnLoadCustomer.setEnabled(false);
@@ -89,7 +89,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
         servicesBoundary = new ServiceBoundary();
 
         mapPayTypes = new HashMap<String, ArrayList<FolioTransaction>>();
-        sbCardNumbers = new StringBuilder("");
+        //sbCardNumbers = new StringBuilder("");
 
         RoomTypes roomTypesActive = new RoomTypes();
         roomTypesActive.setRtyStatus(multiValueBoundary.findByKey(new MultiValue(MMKeys.General.STA_ACTIVO_KEY)));
@@ -98,22 +98,25 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
     }
 //CAMBIAR AQUI QUICK RENT DESDE RESERVACIONES 
-    public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift) {
+    public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift, MainFrm mainForm) {
         super(parent, true);
         initComponents();
         this.dlgParent = parent;
+        this.mainForm = mainForm;
         this.mainCustomer = reservation.getCusId();
         this.currentShift = shift;
 
-        MultiValueBoundary multiValueBoundary = new MultiValueBoundary();
+        multiValueBoundary = new MultiValueBoundary();
         preferenceDetailBoundary = new PreferenceDetailBoundary();
+        accountBoundary = new AccountBoundary();
+        accountTransactionsBoundary = new AccountTransactionsBoundary();
+        roomsBounday = new RoomsBoundary();
+        
         //asignar valores de la reservacion
         Calendar calIni = Calendar.getInstance();
         calIni.setTime(reservation.getResFecIni());
         Calendar calFin = Calendar.getInstance();
-        calFin.setTime(reservation.getResFecFin());
-
-        
+        calFin.setTime(reservation.getResFecFin());        
         
         dateCsIni.setCurrent(calIni);
         dateCsFin.setCurrent(calFin);
@@ -587,13 +590,14 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
                     GeneralFunctions.sendMessage(this, "Renta realizada exitosamente.");
                     RoomsBoundary roomsBoundary = new RoomsBoundary();
-                    parentFrm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
+                    mainForm.configGrid(roomsBoundary.searchAll(new com.ahms.model.entity.Rooms()));
                     this.dispose();
                 }
 
             } catch (Exception e) {
                 GeneralFunctions.sendMessage(this, "Ocurrio un error. Por favor contacte con servicio técnico. \n Error: " + e.getMessage());
-                GeneralFunctions.appendTrace(e.getStackTrace());
+                //GeneralFunctions.appendTrace(e.getStackTrace());
+                e.printStackTrace();
             }
         }
     }//GEN-LAST:event_jbQRPagarActionPerformed
@@ -635,7 +639,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbQRSearchRoomActionPerformed
 
     private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
-        CustomerRegFrm loadCustomer = new CustomerRegFrm(parentFrm, true, parentFrm, mainCustomer);
+        CustomerRegFrm loadCustomer = new CustomerRegFrm(mainForm, true, mainForm, mainCustomer);
         loadCustomer.setVisible(true);
         mainCustomer = loadCustomer.localCustomer;
 

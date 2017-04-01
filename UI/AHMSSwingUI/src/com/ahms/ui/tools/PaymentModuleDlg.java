@@ -330,7 +330,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
             {
                 importeSobrante = importePagado.subtract(importeTotal).setScale(2, RoundingMode.UP);
                 //Actualizar Mapa del Parent
-                parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                //parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
                 GeneralFunctions.sendMessage(this, "Renta realizada exitosamente. Monto sobrante: $ " + importeSobrante.toString());
                 
                 FolioTransaction iFolio = new FolioTransaction();
@@ -350,7 +350,7 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 importeRestante = importeTotal.subtract(importePagado).setScale(2, RoundingMode.UP);
                 
                 //Actualizar Mapa del Parent
-                parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
+                //parentQuickRent.sbCardNumbers.append(jtCardNumber.getText().trim().length() > 0 ? jtCardNumber.getText() + "," : "");
                 GeneralFunctions.sendMessage(this, "Pago parcial realizado exitosamente. Monto Pagado: $ " + importePagado.toString() + "  |  Importe Restante: $ " + importeRestante.toString());
                 //limpiar la forma sin hacer el dispose
                 importeTotal = importeRestante;
