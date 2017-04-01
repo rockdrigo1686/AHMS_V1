@@ -286,12 +286,12 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 iFolio.setFtrCardNumber(jtCardNumber.getText());
                 iFolio.setFtrDteMod(new Date());
                 iFolio.setPayId(selectedPayment);
-                if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
-                    parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
+                if(parentDialog.mapPayTypes.containsKey(selectedPayment.getPayCode())){
+                    parentDialog.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
                 } else {
                     ArrayList<FolioTransaction> arrFolios = new ArrayList<>();
                     arrFolios.add(iFolio);
-                    parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
+                    parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
                 }                
                 //Actualizar el mapa del parent
                 //parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
@@ -309,12 +309,12 @@ public class PaymentModuleDlg extends javax.swing.JDialog {
                 iFolio.setFtrCardNumber(jtCardNumber.getText());
                 iFolio.setFtrDteMod(new Date());
                 iFolio.setPayId(selectedPayment);
-                if(parentQuickRent.mapPayTypes.containsKey(selectedPayment.getPayCode())){
-                    parentQuickRent.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
+                if(parentDialog.mapPayTypes.containsKey(selectedPayment.getPayCode())){
+                    parentDialog.mapPayTypes.get(selectedPayment.getPayCode()).add(iFolio);
                 } else {
                     ArrayList<FolioTransaction> arrFolios = new ArrayList<>();
                     arrFolios.add(iFolio);
-                    parentQuickRent.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
+                    parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), arrFolios);
                 }                
                 //Actualizar Mapa del Parent
                 //parentDialog.mapPayTypes.put(selectedPayment.getPayCode(), selectedPayment);
