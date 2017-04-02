@@ -275,7 +275,7 @@ public class QuickResDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jbQuickResSearchActionPerformed
 
     private void jbtnLoadCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoadCustomerActionPerformed
-        CustomerRegFrm loadCustomer = new CustomerRegFrm(this, true, mainCustomer);
+        CustomerRegFrm loadCustomer = new CustomerRegFrm(this, true, mainCustomer,parentFrm);
         loadCustomer.setVisible(true);
         mainCustomer = loadCustomer.localCustomer;
         if (mainCustomer != null && mainCustomer.getCusId() != null) {

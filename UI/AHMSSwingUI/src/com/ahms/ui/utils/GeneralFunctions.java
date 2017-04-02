@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 /**
  *
@@ -23,13 +26,18 @@ public class GeneralFunctions {
 
     private static final ErrorTraceBoundary ERROR_TRACE_BOUNDARY = new ErrorTraceBoundary();
 
-    public static long getDaysBetweenDates(Calendar date1, Calendar date2) {
-        long days = 0;
+    public static int getDaysBetweenDates(Calendar date1, Calendar date2) {
+        int days = 0;
+       SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            long diffTimeInMillis = date2.getTimeInMillis() - date1.getTimeInMillis();
-            days = diffTimeInMillis / (24 * 60 * 60 * 1000);
+            DateTime dt1 = new DateTime(date1);
+            DateTime dt2 = new DateTime(date2);
+            
+             days = Days.daysBetween(dt1,dt2).getDays();
+            
         } catch (Exception e) {
-            appendTrace(e.getStackTrace());
+            e.printStackTrace();
+            //appendTrace(e.getStackTrace());
         }
         return days;
     }

@@ -54,12 +54,12 @@ public class CustomerRegFrm extends javax.swing.JDialog {
         fillGrid(null);
     }
 
-    public CustomerRegFrm(java.awt.Dialog parent, boolean modal, Customers customers) {
+    public CustomerRegFrm(java.awt.Dialog parent, boolean modal, Customers customers,MainFrm main) {
         super(parent, modal);
         dialog = parent;
         localCustomer = customers;
         customersBoundary = new CustomersBoundary();
-        
+         mainLocal = main;
         initComponents();
         fillGrid(null);
     }

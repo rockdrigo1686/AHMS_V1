@@ -226,7 +226,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
         CustomerRegFrm customerReg;
-        customerReg = new CustomerRegFrm(this, true, null);
+        customerReg = new CustomerRegFrm(this, true, null,topFrame);
         customerReg.setVisible(true);
         customer = customerReg.getCustomer();
         lblCus.setText(lblCus.getText() + " " + customer.getFullName());
@@ -336,7 +336,7 @@ public class AccountSearchDlg extends javax.swing.JDialog {
 
     //</editor-fold>
     public void fillTable() {
-        String cDesc = AC.equalsIgnoreCase(action) ? "Total" : "Cuarto";
+        String cDesc = AC.equalsIgnoreCase(action) ? "Total" : "# Cuartos";
         String col[] = {"ID", "Fecha de Entrada", "Fecha de Salida", cDesc, "Estatus"};
         SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         tableModel = new DefaultTableModel(col, 0) {
@@ -360,10 +360,11 @@ public class AccountSearchDlg extends javax.swing.JDialog {
         } else {
             List<Reservation> accountList = (List<Reservation>) this.resultList;
             // The 0 argument is number rows.
-            accountList.stream().forEach((next) -> {
-                tableModel.addRow(new Object[]{next.getResId(), sd.format(next.getResFecIni()), sd.format(next.getResFecFin()), next.getRmsId().getRmsNumber(), next.getResStatus()});
+            Reservation res =accountList.get(0);
+            
+                tableModel.addRow(new Object[]{res.getResId(), sd.format(res.getResFecIni()), sd.format(res.getResFecFin()), accountList.size(), res.getResStatus()});
 
-            });
+            
         }
 
         resultTable.setModel(tableModel);

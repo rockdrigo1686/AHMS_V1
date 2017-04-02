@@ -7,6 +7,7 @@ import com.ahms.boundary.entity_boundary.FolioTransactionBoundary;
 import com.ahms.boundary.entity_boundary.MultiValueBoundary;
 import com.ahms.boundary.entity_boundary.PaymentTypesBoundary;
 import com.ahms.boundary.entity_boundary.PreferenceDetailBoundary;
+import com.ahms.boundary.entity_boundary.ReservationBoundary;
 import com.ahms.boundary.entity_boundary.RoomTypesBoundary;
 import com.ahms.boundary.entity_boundary.RoomsBoundary;
 import com.ahms.boundary.entity_boundary.ServiceBoundary;
@@ -32,6 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -98,6 +100,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
 
     }
 //CAMBIAR AQUI QUICK RENT DESDE RESERVACIONES 
+
     public QuickRentDlg(AccountSearchDlg parent, Reservation reservation, CashOut shift, MainFrm mainForm) {
         super(parent, true);
         initComponents();
@@ -111,24 +114,30 @@ public class QuickRentDlg extends javax.swing.JDialog {
         accountBoundary = new AccountBoundary();
         accountTransactionsBoundary = new AccountTransactionsBoundary();
         roomsBounday = new RoomsBoundary();
-        
+
         //asignar valores de la reservacion
         Calendar calIni = Calendar.getInstance();
         calIni.setTime(reservation.getResFecIni());
         Calendar calFin = Calendar.getInstance();
-        calFin.setTime(reservation.getResFecFin());        
-        
+        calFin.setTime(reservation.getResFecFin());
+
         dateCsIni.setCurrent(calIni);
         dateCsFin.setCurrent(calFin);
+        dateCsIni.setSelectedDate(calIni);
+        dateCsFin.setSelectedDate(calFin);
+
+        ReservationBoundary resB = new ReservationBoundary();
+        List<Reservation> resList = resB.searchByCusId(reservation);
+
         jcbQuickRentTipo.setSelectedItem(reservation.getRmsId().getRmsBeds());
         lblCustName.setText(mainCustomer.getFullName());
         lblRfc.setText(mainCustomer.getCusRfc());
         //generar totales de renta
         MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
         MultiValue mvIsh = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.ISH_KEY));
-        quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-        quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-        long days = GeneralFunctions.getDaysBetweenDates(calIni, calFin);
+        quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
+        quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
+        int days = GeneralFunctions.getDaysBetweenDates(calIni, calFin);
         //verificar si el Customer tiene tasa preferencial ------------------------------------
         PreferenceDetail preferenceDetail = new PreferenceDetail();
         preferenceDetail.setCusId(mainCustomer);
@@ -140,15 +149,31 @@ public class QuickRentDlg extends javax.swing.JDialog {
         quickRentIsh = BigDecimal.ZERO;
         quickRentTotal = BigDecimal.ZERO;
         BigDecimal price = BigDecimal.ZERO;
+        BigDecimal totalPerExt = BigDecimal.ZERO;
+        int maxPers = 0;
+        for (Reservation res : resList) {
+            price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : res.getRmsId().getRteId().getRtePrice();
+            quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_UP));
+            maxPers += res.getRmsId().getRmsMaxOcu();
+        }
 
-        price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : reservation.getRmsId().getRteId().getRtePrice();
-        quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
-        quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
-        quickRentIsh = quickRentIsh.add(quickRentSubTotal.multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_EVEN));
-        quickRentTotal = quickRentSubTotal.add(quickRentIva).add(quickRentIsh).setScale(2, RoundingMode.HALF_EVEN);
+//        quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
+//        quickRentIsh = quickRentIsh.add(quickRentSubTotal.multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_EVEN));
+//        quickRentTotal = quickRentSubTotal.add(quickRentIva).add(quickRentIsh).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal impuestos = quickrentIvaPercent.add(quickrentIshPercent).add(BigDecimal.ONE);
 
-        lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
-        jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
+        Integer numPers = ((Integer) jspNumeroPersonas.getValue()) - maxPers;
+        if (numPers > 0) {
+            totalPerExt = perExtra.getSrvPrice().multiply(new BigDecimal(numPers));
+        }
+        quickRentTotal = quickRentSubTotal.add(totalPerExt);
+
+        quickRentIva = quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_UP);
+        quickRentIsh = quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal rentaSinImpuestos = quickRentSubTotal.divide(impuestos, 2, RoundingMode.HALF_UP);
+        lbPrecioCuarto.setText(GeneralFunctions.formatAmount(rentaSinImpuestos));
+        jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP)));
         jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
         lblIsh.setText(GeneralFunctions.formatAmount(quickRentIsh));
         jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
@@ -219,6 +244,11 @@ public class QuickRentDlg extends javax.swing.JDialog {
         jLabel10.setText("Personas:");
 
         jspNumeroPersonas.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
+        jspNumeroPersonas.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jspNumeroPersonasStateChanged(evt);
+            }
+        });
 
         jlNumber.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jlNumber.setText("Cuarto(s) disponible(s):");
@@ -344,7 +374,7 @@ public class QuickRentDlg extends javax.swing.JDialog {
             }
         });
 
-        jLabel8.setText("Precio por Cuarto:");
+        jLabel8.setText("Renta:");
 
         lbPrecioCuarto.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
         lbPrecioCuarto.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -648,21 +678,26 @@ public class QuickRentDlg extends javax.swing.JDialog {
             lblCustName.setText(mainCustomer.getFullName());
             lblRfc.setText(mainCustomer.getCusRfc());
             //------------------------------------------------
+            jbQRPagar.setEnabled(true);
+            recalculate();
+        }
+
+    }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
+
+    private void recalculate(){
+        try {
             RoomTypes tipoSeleccionado = (RoomTypes) jcbQuickRentTipo.getSelectedItem();
             com.ahms.model.entity.Rooms paramRoom = new com.ahms.model.entity.Rooms();
             paramRoom.setRmsBeds(tipoSeleccionado);
             Calendar calEntrada = dateCsIni.getCurrent();
             Calendar calSalida = dateCsFin.getCurrent();
-
-            jbQRPagar.setEnabled(true);
-            //jspNumeroPersonas.setModel(new SpinnerNumberModel(1, 1, quickRentRoomAssigned.getRmsMaxOcu(), 1));
-            //generar totales de renta
+            
             MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
             MultiValue mvIsh = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.ISH_KEY));
-            quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
-            quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_EVEN);
+            quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
+            quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
 
-            long days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida);
+            int days = GeneralFunctions.getDaysBetweenDates(calEntrada, calSalida);
             //verificar si el Customer tiene tasa preferencial ------------------------------------
             PreferenceDetail preferenceDetail = new PreferenceDetail();
             preferenceDetail.setCusId(mainCustomer);
@@ -675,30 +710,43 @@ public class QuickRentDlg extends javax.swing.JDialog {
             quickRentTotal = BigDecimal.ZERO;
             BigDecimal price = BigDecimal.ZERO;
             BigDecimal totalPerExt = BigDecimal.ZERO;
-            for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
-                price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : room.getRteId().getRtePrice();
-                quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)).setScale(2, RoundingMode.HALF_EVEN));
-                quickRentSubTotal.add(totalPerExt);
 
+            int maxPers = 0;
+            for (com.ahms.model.entity.Rooms room : roomAvailableByTypeLst) {
+                maxPers += room.getRmsMaxOcu();
+                price = preference != null && preference.getPrefId() != null ? preference.getPrefAmount() : room.getRteId().getRtePrice();
+                quickRentSubTotal = quickRentSubTotal.add(price.multiply(new BigDecimal(days)));
             }
-            quickRentIva = quickRentIva.add(quickRentSubTotal.multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_EVEN));
-            //APLICAR ISH AL PRECIO YA CON IVA O SIN IVA 
-            quickRentIsh = quickRentIsh.add(quickRentSubTotal.multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_EVEN));
-            Integer numPers = (Integer) jspNumeroPersonas.getValue() - roomAvailableByTypeLst.size();
+            Integer numPers = ((Integer) jspNumeroPersonas.getValue()) - maxPers;// - roomAvailableByTypeLst.size();
             if (numPers > 0) {
                 totalPerExt = perExtra.getSrvPrice().multiply(new BigDecimal(numPers));
             }
-            quickRentTotal = quickRentSubTotal.add(quickRentIsh).add(quickRentIva).setScale(2, RoundingMode.HALF_EVEN);
+            quickRentTotal = quickRentSubTotal.add(totalPerExt);
+            BigDecimal impuestos = quickrentIvaPercent.add(quickrentIshPercent).add(BigDecimal.ONE);
+            quickRentIva = quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_UP);
+            quickRentIsh = quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_UP);
 
-            lbPrecioCuarto.setText(GeneralFunctions.formatAmount(price));
-            jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentSubTotal));
+            BigDecimal rentaSinImpuestos = quickRentSubTotal.divide(impuestos, 2, RoundingMode.HALF_UP);
+            lbPrecioCuarto.setText(GeneralFunctions.formatAmount(rentaSinImpuestos));
+            jlQRSubTotal.setText(GeneralFunctions.formatAmount(quickRentTotal.divide(impuestos, 2, RoundingMode.HALF_UP)));
             jlQRIVA.setText(GeneralFunctions.formatAmount(quickRentIva));
             lblIsh.setText(GeneralFunctions.formatAmount(quickRentIsh));
             jlQRTotal.setText(GeneralFunctions.formatAmount(quickRentTotal));
-            lblPerExt.setText(GeneralFunctions.formatAmount(totalPerExt));
+            lblPerExt.setText(GeneralFunctions.formatAmount(totalPerExt.divide(impuestos, 2, RoundingMode.HALF_UP)));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-    }//GEN-LAST:event_jbtnLoadCustomerActionPerformed
+    }
+    
+    private void jspNumeroPersonasStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspNumeroPersonasStateChanged
+        //GeneralFunctions.sendMessage(this, jspNumeroPersonas.getValue().toString());
+        //Hacer recalculo de cantidades
+        if(mainCustomer.getCusId() != null){
+            //GeneralFunctions.sendMessage(this, jspNumeroPersonas.getValue().toString());
+            recalculate();
+        }
+        
+    }//GEN-LAST:event_jspNumeroPersonasStateChanged
 
     public void clearQuickRentInstance() {
         quickRentRoomAssigned = null;

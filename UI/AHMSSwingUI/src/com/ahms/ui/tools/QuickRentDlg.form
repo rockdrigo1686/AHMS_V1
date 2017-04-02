@@ -123,6 +123,9 @@
               <SpinnerModel initial="1" maximum="10" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jspNumeroPersonasStateChanged"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jlNumber">
           <Properties>
@@ -427,7 +430,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Precio por Cuarto:"/>
+            <Property name="text" type="java.lang.String" value="Renta:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lbPrecioCuarto">
