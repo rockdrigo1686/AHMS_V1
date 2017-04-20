@@ -40,7 +40,9 @@ public class CheckOutDlg extends javax.swing.JDialog {
     public BigDecimal totalAccount = BigDecimal.ZERO;
     public BigDecimal totalPending = BigDecimal.ZERO;
     public BigDecimal total = BigDecimal.ZERO;
+    public BigDecimal subtotal = BigDecimal.ZERO;
     public BigDecimal totalIVA = BigDecimal.ZERO;
+    public BigDecimal totalISH = BigDecimal.ZERO;
     public BigDecimal totalPagado = BigDecimal.ZERO;
     public BigDecimal totalOriginal = BigDecimal.ZERO;
     public BigDecimal totalCambio = BigDecimal.ZERO;
@@ -84,8 +86,9 @@ public class CheckOutDlg extends javax.swing.JDialog {
     }
 
     public void regenerateTotals() {
-        jlSubtotal.setText("$" + total.toString());
+        jlSubtotal.setText("$" + subtotal.toString());
         jlIVA.setText("$" + totalIVA.toString());
+        jlISH.setText("$" + totalISH.toString());
         jlTotal.setText("$" + totalOriginal.toString());
         jlPagado.setText("$" + totalPagado.toString());
         jlPendiente.setText("$" + totalPending.toString());
@@ -141,15 +144,23 @@ public class CheckOutDlg extends javax.swing.JDialog {
                 contador++;
             }
 
-            totalIVA = total.multiply(new BigDecimal(0.16));
-            totalAccount = totalPending = total.add(totalIVA);
+            MultiValue mvIva = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.IVA_KEY));
+            MultiValue mvIsh = multiValueBoundary.findByKey(new MultiValue(MMKeys.Math.ISH_KEY));
+            BigDecimal quickrentIvaPercent = new BigDecimal(mvIva.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal quickrentIshPercent = new BigDecimal(mvIsh.getMvaDescription()).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal impuestos = quickrentIvaPercent.add(quickrentIshPercent).add(BigDecimal.ONE);
+            
+            totalIVA = total.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIvaPercent).setScale(2, RoundingMode.HALF_UP);
+            totalISH = total.divide(impuestos, 2, RoundingMode.HALF_UP).multiply(quickrentIshPercent).setScale(2, RoundingMode.HALF_UP);
+            //totalAccount = totalPending = total.add(totalIVA);
+            totalAccount = totalPending = total;
 
-            total = total.setScale(2, RoundingMode.HALF_EVEN);
-            totalIVA = totalIVA.setScale(2, RoundingMode.HALF_EVEN);
-            totalAccount = totalAccount.setScale(2, RoundingMode.HALF_EVEN);
-            totalPending = totalPending.setScale(2, RoundingMode.HALF_EVEN);
-            totalPagado = totalPagado.setScale(2, RoundingMode.HALF_EVEN);
-
+            total = total.setScale(2, RoundingMode.HALF_UP);
+            totalIVA = totalIVA.setScale(2, RoundingMode.HALF_UP);
+            totalAccount = totalAccount.setScale(2, RoundingMode.HALF_UP);
+            totalPending = totalPending.setScale(2, RoundingMode.HALF_UP);
+            totalPagado = totalPagado.setScale(2, RoundingMode.HALF_UP);
+            subtotal = total.subtract(totalIVA).subtract(totalISH).setScale(2, RoundingMode.HALF_UP);
             totalOriginal = totalAccount;
             //vinculando al UI
             regenerateTotals();
@@ -222,6 +233,9 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jbCloseAccount = new javax.swing.JButton();
         jlCambio = new javax.swing.JLabel();
         jlMontoCambio = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jlISH = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -315,6 +329,12 @@ public class CheckOutDlg extends javax.swing.JDialog {
         jlMontoCambio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jlMontoCambio.setText("pagado");
 
+        jLabel5.setText("ISH(2%):");
+
+        jlISH.setFont(new java.awt.Font("Ubuntu", 1, 15)); // NOI18N
+        jlISH.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jlISH.setText("ish");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -324,9 +344,11 @@ public class CheckOutDlg extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel5))
                 .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jlISH, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -369,14 +391,26 @@ public class CheckOutDlg extends javax.swing.JDialog {
                             .addComponent(jlIVA)
                             .addComponent(jlCambio)
                             .addComponent(jlMontoCambio))
-                        .addGap(8, 8, 8)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jlTotal)
-                            .addComponent(jLabel3)
-                            .addComponent(jlPendiente))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jlPendiente))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jlISH, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlTotal, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
+
+        jLabel4.setText("jLabel4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -385,7 +419,10 @@ public class CheckOutDlg extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jscpDetalle)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jscpDetalle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4))
                     .addComponent(jpCabecera, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -395,11 +432,16 @@ public class CheckOutDlg extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jpCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jscpDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addComponent(jLabel4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jscpDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -502,7 +544,7 @@ public class CheckOutDlg extends javax.swing.JDialog {
             GeneralFunctions.sendMessage(this, "Cuenta cerrada satisfactoriamente.");
             
         } catch (Exception e) {
-            GeneralFunctions.appendTrace(e.getStackTrace());
+            //GeneralFunctions.appendTrace(e.getStackTrace());
             GeneralFunctions.sendMessage(this, "Ocurrio un error al cerrar la cuenta. Por favor contacte a servicio técnico. \nError:" + e.getMessage());
         }
         //Cerrar dialog
@@ -558,10 +600,13 @@ public class CheckOutDlg extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbCloseAccount;
     private javax.swing.JButton jbPay;
     private javax.swing.JLabel jlCambio;
+    private javax.swing.JLabel jlISH;
     private javax.swing.JLabel jlIVA;
     private javax.swing.JLabel jlMontoCambio;
     private javax.swing.JLabel jlNombre;
