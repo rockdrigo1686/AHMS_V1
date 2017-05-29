@@ -16,10 +16,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class OcupacionRpEngine {
@@ -30,7 +28,7 @@ public class OcupacionRpEngine {
         this.shift = _shift;
     }
     public void generate() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_hh_mm_ss");
         SimpleDateFormat sdfTitle = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdfDayWeek = new SimpleDateFormat("EEEEEEEEEEEE");
         Date today = new Date();        

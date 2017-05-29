@@ -15,7 +15,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +28,7 @@ public class RentaDetalleRpEgine {
     }
     
     public void generate() throws Exception {
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_hh_mm_ss");
         SimpleDateFormat sdfTitle = new SimpleDateFormat("dd/MM/yyyy");
         Date today = new Date();        
         try {
