@@ -46,10 +46,10 @@ public class OcupacionRpEngine {
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL, BaseColor.DARK_GRAY);
             
             //IMAGEN
-//            URL resource = OcupacionRpEngine.class.getResource(UIConstants.LOGO_W);
-//            Image img = Image.getInstance(resource);
-//            img.scaleToFit(580f, 76.5f);
-//            documento.add(img);
+            Image img = Image.getInstance(UIConstants.LOGO_W);
+            img.scaleToFit(580f, 76.5f);
+            img.setAlignment(Image.ALIGN_CENTER);
+            documento.add(img);
             
             //Cabecera			
             PdfPTable titleTable = new PdfPTable(1);
@@ -122,7 +122,11 @@ public class OcupacionRpEngine {
         cell.setPaddingTop(3f);
         cell.setPaddingBottom(3f);		
         cell.setBackgroundColor(new BaseColor(224, 224, 224));
-        cell.setBorder(0);
+        cell.setBorderColor(new BaseColor(0, 0, 0));
+        cell.setBorderWidthLeft(0.1f);
+        cell.setBorderWidthRight(0.1f);
+        cell.setBorderWidthTop(0.1f);
+        cell.setBorderWidthBottom(0.1f);
     }
     
     public static void cellStyle(PdfPCell cell) {
