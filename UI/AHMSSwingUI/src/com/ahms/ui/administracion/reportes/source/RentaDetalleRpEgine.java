@@ -1,6 +1,5 @@
-package com.ahms.ui.administracion.reportes.source; 
+package com.ahms.ui.administracion.reportes.source;
 
-import com.ahms.model.entity.CashOut;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.itextpdf.text.BaseColor;
@@ -21,21 +20,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class OcupacionRpEngine {
+public class RentaDetalleRpEgine {
     private ArrayList<ArrayList<String>> source = null;
-    private CashOut shift = null;
-    public OcupacionRpEngine(ArrayList<ArrayList<String>> _source, CashOut _shift){
+    private ArrayList<ArrayList<String>> totales = null;
+    public RentaDetalleRpEgine(ArrayList<ArrayList<String>> _source, ArrayList<ArrayList<String>> _totales){
         this.source = _source;
-        this.shift = _shift;
+        this.totales = _totales;
     }
+    
     public void generate() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-        SimpleDateFormat sdfDia = new SimpleDateFormat("ddddddddddddd");
         Date today = new Date();        
         try {
             Document documento = new Document();
             documento.setPageSize(PageSize.A4);            
-            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(UIConstants.REPORTE_OUT_FILE + "ocupacionRp_" + sdf.format(today) + ".pdf"));
+            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(UIConstants.REPORTE_OUT_FILE + "RentaDetalleRp_" + sdf.format(today) + ".pdf"));
             writer.setPdfVersion(PdfWriter.VERSION_1_7);                        
             documento.open();
             
@@ -53,40 +52,34 @@ public class OcupacionRpEngine {
             //Cabecera			
             PdfPTable titleTable = new PdfPTable(1);
             titleTable.setWidthPercentage(100);
-            PdfPCell titCell = new PdfPCell(new Phrase("CONTROL DE HABITACIONES", fontTitle));
+            PdfPCell titCell = new PdfPCell(new Phrase("DETALLE DE RENTAS", fontTitle));
             tittleCellStyle(titCell);
             titleTable.addCell(titCell);
             documento.add(titleTable);		
 
-            PdfPTable headerTable = new PdfPTable(3);
+            PdfPTable headerTable = new PdfPTable(1);
             headerTable.setWidthPercentage(100);
-            PdfPCell fechaCell = new PdfPCell(new Phrase("Fecha: " + sdf.format(today), fontRem2));
+            PdfPCell fechaCell = new PdfPCell(new Phrase("FECHA: " + sdf.format(today), fontRem2));
             headerCellStyle(fechaCell);
             headerTable.addCell(fechaCell);
-            PdfPCell diaCell = new PdfPCell(new Phrase("Dia: " + sdfDia.format(today), fontRem2));
-            headerCellStyle(diaCell);
-            headerTable.addCell(diaCell);
-            PdfPCell recCell = new PdfPCell(new Phrase("Recepcionista: " + shift.getUsrId().getFullName(), fontRem2));
-            headerCellStyle(recCell);
-            headerTable.addCell(recCell);
             documento.add(headerTable);
             
             //DATOS
             int rowNumber = 0;
             for(ArrayList<String> iSource : source){
                 if(rowNumber <= 0){
-                    PdfPTable colsTable = new PdfPTable(5);
+                    PdfPTable colsTable = new PdfPTable(7);
                     colsTable.setWidthPercentage(100);
-                    for(int i=0;i<5;i++){
-                        PdfPCell cuartoCell = new PdfPCell(new Phrase(iSource.get(i).toUpperCase(), fontRem2));
-                        headerCellStyle(cuartoCell);
-                        colsTable.addCell(cuartoCell);
+                    for(int i=0;i<7;i++){
+                        PdfPCell cell = new PdfPCell(new Phrase(iSource.get(i).toUpperCase(), fontRem2));
+                        headerCellStyle(cell);
+                        colsTable.addCell(cell);
                     }
                     documento.add(colsTable);
                 } else {
-                    PdfPTable rowTable = new PdfPTable(5);
+                    PdfPTable rowTable = new PdfPTable(7);
                     rowTable.setWidthPercentage(100);
-                    for(int i=0;i<5;i++){
+                    for(int i=0;i<7;i++){
                         PdfPCell cell = new PdfPCell(new Phrase(iSource.get(i).toUpperCase(), fontNormal));
                         cellStyle(cell);
                         rowTable.addCell(cell);
@@ -96,14 +89,41 @@ public class OcupacionRpEngine {
                 rowNumber++;
             }
 
+            int rowTotalesNumber = 0;
+            for(ArrayList<String> iTotal : totales){
+                if(rowTotalesNumber <= 0){
+                    PdfPTable colsTable = new PdfPTable(1);
+                    colsTable.setWidthPercentage(100);
+                    PdfPCell cell = new PdfPCell(new Phrase("TOTALES", fontRem2));
+                    headerCellStyle(cell);
+                    colsTable.addCell(cell);
+                    documento.add(colsTable);
+                } else {
+                    PdfPTable rowTable = new PdfPTable(7);
+                    rowTable.setWidthPercentage(100);
+                    for(int i=0;i<7;i++){
+                        if(i>4){
+                            PdfPCell cell = new PdfPCell(new Phrase(iTotal.get(i).toUpperCase(), fontNormal));
+                            totalesCellStyle(cell);
+                            rowTable.addCell(cell);
+                        } else{
+                            PdfPCell cell = new PdfPCell(new Phrase("", fontNormal));
+                            totalesCellStyle(cell);
+                            rowTable.addCell(cell);
+                        }                        
+                    }
+                    documento.add(rowTable);
+                }
+                rowTotalesNumber++;
+            }
+            
             //Create file
             documento.close();
             GeneralFunctions.sendMessage(null, "Reporte de ocupacion generado correctamente.");
         } catch (DocumentException | IOException e) {
             GeneralFunctions.sendMessage(null, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + e.getMessage());
         }        
-    }
-    
+    }    
     private void headerCellStyle(PdfPCell cell) {
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setPaddingTop(3f);
@@ -114,16 +134,14 @@ public class OcupacionRpEngine {
         cell.setBorderWidthRight(0.1f);
         cell.setBorderWidthTop(0.1f);
         cell.setBorderWidthBottom(0.1f);
-    }
-    
+    }    
     public void tittleCellStyle(PdfPCell cell) {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setPaddingTop(3f);
         cell.setPaddingBottom(3f);		
         cell.setBackgroundColor(new BaseColor(224, 224, 224));
         cell.setBorder(0);
-    }
-    
+    }    
     public static void cellStyle(PdfPCell cell) {
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setPaddingTop(3f);
@@ -134,4 +152,15 @@ public class OcupacionRpEngine {
         cell.setBorderWidthTop(0.1f);
         cell.setBorderWidthBottom(0.1f);
     }
+    private void totalesCellStyle(PdfPCell cell) {
+        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        cell.setPaddingTop(3f);
+        cell.setPaddingBottom(3f);		
+        cell.setBackgroundColor(new BaseColor(224, 224, 224));
+        cell.setBorderColor(new BaseColor(224, 224, 224));
+        cell.setBorderWidthLeft(0.1f);
+        cell.setBorderWidthRight(0.1f);
+        cell.setBorderWidthTop(0.1f);
+        cell.setBorderWidthBottom(0.1f);
+    }    
 }
