@@ -39,7 +39,6 @@ public class RentaDetalleRpEgine {
             documento.open();
             
             Font fontTitle = new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.WHITE);
-            //Font fontRem = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
             Font fontRem2 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL, BaseColor.DARK_GRAY);
             

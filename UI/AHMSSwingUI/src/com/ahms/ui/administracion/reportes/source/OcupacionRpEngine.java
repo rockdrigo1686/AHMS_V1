@@ -35,12 +35,11 @@ public class OcupacionRpEngine {
         try {
             Document documento = new Document();
             documento.setPageSize(PageSize.A4);            
-            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(UIConstants.REPORTE_OUT_FILE + "ocupacionRp_" + sdf.format(today) + ".pdf"));
+            PdfWriter writer = PdfWriter.getInstance(documento, new FileOutputStream(UIConstants.REPORTE_OUT_FILE + "ControlDeCuartosRp_" + sdf.format(today) + ".pdf"));
             writer.setPdfVersion(PdfWriter.VERSION_1_7);                        
             documento.open();
             
             Font fontTitle = new Font(Font.FontFamily.HELVETICA, 13, Font.BOLD, BaseColor.WHITE);
-            //Font fontRem = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
             Font fontRem2 = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL, BaseColor.DARK_GRAY);
             
