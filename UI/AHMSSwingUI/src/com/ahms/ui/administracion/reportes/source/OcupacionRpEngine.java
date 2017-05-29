@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class OcupacionRpEngine {
@@ -30,7 +31,8 @@ public class OcupacionRpEngine {
     }
     public void generate() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-        SimpleDateFormat sdfDia = new SimpleDateFormat("ddddddddddddd");
+        SimpleDateFormat sdfTitle = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdfDayWeek = new SimpleDateFormat("EEEEEEEEEEEE");
         Date today = new Date();        
         try {
             Document documento = new Document();
@@ -59,10 +61,10 @@ public class OcupacionRpEngine {
 
             PdfPTable headerTable = new PdfPTable(3);
             headerTable.setWidthPercentage(100);
-            PdfPCell fechaCell = new PdfPCell(new Phrase("Fecha: " + sdf.format(today), fontRem2));
+            PdfPCell fechaCell = new PdfPCell(new Phrase("Fecha: " + sdfTitle.format(today), fontRem2));
             headerCellStyle(fechaCell);
             headerTable.addCell(fechaCell);
-            PdfPCell diaCell = new PdfPCell(new Phrase("Dia: " + sdfDia.format(today), fontRem2));
+            PdfPCell diaCell = new PdfPCell(new Phrase("Dia: " + sdfDayWeek.format(today), fontRem2));
             headerCellStyle(diaCell);
             headerTable.addCell(diaCell);
             PdfPCell recCell = new PdfPCell(new Phrase("Recepcionista: " + shift.getUsrId().getFullName(), fontRem2));

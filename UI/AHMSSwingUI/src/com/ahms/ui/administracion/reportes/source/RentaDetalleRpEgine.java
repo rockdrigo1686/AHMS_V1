@@ -30,6 +30,7 @@ public class RentaDetalleRpEgine {
     
     public void generate() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat sdfTitle = new SimpleDateFormat("dd/MM/yyyy");
         Date today = new Date();        
         try {
             Document documento = new Document();
@@ -58,7 +59,7 @@ public class RentaDetalleRpEgine {
 
             PdfPTable headerTable = new PdfPTable(1);
             headerTable.setWidthPercentage(100);
-            PdfPCell fechaCell = new PdfPCell(new Phrase("FECHA: " + sdf.format(today), fontRem2));
+            PdfPCell fechaCell = new PdfPCell(new Phrase("FECHA: " + sdfTitle.format(today), fontRem2));
             headerCellStyle(fechaCell);
             headerTable.addCell(fechaCell);
             documento.add(headerTable);
