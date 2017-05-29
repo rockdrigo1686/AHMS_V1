@@ -90,8 +90,8 @@ public class UIConstants {
     public static final String REPORTE_CORTE_CAJA_XML_LINUX = "./reports/src/XML_CORTE_CAJA.xml";
 
     //PATH PDF OUT
-    public static final String REPORTE_OUT_FILE = "c:/ahms/reports/";
-
+    //public static final String REPORTE_OUT_FILE = "c:/ahms/reports/";
+    public static final String REPORTE_OUT_FILE = "/home/hrodric/Dev/JAVA/";
     //LOGO
     public static final String LOGO_W = "c:/ahms/reports/src/LOGO.jpg";
     public static final String LOGO = "./reports/src/LOGO.jpg";

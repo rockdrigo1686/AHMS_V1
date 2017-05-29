@@ -46,10 +46,10 @@ public class OcupacionRpEngine {
             Font fontNormal = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL, BaseColor.DARK_GRAY);
             
             //IMAGEN
-            URL resource = OcupacionRpEngine.class.getResource(UIConstants.LOGO_W);
-            Image img = Image.getInstance(resource);
-            img.scaleToFit(580f, 76.5f);
-            documento.add(img);
+//            URL resource = OcupacionRpEngine.class.getResource(UIConstants.LOGO_W);
+//            Image img = Image.getInstance(resource);
+//            img.scaleToFit(580f, 76.5f);
+//            documento.add(img);
             
             //Cabecera			
             PdfPTable titleTable = new PdfPTable(1);
