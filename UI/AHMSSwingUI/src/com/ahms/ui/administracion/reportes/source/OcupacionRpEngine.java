@@ -1,6 +1,7 @@
 package com.ahms.ui.administracion.reportes.source; 
 
 import com.ahms.model.entity.CashOut;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -96,10 +97,11 @@ public class OcupacionRpEngine {
             }
 
             //Create file
-            documento.close();            
+            documento.close();
+            GeneralFunctions.sendMessage(null, "Reporte de ocupacion generado correctamente.");
         } catch (DocumentException | IOException e) {
-            throw e;
-        }
+            GeneralFunctions.sendMessage(null, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + e.getMessage());
+        }        
     }
     
     private void headerCellStyle(PdfPCell cell) {
