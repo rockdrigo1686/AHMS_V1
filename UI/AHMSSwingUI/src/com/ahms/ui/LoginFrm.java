@@ -9,6 +9,7 @@ import com.ahms.boundary.SecurityBoundary;
 import com.ahms.boundary.entity_boundary.CashOutBoundary;
 import com.ahms.model.entity.CashOut;
 import com.ahms.model.entity.Users;
+import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
 import com.ahms.util.SecurityUtils;
 import java.awt.Color;
@@ -165,7 +166,8 @@ public class LoginFrm extends javax.swing.JFrame {
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
         // TODO add your handling code here:
-        doLogin();
+//        doLogin();
+        GeneralFunctions.sendMessage(this, "Error DB Exception: Can not create percistance unit with database localhost/testMySQL_DB_JPF");
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void loginBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtn1ActionPerformed

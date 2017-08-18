@@ -11,11 +11,11 @@ import com.ahms.model.entity.Account;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.FolioTransaction;
 import com.ahms.model.entity.MultiValue;
-import com.ahms.ui.administracion.reportes.entity.Header;
-import com.ahms.ui.administracion.reportes.entity.servicios.Servicio;
-import com.ahms.ui.administracion.reportes.entity.servicios.ServicioRep;
-import com.ahms.ui.administracion.reportes.entity.servicios.TipoPago;
-import com.ahms.ui.administracion.reportes.entity.servicios.TipoServicio;
+//import com.ahms.ui.administracion.reportes.entity.Header;
+//import com.ahms.ui.administracion.reportes.entity.servicios.Servicio;
+//import com.ahms.ui.administracion.reportes.entity.servicios.ServicioRep;
+//import com.ahms.ui.administracion.reportes.entity.servicios.TipoPago;
+//import com.ahms.ui.administracion.reportes.entity.servicios.TipoServicio;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -163,88 +163,88 @@ public class ServiciosRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
-        String fileOut = "./reports/RPT_SERVICIOS_" + df.format(date) + ".pdf";
-        try {
-            Calendar calEntrada = dateChooserFecEnt.getCurrent();
-            Calendar calSalida = dateChooserFecFin.getCurrent();
-            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
-                SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
-                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_SERVICIOS_XML_LINUX);
-                AccountBoundary acb = new AccountBoundary();
-                MultiValueBoundary mvb = new MultiValueBoundary();
-                Account acct = new Account();
-                acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
-                List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
-                if (list != null && list.size() > 0) {
-                    ServicioRep rep = mapEntity(list);
-                    rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
-                    int response = marshaler.parseObject(rep);
-                    if (response > 0) {
-                        FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
-                        File myFile = new File(fileOut);
-                        Desktop.getDesktop().open(myFile);
-                        GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
-                    } else {
-                        GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
-                    }
-
-                }
-            } else {
-                GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
-            }
-
-        } catch (Exception ex) {
-            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
-            GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
-        }
+//        Date date = new Date();
+//        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
+//        String fileOut = "./reports/RPT_SERVICIOS_" + df.format(date) + ".pdf";
+//        try {
+//            Calendar calEntrada = dateChooserFecEnt.getCurrent();
+//            Calendar calSalida = dateChooserFecFin.getCurrent();
+//            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
+//                SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+//                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_SERVICIOS_XML_LINUX);
+//                AccountBoundary acb = new AccountBoundary();
+//                MultiValueBoundary mvb = new MultiValueBoundary();
+//                Account acct = new Account();
+//                acct.setActStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_PAGADO_KEY)));
+//                List<Account> list = acb.findServices(acct, calEntrada.getTime(), calSalida.getTime());
+//                if (list != null && list.size() > 0) {
+//                    ServicioRep rep = mapEntity(list);
+//                    rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), df.format(date)));
+//                    int response = marshaler.parseObject(rep);
+//                    if (response > 0) {
+//                        FOPEngine.convertToPDF(UIConstants.REPORTE_SERVICIOS_XSL_LINUX, UIConstants.REPORTE_SERVICIOS_XML_LINUX, fileOut);
+//                        File myFile = new File(fileOut);
+//                        Desktop.getDesktop().open(myFile);
+//                        GeneralFunctions.sendMessage(this, "Reporte de Servicios generado correctamente.");
+//                    } else {
+//                        GeneralFunctions.sendMessage(this, "No se pudo generar el Reporte de Servicios.");
+//                    }
+//
+//                }
+//            } else {
+//                GeneralFunctions.sendMessage(this, UIConstants.ERROR_INVALID_RANGE_DATES);
+//            }
+//
+//        } catch (Exception ex) {
+//            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
+//            GeneralFunctions.sendMessage(this, "Ocurrio un error al generar el reporte.\nContacte con su servicio técnico.\nError: " + ex.getMessage());
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private ServicioRep mapEntity(List<Account> list) {
-        ServicioRep rep = new ServicioRep();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-        List<TipoPago> tpl = new ArrayList<TipoPago>();
-        List<TipoServicio> tsl = new ArrayList<TipoServicio>();
-        Map<String, TipoPago> tpMap = new HashMap<String, TipoPago>();
-        Map<String, List<Servicio>> tsMap = new HashMap<String, List<Servicio>>();
-        for (Account at : list) {
-            for (FolioTransaction ft : at.getFolioTransactionCollection()) {
-                TipoPago tpago = tpMap.get(ft.getPayId().getPayCode());
-                if (tpago == null) {
-                    tpMap.put(ft.getPayId().getPayCode(), new TipoPago(ft.getPayId().getPayDesc(), ft.getFtrAmount()));
-                } else {
-                    tpago.setTotal(tpago.getTotal().add(ft.getFtrAmount()));
-                }
-            }
-            for (AccountTransactions act : at.getAccountTransactionsCollection()) {
-                if (act.getSrvId() != null) {
-                    BigDecimal ammt = act.getSrvId().getSrvPrice().multiply(new BigDecimal(act.getAtrQuantity()));
-                    if (MMKeys.AccountsTransactions.STA_PAGADO_KEY.equalsIgnoreCase(act.getAtrStatus().getMvaKey())) {
-                        List<Servicio> sl = tsMap.get(act.getSrvId().getSvtId().getSvtDesc());
-                        if (sl == null) {
-                            sl = new ArrayList<Servicio>();
-                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
-                            tsMap.put(act.getSrvId().getSvtId().getSvtDesc(), sl);
-                        } else {
-                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
-                        }
-                    }
-                }
-            }
-        }
-
-        for (TipoPago entry : tpMap.values()) {
-            tpl.add(entry);
-        }
-        for (String key : tsMap.keySet()) {
-            tsl.add(new TipoServicio(key, tsMap.get(key)));
-        }
-        rep.setPymentType(tpl);
-        rep.setServiceType(tsl);
-
-        return rep;
-    }
+//    private ServicioRep mapEntity(List<Account> list) {
+//        ServicioRep rep = new ServicioRep();
+//        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+//        List<TipoPago> tpl = new ArrayList<TipoPago>();
+//        List<TipoServicio> tsl = new ArrayList<TipoServicio>();
+//        Map<String, TipoPago> tpMap = new HashMap<String, TipoPago>();
+//        Map<String, List<Servicio>> tsMap = new HashMap<String, List<Servicio>>();
+//        for (Account at : list) {
+//            for (FolioTransaction ft : at.getFolioTransactionCollection()) {
+//                TipoPago tpago = tpMap.get(ft.getPayId().getPayCode());
+//                if (tpago == null) {
+//                    tpMap.put(ft.getPayId().getPayCode(), new TipoPago(ft.getPayId().getPayDesc(), ft.getFtrAmount()));
+//                } else {
+//                    tpago.setTotal(tpago.getTotal().add(ft.getFtrAmount()));
+//                }
+//            }
+//            for (AccountTransactions act : at.getAccountTransactionsCollection()) {
+//                if (act.getSrvId() != null) {
+//                    BigDecimal ammt = act.getSrvId().getSrvPrice().multiply(new BigDecimal(act.getAtrQuantity()));
+//                    if (MMKeys.AccountsTransactions.STA_PAGADO_KEY.equalsIgnoreCase(act.getAtrStatus().getMvaKey())) {
+//                        List<Servicio> sl = tsMap.get(act.getSrvId().getSvtId().getSvtDesc());
+//                        if (sl == null) {
+//                            sl = new ArrayList<Servicio>();
+//                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
+//                            tsMap.put(act.getSrvId().getSvtId().getSvtDesc(), sl);
+//                        } else {
+//                            sl.add(new Servicio(act.getSrvId().getSrvDesc(), act.getAtrQuantity(), ammt.toString()));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (TipoPago entry : tpMap.values()) {
+//            tpl.add(entry);
+//        }
+//        for (String key : tsMap.keySet()) {
+//            tsl.add(new TipoServicio(key, tsMap.get(key)));
+//        }
+//        rep.setPymentType(tpl);
+//        rep.setServiceType(tsl);
+//
+//        return rep;
+//    }
 
     /**
      * @param args the command line arguments

@@ -11,10 +11,10 @@ import com.ahms.boundary.entity_boundary.UsersBoundary;
 import com.ahms.model.entity.AccountTransactions;
 import com.ahms.model.entity.MultiValue;
 import com.ahms.model.entity.Users;
-import com.ahms.ui.administracion.reportes.entity.Header;
-import com.ahms.ui.administracion.reportes.entity.ReqUser;
-import com.ahms.ui.administracion.reportes.entity.cancelaciones.Cancelacion;
-import com.ahms.ui.administracion.reportes.entity.cancelaciones.CancelacionRep;
+//import com.ahms.ui.administracion.reportes.entity.Header;
+//import com.ahms.ui.administracion.reportes.entity.ReqUser;
+//import com.ahms.ui.administracion.reportes.entity.cancelaciones.Cancelacion;
+//import com.ahms.ui.administracion.reportes.entity.cancelaciones.CancelacionRep;
 import com.ahms.ui.utils.FOPEngine;
 import com.ahms.ui.utils.GeneralFunctions;
 import com.ahms.ui.utils.UIConstants;
@@ -152,80 +152,80 @@ public class CancelacionesRp extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
-        String fileOut = "./reports/RPT_CANCELACION_" + df.format(date) + ".pdf";
-        try {
-            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
-            AccountTransactions accountTransactions = new AccountTransactions();
-            Calendar calEntrada = dateIni.getCurrent();
-            Calendar calSalida = dateFin.getCurrent();
-            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
-                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_CANCELACIONES_XML_LINUX);
-            AccountTransactionsBoundary atb = new AccountTransactionsBoundary();
-            MultiValueBoundary mvb = new MultiValueBoundary();
-            accountTransactions.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
-            if (cbUsers.getSelectedIndex() != 0) {
-                accountTransactions.setAtrUsrMod((Users) cbUsers.getSelectedItem());
-            }
-            List<AccountTransactions> cancelations = atb.findCancelations(accountTransactions, calEntrada.getTime(), calSalida.getTime());
-            if (cancelations != null && cancelations.size()>0) {
-                CancelacionRep rep = mapEntity(cancelations);
-                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
-                int response = marshaler.parseObject(rep);
-                if (response > 0) {
-                    FOPEngine.convertToPDF(UIConstants.REPORTE_CANCELACIONES_XSL_LINUX, UIConstants.REPORTE_CANCELACIONES_XML_LINUX, fileOut);
-                    File myFile = new File(fileOut);
-                    Desktop.getDesktop().open(myFile);
-                }
-            }else{
-                GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
-            }
-            }else{
-                GeneralFunctions.sendMessage(this,UIConstants.ERROR_INVALID_RANGE_DATES);
-            }
-            
-        } catch (Exception ex) {
-            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        Date date = new Date();
+//        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy_hh:mm");
+//        String fileOut = "./reports/RPT_CANCELACION_" + df.format(date) + ".pdf";
+//        try {
+//            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+//            AccountTransactions accountTransactions = new AccountTransactions();
+//            Calendar calEntrada = dateIni.getCurrent();
+//            Calendar calSalida = dateFin.getCurrent();
+//            if (GeneralFunctions.compareDates(calEntrada, calSalida,false)) {
+//                XmlMarshaler marshaler = new XmlMarshaler(UIConstants.REPORTE_CANCELACIONES_XML_LINUX);
+//            AccountTransactionsBoundary atb = new AccountTransactionsBoundary();
+//            MultiValueBoundary mvb = new MultiValueBoundary();
+//            accountTransactions.setAtrStatus(mvb.findByKey(new MultiValue(MMKeys.AccountsTransactions.STA_CANCELADO_KEY)));
+//            if (cbUsers.getSelectedIndex() != 0) {
+//                accountTransactions.setAtrUsrMod((Users) cbUsers.getSelectedItem());
+//            }
+//            List<AccountTransactions> cancelations = atb.findCancelations(accountTransactions, calEntrada.getTime(), calSalida.getTime());
+//            if (cancelations != null && cancelations.size()>0) {
+//                CancelacionRep rep = mapEntity(cancelations);
+//                rep.setHeader(new Header(dateF.format(calEntrada.getTime()), dateF.format(calSalida.getTime()), dateF.format(date)));
+//                int response = marshaler.parseObject(rep);
+//                if (response > 0) {
+//                    FOPEngine.convertToPDF(UIConstants.REPORTE_CANCELACIONES_XSL_LINUX, UIConstants.REPORTE_CANCELACIONES_XML_LINUX, fileOut);
+//                    File myFile = new File(fileOut);
+//                    Desktop.getDesktop().open(myFile);
+//                }
+//            }else{
+//                GeneralFunctions.sendMessage(this, UIConstants.ERROR_EMPTY_REPORT);
+//            }
+//            }else{
+//                GeneralFunctions.sendMessage(this,UIConstants.ERROR_INVALID_RANGE_DATES);
+//            }
+//            
+//        } catch (Exception ex) {
+//            Logger.getLogger(CancelacionesRp.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private CancelacionRep mapEntity(List<AccountTransactions> cancelations) {
-        CancelacionRep rep = null;
-        Map<String, ReqUser> userMap = new HashMap<String, ReqUser>();
-        List<Cancelacion> canList = null;
-        Cancelacion cancelacion = null;
-        ReqUser user = null;
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            for (AccountTransactions cancelation : cancelations) {
-                user = userMap.get(cancelation.getAtrUsrMod().getUsrCode());
-                if (user == null) {
-                    user = new ReqUser(cancelation.getAtrUsrMod().getUsrCode() + " | " + cancelation.getAtrUsrMod().getFullName());
-                    canList = new ArrayList<Cancelacion>();
-                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
-                    canList.add(cancelacion);
-                    user.setCancelation(canList);
-                    userMap.put(cancelation.getAtrUsrMod().getUsrCode(), user);
-                } else {
-                    canList = user.getCancelation();
-                    if (canList == null) {
-                        canList = new ArrayList<Cancelacion>();
-                    }
-                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
-                    canList.add(cancelacion);
-                }
-            }
-            rep = new CancelacionRep();
-            List<ReqUser> userList = new ArrayList<ReqUser>(userMap.values());
-            rep.setUser(userList);
-        } catch (Exception e) {
-            e.printStackTrace();
-//            System.out.println("error: " + e.getMessage());
-            GeneralFunctions.appendTrace(e.getStackTrace());
-        }
-        return rep;
-    }
+//    private CancelacionRep mapEntity(List<AccountTransactions> cancelations) {
+//        CancelacionRep rep = null;
+//        Map<String, ReqUser> userMap = new HashMap<String, ReqUser>();
+//        List<Cancelacion> canList = null;
+//        Cancelacion cancelacion = null;
+//        ReqUser user = null;
+//        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//        try {
+//            for (AccountTransactions cancelation : cancelations) {
+//                user = userMap.get(cancelation.getAtrUsrMod().getUsrCode());
+//                if (user == null) {
+//                    user = new ReqUser(cancelation.getAtrUsrMod().getUsrCode() + " | " + cancelation.getAtrUsrMod().getFullName());
+//                    canList = new ArrayList<Cancelacion>();
+//                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
+//                    canList.add(cancelacion);
+//                    user.setCancelation(canList);
+//                    userMap.put(cancelation.getAtrUsrMod().getUsrCode(), user);
+//                } else {
+//                    canList = user.getCancelation();
+//                    if (canList == null) {
+//                        canList = new ArrayList<Cancelacion>();
+//                    }
+//                    cancelacion = new Cancelacion(df.format(cancelation.getAtrDteMod()), cancelation.getSrvId().getSrvDesc());
+//                    canList.add(cancelacion);
+//                }
+//            }
+//            rep = new CancelacionRep();
+//            List<ReqUser> userList = new ArrayList<ReqUser>(userMap.values());
+//            rep.setUser(userList);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+////            System.out.println("error: " + e.getMessage());
+//            GeneralFunctions.appendTrace(e.getStackTrace());
+//        }
+//        return rep;
+//    }
 
     /**
      * @param args the command line arguments
