@@ -27,13 +27,100 @@ public class ReportsQuery extends AHMSEntityManager<Users> {
                 createEm();
             }
             StringBuilder sbQuery = new StringBuilder();
-            sbQuery.append(" select r.RMS_NUMBER, r.RMS_STATUS, IFNULL(concat(c.CUS_NAME,  ' ', c.CUS_LST_1), ' ' )as NOMBRE, "
+            sbQuery.append(" select r.RMS_NUMBER, m.MVA_DESCRIPTION, IFNULL(concat(c.CUS_NAME,  ' ', c.CUS_LST_1), ' ' )as NOMBRE, "
                     + " IFNULL(c.ACT_FEC_INI,' '), IFNULL(c.ACT_FEC_FIN,' ') from rooms r"
                     + " left join ("
                     + " select c.CUS_NAME, c.CUS_LST_1, ac.RMS_ID, a.ACT_FEC_INI, a.ACT_FEC_FIN from account_transactions ac "
                     + " join account a on a.ACT_ID =  ac.ACT_ID"
                     + " join customers c on c.CUS_ID = a.CUS_ID"
-                    + " where ac.ATR_STATUS = 'PEND') c on c.RMS_ID = r.RMS_ID");
+                    + " where ac.ATR_STATUS = 'PEND') c on c.RMS_ID = r.RMS_ID"
+                    + " join multi_value m on m.MVA_KEY = r.RMS_STATUS");
+            int i = 1;
+            Query query = em.createNativeQuery(sbQuery.toString());
+            List resVec =  query.getResultList();
+            String[]header = {"Cuarto","Estatus","Nombre","Entrada","Salida"};
+            retList.add(new ArrayList<String>(Arrays.asList(header)));
+            for (Object object : resVec) {               
+                Object[] obA = (Object[])object;
+                String[] strA = Arrays.copyOf(obA, obA.length, String[].class);
+                ArrayList<String> val;
+                val = new ArrayList<String>(Arrays.asList(strA));
+                retList.add(val);                
+             }
+            int x = 0;
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+
+        return retList;
+    }
+    
+    public ArrayList<ArrayList<String>> generaReporteRest() {
+        ArrayList<ArrayList<String>> retList = new  ArrayList<ArrayList<String>> ();
+        try {
+            if (em == null) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" select r.RMS_NUMBER, m.MVA_DESCRIPTION, IFNULL(concat(c.CUS_NAME,  ' ', c.CUS_LST_1), ' ' )as NOMBRE, "
+                    + " IFNULL(c.ACT_FEC_INI,' '), IFNULL(c.ACT_FEC_FIN,' ') from rooms r"
+                    + " left join ("
+                    + " select c.CUS_NAME, c.CUS_LST_1, ac.RMS_ID, a.ACT_FEC_INI, a.ACT_FEC_FIN from account_transactions ac "
+                    + " join account a on a.ACT_ID =  ac.ACT_ID"
+                    + " join customers c on c.CUS_ID = a.CUS_ID"
+                    + " where ac.ATR_STATUS = 'PEND') c on c.RMS_ID = r.RMS_ID"
+                    + " join multi_value m on m.MVA_KEY = r.RMS_STATUS");
+            int i = 1;
+            Query query = em.createNativeQuery(sbQuery.toString());
+            List resVec =  query.getResultList();
+            String[]header = {"Cuarto","Estatus","Nombre","Entrada","Salida"};
+            retList.add(new ArrayList<String>(Arrays.asList(header)));
+            for (Object object : resVec) {               
+                Object[] obA = (Object[])object;
+                String[] strA = Arrays.copyOf(obA, obA.length, String[].class);
+                ArrayList<String> val;
+                val = new ArrayList<String>(Arrays.asList(strA));
+                retList.add(val);                
+             }
+            int x = 0;
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return null;
+            } else {
+                throw e;
+            }
+        } finally {
+            if (em != null) {
+                closeEm();
+            }
+        }
+
+        return retList;
+    }
+    
+    public ArrayList<ArrayList<String>> generaReporteRentDetalle() {
+        ArrayList<ArrayList<String>> retList = new  ArrayList<ArrayList<String>> ();
+        try {
+            if (em == null) {
+                createEm();
+            }
+            StringBuilder sbQuery = new StringBuilder();
+            sbQuery.append(" select r.RMS_NUMBER, m.MVA_DESCRIPTION, IFNULL(concat(c.CUS_NAME,  ' ', c.CUS_LST_1), ' ' )as NOMBRE, "
+                    + " IFNULL(c.ACT_FEC_INI,' '), IFNULL(c.ACT_FEC_FIN,' ') from rooms r"
+                    + " left join ("
+                    + " select c.CUS_NAME, c.CUS_LST_1, ac.RMS_ID, a.ACT_FEC_INI, a.ACT_FEC_FIN from account_transactions ac "
+                    + " join account a on a.ACT_ID =  ac.ACT_ID"
+                    + " join customers c on c.CUS_ID = a.CUS_ID"
+                    + " where ac.ATR_STATUS = 'PEND') c on c.RMS_ID = r.RMS_ID"
+                    + " join multi_value m on m.MVA_KEY = r.RMS_STATUS");
             int i = 1;
             Query query = em.createNativeQuery(sbQuery.toString());
             List resVec =  query.getResultList();
